@@ -59,17 +59,6 @@
             </folder>
         </folder>
     </folder>
-<!--    <folder name="Navigator">
-        <folder name="Panels">
-            <folder name="text">
-                <folder name="x-go">
-                    <file name="org-tvl-goworks-editor-go-navigation-GoMembersPanel.instance">
-                        <attr name="position" intvalue="100"/>
-                    </file>
-                </folder>
-            </folder>
-        </folder>
-    </folder>-->
     <folder name="Loaders">
         <folder name="text">
             <folder name="x-go">
