@@ -160,6 +160,7 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
         case GoHighlighterLexer.FLOAT_LITERAL:
             return numberLiteralAttributes;
 
+        case GoHighlighterLexer.CharLiteral:
         case GoHighlighterLexer.InterpretedStringLiteral:
         case GoHighlighterLexer.RawStringLiteral:
             return stringLiteralAttributes;
