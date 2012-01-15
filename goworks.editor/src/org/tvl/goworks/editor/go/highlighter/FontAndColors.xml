@@ -9,15 +9,55 @@
 <!--    <fontcolor name="reference" foreColor="FF008800">
         <font style="bold" />
     </fontcolor>-->
-    <fontcolor name="comment" default="comment" foreColor="FF008000" />
-    <fontcolor name="stringliteral" default="string" foreColor="FFA31515" />
+    <fontcolor name="comment" default="comment" />
+    <fontcolor name="stringliteral" default="string" />
     <fontcolor name="number" default="number" />
     <fontcolor name="whitespace" default="whitespace"/>
 <!--    <fontcolor name="operator" default="operator" />-->
 
     <!--
-        ANTLR
+        GO SEMANTICS
     -->
+    <fontcolor name="constUse" default="identifier" foreColor="FF009900">
+        <font style="italic" />
+    </fontcolor>
+
+    <fontcolor name="globalConstUse" default="constUse" />
+    <fontcolor name="globalConstDeclaration" default="globalConstUse" />
+
+    <fontcolor name="localConstUse" default="constUse" />
+    <fontcolor name="localConstDeclaration" default="localConstUse" />
+
+    <fontcolor name="funcUse" default="identifier" />
+    <fontcolor name="funcDeclaration" default="funcUse" />
+
+    <fontcolor name="methodUse" default="identifier" />
+    <fontcolor name="methodDeclaration" default="methodUse" />
+
+    <fontcolor name="typeUse" default="identifier" foreColor="FF2B91AF" />
+    <fontcolor name="typeDeclaration" default="typeUse" />
+
+    <fontcolor name="builtinTypeUse" default="typeUse" foreColor="FF0000FF" />
+
+    <fontcolor name="parameterUse" default="identifier" />
+    <fontcolor name="parameterDeclaration" default="parameterUse" />
+
+    <fontcolor name="returnParameterUse" default="parameterUse" />
+    <fontcolor name="returnParameterDeclaration" default="returnParameterUse" />
+
+    <fontcolor name="varUse" default="identifier" />
+
+    <fontcolor name="globalVarUse" default="varUse" foreColor="FF009900">
+        <font style="italic" />
+    </fontcolor>
+    <fontcolor name="globalVarDeclaration" default="globalVarUse" />
+
+    <fontcolor name="fieldVarUse" default="varUse" foreColor="FF009900" />
+    <fontcolor name="fieldVarDeclaration" default="fieldVarUse" />
+
+    <fontcolor name="localVarUse" default="varUse" />
+    <fontcolor name="localVarDeclaration" default="localVarUse" />
+
     <!-- Slate Blue -->
 <!--    <fontcolor name="parserrule" foreColor="FF6A5ACD" />-->
     <!-- Dark Blue -->
