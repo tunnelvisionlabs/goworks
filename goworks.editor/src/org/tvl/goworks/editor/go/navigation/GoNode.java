@@ -104,14 +104,26 @@ public class GoNode extends NavigatorNode {
 
     public static class DeclarationDescription extends Description {
         private final DeclarationKind kind;
+        private final String sortText;
 
         public DeclarationDescription() {
             this.kind = DeclarationKind.UNKNOWN;
+            this.sortText = null;
         }
 
         public DeclarationDescription(String name, DeclarationKind kind) {
-            super(getSortOrder(kind) + "_" + name.toLowerCase());
+            super(name);
             this.kind = kind;
+            this.sortText = getSortOrder(kind) + "_" + name.toLowerCase();
+        }
+
+        @Override
+        public String getSortText() {
+            if (sortText != null) {
+                return sortText;
+            }
+
+            return super.getSortText();
         }
 
         public DeclarationKind getKind() {
