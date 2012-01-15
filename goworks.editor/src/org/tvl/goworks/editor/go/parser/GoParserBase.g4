@@ -50,7 +50,7 @@ structType
     ;
 
 fieldDecl
-    :   (identifierList type | anonymousField) tag?
+    :   (idList=identifierList type | anonymousField) tag?
     ;
 
 anonymousField
@@ -91,7 +91,7 @@ parameterList
     ;
 
 parameterDecl
-    :   identifierList? '...'? type
+    :   idList=identifierList? '...'? type
     ;
 
 interfaceType
@@ -104,7 +104,7 @@ methodSpec
     ;
 
 methodName
-    :   IDENTIFIER
+    :   name=IDENTIFIER
     ;
 
 interfaceTypeName
@@ -169,7 +169,7 @@ typeDecl
     ;
 
 typeSpec
-    :   IDENTIFIER type
+    :   name=IDENTIFIER type
     ;
 
 varDecl
@@ -180,18 +180,18 @@ varDecl
     ;
 
 varSpec
-    :   identifierList
-        (   type ('=' expressionList)?
-        |   '=' expressionList
+    :   idList=identifierList
+        (   varType=type ('=' exprList=expressionList)?
+        |   '=' exprList=expressionList
         )
     ;
 
 shortVarDecl
-    :   identifierList ':=' expressionList
+    :   idList=identifierList ':=' exprList=expressionList
     ;
 
 functionDecl
-    :   'func' IDENTIFIER signature body?
+    :   'func' name=IDENTIFIER sig=signature bdy=body?
     ;
 
 body
@@ -199,7 +199,7 @@ body
     ;
 
 methodDecl
-    :   'func' receiver methodName signature body?
+    :   'func' recv=receiver name=methodName sig=signature bdy=body?
     ;
 
 receiver
@@ -232,11 +232,11 @@ basicLiteral
     ;
 
 qualifiedIdentifier
-    :   (packageName '.')? IDENTIFIER
+    :   (pkg=packageName '.')? id=IDENTIFIER
     ;
 
 methodExpr
-    :   receiverType '.' methodName
+    :   recvType=receiverType '.' name=methodName
     ;
 
 receiverType
@@ -301,29 +301,6 @@ expression
     |   expression '.' '(' type ')' // -> typeAssertion
     |   expression '(' (argumentList ','?)? ')' // -> call
 
-    |   expression '||' expression
-    |   expression '&&' expression
-
-    |   expression '==' expression
-    |   expression '!=' expression
-    |   expression '<' expression
-    |   expression '<=' expression
-    |   expression '>' expression
-    |   expression '>=' expression
-
-    |   expression '+' expression
-    |   expression '-' expression
-    |   expression '|' expression
-    |   expression '^' expression
-
-    |   expression '*' expression
-    |   expression '/' expression
-    |   expression '^' expression
-    |   expression '<<' expression
-    |   expression '>>' expression
-    |   expression '&' expression
-    |   expression '&^' expression
-
     |   '+' expression
     |   '-' expression
     |   '!' expression
@@ -331,6 +308,12 @@ expression
     |   '*' expression
     |   '&' expression
     |   '<-' expression
+
+    |   expression ('*' | '/' | '%' | '<<' | '>>' | '&' | '&^') expression
+    |   expression ('+' | '-' | '|' | '^') expression
+    |   expression ('==' | '!=' | '<' | '<=' | '>' | '>=') expression
+    |   expression '&&' expression
+    |   expression '||' expression
     ;
 
 primaryExpr
