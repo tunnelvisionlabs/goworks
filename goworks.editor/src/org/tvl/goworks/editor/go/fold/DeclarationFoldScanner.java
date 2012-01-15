@@ -41,6 +41,7 @@ import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
+import org.tvl.goworks.editor.go.parser.GoParserBase.importDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.topLevelDeclContext;
 
 /**
@@ -87,6 +88,14 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
 
         @Override
         public void enterRule(topLevelDeclContext ctx) {
+            FoldInfo foldInfo = createFold(ctx, "...", snapshot);
+            if (foldInfo != null) {
+                folds.add(foldInfo);
+            }
+        }
+
+        @Override
+        public void enterRule(importDeclContext ctx) {
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
                 folds.add(foldInfo);
