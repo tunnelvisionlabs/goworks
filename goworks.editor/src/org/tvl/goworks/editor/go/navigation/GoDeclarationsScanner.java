@@ -27,8 +27,10 @@
  */
 package org.tvl.goworks.editor.go.navigation;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
@@ -41,9 +43,19 @@ import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
+import org.tvl.goworks.editor.go.parser.GoParserBase;
+import org.tvl.goworks.editor.go.parser.GoParserBase.blockContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.constSpecContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.fieldDeclContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.functionDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.identifierListContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.methodDeclContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.resultContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.shortVarDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.sourceFileContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.structTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.typeSpecContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
 
 /**
  *
@@ -99,11 +111,19 @@ public class GoDeclarationsScanner {
 
     private static class DeclarationsScannerListener extends BlankGoParserBaseListener {
         private final DocumentSnapshot snapshot;
-        private final GoNode.DeclarationDescription rootDescription;
+        private final Deque<DeclarationDescription> descriptionStack = new ArrayDeque<DeclarationDescription>();
+        private final Deque<String> typeNameStack = new ArrayDeque<String>();
+
+        private int resultLevel;
+        private int blockLevel;
 
         public DeclarationsScannerListener(DocumentSnapshot snapshot, DeclarationDescription rootDescription) {
             this.snapshot = snapshot;
-            this.rootDescription = rootDescription;
+            this.descriptionStack.push(rootDescription);
+        }
+
+        public DeclarationDescription getCurrentParent() {
+            return descriptionStack.peek();
         }
 
         @Override
@@ -114,11 +134,152 @@ public class GoDeclarationsScanner {
                 Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
                 String signature = String.format("%s", identifier.getText());
 
-                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature);
-                description.setOffset(snapshot, rootDescription.getFileObject(), sourceInterval.a);
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.CONSTANT);
+                description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(String.format("%s", signature));
-                rootDescription.getChildren().add(description);
+                getCurrentParent().getChildren().add(description);
             }
+        }
+
+        @Override
+        public void enterRule(varSpecContext ctx) {
+            // no locals in navigator
+            if (blockLevel > 0) {
+                return;
+            }
+
+            identifierListContext idListContext = ctx.idList;
+            List<Token> identifiers = idListContext.ids_list;
+            for (Token identifier : identifiers) {
+                Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
+                String signature = String.format("%s", identifier.getText());
+
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
+                description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+                description.setHtmlHeader(String.format("%s", signature));
+                getCurrentParent().getChildren().add(description);
+            }
+        }
+
+        @Override
+        public void enterRule(shortVarDeclContext ctx) {
+            // no locals in navigator
+            if (blockLevel > 0) {
+                return;
+            }
+
+            identifierListContext idListContext = ctx.idList;
+            List<Token> identifiers = idListContext.ids_list;
+            for (Token identifier : identifiers) {
+                Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
+                String signature = String.format("%s", identifier.getText());
+
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
+                description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+                description.setHtmlHeader(String.format("%s", signature));
+                getCurrentParent().getChildren().add(description);
+            }
+        }
+
+        @Override
+        public void enterRule(fieldDeclContext ctx) {
+            identifierListContext idListContext = ctx.idList;
+            if (idListContext != null) {
+                List<Token> identifiers = idListContext.ids_list;
+                for (Token identifier : identifiers) {
+                    Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
+                    String signature = String.format("%s", identifier.getText());
+
+                    GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FIELD);
+                    description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+                    description.setHtmlHeader(String.format("%s", signature));
+                    getCurrentParent().getChildren().add(description);
+                }
+            }
+        }
+
+        @Override
+        public void enterRule(structTypeContext ctx) {
+            Interval sourceInterval = new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+            String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
+
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.STRUCT);
+            description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+            description.setHtmlHeader(String.format("%s", signature));
+            getCurrentParent().getChildren().add(description);
+            description.setChildren(new ArrayList<Description>());
+            descriptionStack.push(description);
+        }
+
+        @Override
+        public void exitRule(structTypeContext ctx) {
+            descriptionStack.pop();
+        }
+
+        @Override
+        public void enterRule(functionDeclContext ctx) {
+            Interval sourceInterval = new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+            String signature = String.format("%s", ctx.name.getText());
+
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FUNCTION);
+            description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+            description.setHtmlHeader(String.format("%s", signature));
+            getCurrentParent().getChildren().add(description);
+            description.setChildren(new ArrayList<Description>());
+            descriptionStack.push(description);
+        }
+
+        @Override
+        public void exitRule(functionDeclContext ctx) {
+            descriptionStack.pop();
+        }
+
+        @Override
+        public void enterRule(methodDeclContext ctx) {
+            Interval sourceInterval = new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+            String signature = String.format("%s", ctx.name.name.getText());
+
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
+            description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+            description.setHtmlHeader(String.format("%s", signature));
+            getCurrentParent().getChildren().add(description);
+            description.setChildren(new ArrayList<Description>());
+            descriptionStack.push(description);
+        }
+
+        @Override
+        public void exitRule(methodDeclContext ctx) {
+            descriptionStack.pop();
+        }
+
+        @Override
+        public void enterRule(typeSpecContext ctx) {
+            typeNameStack.push(ctx.name.getText());
+        }
+
+        @Override
+        public void exitRule(typeSpecContext ctx) {
+            typeNameStack.pop();
+        }
+
+        @Override
+        public void enterRule(resultContext ctx) {
+            resultLevel++;
+        }
+
+        @Override
+        public void exitRule(resultContext ctx) {
+            resultLevel--;
+        }
+
+        @Override
+        public void enterRule(blockContext ctx) {
+            blockLevel++;
+        }
+
+        @Override
+        public void exitRule(blockContext ctx) {
+            blockLevel--;
         }
 
     }

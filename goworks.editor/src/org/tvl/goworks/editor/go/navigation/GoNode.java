@@ -52,22 +52,74 @@ import org.openide.util.ImageUtilities;
 
 public class GoNode extends NavigatorNode {
 
-    public GoNode(NavigatorPanelUI ui, Description description) {
+    public GoNode(NavigatorPanelUI ui, DeclarationDescription description) {
         super(ui, description, DeclarationNodeFactory.INSTANCE);
     }
 
     @Override
+    public DeclarationDescription getDescription() {
+        return (DeclarationDescription)super.getDescription();
+    }
+
+    @Override
     public Image getIcon(int type) {
-        return ImageUtilities.loadImage("org/antlr/works/editor/st4/navigation/resources/template_parameter_16.png");
+        String resourceLocation = "org/tvl/goworks/editor/go/resources/";
+        String imageName;
+        switch (getDescription().getKind()) {
+        case CONSTANT:
+            imageName = "global_constant.png";
+            break;
+
+        case VARIABLE:
+            imageName = "global_variable.png";
+            break;
+
+        case FIELD:
+            imageName = "fields.png";
+            break;
+
+        case FUNCTION:
+            imageName = "global_function.png";
+            break;
+
+        case METHOD:
+            if (getDescription().isExported()) {
+                imageName = "methods.png";
+            } else {
+                imageName = "methods_protected.png";
+            }
+            break;
+
+        case STRUCT:
+            imageName = "struct_16.png";
+            break;
+
+        case UNKNOWN:
+        default:
+            return null;
+        }
+
+        return ImageUtilities.loadImage(resourceLocation + imageName);
     }
 
     public static class DeclarationDescription extends Description {
+        private final DeclarationKind kind;
 
         public DeclarationDescription() {
+            this.kind = DeclarationKind.UNKNOWN;
         }
 
-        public DeclarationDescription(String name) {
-            super(name);
+        public DeclarationDescription(String name, DeclarationKind kind) {
+            super(getSortOrder(kind) + "_" + name.toLowerCase());
+            this.kind = kind;
+        }
+
+        public DeclarationKind getKind() {
+            return kind;
+        }
+
+        public boolean isExported() {
+            return !getName().isEmpty() && Character.isUpperCase(getName().charAt(0));
         }
 
         @Override
@@ -83,6 +135,29 @@ public class GoNode extends NavigatorNode {
         public int hashCode() {
             return super.hashCode();
         }
+
+        private static int getSortOrder(DeclarationKind kind) {
+            switch (kind) {
+            case CONSTANT:
+                return 0;
+
+            case FUNCTION:
+            case METHOD:
+                return 1;
+
+            case FIELD:
+            case VARIABLE:
+                return 2;
+
+            case STRUCT:
+            case INTERFACE:
+                return 3;
+
+            case UNKNOWN:
+            default:
+                return 4;
+            }
+        }
     }
 
     protected static class DeclarationNodeFactory implements Factory {
@@ -90,7 +165,11 @@ public class GoNode extends NavigatorNode {
 
         @Override
         public NavigatorNode createNode(NavigatorPanelUI ui, Description key) {
-            return new GoNode(ui, key);
+            if (!(key instanceof DeclarationDescription)) {
+                throw new UnsupportedOperationException();
+            }
+
+            return new GoNode(ui, (DeclarationDescription)key);
         }
 
     }
