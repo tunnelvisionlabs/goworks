@@ -18,13 +18,14 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service=ProjectFactory.class)
 public class GoProjectFactory implements ProjectFactory {
 
-    public static final String PROJECT_DIR = "texts";
+    public static final String PROJECT_DIR = "nbgoproject";
 
     //Specifies when a project is a project, i.e.,
     //if the project directory "texts" is present:
     @Override
     public boolean isProject(FileObject projectDirectory) {
-        return projectDirectory.getFileObject(PROJECT_DIR) != null;
+        FileObject goprojectDir = projectDirectory.getFileObject(PROJECT_DIR);
+        return goprojectDir != null && goprojectDir.isFolder();
     }
 
     //Specifies when the project will be opened, i.e.,
@@ -42,8 +43,9 @@ public class GoProjectFactory implements ProjectFactory {
                     " deleted," +
                     " cannot save project");
         }
+
         //Force creation of the texts dir if it was deleted:
-        ((GoProject) project).getTextFolder(true);
+        ((GoProject) project).getProjectDataFolder(true);
     }
 
 }

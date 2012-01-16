@@ -45,7 +45,7 @@ public class GoProject implements Project {
         return projectDir;
     }
 
-    FileObject getTextFolder(boolean create) {
+    FileObject getProjectDataFolder(boolean create) {
         FileObject result =
                 projectDir.getFileObject(GoProjectFactory.PROJECT_DIR);
         if (result == null && create) {

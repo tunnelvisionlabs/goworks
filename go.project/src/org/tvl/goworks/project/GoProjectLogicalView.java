@@ -37,18 +37,17 @@ public class GoProjectLogicalView implements LogicalViewProvider {
     public Node createLogicalView() {
         try {
             //Get the Text directory, creating if deleted
-            FileObject text = project.getTextFolder(true);
+            FileObject root = project.getProjectDirectory();
 
             //Get the DataObject that represents it
-            DataFolder textDataObject =
-                    DataFolder.findFolder(text);
+            DataFolder rootDataObject = DataFolder.findFolder(root);
 
             //Get its default node-we'll wrap our node around it to change the
             //display name, icon, etc
-            Node realTextFolderNode = textDataObject.getNodeDelegate();
+            Node realRootFolderNode = rootDataObject.getNodeDelegate();
 
             //This FilterNode will be our project node
-            return new TextNode(realTextFolderNode, project);
+            return new TextNode(realRootFolderNode, project);
 
         } catch (DataObjectNotFoundException donfe) {
             Exceptions.printStackTrace(donfe);
