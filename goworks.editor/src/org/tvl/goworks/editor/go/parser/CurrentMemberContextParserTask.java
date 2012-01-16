@@ -54,6 +54,7 @@ import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
+import org.tvl.goworks.editor.go.parser.GoParserBase.topLevelDeclContext;
 
 /**
  *
@@ -87,42 +88,35 @@ public class CurrentMemberContextParserTask implements ParserTask {
         ParserData<List<Anchor>> anchorsData = result.get();
         List<Anchor> anchors = anchorsData.getData();
 
-        throw new UnsupportedOperationException("Not yet implemented.");
-//        GrammarParser.ruleContext ruleContext = null;
-//        int grammarType = -1;
-//
-//        if (anchors != null) {
-//            Anchor enclosing = null;
-//
-//            /*
-//             * parse the current rule
-//             */
-//            for (Anchor anchor : anchors) {
-//                if (anchor instanceof GrammarParserAnchorListener.GrammarTypeAnchor) {
-//                    grammarType = ((GrammarParserAnchorListener.GrammarTypeAnchor)anchor).getGrammarType();
-//                    continue;
-//                }
-//
-//                if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset && anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
-//                    enclosing = anchor;
-//                } else if (anchor.getSpan().getStartPosition(snapshot).getOffset() > caretOffset) {
-//                    break;
-//                }
-//            }
-//
-//            if (enclosing != null) {
-//                CharStream input = new DocumentSnapshotCharStream(snapshot);
-//                input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
-//                GrammarLexer lexer = new GrammarLexer(input);
-//                CommonTokenStream tokens = new TaskTokenStream(lexer);
-//                GrammarParser parser = new GrammarParser(tokens);
-//                parser.setBuildParseTree(true);
-//                ruleContext = parser.rule();
-//            }
-//        }
-//
-//        CurrentRuleContextData data = new CurrentRuleContextData(snapshot, grammarType, ruleContext);
-//        results.addResult(new BaseParserData<CurrentRuleContextData>(GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));
+        topLevelDeclContext context = null;
+
+        if (anchors != null) {
+            Anchor enclosing = null;
+
+            /*
+             * parse the current rule
+             */
+            for (Anchor anchor : anchors) {
+                if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset && anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
+                    enclosing = anchor;
+                } else if (anchor.getSpan().getStartPosition(snapshot).getOffset() > caretOffset) {
+                    break;
+                }
+            }
+
+            if (enclosing != null) {
+                CharStream input = new DocumentSnapshotCharStream(snapshot);
+                input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
+                GoLexer lexer = new GoLexer(input);
+                CommonTokenStream tokens = new TaskTokenStream(lexer);
+                GoParser parser = new GoParser(tokens, snapshot);
+                parser.setBuildParseTree(true);
+                context = parser.topLevelDecl();
+            }
+        }
+
+        CurrentDeclarationContextData data = new CurrentDeclarationContextData(snapshot, context);
+        results.addResult(new BaseParserData<CurrentDeclarationContextData>(GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, snapshot, data));
     }
 
     private class TaskTokenStream extends CommonTokenStream {
