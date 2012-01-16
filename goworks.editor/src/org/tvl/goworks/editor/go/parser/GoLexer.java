@@ -45,13 +45,14 @@ public class GoLexer extends GoLexerBase {
 
     @Override
     public Token nextToken() {
+        Token result;
         if (deferredEol != null) {
-            Token result = deferredEol;
+            result = deferredEol;
             deferredEol = null;
-            return result;
+        } else {
+            result = super.nextToken();
         }
 
-        Token result = super.nextToken();
         switch (result.getType()) {
         case IDENTIFIER:
         case INT_LITERAL:

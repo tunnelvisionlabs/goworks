@@ -46,7 +46,7 @@ sliceType
     ;
 
 structType
-    :   'struct' '{' (fieldDecl ';')* '}'
+    :   'struct' '{' (fieldDecl ';')* fieldDecl? '}'
     ;
 
 fieldDecl
@@ -95,7 +95,7 @@ parameterDecl
     ;
 
 interfaceType
-    :   'interface' '{' (methodSpec ';')* '}'
+    :   'interface' '{' (methodSpec (';' methodSpec)* ';'?)? '}'
     ;
 
 methodSpec
@@ -127,7 +127,7 @@ channelType
     ;
 
 block
-    :   '{' (statement ';')* '}'
+    :   '{' (statement (';' statement)* ';'?)? '}'
     ;
 
 declaration
@@ -145,7 +145,7 @@ topLevelDecl
 constDecl
     :   'const'
         (   constSpec
-        |   '(' (constSpec ';')* ')'
+        |   '(' (constSpec (';' constSpec)* ';'?)? ')'
         )
     ;
 
@@ -164,7 +164,7 @@ expressionList
 typeDecl
     :   'type'
         (   typeSpec
-        |   '(' (typeSpec ';')* ')'
+        |   '(' (typeSpec (';' typeSpec)* ';'?)? ')'
         )
     ;
 
@@ -175,7 +175,7 @@ typeSpec
 varDecl
     :   'var'
         (   varSpec
-        |   '(' (varSpec ';')* ')'
+        |   '(' (varSpec (';' varSpec)* ';'?)? ')'
         )
     ;
 
@@ -422,7 +422,7 @@ exprSwitchStmt
     ;
 
 exprCaseClause
-    :   exprSwitchCase ':' (statement ';')*
+    :   exprSwitchCase ':' (statement (';' statement)* ';'?)?
     ;
 
 exprSwitchCase
@@ -439,7 +439,7 @@ typeSwitchGuard
     ;
 
 typeCaseClause
-    :   typeSwitchCase ':' (statement ';')*
+    :   typeSwitchCase ':' (statement (';' statement)* ';'?)?
     ;
 
 typeSwitchCase
@@ -484,7 +484,7 @@ selectStmt
     ;
 
 commClause
-    :   commCase ':' (statement ';')*
+    :   commCase ':' (statement (';' statement)* ';'?)?
     ;
 
 commCase
@@ -546,7 +546,7 @@ packageName
     ;
 
 importDecl
-    :   'import' (importSpec | '(' (importSpec ';')* ')')
+    :   'import' (importSpec | '(' (importSpec (';' importSpec)* ';'?)? ')')
     ;
 
 importSpec
