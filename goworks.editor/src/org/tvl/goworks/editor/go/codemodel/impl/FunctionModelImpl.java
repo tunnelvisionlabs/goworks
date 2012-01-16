@@ -25,29 +25,32 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel;
+package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
+import org.netbeans.api.project.Project;
+import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 
 /**
  *
- * @author Sam Harwell
+ * @author sam
  */
-public interface FileModel extends CodeElementModel {
+public class FunctionModelImpl extends AbstractCodeElementModel implements FunctionModel {
 
-    Collection<? extends CodeElementModel> getCodeElements();
+    public FunctionModelImpl(String name, Project project, String packageName) {
+        super(name, project, packageName);
+    }
 
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
+    @Override
+    public Collection<? extends ParameterModel> getParameters() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
+    @Override
+    public Collection<? extends ParameterModel> getReturnValues() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-    Collection<? extends TypeModel> getTypes();
-
-    Collection<? extends ConstModel> getConstants();
-
-    Collection<? extends VarModel> getVars();
-
-    Collection<? extends FunctionModel> getFunctions();
 
 }

@@ -25,29 +25,19 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel;
+package org.tvl.goworks.editor.go.codemodel.impl;
 
-import java.util.Collection;
+import org.netbeans.api.project.Project;
+import org.tvl.goworks.editor.go.codemodel.ConstModel;
 
 /**
  *
- * @author Sam Harwell
+ * @author sam
  */
-public interface FileModel extends CodeElementModel {
+public class ConstModelImpl extends AbstractCodeElementModel implements ConstModel {
 
-    Collection<? extends CodeElementModel> getCodeElements();
-
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
-
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
-
-    Collection<? extends TypeModel> getTypes();
-
-    Collection<? extends ConstModel> getConstants();
-
-    Collection<? extends VarModel> getVars();
-
-    Collection<? extends FunctionModel> getFunctions();
+    public ConstModelImpl(String name, Project project, String packageName) {
+        super(name, project, packageName);
+    }
 
 }

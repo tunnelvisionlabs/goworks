@@ -25,29 +25,31 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel;
+package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
+import org.netbeans.api.project.Project;
+import org.tvl.goworks.editor.go.codemodel.FileModel;
+import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
 /**
  *
- * @author Sam Harwell
+ * @author sam
  */
-public interface FileModel extends CodeElementModel {
+public class PackageModelImpl extends AbstractCodeElementModel implements PackageModel {
 
-    Collection<? extends CodeElementModel> getCodeElements();
+    public PackageModelImpl(String name, Project project) {
+        super(name, project, name);
+    }
 
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
+    @Override
+    public PackageModel getPackage() {
+        return this;
+    }
 
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
-
-    Collection<? extends TypeModel> getTypes();
-
-    Collection<? extends ConstModel> getConstants();
-
-    Collection<? extends VarModel> getVars();
-
-    Collection<? extends FunctionModel> getFunctions();
+    @Override
+    public Collection<? extends FileModel> getFiles() {
+        return getCodeModelCache().getFiles(this);
+    }
 
 }

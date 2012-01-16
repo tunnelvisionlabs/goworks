@@ -25,29 +25,78 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel;
+package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  *
- * @author Sam Harwell
+ * @author sam
  */
-public interface FileModel extends CodeElementModel {
+public class FreezableArrayList<E> extends ArrayList<E> {
 
-    Collection<? extends CodeElementModel> getCodeElements();
+    private boolean frozen;
 
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
+    public boolean isFrozen() {
+        return frozen;
+    }
 
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
+    public void freeze() {
+        frozen = true;
+    }
 
-    Collection<? extends TypeModel> getTypes();
+    @Override
+    public E set(int index, E element) {
+        ensureModifiable();
+        return super.set(index, element);
+    }
 
-    Collection<? extends ConstModel> getConstants();
+    @Override
+    public boolean add(E e) {
+        ensureModifiable();
+        return super.add(e);
+    }
 
-    Collection<? extends VarModel> getVars();
+    @Override
+    public void add(int index, E element) {
+        ensureModifiable();
+        super.add(index, element);
+    }
 
-    Collection<? extends FunctionModel> getFunctions();
+    @Override
+    public boolean remove(Object o) {
+        ensureModifiable();
+        return super.remove(o);
+    }
 
+    @Override
+    public void clear() {
+        ensureModifiable();
+        super.clear();
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        ensureModifiable();
+        return super.addAll(c);
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        ensureModifiable();
+        return super.addAll(index, c);
+    }
+
+    @Override
+    protected void removeRange(int fromIndex, int toIndex) {
+        ensureModifiable();
+        super.removeRange(fromIndex, toIndex);
+    }
+
+    protected void ensureModifiable() {
+        if (isFrozen()) {
+            throw new IllegalStateException("The collection is frozen.");
+        }
+    }
 }

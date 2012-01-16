@@ -25,29 +25,66 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel;
+package org.tvl.goworks.editor.go.codemodel.impl;
 
-import java.util.Collection;
+import org.netbeans.api.project.Project;
+import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
 /**
  *
- * @author Sam Harwell
+ * @author sam
  */
-public interface FileModel extends CodeElementModel {
+public abstract class AbstractCodeElementModel implements CodeElementModel {
+    private final String name;
+    private final Project project;
+    private final String packageName;
 
-    Collection<? extends CodeElementModel> getCodeElements();
+    private boolean frozen;
 
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
+    public AbstractCodeElementModel(String name, Project project, String packageName) {
+        this.name = name;
+        this.project = project;
+        this.packageName = packageName;
+    }
 
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
+    public boolean isFrozen() {
+        return frozen;
+    }
 
-    Collection<? extends TypeModel> getTypes();
+    public final void freeze() {
+        if (isFrozen()) {
+            return;
+        }
 
-    Collection<? extends ConstModel> getConstants();
+        freezeImpl();
+        frozen = true;
+    }
 
-    Collection<? extends VarModel> getVars();
+    @Override
+    public PackageModel getPackage() {
+        return getCodeModelCache().getPackage(project, packageName);
+    }
 
-    Collection<? extends FunctionModel> getFunctions();
+    @Override
+    public String getName() {
+        return name;
+    }
 
+    public Project getProject() {
+        return project;
+    }
+
+    protected CodeModelCacheImpl getCodeModelCache() {
+        return CodeModelCacheImpl.getInstance();
+    }
+
+    protected void freezeImpl() {
+    }
+
+    protected void ensureModifiable() {
+        if (isFrozen()) {
+            throw new IllegalStateException("The object is frozen.");
+        }
+    }
 }

@@ -28,26 +28,16 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.project.Project;
 
 /**
  *
- * @author Sam Harwell
+ * @author sam
  */
-public interface FileModel extends CodeElementModel {
+public interface PackageModel extends CodeElementModel {
 
-    Collection<? extends CodeElementModel> getCodeElements();
+    Project getProject();
 
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
-
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
-
-    Collection<? extends TypeModel> getTypes();
-
-    Collection<? extends ConstModel> getConstants();
-
-    Collection<? extends VarModel> getVars();
-
-    Collection<? extends FunctionModel> getFunctions();
+    Collection<? extends FileModel> getFiles();
 
 }

@@ -25,29 +25,48 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel;
+package org.tvl.goworks.editor.go.codemodel.impl;
 
-import java.util.Collection;
+import java.util.AbstractList;
+import java.util.List;
 
 /**
  *
- * @author Sam Harwell
+ * @author sam
  */
-public interface FileModel extends CodeElementModel {
+public class ProxyCollection<E> extends AbstractList<E> {
+    private final List<? extends E>[] collections;
 
-    Collection<? extends CodeElementModel> getCodeElements();
+    public ProxyCollection(List<? extends E> ...collections) {
+        this.collections = collections;
+    }
 
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
+    @Override
+    public E get(int index) {
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException(index);
+        }
 
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
+        int offset = 0;
+        for (List<? extends E> list : collections) {
+            if (index - offset < list.size()) {
+                return list.get(index - offset);
+            }
 
-    Collection<? extends TypeModel> getTypes();
+            offset += list.size();
+        }
 
-    Collection<? extends ConstModel> getConstants();
+        throw new ArrayIndexOutOfBoundsException(index);
+    }
 
-    Collection<? extends VarModel> getVars();
+    @Override
+    public int size() {
+        int size = 0;
+        for (List<?> list : collections) {
+            size += list.size();
+        }
 
-    Collection<? extends FunctionModel> getFunctions();
+        return size;
+    }
 
 }
