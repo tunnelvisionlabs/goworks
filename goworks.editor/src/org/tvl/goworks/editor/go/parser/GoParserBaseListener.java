@@ -212,6 +212,39 @@ public interface GoParserBaseListener extends ParseTreeListener<Token> {
 	void enterRule(GoParserBase.expressionContext ctx);
 	void exitRule(GoParserBase.expressionContext ctx);
 
+	void enterRule(GoParserBase.unaryExprContext ctx);
+	void exitRule(GoParserBase.unaryExprContext ctx);
+
+	void enterRule(GoParserBase.multExprContext ctx);
+	void exitRule(GoParserBase.multExprContext ctx);
+
+	void enterRule(GoParserBase.addExprContext ctx);
+	void exitRule(GoParserBase.addExprContext ctx);
+
+	void enterRule(GoParserBase.compareExprContext ctx);
+	void exitRule(GoParserBase.compareExprContext ctx);
+
+	void enterRule(GoParserBase.andExprContext ctx);
+	void exitRule(GoParserBase.andExprContext ctx);
+
+	void enterRule(GoParserBase.orExprContext ctx);
+	void exitRule(GoParserBase.orExprContext ctx);
+
+	void enterRule(GoParserBase.selectorExprContext ctx);
+	void exitRule(GoParserBase.selectorExprContext ctx);
+
+	void enterRule(GoParserBase.indexExprContext ctx);
+	void exitRule(GoParserBase.indexExprContext ctx);
+
+	void enterRule(GoParserBase.sliceExprContext ctx);
+	void exitRule(GoParserBase.sliceExprContext ctx);
+
+	void enterRule(GoParserBase.typeAssertionExprContext ctx);
+	void exitRule(GoParserBase.typeAssertionExprContext ctx);
+
+	void enterRule(GoParserBase.callExprContext ctx);
+	void exitRule(GoParserBase.callExprContext ctx);
+
 	void enterRule(GoParserBase.primaryExprContext ctx);
 	void exitRule(GoParserBase.primaryExprContext ctx);
 

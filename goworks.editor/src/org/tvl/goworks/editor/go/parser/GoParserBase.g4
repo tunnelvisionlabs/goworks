@@ -153,7 +153,7 @@ interfaceType
     ;
 
 methodSpec
-    :   methodName signature
+    :   name=methodName sig=signature
     |   interfaceTypeName
     ;
 
@@ -257,16 +257,16 @@ methodDecl
     ;
 
 receiver
-    :   '(' IDENTIFIER? '*'? baseTypeName ')'
+    :   '(' name=IDENTIFIER? '*'? typ=baseTypeName ')'
     ;
 
 baseTypeName
-    :   IDENTIFIER
+    :   name=IDENTIFIER
     ;
 
 operand
-    :   literal
-    |   qualifiedIdentifier
+    :   lit=literal
+    |   qid=qualifiedIdentifier
     |   methodExpr
     |   '(' expression ')'
     ;
@@ -342,32 +342,37 @@ value
     ;
 
 functionLiteral
-    :   functionType body
+    :   typ=functionType body
     ;
 
 expression
     :   operand
     |   conversion
     |   builtinCall
-    |   expression '.' IDENTIFIER // -> selector
-    |   expression '[' expression ']' // -> index
-    |   expression '[' expression? ':' expression? ']' // -> slice
-    |   expression '.' '(' type ')' // -> typeAssertion
-    |   expression '(' (argumentList ','?)? ')' // -> call
+    |   expression '.' IDENTIFIER
+        -> selectorExpr
+    |   expression '[' expression ']'
+        -> indexExpr
+    |   expression '[' expression? ':' expression? ']'
+        -> sliceExpr
+    |   expression '.' '(' type ')'
+        -> typeAssertionExpr
+    |   expression '(' (argumentList ','?)? ')'
+        -> callExpr
 
-    |   '+' expression
-    |   '-' expression
-    |   '!' expression
-    |   '^' expression
-    |   '*' expression
-    |   '&' expression
-    |   '<-' expression
+    |   ('+' | '-' | '!' | '^' | '*' | '&' | '<-') expression
+        -> unaryExpr
 
     |   expression ('*' | '/' | '%' | '<<' | '>>' | '&' | '&^') expression
+        -> multExpr
     |   expression ('+' | '-' | '|' | '^') expression
+        -> addExpr
     |   expression ('==' | '!=' | '<' | '<=' | '>' | '>=') expression
+        -> compareExpr
     |   expression '&&' expression
+        -> andExpr
     |   expression '||' expression
+        -> orExpr
     ;
 
 primaryExpr
@@ -421,11 +426,11 @@ emptyStmt
     ;
 
 labeledStmt
-    :   label ':' statement
+    :   lbl=label ':' stmt=statement
     ;
 
 label
-    :   IDENTIFIER
+    :   name=IDENTIFIER
     ;
 
 expressionStmt
@@ -579,7 +584,7 @@ deferStmt
     ;
 
 builtinCall
-    :   IDENTIFIER '(' (builtinArgs ','?)? ')'
+    :   name=IDENTIFIER '(' (args=builtinArgs ','?)? ')'
     ;
 
 builtinArgs
@@ -588,7 +593,7 @@ builtinArgs
     ;
 
 sourceFile
-    :   packageClause ';' (importDecls+=importDecl ';')* (decls+=topLevelDecl ';')*
+    :   pkg=packageClause ';' (importDecls+=importDecl ';')* (decls+=topLevelDecl ';')*
     ;
 
 packageClause
@@ -608,5 +613,5 @@ importSpec
     ;
 
 importPath
-    :   StringLiteral
+    :   path=StringLiteral
     ;

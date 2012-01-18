@@ -213,6 +213,39 @@ public class BlankGoParserBaseListener implements GoParserBaseListener {
 	@Override public void enterRule(GoParserBase.expressionContext ctx) { }
 	@Override public void exitRule(GoParserBase.expressionContext ctx) { }
 
+	@Override public void enterRule(GoParserBase.unaryExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.unaryExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.multExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.multExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.addExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.addExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.compareExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.compareExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.andExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.andExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.orExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.orExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.selectorExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.selectorExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.indexExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.indexExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.sliceExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.sliceExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.typeAssertionExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.typeAssertionExprContext ctx) { }
+
+	@Override public void enterRule(GoParserBase.callExprContext ctx) { }
+	@Override public void exitRule(GoParserBase.callExprContext ctx) { }
+
 	@Override public void enterRule(GoParserBase.primaryExprContext ctx) { }
 	@Override public void exitRule(GoParserBase.primaryExprContext ctx) { }
 
