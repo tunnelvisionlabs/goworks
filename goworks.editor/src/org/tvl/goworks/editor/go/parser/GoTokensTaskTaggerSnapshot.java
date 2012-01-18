@@ -81,29 +81,10 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
     }
 
     private static class GoLexerWrapper extends GoLexer implements TokenSourceWithStateV4<SimpleLexerState> {
-//        private static final Deque<LexerATNSimulator> SharedInterpreters = new ArrayDeque<LexerATNSimulator>();
-//
-//        private LexerATNSimulator localInterpreter;
-//
-//        static {
-//            for (int i = 0; i < 4; i++) {
-//                SharedInterpreters.add(new LexerATNSimulator(_ATN));
-//            }
-//        }
 
         public GoLexerWrapper(CharStream input) {
             super(input);
         }
-
-//        @Override
-//        public Token nextToken() {
-//            try {
-//                takeSharedInterpreter();
-//                return super.nextToken();
-//            } finally {
-//                returnSharedInterpreter();
-//            }
-//        }
 
         @Override
         public CharStream getCharStream() {
@@ -115,34 +96,5 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
             return SimpleLexerState.createSimpleState(this);
         }
 
-//        public void takeSharedInterpreter() {
-//            if (localInterpreter != null) {
-//                // already have shared interpreter
-//                return;
-//            }
-//
-//            synchronized (SharedInterpreters) {
-//                if (SharedInterpreters.isEmpty()) {
-//                    return;
-//                }
-//
-//                localInterpreter = _interp;
-//                _interp = SharedInterpreters.poll();
-//            }
-//        }
-//
-//        public void returnSharedInterpreter() {
-//            if (localInterpreter == null) {
-//                // don't have a shared interpreter
-//                return;
-//            }
-//
-//            synchronized (SharedInterpreters) {
-//                SharedInterpreters.add(_interp);
-//            }
-//
-//            _interp = localInterpreter;
-//            localInterpreter = null;
-//        }
     }
 }
