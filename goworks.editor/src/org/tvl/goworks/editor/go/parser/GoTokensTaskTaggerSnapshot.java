@@ -27,6 +27,10 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.Map;
+import java.util.WeakHashMap;
 import org.antlr.netbeans.editor.highlighting.TokenSourceWithStateV4;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
@@ -39,6 +43,7 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<SimpleLexerState> {
+    private final Map<Thread, Reference<GoLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<GoLexerWrapper>>();
 
     public GoTokensTaskTaggerSnapshot(@NonNull DocumentSnapshot snapshot) {
         super(snapshot);
@@ -55,9 +60,19 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
 
     @Override
     protected TokenSourceWithStateV4<SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
-        GoLexerWrapper lexer = new GoLexerWrapper(input);
-        startState.apply(lexer);
-        return lexer;
+        synchronized (lexerCache) {
+            Reference<GoLexerWrapper> ref = lexerCache.get(Thread.currentThread());
+            GoLexerWrapper lexer = ref != null ? ref.get() : null;
+            if (lexer == null) {
+                lexer = new GoLexerWrapper(input);
+                lexerCache.put(Thread.currentThread(), new SoftReference<GoLexerWrapper>(lexer));
+            } else {
+                lexer.setInputStream(input);
+            }
+
+            startState.apply(lexer);
+            return lexer;
+        }
     }
 
     @Override
@@ -66,10 +81,29 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
     }
 
     private static class GoLexerWrapper extends GoLexer implements TokenSourceWithStateV4<SimpleLexerState> {
+//        private static final Deque<LexerATNSimulator> SharedInterpreters = new ArrayDeque<LexerATNSimulator>();
+//
+//        private LexerATNSimulator localInterpreter;
+//
+//        static {
+//            for (int i = 0; i < 4; i++) {
+//                SharedInterpreters.add(new LexerATNSimulator(_ATN));
+//            }
+//        }
 
         public GoLexerWrapper(CharStream input) {
             super(input);
         }
+
+//        @Override
+//        public Token nextToken() {
+//            try {
+//                takeSharedInterpreter();
+//                return super.nextToken();
+//            } finally {
+//                returnSharedInterpreter();
+//            }
+//        }
 
         @Override
         public CharStream getCharStream() {
@@ -80,5 +114,35 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
         public SimpleLexerState getState() {
             return SimpleLexerState.createSimpleState(this);
         }
+
+//        public void takeSharedInterpreter() {
+//            if (localInterpreter != null) {
+//                // already have shared interpreter
+//                return;
+//            }
+//
+//            synchronized (SharedInterpreters) {
+//                if (SharedInterpreters.isEmpty()) {
+//                    return;
+//                }
+//
+//                localInterpreter = _interp;
+//                _interp = SharedInterpreters.poll();
+//            }
+//        }
+//
+//        public void returnSharedInterpreter() {
+//            if (localInterpreter == null) {
+//                // don't have a shared interpreter
+//                return;
+//            }
+//
+//            synchronized (SharedInterpreters) {
+//                SharedInterpreters.add(_interp);
+//            }
+//
+//            _interp = localInterpreter;
+//            localInterpreter = null;
+//        }
     }
 }
