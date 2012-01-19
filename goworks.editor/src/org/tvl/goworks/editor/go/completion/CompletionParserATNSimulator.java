@@ -56,6 +56,7 @@ import org.antlr.v4.runtime.dfa.DFAState;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
+import org.tvl.goworks.editor.go.parser.GoLexerBase;
 
 /**
  *
@@ -350,31 +351,9 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
     private static final List<Integer> WORDLIKE_TOKEN_TYPES =
         new ArrayList<Integer>() {{
             // keywords
-//            add(GrammarLexer.OPTIONS);
-//            add(GrammarLexer.TOKENS);
-//            add(GrammarLexer.IMPORT);
-//            add(GrammarLexer.FRAGMENT);
-//            add(GrammarLexer.LEXER);
-//            add(GrammarLexer.PARSER);
-//            add(GrammarLexer.GRAMMAR);
-//            add(GrammarLexer.PROTECTED);
-//            add(GrammarLexer.PUBLIC);
-//            add(GrammarLexer.PRIVATE);
-//            add(GrammarLexer.RETURNS);
-//            add(GrammarLexer.LOCALS);
-//            add(GrammarLexer.THROWS);
-//            add(GrammarLexer.CATCH);
-//            add(GrammarLexer.FINALLY);
-//            add(GrammarLexer.TEMPLATE);
-//            add(GrammarLexer.MODE);
-//            // atoms
-//            add(GrammarLexer.RULE_REF);
-//            add(GrammarLexer.TOKEN_REF);
-//            add(GrammarLexer.ID);
-//            // special
-//            add(GrammarLexer.ARG_ACTION_WORD);
-//            add(GrammarLexer.ACTION_REFERENCE);
-//            add(GrammarLexer.ACTION_WORD);
+            addAll(KeywordCompletionItem.KEYWORD_TYPES);
+            // identifiers
+            add(GoLexerBase.IDENTIFIER);
 
             Collections.sort(this);
         }};

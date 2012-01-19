@@ -83,7 +83,7 @@ public abstract class GoCompletionItem implements CompletionItem {
 
     @Override
     public final void defaultAction(JTextComponent component) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GoCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public void defaultAction(@NonNull JTextComponent component, @NonNull GoCompletionController controller, boolean isSelected) {
@@ -122,14 +122,14 @@ public abstract class GoCompletionItem implements CompletionItem {
 
     @Override
     public final void processKeyEvent(KeyEvent evt) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GoCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public void processKeyEvent(KeyEvent evt, GoCompletionController controller, boolean isSelected) {
         if (evt.getID() == KeyEvent.KEY_TYPED) {
-            if (!GoCompletionProvider.autoPopupOnGrammarIdentifierPart()
+            if (!GoCompletionProvider.autoPopupOnIdentifierPart()
                 && evt.getModifiers() == 0
-                && GoCompletionProvider.getGrammarCompletionSelectors().indexOf(evt.getKeyChar()) >= 0) {
+                && GoCompletionProvider.getCompletionSelectors().indexOf(evt.getKeyChar()) >= 0) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         } else if (evt.getID() == KeyEvent.KEY_PRESSED && evt.getKeyCode() == KeyEvent.VK_ENTER && evt.isControlDown()) {
@@ -146,7 +146,7 @@ public abstract class GoCompletionItem implements CompletionItem {
 
     @Override
     public final void render(Graphics g, Font defaultFont, Color defaultColor, Color backgroundColor, int width, int height, boolean selected) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GoCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public void render(CompletionController controller, Graphics g, Font defaultFont, Color foregroundColor, Color backgroundColor, Color selectedForegroundColor, Color selectedBackgroundColor, int width, int height, boolean isBestMatch, boolean isSelected) {
@@ -165,7 +165,7 @@ public abstract class GoCompletionItem implements CompletionItem {
 
     @Override
     public final boolean instantSubstitution(JTextComponent component) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController.");
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GoCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public boolean instantSubstitution(@NonNull JTextComponent component, @NonNull GoCompletionController controller) {

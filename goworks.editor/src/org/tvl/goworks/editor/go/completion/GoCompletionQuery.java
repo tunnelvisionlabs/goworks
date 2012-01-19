@@ -96,7 +96,7 @@ import org.tvl.goworks.editor.go.parser.GoLexerBase;
  * @author Sam Harwell
  */
 public final class GoCompletionQuery extends AsyncCompletionQuery {
-    // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionQuery.level=FINE
+    // -J-Dorg.tvl.goworks.editor.go.completion.GoCompletionQuery.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoCompletionQuery.class.getName());
 
     private static final int NO_ADDITIONAL_ITEMS = 0;
@@ -184,7 +184,7 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
     protected void query(CompletionResultSet resultSet, Document doc, int caretOffset) {
         try {
             this.caretOffset = caretOffset;
-            if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE || GoCompletionProvider.isGrammarContext(component, caretOffset, true, true)) {
+            if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE || GoCompletionProvider.isGoContext(component, caretOffset, true)) {
                 results = null;
                 documentation = null;
                 if (toolTip != null) {
@@ -328,7 +328,7 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
         return new Task(document);
     }
 
-    /*package*/ static boolean isGrammarIdentifierPart(String typedText) {
+    /*package*/ static boolean isIdentifierPart(String typedText) {
         for (int i = 0; i < typedText.length(); i++) {
             if (!Character.isJavaIdentifierPart(typedText.charAt(i))) {
                 return false;
@@ -389,7 +389,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
             boolean definiteInAction;
             Map<RuleContext, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
-            int grammarType = -1;
 
             ParserTaskManager taskManager = getParserTaskManager();
             if (taskManager == null) {
@@ -461,7 +460,7 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
 
 //                        CharStream input = new DocumentSnapshotCharStream(snapshot);
 //                        input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
-//                        GrammarLexer lexer = new GrammarLexer(input);
+//                        GoLexer lexer = new GoLexer(input);
                     TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, taggerTokenSource);
                     CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 

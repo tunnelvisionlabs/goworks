@@ -27,23 +27,15 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.classification.TokenTag;
-import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -78,13 +70,13 @@ import org.tvl.goworks.editor.go.parser.GoLexerBase;
     "GCP-instance-members="
 })
 public class GoCompletionProvider implements CompletionProvider {
-    // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionProvider.level=FINE
+    // -J-Dorg.tvl.goworks.editor.go.completion.GoCompletionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoCompletionProvider.class.getName());
 
     public static final int AUTO_QUERY_TYPE = 0x00010000;
 
-    private static String grammarCompletionAutoPopupTriggers = "$";
-    private static String grammarCompletionSelectors = "";
+    private static String goCompletionAutoPopupTriggers = "";
+    private static String goCompletionSelectors = "";
 
     public static void incompleteCompletionSupport() {
         assert false : "Editor code completion for Go is not yet complete.";
@@ -100,10 +92,10 @@ public class GoCompletionProvider implements CompletionProvider {
             return 0;
         }
 
-        boolean triggered = getGrammarCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0;
-        if (triggered || (autoPopupOnGrammarIdentifierPart() && GoCompletionQuery.isGrammarIdentifierPart(typedText))) {
+        boolean triggered = getCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0;
+        if (triggered || (autoPopupOnIdentifierPart() && GoCompletionQuery.isIdentifierPart(typedText))) {
             int offset = component.getSelectionStart() - 1;
-            Token contextToken = getGrammarContext(component, offset);
+            Token contextToken = getContext(component, offset);
             if (contextToken == null) {
                 return 0;
             }
@@ -123,8 +115,7 @@ public class GoCompletionProvider implements CompletionProvider {
             }
 
             boolean allowInStrings = false;
-            boolean allowInActions = triggered;
-            if (isGrammarContext(contextToken, offset, allowInStrings, allowInActions)) {
+            if (isGoContext(contextToken, offset, allowInStrings)) {
                 return COMPLETION_QUERY_TYPE | AUTO_QUERY_TYPE;
             }
         }
@@ -150,23 +141,23 @@ public class GoCompletionProvider implements CompletionProvider {
         return null;
     }
 
-    public static boolean autoPopupOnGrammarIdentifierPart() {
+    public static boolean autoPopupOnIdentifierPart() {
         return true;
     }
 
-    public static String getGrammarCompletionAutoPopupTriggers() {
-        return grammarCompletionAutoPopupTriggers;
+    public static String getCompletionAutoPopupTriggers() {
+        return goCompletionAutoPopupTriggers;
     }
 
-    public static String getGrammarCompletionSelectors() {
-        return grammarCompletionSelectors;
+    public static String getCompletionSelectors() {
+        return goCompletionSelectors;
     }
 
-    public static Token getGrammarContext(JTextComponent component, int offset) {
-        return getGrammarContext(component.getDocument(), offset);
+    public static Token getContext(JTextComponent component, int offset) {
+        return getContext(component.getDocument(), offset);
     }
 
-    public static Token getGrammarContext(Document document, int offset) {
+    public static Token getContext(Document document, int offset) {
         if (document instanceof AbstractDocument) {
             ((AbstractDocument)document).readLock();
         }
@@ -192,8 +183,8 @@ public class GoCompletionProvider implements CompletionProvider {
                 Iterable<TaggedPositionRegion<TokenTag>> tags = tagger.getTags(new NormalizedSnapshotPositionRegionCollection(new SnapshotPositionRegion(snapshot, region)));
 
                 // TODO: cache tokens
-//                ANTLRStringStream input = new ANTLRStringStream(document.getText(0, document.getLength()));
-//                GrammarLexer lexer = new GrammarLexer(input);
+//                ANTLRInputStream input = new ANTLRInputStream(document.getText(0, document.getLength()));
+//                GoLexer lexer = new GoLexer(input);
 //                CommonTokenStream tokenStream = new CommonTokenStream(lexer);
                 Token token = null;
 //                for (token = tokenStream.LT(1); token != null && token.getType() != Token.EOF; token = tokenStream.LT(1)) {
@@ -227,7 +218,7 @@ public class GoCompletionProvider implements CompletionProvider {
                 //List<Token> tokens;
 //            } catch (BadLocationException ex) {
 //                Exceptions.printStackTrace(ex);
-//                return false;
+//                return null;
 //            }
         } finally {
             if (document instanceof AbstractDocument) {
@@ -236,11 +227,11 @@ public class GoCompletionProvider implements CompletionProvider {
         }
     }
 
-    /*package*/ static boolean isGrammarContext(JTextComponent component, int offset, boolean allowInStrings, boolean allowInActions) {
-        return isGrammarContext(getGrammarContext(component, offset), offset, allowInStrings, allowInActions);
+    /*package*/ static boolean isGoContext(JTextComponent component, int offset, boolean allowInStrings) {
+        return isGoContext(getContext(component, offset), offset, allowInStrings);
     }
 
-    /*package*/ static boolean isGrammarContext(Token token, int offset, boolean allowInStrings, boolean allowInActions) {
+    /*package*/ static boolean isGoContext(Token token, int offset, boolean allowInStrings) {
         if (token == null) {
             return false;
         }
@@ -253,10 +244,6 @@ public class GoCompletionProvider implements CompletionProvider {
         case GoLexerBase.StringLiteral:
             return allowInStrings;
 
-//        case GoLexerBase.ARG_ACTION_WORD:
-//        case GoLexerBase.ACTION_WORD:
-//            return allowInActions;
-
         case GoLexerBase.WS:
             return true;
 
@@ -265,43 +252,4 @@ public class GoCompletionProvider implements CompletionProvider {
         }
     }
 
-    public static Collection<Description> getRulesFromGrammar(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
-        Description rootDescription = null;
-        Future<ParserData<Description>> futureNavigatorRootData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-        try {
-            ParserData<Description> data = futureNavigatorRootData.get();
-            if (data != null) {
-                rootDescription = data.getData();
-            }
-        } catch (InterruptedException ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "An exception occurred while parsing navigator data.", ex);
-            }
-        } catch (ExecutionException ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "An exception occurred while parsing navigator data.", ex);
-            }
-        }
-
-        if (rootDescription != null) {
-            List<Description> rules = new ArrayList<Description>();
-            Queue<Description> workList = new ArrayDeque<Description>();
-            workList.add(rootDescription);
-
-            while (!workList.isEmpty()) {
-                Description description = workList.remove();
-                if (description.getOffset() > 0) {
-                    rules.add(description);
-                }
-
-                if (description.getChildren() != null) {
-                    workList.addAll(description.getChildren());
-                }
-            }
-
-            return rules;
-        }
-
-        return Collections.emptyList();
-    }
 }
