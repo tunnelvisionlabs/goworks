@@ -86,6 +86,14 @@ public class GoCompletionProvider implements CompletionProvider {
     private static String grammarCompletionAutoPopupTriggers = "$";
     private static String grammarCompletionSelectors = "";
 
+    public static void incompleteCompletionSupport() {
+        assert false : "Editor code completion for Go is not yet complete.";
+    }
+
+    public static void incompleteCompletionSupport(String message) {
+        assert false : message;
+    }
+
     @Override
     public int getAutoQueryTypes(JTextComponent component, String typedText) {
         if (typedText == null || typedText.length() != 1) {
