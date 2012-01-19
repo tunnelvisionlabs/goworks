@@ -90,6 +90,7 @@ import org.openide.util.NbBundle;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.parser.GoLexerBase;
+import org.tvl.goworks.editor.go.parser.GoParserBase;
 
 /**
  *
@@ -457,10 +458,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                     }
 
                     TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
-
-//                        CharStream input = new DocumentSnapshotCharStream(snapshot);
-//                        input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
-//                        GoLexer lexer = new GoLexer(input);
                     TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, taggerTokenSource);
                     CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
@@ -468,16 +465,15 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new CodeCompletionErrorStrategy());
 
-                    GoCompletionProvider.incompleteCompletionSupport();
-                    //switch (previous.getRule()) {
-                    //case GrammarParser.RULE_rule:
-                    //    parseTrees = getParseTrees(parser);
-                    //    break;
-                    //
-                    //default:
-                    //    parseTrees = null;
-                    //    break;
-                    //}
+                    switch (previous.getRule()) {
+                    case GoParserBase.RULE_topLevelDecl:
+                        parseTrees = getParseTrees(parser);
+                        break;
+                    
+                    default:
+                        parseTrees = null;
+                        break;
+                    }
 
                     //boolean hasActionConfig = false;
                     //boolean hasNonActionConfig = false;
@@ -852,14 +848,11 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
         }
 
         private void tryParse(CodeCompletionGoParser parser, List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath, Map<RuleContext, CaretReachedException> results) {
-            RuleContext parseTree = null;
+            RuleContext parseTree;
             try {
                 parser.getTokenStream().seek(0);
                 parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);
-
-                GoCompletionProvider.incompleteCompletionSupport();
-                //parseTree = parser.rules();
-
+                parseTree = parser.topLevelDecl();
                 results.put(parseTree, null);
             } catch (CaretReachedException ex) {
                 for (parseTree = ex.getFinalContext(); parseTree.getParent() != null; parseTree = (RuleContext)parseTree.getParent()) {
