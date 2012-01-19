@@ -56,9 +56,12 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.shared.TaggerTokenSource;
 import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
+import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
+import org.tvl.goworks.editor.go.codemodel.impl.CodeModelCacheImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
 
 /**
  *
@@ -82,9 +85,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         Future<ParserData<Tagger<TokenTag>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS);
         Tagger<TokenTag> tagger = futureTokensData.get().getData();
         TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
-//        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
-//        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
-//        GrammarLexer lexer = new GrammarLexer(input);
+
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
         GoParser parser = new GoParser(tokenStream, snapshot);
         parser.setBuildParseTree(true);
@@ -98,10 +99,26 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
         results.addResult(result);
 
-//        CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
-//        ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
-//        ParserData<FileModel> fileModelResult = new BaseParserData<FileModel>(TemplateParserDataDefinitions.FILE_MODEL, snapshot, codeModelBuilderListener.getFileModel());
-//        results.addResult(fileModelResult);
+        try {
+            CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
+            ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
+            FileModelImpl fileModel = codeModelBuilderListener.getFileModel();
+            if (fileModel != null) {
+                updateCodeModelCache(fileModel);
+            }
+            ParserData<FileModel> fileModelResult = new BaseParserData<FileModel>(GoParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
+            results.addResult(fileModelResult);
+        } catch (RuntimeException ex) {
+            Exceptions.printStackTrace(ex);
+            throw ex;
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
+
+    private void updateCodeModelCache(FileModelImpl fileModel) {
+        CodeModelCacheImpl codeModelCache = CodeModelCacheImpl.getInstance();
+        codeModelCache.updateFile(fileModel);
     }
 
     private static class InterruptableTokenStream extends CommonTokenStream {
