@@ -29,40 +29,58 @@ package org.tvl.goworks.editor.go.completion;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import org.tvl.goworks.editor.go.parser.GoLexerBase;
 
 /**
  *
  * @author Sam Harwell
  */
 public class KeywordCompletionItem extends GoCompletionItem {
+    public static final Collection<Integer> KEYWORD_TYPES =
+        new ArrayList<Integer>() {{
+            add(GoLexerBase.Break);
+            add(GoLexerBase.Case);
+            add(GoLexerBase.Chan);
+            add(GoLexerBase.Const);
+            add(GoLexerBase.Continue);
+            add(GoLexerBase.Default);
+            add(GoLexerBase.Defer);
+            add(GoLexerBase.Else);
+            add(GoLexerBase.Fallthrough);
+            add(GoLexerBase.For);
+            add(GoLexerBase.Func);
+            add(GoLexerBase.Go);
+            add(GoLexerBase.Goto);
+            add(GoLexerBase.If);
+            add(GoLexerBase.Import);
+            add(GoLexerBase.Interface);
+            add(GoLexerBase.Map);
+            add(GoLexerBase.Package);
+            add(GoLexerBase.Range);
+            add(GoLexerBase.Return);
+            add(GoLexerBase.Select);
+            add(GoLexerBase.Struct);
+            add(GoLexerBase.Switch);
+            add(GoLexerBase.Type);
+            add(GoLexerBase.Var);
+            Collections.sort(this);
+        }};
+
+    public static final Collection<String> KEYWORDS =
+        new ArrayList<String>() {{
+            for (int i : KEYWORD_TYPES) {
+                add(GoLexerBase.ruleNames[i].toLowerCase());
+            }
+
+            Collections.sort(this);
+        }};
 
     public static final Collection<KeywordCompletionItem> KEYWORD_ITEMS =
         new ArrayList<KeywordCompletionItem>() {{
-            add(new KeywordCompletionItem("break"));
-            add(new KeywordCompletionItem("case"));
-            add(new KeywordCompletionItem("chan"));
-            add(new KeywordCompletionItem("const"));
-            add(new KeywordCompletionItem("continue"));
-            add(new KeywordCompletionItem("default"));
-            add(new KeywordCompletionItem("defer"));
-            add(new KeywordCompletionItem("else"));
-            add(new KeywordCompletionItem("fallthrough"));
-            add(new KeywordCompletionItem("for"));
-            add(new KeywordCompletionItem("func"));
-            add(new KeywordCompletionItem("go"));
-            add(new KeywordCompletionItem("goto"));
-            add(new KeywordCompletionItem("if"));
-            add(new KeywordCompletionItem("import"));
-            add(new KeywordCompletionItem("interface"));
-            add(new KeywordCompletionItem("map"));
-            add(new KeywordCompletionItem("package"));
-            add(new KeywordCompletionItem("range"));
-            add(new KeywordCompletionItem("return"));
-            add(new KeywordCompletionItem("select"));
-            add(new KeywordCompletionItem("struct"));
-            add(new KeywordCompletionItem("switch"));
-            add(new KeywordCompletionItem("type"));
-            add(new KeywordCompletionItem("var"));
+            for (String keyword : KEYWORDS) {
+                add(new KeywordCompletionItem(keyword));
+            }
         }};
 
     private final String keyword;
