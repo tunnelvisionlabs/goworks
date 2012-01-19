@@ -27,17 +27,39 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
-import org.netbeans.api.project.Project;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class ImportDeclarationModelImpl extends AbstractCodeElementModel implements ImportDeclarationModel {
+    private final String path;
+    private final String alias;
+    private final boolean mergeWithLocal;
 
-    public ImportDeclarationModelImpl(String name, Project project, String packageName) {
-        super(name, project, packageName);
+    public ImportDeclarationModelImpl(@NonNull String path, @NullAllowed String alias, boolean mergeWithLocal, @NonNull FileModelImpl file) {
+        super(getAlias(path, alias), file);
+        this.path = path;
+        this.alias = alias;
+        this.mergeWithLocal = mergeWithLocal;
     }
 
+    @Override
+    public boolean isMergeWithLocal() {
+        return mergeWithLocal;
+    }
+
+    private static String getAlias(@NonNull String path, @NullAllowed String alias) {
+        if (alias == null || alias.isEmpty()) {
+            alias = path.substring(path.lastIndexOf('/') + 1);
+            int start = alias.startsWith("\"") ? 1 : 0;
+            int end = alias.length() - start - (alias.endsWith("\"") ? 1 : 0);
+            alias = alias.substring(start, end);
+        }
+
+        return alias;
+    }
 }

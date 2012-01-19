@@ -27,7 +27,9 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
@@ -41,7 +43,7 @@ import org.tvl.goworks.editor.go.codemodel.VarModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class FileModelImpl extends AbstractCodeElementModel implements FileModel {
     private final FreezableArrayList<PackageDeclarationModelImpl> packageDeclarations = new FreezableArrayList<PackageDeclarationModelImpl>();
@@ -77,8 +79,18 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     }
 
     @Override
+    public Collection<TypeModelImpl> getTypes(String name) {
+        return CodeModelCacheImpl.findElementsByName(getTypes(), name);
+    }
+
+    @Override
     public Collection<ConstModelImpl> getConstants() {
         return constants;
+    }
+
+    @Override
+    public Collection<ConstModelImpl> getConstants(String name) {
+        return CodeModelCacheImpl.findElementsByName(getConstants(), name);
     }
 
     @Override
@@ -87,8 +99,18 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     }
 
     @Override
+    public Collection<VarModelImpl> getVars(String name) {
+        return CodeModelCacheImpl.findElementsByName(getVars(), name);
+    }
+
+    @Override
     public Collection<FunctionModelImpl> getFunctions() {
         return functions;
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getFunctions(String name) {
+        return CodeModelCacheImpl.findElementsByName(getFunctions(), name);
     }
 
     @Override

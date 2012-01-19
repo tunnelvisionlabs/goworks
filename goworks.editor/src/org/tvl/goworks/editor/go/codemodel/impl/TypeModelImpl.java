@@ -32,12 +32,12 @@ import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
-public class TypeModelImpl extends AbstractCodeElementModel implements TypeModel {
+public abstract class TypeModelImpl extends AbstractCodeElementModel implements TypeModel {
 
-    public TypeModelImpl(String name, Project project, String packageName) {
-        super(name, project, packageName);
+    public TypeModelImpl(String name, FileModelImpl fileModel) {
+        super(name, fileModel);
     }
 
 }

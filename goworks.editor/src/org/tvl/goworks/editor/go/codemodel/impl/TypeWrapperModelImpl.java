@@ -25,37 +25,25 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel;
+package org.tvl.goworks.editor.go.codemodel.impl;
 
-import java.util.Collection;
+import org.tvl.goworks.editor.go.codemodel.TypeWrapperModel;
 
 /**
  *
  * @author Sam Harwell
  */
-public interface FileModel extends CodeElementModel {
+public abstract class TypeWrapperModelImpl extends TypeModelImpl implements TypeWrapperModel {
+    private final TypeModelImpl elementType;
 
-    Collection<? extends CodeElementModel> getCodeElements();
+    public TypeWrapperModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
+        super(name, fileModel);
+        this.elementType = elementType;
+    }
 
-    // allow multiples to improve ability to recover from syntax errors
-    Collection<? extends PackageDeclarationModel> getPackageDeclarations();
-
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
-
-    Collection<? extends TypeModel> getTypes();
-
-    Collection<? extends TypeModel> getTypes(String name);
-
-    Collection<? extends ConstModel> getConstants();
-
-    Collection<? extends ConstModel> getConstants(String name);
-
-    Collection<? extends VarModel> getVars();
-
-    Collection<? extends VarModel> getVars(String name);
-
-    Collection<? extends FunctionModel> getFunctions();
-
-    Collection<? extends FunctionModel> getFunctions(String name);
+    @Override
+    public TypeModelImpl getElementType() {
+        return elementType;
+    }
 
 }

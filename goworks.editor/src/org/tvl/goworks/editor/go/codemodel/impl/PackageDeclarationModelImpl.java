@@ -32,12 +32,12 @@ import org.tvl.goworks.editor.go.codemodel.PackageDeclarationModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class PackageDeclarationModelImpl extends AbstractCodeElementModel implements PackageDeclarationModel {
 
-    public PackageDeclarationModelImpl(String name, Project project, String packageName) {
-        super(name, project, packageName);
+    public PackageDeclarationModelImpl(String name, Project project) {
+        super(name, project, name);
     }
 
 }

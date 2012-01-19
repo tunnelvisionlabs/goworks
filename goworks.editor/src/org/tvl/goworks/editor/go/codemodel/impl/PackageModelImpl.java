@@ -27,19 +27,25 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class PackageModelImpl extends AbstractCodeElementModel implements PackageModel {
+    private final Map<String, FileModelImpl> files = new HashMap<String, FileModelImpl>();
 
-    public PackageModelImpl(String name, Project project) {
-        super(name, project, name);
+    public PackageModelImpl(String name, Project project, String path) {
+        super(name, project, path);
     }
 
     @Override
@@ -49,7 +55,31 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<? extends FileModel> getFiles() {
-        return getCodeModelCache().getFiles(this);
+        return files.values();
+    }
+
+    @Override
+    public Collection<? extends TypeModel> getTypes() {
+        List<TypeModel> types = new ArrayList<TypeModel>();
+        for (FileModel file : getFiles()) {
+            types.addAll(file.getTypes());
+        }
+
+        return types;
+    }
+
+    @Override
+    public Collection<? extends TypeModel> getTypes(String name) {
+        List<TypeModel> types = new ArrayList<TypeModel>();
+        for (FileModel file : getFiles()) {
+            types.addAll(file.getTypes(name));
+        }
+
+        return types;
+    }
+
+    public void updateFile(FileModelImpl fileModel) {
+        files.put(fileModel.getName(), fileModel);
     }
 
 }

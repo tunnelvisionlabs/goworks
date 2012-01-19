@@ -32,12 +32,16 @@ import org.netbeans.api.project.Project;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public interface PackageModel extends CodeElementModel {
 
     Project getProject();
 
     Collection<? extends FileModel> getFiles();
+
+    Collection<? extends TypeModel> getTypes();
+
+    Collection<? extends TypeModel> getTypes(String name);
 
 }

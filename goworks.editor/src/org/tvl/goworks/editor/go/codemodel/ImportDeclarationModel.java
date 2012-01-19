@@ -29,8 +29,10 @@ package org.tvl.goworks.editor.go.codemodel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public interface ImportDeclarationModel extends CodeElementModel {
+
+    boolean isMergeWithLocal();
 
 }

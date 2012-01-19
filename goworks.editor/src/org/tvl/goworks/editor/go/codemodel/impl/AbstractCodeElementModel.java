@@ -27,25 +27,34 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public abstract class AbstractCodeElementModel implements CodeElementModel {
+    @NonNull
     private final String name;
+    @NullAllowed
     private final Project project;
-    private final String packageName;
+    @NonNull
+    private final String packagePath;
 
     private boolean frozen;
 
-    public AbstractCodeElementModel(String name, Project project, String packageName) {
+    public AbstractCodeElementModel(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
         this.name = name;
         this.project = project;
-        this.packageName = packageName;
+        this.packagePath = packagePath;
+    }
+
+    public AbstractCodeElementModel(@NonNull String name, @NonNull FileModelImpl file) {
+        this(name, file.getProject(), file.getPackagePath());
     }
 
     public boolean isFrozen() {
@@ -63,7 +72,7 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
 
     @Override
     public PackageModel getPackage() {
-        return getCodeModelCache().getPackage(project, packageName);
+        return getCodeModelCache().getUniquePackage(project, packagePath);
     }
 
     @Override
@@ -73,6 +82,10 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
 
     public Project getProject() {
         return project;
+    }
+
+    public String getPackagePath() {
+        return packagePath;
     }
 
     protected CodeModelCacheImpl getCodeModelCache() {
