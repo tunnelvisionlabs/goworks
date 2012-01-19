@@ -571,24 +571,9 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                          * KEYWORD ANALYSIS
                          */
                         IntervalSet remainingKeywords = new IntervalSet();
-                        GoCompletionProvider.incompleteCompletionSupport();
-                        //remainingKeywords.add(GrammarLexer.OPTIONS);
-                        //remainingKeywords.add(GrammarLexer.TOKENS);
-                        //remainingKeywords.add(GrammarLexer.IMPORT);
-                        //remainingKeywords.add(GrammarLexer.FRAGMENT);
-                        //remainingKeywords.add(GrammarLexer.LEXER);
-                        //remainingKeywords.add(GrammarLexer.PARSER);
-                        //remainingKeywords.add(GrammarLexer.GRAMMAR);
-                        //remainingKeywords.add(GrammarLexer.PROTECTED);
-                        //remainingKeywords.add(GrammarLexer.PUBLIC);
-                        //remainingKeywords.add(GrammarLexer.PRIVATE);
-                        //remainingKeywords.add(GrammarLexer.RETURNS);
-                        //remainingKeywords.add(GrammarLexer.LOCALS);
-                        //remainingKeywords.add(GrammarLexer.THROWS);
-                        //remainingKeywords.add(GrammarLexer.CATCH);
-                        //remainingKeywords.add(GrammarLexer.FINALLY);
-                        //remainingKeywords.add(GrammarLexer.TEMPLATE);
-                        //remainingKeywords.add(GrammarLexer.MODE);
+                        for (int type : KeywordCompletionItem.KEYWORD_TYPES) {
+                            remainingKeywords.add(type);
+                        }
 
                         for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
                             CaretReachedException caretReachedException = entry.getValue();
