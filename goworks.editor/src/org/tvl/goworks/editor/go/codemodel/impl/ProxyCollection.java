@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class ProxyCollection<E> extends AbstractList<E> {
     private final List<? extends E>[] collections;

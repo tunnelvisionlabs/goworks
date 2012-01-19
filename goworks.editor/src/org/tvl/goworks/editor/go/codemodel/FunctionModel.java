@@ -31,7 +31,7 @@ import java.util.Collection;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public interface FunctionModel extends CodeElementModel {
 

@@ -33,7 +33,7 @@ import org.tvl.goworks.editor.go.codemodel.VarModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class VarModelImpl extends AbstractCodeElementModel implements VarModel {
 

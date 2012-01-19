@@ -34,7 +34,7 @@ import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class FunctionModelImpl extends AbstractCodeElementModel implements FunctionModel {
 

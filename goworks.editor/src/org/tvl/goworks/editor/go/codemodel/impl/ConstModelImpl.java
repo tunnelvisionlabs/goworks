@@ -32,7 +32,7 @@ import org.tvl.goworks.editor.go.codemodel.ConstModel;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class ConstModelImpl extends AbstractCodeElementModel implements ConstModel {
 

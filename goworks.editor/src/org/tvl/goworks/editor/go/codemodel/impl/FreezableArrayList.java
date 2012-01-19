@@ -32,7 +32,7 @@ import java.util.Collection;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class FreezableArrayList<E> extends ArrayList<E> {
 

@@ -31,7 +31,7 @@ import org.netbeans.api.project.Project;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public final class CodeModelUtilities {
     public static Project getProject(CodeElementModel codeElement) {
