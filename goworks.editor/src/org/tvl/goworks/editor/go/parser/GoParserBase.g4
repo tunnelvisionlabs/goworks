@@ -31,8 +31,7 @@ options {
     tokenVocab=GoLexerBase;
 }
 
-@header {
-/*
+@header {/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
@@ -60,6 +59,46 @@ options {
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.tvl.goworks.editor.go.parser;
+
+import java.util.HashSet;
+import java.util.Set;
+}
+
+@members {
+private final Set<String> packageNames = new HashSet<String>();
+
+public static String getPackageName(Token token) {
+    if (token == null) {
+        return null;
+    }
+
+    String name = token.getText();
+    if (name != null && token.getType() == StringLiteral) {
+        name = name.substring(name.lastIndexOf('/') + 1);
+        if (name.startsWith("\"")) {
+            name = name.substring(1);
+        }
+
+        if (name.endsWith("\"")) {
+            name = name.substring(0, name.length() - 1);
+        }
+    }
+
+    return name;
+}
+
+protected void addPackageName(Token token) {
+    String name = getPackageName(token);
+    if (name == null || name.isEmpty()) {
+        return;
+    }
+
+    packageNames.add(name);
+}
+
+protected boolean isPackageName(Token token) {
+    return token != null && packageNames.contains(token.getText());
+}
 }
 
 type
@@ -133,7 +172,7 @@ signature
 
 result
     :   parameters
-    |   type
+    |   t=type
     ;
 
 parameters
@@ -145,7 +184,7 @@ parameterList
     ;
 
 parameterDecl
-    :   idList=identifierList? '...'? type
+    :   idList=identifierList? '...'? t=type
     ;
 
 interfaceType
@@ -223,7 +262,7 @@ typeDecl
     ;
 
 typeSpec
-    :   name=IDENTIFIER type
+    :   name=IDENTIFIER t=type
     ;
 
 varDecl
@@ -286,7 +325,7 @@ basicLiteral
     ;
 
 qualifiedIdentifier
-    :   (pkg=packageName '.')? id=IDENTIFIER
+    :   ({isPackageName(_input.LT(1))}? pkg=packageName '.')? id=IDENTIFIER
     ;
 
 methodExpr
@@ -347,51 +386,52 @@ functionLiteral
 
 expression
     :   operand
-    |   conversion
+    |   conv=conversion
+        -> conversionOrCallExpr
     |   builtinCall
-    |   expression '.' IDENTIFIER
+    |   e=expression '.' IDENTIFIER
         -> selectorExpr
-    |   expression '[' expression ']'
+    |   e=expression '[' expression ']'
         -> indexExpr
-    |   expression '[' expression? ':' expression? ']'
+    |   e=expression '[' expression? ':' expression? ']'
         -> sliceExpr
-    |   expression '.' '(' type ')'
+    |   e=expression '.' '(' t=type ')'
         -> typeAssertionExpr
-    |   expression '(' (argumentList ','?)? ')'
+    |   e=expression '(' (args=argumentList ','?)? ')'
         -> callExpr
 
-    |   ('+' | '-' | '!' | '^' | '*' | '&' | '<-') expression
+    |   ('+' | '-' | '!' | '^' | '*' | '&' | '<-') e=expression
         -> unaryExpr
 
-    |   expression ('*' | '/' | '%' | '<<' | '>>' | '&' | '&^') expression
+    |   e=expression ('*' | '/' | '%' | '<<' | '>>' | '&' | '&^') right=expression
         -> multExpr
-    |   expression ('+' | '-' | '|' | '^') expression
+    |   e=expression ('+' | '-' | '|' | '^') right=expression
         -> addExpr
-    |   expression ('==' | '!=' | '<' | '<=' | '>' | '>=') expression
+    |   e=expression ('==' | '!=' | '<' | '<=' | '>' | '>=') right=expression
         -> compareExpr
-    |   expression '&&' expression
+    |   e=expression '&&' right=expression
         -> andExpr
-    |   expression '||' expression
+    |   e=expression '||' right=expression
         -> orExpr
     ;
 
-primaryExpr
-    :   operand
-    |   conversion
-    |   builtinCall
-    |   primaryExpr '.' IDENTIFIER // -> selector
-    |   primaryExpr '[' expression ']' // -> index
-    |   primaryExpr '[' expression? ':' expression? ']' // -> slice
-    |   primaryExpr '.' '(' type ')' // -> typeAssertion
-    |   primaryExpr '(' (argumentList ','?)? ')' // -> call
-    ;
+//primaryExpr
+//    :   operand
+//    |   conversion
+//    |   builtinCall
+//    |   primaryExpr '.' IDENTIFIER // -> selector
+//    |   primaryExpr '[' expression ']' // -> index
+//    |   primaryExpr '[' expression? ':' expression? ']' // -> slice
+//    |   primaryExpr '.' '(' type ')' // -> typeAssertion
+//    |   primaryExpr '(' (argumentList ','?)? ')' // -> call
+//    ;
 
 argumentList
     :   expressionList '...'?
     ;
 
 conversion
-    :   type '(' expression ')'
+    :   t=type '(' e=expression ')'
     ;
 
 statement
@@ -493,8 +533,9 @@ typeSwitchStmt
     :   'switch' (simpleStmt ';')? typeSwitchGuard '{' typeCaseClause* '}'
     ;
 
+// this should reference primaryExpr, but the ".(type)" extension is unambig
 typeSwitchGuard
-    :   (IDENTIFIER ':=')? primaryExpr '.' '(' 'type' ')'
+    :   (IDENTIFIER ':=')? expression '.' '(' 'type' ')'
     ;
 
 typeCaseClause
@@ -507,7 +548,7 @@ typeSwitchCase
     ;
 
 typeList
-    :   type (',' type)*
+    :   types+=type (',' types+=type)*
     ;
 
 forStmt
@@ -531,7 +572,7 @@ postStmt
     ;
 
 rangeClause
-    :   expression (',' expression)? ('=' | ':=') 'range' expression
+    :   e1=expression (',' e2=expression)? (eq='=' | defeq=':=') 'range' e=expression
     ;
 
 goStmt
@@ -597,7 +638,7 @@ sourceFile
     ;
 
 packageClause
-    :   'package' name=packageName
+    :   'package' name=packageName              {addPackageName($name.start);}
     ;
 
 packageName
@@ -609,7 +650,9 @@ importDecl
     ;
 
 importSpec
-    :   (dot='.' | name=packageName)? path=importPath
+    :   dot='.' path=importPath
+    |   name=packageName path=importPath        {addPackageName($name.start);}
+    |   path=importPath                         {addPackageName($path.start);}
     ;
 
 importPath
