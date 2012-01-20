@@ -61,8 +61,11 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.FailedPredicateException;
+import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
@@ -859,12 +862,22 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                     // intentionally blank
                 }
 
+                if (ex.getCause() instanceof FailedPredicateException) {
+                    return;
+                }
+
+                Token offendingToken = ex.getCause() != null ? ex.getCause().getOffendingToken() : parser.getInputStream().LT(1);
+                Token startToken = null;
                 NoViableAltException nvae = null;
                 if (ex.getCause() instanceof NoViableAltException) {
                     nvae = (NoViableAltException)ex.getCause();
+                    startToken = nvae.startToken;
+                //} else if (ex.getCause() instanceof InputMismatchException) {
+                //    InputMismatchException ime = (InputMismatchException)ex.getCause();
                 }
 
-                boolean decisionAtCaret = nvae == null || nvae.startToken instanceof CaretToken;
+                boolean decisionAtCaret = (nvae != null && nvae.startToken instanceof CaretToken)
+                    || parser.getInputStream().LT(1) instanceof CaretToken;
                 if (!decisionAtCaret && ex.getTransitions() != null) {
                     IntervalSet alts = new IntervalSet();
                     for (ATNConfig c : ex.getTransitions().keySet()) {
@@ -892,6 +905,8 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                 else {
                     results.put(parseTree, ex);
                 }
+            } catch (RecognitionException ex) {
+                // not a viable path
             }
         }
     }

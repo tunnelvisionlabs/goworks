@@ -39,7 +39,7 @@ public class CodeCompletionGoParser extends GoParser {
 
     public CodeCompletionGoParser(TokenStream input, DocumentSnapshot snapshot) {
         super(input, snapshot);
-        _interp = new CompletionParserATNSimulator(_ATN);
+        _interp = new CompletionParserATNSimulator(this, _ATN);
     }
 
     @Override
