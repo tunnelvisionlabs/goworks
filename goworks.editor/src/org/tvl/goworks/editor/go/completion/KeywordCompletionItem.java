@@ -70,7 +70,7 @@ public class KeywordCompletionItem extends GoCompletionItem {
     public static final Collection<String> KEYWORDS =
         new ArrayList<String>() {{
             for (int i : KEYWORD_TYPES) {
-                add(GoLexerBase.ruleNames[i].toLowerCase());
+                add(GoLexerBase.tokenNames[i]);
             }
 
             Collections.sort(this);
