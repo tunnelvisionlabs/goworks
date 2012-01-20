@@ -41,6 +41,7 @@ import org.antlr.works.editor.shared.completion.AbstractAnchor;
 import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
+import org.tvl.goworks.editor.go.parser.GoParserBase.topLevelDeclContext;
 
 /**
  *
@@ -89,6 +90,16 @@ public class GoParserAnchorListener extends BlankGoParserBaseListener {
     @Override
     public void exitEveryRule(ParserRuleContext<Token> ctx) {
         checkCancellation();
+    }
+
+    @Override
+    public void enterRule(topLevelDeclContext ctx) {
+        enterAnchor(ctx);
+    }
+
+    @Override
+    public void exitRule(topLevelDeclContext ctx) {
+        exitAnchor(ctx, ctx.ruleIndex);
     }
 
     private void enterAnchor(ParserRuleContext<Token> ctx) {
