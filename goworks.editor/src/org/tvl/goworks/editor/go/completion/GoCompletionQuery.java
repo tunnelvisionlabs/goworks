@@ -556,14 +556,38 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                     int ruleIndex = t.target.ruleIndex;
                                     switch (ruleIndex) {
                                     case GoParserBase.RULE_methodName:
-                                    case GoParserBase.RULE_baseTypeName:
-                                    case GoParserBase.RULE_label:
-                                    case GoParserBase.RULE_packageName:
-                                        // TODO: check context for clues
-                                        possibleDeclaration = true;
-                                        possibleReference = true;
+                                        {
+                                            int invokingState = entry.getValue().getFinalContext().invokingState;
+                                            int invokingRule = invokingState > 0 ? parser.getATN().states.get(invokingState).ruleIndex : -1;
+                                            if (invokingRule == GoParserBase.RULE_methodSpec || invokingRule == GoParserBase.RULE_methodDecl) {
+                                                possibleDeclaration = true;
+                                            } else {
+                                                possibleReference = true;
+                                            }
+                                        }
                                         break;
 
+                                    case GoParserBase.RULE_label:
+                                        {
+                                            int invokingState = entry.getValue().getFinalContext().invokingState;
+                                            if (invokingState > 0 && parser.getATN().states.get(invokingState).ruleIndex == GoParserBase.RULE_labeledStmt) {
+                                                possibleDeclaration = true;
+                                            } else {
+                                                possibleReference = true;
+                                            }
+                                        }
+                                        break;
+
+                                    case GoParserBase.RULE_packageName:
+                                        if (isInContext(parser, entry.getValue().getFinalContext(), IntervalSet.of(GoParserBase.RULE_packageClause))) {
+                                            possibleDeclaration = true;
+                                        } else {
+                                            possibleReference = true;
+                                        }
+
+                                        break;
+
+                                    case GoParserBase.RULE_baseTypeName:
                                     case GoParserBase.RULE_builtinCall: // only happens for builtin method name
                                     case GoParserBase.RULE_expression:  // only happens for selector
                                     case GoParserBase.RULE_fieldName:
