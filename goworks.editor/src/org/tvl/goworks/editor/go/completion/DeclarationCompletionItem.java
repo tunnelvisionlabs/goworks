@@ -102,6 +102,6 @@ public class DeclarationCompletionItem extends GoCompletionItem {
 
     @Override
     protected String getRightHtmlText() {
-        return "Label";
+        return "Declaration";
     }
 }
