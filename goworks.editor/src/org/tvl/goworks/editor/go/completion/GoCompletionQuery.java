@@ -365,13 +365,31 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
     private class Task implements Callable<Void> {
         private final BaseDocument document;
 
+        private final IntervalSet BREAK_SCOPES = new IntervalSet() {{
+            add(GoParserBase.RULE_forStmt);
+            add(GoParserBase.RULE_switchStmt);
+            add(GoParserBase.RULE_selectStmt);
+        }};
+
+        private final IntervalSet CONTINUE_SCOPES = new IntervalSet() {{
+            add(GoParserBase.RULE_forStmt);
+        }};
+
         public Task(BaseDocument document) {
             this.document = document;
         }
 
         @Override
         public Void call() {
-            runImpl(document);
+            try {
+                runImpl(document);
+            } catch (RuntimeException ex) {
+                Exceptions.printStackTrace(ex);
+                throw ex;
+            } catch (Error ex) {
+                Exceptions.printStackTrace(ex);
+                throw ex;
+            }
             return null;
         }
 
@@ -422,13 +440,10 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                  * parse the current rule
                  */
                 for (Anchor anchor : anchors) {
-                    GoCompletionProvider.incompleteCompletionSupport();
-                    //if (anchor instanceof GoParserAnchorListener.GrammarTypeAnchor) {
-                    //    grammarType = ((GoParserAnchorListener.GrammarTypeAnchor)anchor).getGrammarType();
-                    //    continue;
-                    //}
-
-                    GoCompletionProvider.incompleteCompletionSupport("Need to make sure all 'go' anchors are supported.");
+                    // TODO: support more anchors
+                    if (anchor.getRule() != GoParserBase.RULE_topLevelDecl) {
+                        continue;
+                    }
 
                     if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset) {
                         previous = anchor;
@@ -503,7 +518,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                             Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
                             Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
                             for (ATNConfig c : transitions.keySet()) {
-                                GoCompletionProvider.incompleteCompletionSupport();
                                 //boolean currentActionConfig = false;
                                 //final boolean currentRewriteConfig = false;
 
@@ -525,7 +539,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                     }
 
                                     int ruleIndex = parser.getATN().states.get(state).ruleIndex;
-                                    GoCompletionProvider.incompleteCompletionSupport();
                                     //if (ruleIndex == GrammarParser.RULE_actionBlock) {
                                     //    currentActionConfig = true;
                                     //}
@@ -535,27 +548,46 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                     //}
                                 }
 
-                                GoCompletionProvider.incompleteCompletionSupport();
                                 //hasActionConfig |= currentActionConfig;
                                 //hasNonActionConfig |= !currentActionConfig;
                                 //hasNonRewriteConfig |= !currentRewriteConfig;
 
                                 for (Transition t : transitions.get(c)) {
                                     int ruleIndex = t.target.ruleIndex;
-                                    GoCompletionProvider.incompleteCompletionSupport();
-                                    //if (ruleIndex == GrammarParser.RULE_id) {
-                                    //    possibleDeclaration = true;
-                                    //} else if (ruleIndex == GrammarParser.RULE_ruleref
-                                    //    || ruleIndex == GrammarParser.RULE_terminal) {
-                                    //    possibleReference = true;
-                                    //}
+                                    switch (ruleIndex) {
+                                    case GoParserBase.RULE_methodName:
+                                    case GoParserBase.RULE_baseTypeName:
+                                    case GoParserBase.RULE_label:
+                                    case GoParserBase.RULE_packageName:
+                                        // TODO: check context for clues
+                                        possibleDeclaration = true;
+                                        possibleReference = true;
+                                        break;
+
+                                    case GoParserBase.RULE_builtinCall: // only happens for builtin method name
+                                    case GoParserBase.RULE_expression:  // only happens for selector
+                                    case GoParserBase.RULE_fieldName:
+                                    case GoParserBase.RULE_qualifiedIdentifier:
+                                        possibleReference = true;
+                                        break;
+
+                                    case GoParserBase.RULE_identifierList:
+                                    case GoParserBase.RULE_functionDecl:
+                                    case GoParserBase.RULE_receiver:
+                                    case GoParserBase.RULE_typeSpec:
+                                    case GoParserBase.RULE_typeSwitchGuard:
+                                        possibleDeclaration = true;
+                                        break;
+
+                                    default:
+                                        break;
+                                    }
 
                                     if (possibleDeclaration && possibleReference) {
                                         break;
                                     }
                                 }
 
-                                GoCompletionProvider.incompleteCompletionSupport();
                                 //if (hasActionConfig && hasNonActionConfig && hasRewriteConfig && hasNonRewriteConfig) {
                                 //    break declarationOrReferenceLoop;
                                 //}
@@ -568,6 +600,11 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                         /*
                          * KEYWORD ANALYSIS
                          */
+                        boolean canContinue = false;
+                        boolean canBreak = false;
+                        boolean canDefaultOrCase = false;
+
+                        IntervalSet allowedKeywords = new IntervalSet();
                         IntervalSet remainingKeywords = new IntervalSet();
                         for (int type : KeywordCompletionItem.KEYWORD_TYPES) {
                             remainingKeywords.add(type);
@@ -591,15 +628,55 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                         continue;
                                     }
 
+                                    if (!canContinue && label.contains(GoLexerBase.Continue)) {
+                                        canContinue = isInContext(parser, caretReachedException.getFinalContext(), CONTINUE_SCOPES);
+                                        if (canContinue) {
+                                            canBreak = true;
+                                        }
+                                    }
+
+                                    if (!canBreak && label.contains(GoLexerBase.Break)) {
+                                        canBreak = isInContext(parser, caretReachedException.getFinalContext(), BREAK_SCOPES);
+                                    }
+
+                                    if (!canDefaultOrCase && label.contains(GoLexerBase.Default)) {
+                                        if (caretReachedException.getFinalContext() instanceof ParserRuleContext<?>) {
+                                            int currentRule = ((ParserRuleContext<?>)caretReachedException.getFinalContext()).ruleIndex;
+                                            canDefaultOrCase =
+                                                currentRule == GoParserBase.RULE_typeSwitchCase
+                                                || currentRule == GoParserBase.RULE_exprSwitchCase
+                                                || currentRule == GoParserBase.RULE_commCase;
+                                        } else {
+                                            canDefaultOrCase = true;
+                                        }
+                                    }
+
                                     for (int keyword : remainingKeywords.toArray()) {
                                         if (label.contains(keyword)) {
                                             remainingKeywords.remove(keyword);
-                                            KeywordCompletionItem item = new KeywordCompletionItem(GoLexerBase.tokenNames[keyword].toLowerCase());
-                                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                            allowedKeywords.add(keyword);
                                         }
                                     }
                                 }
                             }
+                        }
+
+                        if (!canContinue) {
+                            allowedKeywords.remove(GoLexerBase.Continue);
+                        }
+
+                        if (!canBreak) {
+                            allowedKeywords.remove(GoLexerBase.Break);
+                        }
+
+                        if (!canDefaultOrCase) {
+                            allowedKeywords.remove(GoLexerBase.Case);
+                            allowedKeywords.remove(GoLexerBase.Default);
+                        }
+
+                        for (int keyword : allowedKeywords.toArray()) {
+                            KeywordCompletionItem item = new KeywordCompletionItem(GoLexerBase.tokenNames[keyword]);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
                         }
 
                         /*
@@ -616,7 +693,9 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                             }
 
                             ParseTree expressionRoot = null;
-                            GoCompletionProvider.incompleteCompletionSupport();
+                            if (true) {
+                                continue;
+                            }
                             //if (finalContext instanceof actionScopeExpressionContext
                             //    || finalContext instanceof actionExpressionContext) {
                             //    expressionRoot = finalContext;
@@ -671,6 +750,10 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                         for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
                             ParseTree parseTree = entry.getKey();
                             RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                            if (true) {
+                                continue;
+                            }
+
                             GoCompletionProvider.incompleteCompletionSupport();
                             //LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
                             //ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
@@ -774,7 +857,7 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
             }
 
             if (possibleReference) {
-                GoCompletionProvider.incompleteCompletionSupport();
+//                GoCompletionProvider.incompleteCompletionSupport();
                 //boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER;
                 //
                 //// Add rules from the grammar
@@ -816,6 +899,28 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
         }
 
+        private boolean isInContext(Parser parser, RuleContext context, IntervalSet values) {
+            return isInContext(parser, context, values, true);
+        }
+
+        private boolean isInContext(Parser parser, RuleContext context, IntervalSet values, boolean checkTop) {
+            if (context instanceof ParserRuleContext<?>) {
+                if (values.contains(((ParserRuleContext<?>)context).ruleIndex)) {
+                    return true;
+                }
+            }
+
+            if (context.isEmpty()) {
+                return false;
+            }
+
+            if (values.contains(parser.getATN().states.get(context.invokingState).ruleIndex)) {
+                return true;
+            }
+
+            return isInContext(parser, context.parent, values, false);
+        }
+
         private Map<RuleContext, CaretReachedException> getParseTrees(CodeCompletionGoParser parser) {
             List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
             List<Integer> currentPath = new ArrayList<Integer>();
@@ -831,6 +936,8 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                 for (Map.Entry<RuleContext, CaretReachedException> entry : results.entrySet()) {
                     LOGGER.log(Level.FINE, entry.getKey().toStringTree(parser));
                 }
+            } catch (RecognitionException ex) {
+                // not a viable path
             }
 
             return results;
