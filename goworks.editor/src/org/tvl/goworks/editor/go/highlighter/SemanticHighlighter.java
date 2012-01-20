@@ -932,6 +932,10 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         private Collection<Token> getContainerForVarReference(Token token) {
+            if (token == null) {
+                return null;
+            }
+
             String text = token.getText();
 
             if (PREDEFINED_CONSTANTS.contains(text)) {
