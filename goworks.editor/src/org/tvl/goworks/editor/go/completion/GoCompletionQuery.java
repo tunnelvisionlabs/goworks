@@ -62,8 +62,8 @@ import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.FailedPredicateException;
-import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.NoViableAltException;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
@@ -936,8 +936,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                 for (Map.Entry<RuleContext, CaretReachedException> entry : results.entrySet()) {
                     LOGGER.log(Level.FINE, entry.getKey().toStringTree(parser));
                 }
-            } catch (RecognitionException ex) {
-                // not a viable path
             }
 
             return results;
