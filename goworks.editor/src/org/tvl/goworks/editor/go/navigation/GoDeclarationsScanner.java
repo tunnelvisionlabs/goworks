@@ -29,9 +29,10 @@ package org.tvl.goworks.editor.go.navigation;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -43,7 +44,6 @@ import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
-import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.blockContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.constSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.fieldDeclContext;
@@ -62,6 +62,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
  * @author Sam Harwell
  */
 public class GoDeclarationsScanner {
+    private static final Logger LOGGER = Logger.getLogger(GoDeclarationsScanner.class.getName());
 
     public Description scan(CompiledModel model) {
         GoDeclarationsPanelUI ui = GoDeclarationsPanel.findDeclarationsPanelUI();
@@ -91,7 +92,9 @@ public class GoDeclarationsScanner {
             processParseResult(model.getSnapshot(), model.getResult(), ui, rootDescription);
             return rootDescription;
         } catch (RuntimeException ex) {
-            Exceptions.printStackTrace(ex);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                Exceptions.printStackTrace(ex);
+            }
             return null;
         }
     }

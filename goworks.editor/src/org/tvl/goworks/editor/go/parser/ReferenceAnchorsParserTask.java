@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.tagging.Tagger;
@@ -68,6 +70,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
  * @author Sam Harwell
  */
 public class ReferenceAnchorsParserTask implements ParserTask {
+    private static final Logger LOGGER = Logger.getLogger(ReferenceAnchorsParserTask.class.getName());
 
     private final VersionedDocument document;
 
@@ -109,10 +112,15 @@ public class ReferenceAnchorsParserTask implements ParserTask {
             ParserData<FileModel> fileModelResult = new BaseParserData<FileModel>(GoParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
             results.addResult(fileModelResult);
         } catch (RuntimeException ex) {
-            Exceptions.printStackTrace(ex);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                Exceptions.printStackTrace(ex);
+            }
             throw ex;
-        } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+        } catch (Error ex) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                Exceptions.printStackTrace(ex);
+            }
+            throw ex;
         }
     }
 
