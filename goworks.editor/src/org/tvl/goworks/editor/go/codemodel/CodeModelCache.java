@@ -28,6 +28,7 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.project.Project;
 
 /**
  *
@@ -35,6 +36,8 @@ import java.util.Collection;
  */
 public interface CodeModelCache {
 
-    public Collection<? extends PackageModel> getPackages();
+    public Collection<? extends PackageModel> getPackages(Project project);
+
+    public Collection<? extends PackageModel> getPackages(Project project, String path);
 
 }

@@ -57,18 +57,19 @@ public class CodeModelCacheImpl implements CodeModelCache {
 
     @Override
     @NonNull
-    public Collection<? extends PackageModel> getPackages() {
+    public Collection<? extends PackageModel> getPackages(Project project) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @CheckForNull
-    public Collection<? extends PackageModel> getPackages(Project project, String name) {
+    @Override
+    public Collection<? extends PackageModel> getPackages(Project project, String path) {
         CodeModelProjectCache cache = getProjectCache(project, false);
         if (cache == null) {
             return null;
         }
 
-        return cache.getPackages(name);
+        return cache.getPackages(path);
     }
 
     @CheckForNull

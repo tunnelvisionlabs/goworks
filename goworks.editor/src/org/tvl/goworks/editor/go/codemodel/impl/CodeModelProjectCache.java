@@ -84,12 +84,17 @@ public class CodeModelProjectCache {
     }
 
     @NonNull
-    public Collection<PackageModelImpl> getPackages(final String name) {
+    public Collection<PackageModelImpl> getPackages(final String path) {
         return lockedRead(new Callable<Collection<PackageModelImpl>>() {
 
             @Override
             public Collection<PackageModelImpl> call() throws Exception {
-                return new ArrayList<PackageModelImpl>(packagesByName.get(name));
+                PackageModelImpl model = packagesByPath.get(path);
+                if (model == null) {
+                    return Collections.emptyList();
+                }
+
+                return Collections.<PackageModelImpl>singletonList(model);
             }
 
         });
