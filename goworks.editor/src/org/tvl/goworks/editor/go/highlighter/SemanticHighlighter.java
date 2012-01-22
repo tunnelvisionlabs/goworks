@@ -112,7 +112,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     // -J-Dorg.tvl.goworks.editor.go.highlighter.SemanticHighlighter.level=FINE
     private static final Logger LOGGER = Logger.getLogger(SemanticHighlighter.class.getName());
 
-    private static final Set<String> PREDEFINED_TYPES = new HashSet<String>()
+    public static final Set<String> PREDEFINED_TYPES = new HashSet<String>()
         {{
             add("bool");
             add("byte");
@@ -136,7 +136,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             add("uintptr");
         }};
 
-    private static final Set<String> PREDEFINED_CONSTANTS = new HashSet<String>()
+    public static final Set<String> PREDEFINED_CONSTANTS = new HashSet<String>()
         {{
             add("true");
             add("false");
@@ -144,7 +144,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             add("nil");
         }};
 
-    private static final Set<String> PREDEFINED_FUNCTIONS = new HashSet<String>()
+    public static final Set<String> PREDEFINED_FUNCTIONS = new HashSet<String>()
         {{
             add("append");
             add("cap");
