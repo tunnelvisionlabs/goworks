@@ -3347,7 +3347,7 @@ public class GoParserBase extends Parser {
 		        if ( _alt252==1 ) {
 		    	    if ( _parseListeners!=null ) triggerExitRuleEvent();
 		    	    _prevctx = _localctx;
-                    _prevctx.stop = _input.LT(-1);
+		    	    _prevctx.stop = _input.LT(-1);
 		            {
 		            setState(878);
 		            //_errHandler.sync(this);
@@ -3358,7 +3358,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(794);
 		            		if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {5 >= $_p}?");
 		            		setState(796);
@@ -3378,7 +3378,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(800);
 		            		if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {4 >= $_p}?");
 		            		setState(802);
@@ -3398,7 +3398,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(806);
 		            		if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {3 >= $_p}?");
 		            		setState(808);
@@ -3418,7 +3418,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(812);
 		            		if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {2 >= $_p}?");
 		            		setState(814); match(And);
@@ -3432,7 +3432,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(818);
 		            		if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {1 >= $_p}?");
 		            		setState(820); match(Or);
@@ -3446,7 +3446,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(824);
 		            		if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {11 >= $_p}?");
 		            		setState(826); _localctx.dot = match(Dot);
@@ -3460,7 +3460,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(830);
 		            		if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {10 >= $_p}?");
 		            		setState(832); match(LeftBrack);
@@ -3475,7 +3475,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(838);
 		            		if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {9 >= $_p}?");
 		            		setState(840); match(LeftBrack);
@@ -3508,7 +3508,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(854);
 		            		if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {8 >= $_p}?");
 		            		setState(856); _localctx.dot = match(Dot);
@@ -3524,7 +3524,7 @@ public class GoParserBase extends Parser {
 		            		_localctx.addChild(_prevctx);
 		            		_localctx.e = _prevctx;
 		            		pushNewRecursionContext(_localctx, RULE_expression);
-                            _localctx.start = _prevctx.start;
+		            		_localctx.start = _prevctx.start;
 		            		setState(864);
 		            		if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {7 >= $_p}?");
 		            		setState(866); _localctx.lp = match(LeftParen);
