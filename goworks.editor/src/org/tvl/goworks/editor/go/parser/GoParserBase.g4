@@ -66,6 +66,7 @@ import java.util.Set;
 
 @members {
 private final Set<String> packageNames = new HashSet<String>();
+private boolean checkPackageNames = true;
 
 public static String getPackageName(Token token) {
     if (token == null) {
@@ -97,7 +98,19 @@ protected void addPackageName(Token token) {
 }
 
 protected boolean isPackageName(Token token) {
+    if (!checkPackageNames) {
+        return true;
+    }
+
     return token != null && packageNames.contains(token.getText());
+}
+
+public boolean isCheckPackageNames() {
+    return checkPackageNames;
+}
+
+public void setCheckPackageNames(boolean checkPackageNames) {
+    this.checkPackageNames = checkPackageNames;
 }
 }
 
@@ -325,11 +338,11 @@ basicLiteral
     ;
 
 qualifiedIdentifier
-    :   ({isPackageName(_input.LT(1))}? pkg=packageName '.')? id=IDENTIFIER
+    :   ({isPackageName(_input.LT(1))}? pkg=packageName dot='.')? id=IDENTIFIER
     ;
 
 methodExpr
-    :   recvType=receiverType '.' name=methodName
+    :   recvType=receiverType dot='.' name=methodName
     ;
 
 receiverType
@@ -389,15 +402,15 @@ expression
     |   conv=conversion
         -> conversionOrCallExpr
     |   builtinCall
-    |   e=expression '.' IDENTIFIER
+    |   e=expression dot='.' IDENTIFIER
         -> selectorExpr
     |   e=expression '[' expression ']'
         -> indexExpr
     |   e=expression '[' expression? ':' expression? ']'
         -> sliceExpr
-    |   e=expression '.' '(' t=type ')'
+    |   e=expression dot='.' lp='(' t=type rp=')'
         -> typeAssertionExpr
-    |   e=expression '(' (args=argumentList ','?)? ')'
+    |   e=expression lp='(' (args=argumentList ','?)? rp=')'
         -> callExpr
 
     |   ('+' | '-' | '!' | '^' | '*' | '&' | '<-') e=expression
@@ -535,7 +548,7 @@ typeSwitchStmt
 
 // this should reference primaryExpr, but the ".(type)" extension is unambig
 typeSwitchGuard
-    :   (IDENTIFIER ':=')? expression '.' '(' 'type' ')'
+    :   (id=IDENTIFIER ':=')? e=expression dot='.' '(' 'type' ')'
     ;
 
 typeCaseClause
