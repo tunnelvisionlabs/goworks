@@ -140,7 +140,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
         }
 
         String path = ctx.path.path.getText();
-        path = path.substring(1, path.length() - 2);
+        path = path.substring(1, path.length() - 1);
 
         String alias;
         if (ctx.dot != null) {
