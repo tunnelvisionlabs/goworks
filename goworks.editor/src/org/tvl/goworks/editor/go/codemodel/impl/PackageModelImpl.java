@@ -33,9 +33,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.netbeans.api.project.Project;
+import org.tvl.goworks.editor.go.codemodel.ConstModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
+import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
+import org.tvl.goworks.editor.go.codemodel.VarModel;
 
 /**
  *
@@ -54,14 +57,14 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
     }
 
     @Override
-    public Collection<? extends FileModel> getFiles() {
+    public Collection<FileModelImpl> getFiles() {
         return files.values();
     }
 
     @Override
-    public Collection<? extends TypeModel> getTypes() {
-        List<TypeModel> types = new ArrayList<TypeModel>();
-        for (FileModel file : getFiles()) {
+    public Collection<TypeModelImpl> getTypes() {
+        List<TypeModelImpl> types = new ArrayList<TypeModelImpl>();
+        for (FileModelImpl file : getFiles()) {
             types.addAll(file.getTypes());
         }
 
@@ -69,9 +72,9 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
     }
 
     @Override
-    public Collection<? extends TypeModel> getTypes(String name) {
-        List<TypeModel> types = new ArrayList<TypeModel>();
-        for (FileModel file : getFiles()) {
+    public Collection<TypeModelImpl> getTypes(String name) {
+        List<TypeModelImpl> types = new ArrayList<TypeModelImpl>();
+        for (FileModelImpl file : getFiles()) {
             types.addAll(file.getTypes(name));
         }
 
@@ -80,6 +83,66 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     public void updateFile(FileModelImpl fileModel) {
         files.put(fileModel.getName(), fileModel);
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getFunctions() {
+        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        for (FileModelImpl file : getFiles()) {
+            functions.addAll(file.getFunctions());
+        }
+
+        return functions;
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getFunctions(String name) {
+        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        for (FileModelImpl file : getFiles()) {
+            functions.addAll(file.getFunctions(name));
+        }
+
+        return functions;
+    }
+
+    @Override
+    public Collection<ConstModelImpl> getConstants() {
+        List<ConstModelImpl> constants = new ArrayList<ConstModelImpl>();
+        for (FileModelImpl file : getFiles()) {
+            constants.addAll(file.getConstants());
+        }
+
+        return constants;
+    }
+
+    @Override
+    public Collection<ConstModelImpl> getConstants(String name) {
+        List<ConstModelImpl> constants = new ArrayList<ConstModelImpl>();
+        for (FileModelImpl file : getFiles()) {
+            constants.addAll(file.getConstants(name));
+        }
+
+        return constants;
+    }
+
+    @Override
+    public Collection<VarModelImpl> getVars() {
+        List<VarModelImpl> vars = new ArrayList<VarModelImpl>();
+        for (FileModelImpl file : getFiles()) {
+            vars.addAll(file.getVars());
+        }
+
+        return vars;
+    }
+
+    @Override
+    public Collection<VarModelImpl> getVars(String name) {
+        List<VarModelImpl> vars = new ArrayList<VarModelImpl>();
+        for (FileModelImpl file : getFiles()) {
+            vars.addAll(file.getVars(name));
+        }
+
+        return vars;
     }
 
 }

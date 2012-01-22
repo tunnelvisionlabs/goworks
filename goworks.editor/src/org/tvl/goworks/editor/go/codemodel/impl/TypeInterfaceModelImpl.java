@@ -42,7 +42,12 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
     }
 
     @Override
-    public Collection<? extends FunctionModel> getFunctions() {
+    public Collection<? extends FunctionModel> getInterfaceMethods() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<? extends FunctionModel> getInterfaceMethods(String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

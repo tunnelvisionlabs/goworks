@@ -33,8 +33,10 @@ import java.util.Collection;
  *
  * @author Sam Harwell
  */
-public interface InterfaceModel extends CodeElementModel {
+public interface InterfaceModel extends TypeModel {
 
-    Collection<? extends FunctionModel> getFunctions();
+    Collection<? extends FunctionModel> getInterfaceMethods();
+
+    Collection<? extends FunctionModel> getInterfaceMethods(String name);
 
 }

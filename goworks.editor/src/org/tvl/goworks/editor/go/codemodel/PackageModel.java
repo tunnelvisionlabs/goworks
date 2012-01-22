@@ -44,4 +44,16 @@ public interface PackageModel extends CodeElementModel {
 
     Collection<? extends TypeModel> getTypes(String name);
 
+    Collection<? extends FunctionModel> getFunctions();
+
+    Collection<? extends FunctionModel> getFunctions(String name);
+
+    Collection<? extends ConstModel> getConstants();
+
+    Collection<? extends ConstModel> getConstants(String name);
+
+    Collection<? extends VarModel> getVars();
+
+    Collection<? extends VarModel> getVars(String name);
+
 }

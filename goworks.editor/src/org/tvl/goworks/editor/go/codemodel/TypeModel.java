@@ -27,10 +27,20 @@
  */
 package org.tvl.goworks.editor.go.codemodel;
 
+import java.util.Collection;
+
 /**
  *
  * @author Sam Harwell
  */
 public interface TypeModel extends CodeElementModel {
+
+    Collection<? extends VarModel> getFields();
+
+    Collection<? extends VarModel> getFields(String name);
+
+    Collection<? extends FunctionModel> getMethods();
+
+    Collection<? extends FunctionModel> getMethods(String name);
 
 }

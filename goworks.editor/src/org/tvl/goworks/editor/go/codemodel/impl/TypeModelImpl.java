@@ -27,7 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
-import org.netbeans.api.project.Project;
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
@@ -38,6 +39,26 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
 
     public TypeModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
+    }
+
+    @Override
+    public Collection<VarModelImpl> getFields() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Collection<VarModelImpl> getFields(String name) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getMethods() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getMethods(String name) {
+        return Collections.emptyList();
     }
 
 }

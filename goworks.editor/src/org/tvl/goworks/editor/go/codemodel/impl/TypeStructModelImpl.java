@@ -29,7 +29,6 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import org.tvl.goworks.editor.go.codemodel.StructModel;
-import org.tvl.goworks.editor.go.codemodel.VarModel;
 
 /**
  *
@@ -42,8 +41,13 @@ public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
     }
 
     @Override
-    public Collection<? extends VarModel> getFields() {
+    public Collection<VarModelImpl> getFields() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<VarModelImpl> getFields(String name) {
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
 }

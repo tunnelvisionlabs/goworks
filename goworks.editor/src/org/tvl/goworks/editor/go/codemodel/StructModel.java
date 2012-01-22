@@ -35,6 +35,4 @@ import java.util.Collection;
  */
 public interface StructModel extends TypeModel {
 
-    Collection<? extends VarModel> getFields();
-
 }
