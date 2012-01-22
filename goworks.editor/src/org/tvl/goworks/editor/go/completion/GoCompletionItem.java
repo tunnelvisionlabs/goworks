@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,9 @@ import org.netbeans.spi.editor.completion.support.CompletionUtilities;
 public abstract class GoCompletionItem implements CompletionItem {
 
     public static final int KEYWORD_SORT_PRIORITY = 100;
+    public static final int PACKAGE_SORT_PRIORITY = 100;
+    public static final int TYPE_SORT_PRIORITY = 100;
+    public static final int LABEL_SORT_PRIORITY = 100;
     public static final int RULE_SORT_PRIORITY = 100;
     public static final int ELEMENT_REFERENCE_SORT_PRIORITY = 100;
     public static final int PROPERTY_SORT_PRIORITY = 100;
@@ -67,6 +70,9 @@ public abstract class GoCompletionItem implements CompletionItem {
     public static final String METHOD_COLOR = "<font color=#000000>"; //NOI18N
     public static final String PARAMETER_NAME_COLOR = "<font color=#a06001>"; //NOI18N
     public static final String REFERENCE_COLOR = "<font color=#a06001>"; //NOI18N
+    public static final String PACKAGE_COLOR = "<font color=#a06001>"; //NOI18N
+    public static final String TYPE_COLOR = "<font color=#2B91AF>"; //NOI18N
+    public static final String LABEL_COLOR = "<font color=#000000>"; //NOI18N
 
     public static final String COLOR_END = "</font>"; //NOI18N
     public static final String STRIKE = "<s>"; //NOI18N
