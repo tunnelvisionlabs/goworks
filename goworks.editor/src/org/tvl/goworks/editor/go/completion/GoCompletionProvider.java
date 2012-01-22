@@ -75,7 +75,7 @@ public class GoCompletionProvider implements CompletionProvider {
 
     public static final int AUTO_QUERY_TYPE = 0x00010000;
 
-    private static String goCompletionAutoPopupTriggers = "";
+    private static String goCompletionAutoPopupTriggers = ".";
     private static String goCompletionSelectors = "";
 
     public static void incompleteCompletionSupport() {
