@@ -27,11 +27,16 @@
  */
 package org.tvl.goworks.editor.go.codemodel;
 
+import org.netbeans.api.annotations.common.NonNull;
+
 /**
  *
  * @author Sam Harwell
  */
 public interface ImportDeclarationModel extends CodeElementModel {
+
+    @NonNull
+    String getPath();
 
     boolean isMergeWithLocal();
 

@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
+import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 
 /**
@@ -48,11 +49,18 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
     }
 
     @Override
+    public String getPath() {
+        return path;
+    }
+
+    @Override
     public boolean isMergeWithLocal() {
         return mergeWithLocal;
     }
 
     private static String getAlias(@NonNull String path, @NullAllowed String alias) {
+        Parameters.notNull("path", path);
+
         if (alias == null || alias.isEmpty()) {
             alias = path.substring(path.lastIndexOf('/') + 1);
             int start = alias.startsWith("\"") ? 1 : 0;
