@@ -30,6 +30,7 @@ package org.tvl.goworks.editor.go.completion;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -74,10 +75,15 @@ import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.PredictionContext;
+import org.antlr.v4.runtime.atn.StarLoopbackState;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.Tree;
+import org.antlr.v4.runtime.tree.Trees;
 import org.antlr.works.editor.shared.TaggerTokenSource;
 import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.completion.Completion;
@@ -90,10 +96,26 @@ import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
+import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.CodeModelCache;
+import org.tvl.goworks.editor.go.codemodel.ConstModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
+import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
+import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.editor.go.codemodel.TypeModel;
+import org.tvl.goworks.editor.go.codemodel.VarModel;
+import org.tvl.goworks.editor.go.codemodel.impl.CodeModelCacheImpl;
+import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
+import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.GoLexerBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase;
+import org.tvl.goworks.editor.go.parser.GoParserBase.labeledStmtContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.selectorExprContext;
+import org.tvl.goworks.editor.go.parser.ParseTreeAnnotations;
 
 /**
  *
@@ -329,7 +351,9 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
     }
 
     private Task getTask(BaseDocument document) {
-        return new Task(document);
+        VersionedDocument buffer = VersionedDocumentUtilities.getVersionedDocument(document);
+        DocumentSnapshot snapshot = buffer.getCurrentSnapshot();
+        return new Task(document, snapshot);
     }
 
     /*package*/ static boolean isIdentifierPart(String typedText) {
@@ -364,6 +388,12 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
 
     private class Task implements Callable<Void> {
         private final BaseDocument document;
+        private final DocumentSnapshot snapshot;
+        private final ParserTaskManager taskManager;
+
+        private FileModel fileModel;
+        private boolean fileModelDataFailed = false;
+        private TargetAnalyzer targetAnalyzer = new TargetAnalyzer();
 
         private final IntervalSet BREAK_SCOPES = new IntervalSet() {{
             add(GoParserBase.RULE_forStmt);
@@ -375,14 +405,23 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
             add(GoParserBase.RULE_forStmt);
         }};
 
-        public Task(BaseDocument document) {
+        public Task(BaseDocument document, DocumentSnapshot snapshot) {
+            Parameters.notNull("document", document);
+            Parameters.notNull("snapshot", snapshot);
+
             this.document = document;
+            this.snapshot = snapshot;
+            this.taskManager = getParserTaskManager();
+
+            if (taskManager == null) {
+                throw new UnsupportedOperationException();
+            }
         }
 
         @Override
         public Void call() {
             try {
-                runImpl(document);
+                runImpl();
             } catch (RuntimeException ex) {
                 Exceptions.printStackTrace(ex);
                 throw ex;
@@ -390,34 +429,25 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                 Exceptions.printStackTrace(ex);
                 throw ex;
             }
+
             return null;
         }
 
-        private void runImpl(BaseDocument document) {
+        private void runImpl() {
             results = new ArrayList<CompletionItem>();
             possibleDeclaration = true;
             possibleReference = true;
             possibleKeyword = true;
 
             // Add context items (labels, etc). Use anchor points to optimize information gathering.
-            if (document == null) {
-                return;
-            }
 
-            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
-            DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
+//            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
+//            DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
-            boolean possibleInAction;
-            boolean definiteInAction;
+//            boolean possibleInAction;
+//            boolean definiteInAction;
             Map<RuleContext, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
-
-            ParserTaskManager taskManager = getParserTaskManager();
-            if (taskManager == null) {
-                return;
-            }
-
-            Collection<Description> rules = null;
 
             List<Anchor> anchors;
             Future<ParserData<List<Anchor>>> result =
@@ -482,12 +512,13 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                     CodeCompletionGoParser parser = new CodeCompletionGoParser(tokens, snapshot);
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new CodeCompletionErrorStrategy());
+                    parser.setCheckPackageNames(false);
 
                     switch (previous.getRule()) {
                     case GoParserBase.RULE_topLevelDecl:
                         parseTrees = getParseTrees(parser);
                         break;
-                    
+
                     default:
                         parseTrees = null;
                         break;
@@ -553,6 +584,10 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                 //hasNonRewriteConfig |= !currentRewriteConfig;
 
                                 for (Transition t : transitions.get(c)) {
+                                    if (!t.label().contains(GoParserBase.IDENTIFIER)) {
+                                        continue;
+                                    }
+
                                     int ruleIndex = t.target.ruleIndex;
                                     switch (ruleIndex) {
                                     case GoParserBase.RULE_methodName:
@@ -706,9 +741,11 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                         /*
                          * EXPRESSION ANALYSIS
                          */
-                        FileModel fileModel = null;
-                        boolean fileModelDataFailed = false;
-                        boolean inExpression = false;
+
+                        boolean addedPackages = false;
+                        boolean addedTypes = false;
+                        boolean addedVars = false;
+                        boolean addedFunctions = false;
 
                         for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
                             RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
@@ -716,61 +753,289 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                 continue;
                             }
 
-                            ParseTree expressionRoot = null;
-                            if (true) {
+                            Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
+                            assert transitions != null;
+                            assert transitions.size() == 1;
+                            List<Transition> singleTransitionList = transitions.values().iterator().next();
+                            assert singleTransitionList.size() == 1;
+                            Transition transition = singleTransitionList.get(0);
+                            // only interested in identifiers
+                            if (!transition.label().contains(GoParserBase.IDENTIFIER)) {
                                 continue;
                             }
-                            //if (finalContext instanceof actionScopeExpressionContext
-                            //    || finalContext instanceof actionExpressionContext) {
-                            //    expressionRoot = finalContext;
-                            //}
-                            //
-                            //for (Tree tree : Trees.getAncestors(finalContext)) {
-                            //    if (tree instanceof actionScopeExpressionContext
-                            //        || tree instanceof actionExpressionContext) {
-                            //        expressionRoot = (ParseTree)tree;
-                            //    }
-                            //}
-                            //
-                            //if (expressionRoot == null) {
-                            //    continue;
-                            //} else if (expressionRoot instanceof actionScopeExpressionContext) {
-                            //    if (((actionScopeExpressionContext)expressionRoot).op == null) {
-                            //        continue;
-                            //    }
-                            //} else if (expressionRoot instanceof actionExpressionContext) {
-                            //    if (((actionExpressionContext)expressionRoot).op == null) {
-                            //        continue;
-                            //    }
-                            //}
 
-                            if (fileModel == null && !fileModelDataFailed) {
-                                Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                                try {
-                                    fileModel = futureFileModelData.get().getData();
-                                } catch (InterruptedException ex) {
-                                    Exceptions.printStackTrace(ex);
-                                    fileModelDataFailed = true;
-                                } catch (ExecutionException ex) {
-                                    Exceptions.printStackTrace(ex);
-                                    fileModelDataFailed = true;
+                            // if selectorExpressionRoot is not null, then we are on the right hand side of a '.'
+                            ParseTree selectorExpressionRoot = null;
+                            ParserRuleContext<Token> selectorTarget = null;
+                            boolean isTypeSwitchGuard = false;
+
+                            List<Tree> pathToRoot = new ArrayList<Tree>(Trees.getAncestors(finalContext));
+                            pathToRoot.add(finalContext);
+                            Collections.reverse(pathToRoot);
+                            for (Tree tree : pathToRoot) {
+                                if (tree instanceof GoParserBase.selectorExprContext) {
+                                    GoParserBase.selectorExprContext context = (GoParserBase.selectorExprContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = (ParseTree)tree;
+                                        selectorTarget = context.e;
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParserBase.typeSwitchGuardContext) {
+                                    GoParserBase.typeSwitchGuardContext context = (GoParserBase.typeSwitchGuardContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = (ParseTree)tree;
+                                        selectorTarget = context.e;
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParserBase.typeAssertionExprContext) {
+                                    GoParserBase.typeAssertionExprContext context = (GoParserBase.typeAssertionExprContext)tree;
+                                    if (context.dot != null && context.lp == null) {
+                                        selectorExpressionRoot = (ParseTree)tree;
+                                        selectorTarget = context.e;
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParserBase.methodExprContext) {
+                                    GoParserBase.methodExprContext context = (GoParserBase.methodExprContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = (ParseTree)tree;
+                                        selectorTarget = context.recvType;
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParserBase.qualifiedIdentifierContext) {
+                                    GoParserBase.qualifiedIdentifierContext context = (GoParserBase.qualifiedIdentifierContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = (ParseTree)tree;
+                                        selectorTarget = context.pkg;
+                                        break;
+                                    }
                                 }
                             }
 
-                            if (fileModel == null) {
+                            if (selectorExpressionRoot != null) {
+                                /*
+                                 * SELECTOR EXPRESSION
+                                 */
+                                if (isTypeSwitchGuard) {
+                                    intermediateResults.put("(type)", new KeywordCompletionItem("(type)"));
+                                    continue;
+                                }
+
+                                if (getFileModel() == null) {
+                                    continue;
+                                }
+
+                                String text = tokens.toString(selectorTarget.start, selectorTarget.stop);
+                                if (text == null || text.isEmpty()) {
+                                    continue;
+                                }
+
+                                Collection<? extends CodeElementModel> models = targetAnalyzer.resolveTarget(selectorTarget);
+                                assert models != null;
+
+                                for (CodeElementModel model : models) {
+                                    if (model instanceof PackageModel) {
+                                        PackageModel packageModel = (PackageModel)model;
+                                        if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                            continue;
+                                        }
+
+                                        for (FunctionModel function : packageModel.getFunctions()) {
+                                            intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
+                                        }
+
+                                        for (ConstModel constant : packageModel.getConstants()) {
+                                            intermediateResults.put(constant.getName(), new ConstReferenceCompletionItem(constant));
+                                        }
+
+                                        for (VarModel var : packageModel.getVars()) {
+                                            intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var));
+                                        }
+
+                                        for (TypeModel type : packageModel.getTypes()) {
+                                            intermediateResults.put(type.getName(), new TypeReferenceCompletionItem(type));
+                                        }
+                                    } else if (model instanceof TypeModel) {
+                                        TypeModel typeModel = (TypeModel)model;
+                                        if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                            for (FunctionModel method : typeModel.getMethods()) {
+                                                intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
+                                            }
+                                            continue;
+                                        }
+
+                                        // TODO: any other possibilities?
+                                    } else if (model instanceof VarModel) {
+                                        VarModel varModel = (VarModel)model;
+                                        if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                            continue;
+                                        }
+
+                                        TypeModel varType = varModel.getVarType();
+                                        for (FunctionModel method : varType.getMethods()) {
+                                            intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
+                                        }
+
+                                        for (VarModel var : varType.getFields()) {
+                                            intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var));
+                                        }
+                                    } else {
+                                        LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
+                                    }
+
+                                    //ActionExpressionAnalyzer expressionAnalyzer = new ActionExpressionAnalyzer(fileModel, finalContext);
+                                    //ParseTreeWalker.DEFAULT.walk(expressionAnalyzer, expressionRoot);
+                                    //for (AttributeModel member : expressionAnalyzer.getMembers()) {
+                                    //    CompletionItem item = new MemberCompletionItem(member);
+                                    //    intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                    //}
+                                }
+                            } else if (finalContext instanceof GoParserBase.packageNameContext) {
+                                /* AVAILABLE PACKAGES
+                                 */
+                                if (getFileModel() == null || addedPackages) {
+                                    continue;
+                                }
+
+                                addedPackages = true;
+                                Collection<? extends ImportDeclarationModel> imports = getFileModel().getImportDeclarations();
+                                for (ImportDeclarationModel model : imports) {
+                                    if (intermediateResults.containsKey(model.getName())) {
+                                        continue;
+                                    }
+
+                                    intermediateResults.put(model.getName(), new PackageReferenceCompletionItem(model.getName()));
+                                }
+                            } else {
+                                /*
+                                 * UNQUALIFIED EXPRESSION. Identifier could reference any visible:
+                                 *  - type
+                                 *  - var
+                                 *  - function
+                                 *  - method
+                                 *
+                                 * Visible means located in any of the following:
+                                 *  - the current package
+                                 *  - any packages imported with alias '.'
+                                 *  - built-in elements
+                                 */
+                                boolean inCompositeLiteral = isInContext(parser, finalContext, IntervalSet.of(GoParserBase.RULE_compositeLiteral));
+                                if (finalContext instanceof GoParserBase.fieldNameContext) {
+                                    assert inCompositeLiteral;
+                                    // first resolve the type of the containing compositeLiteral
+                                    // then, if the literalValue is nested, resolve the type of the innermost literalValue
+                                    LOGGER.log(Level.FINE, "TODO: Resolve type of compositeLiteral");
+                                } else if (finalContext instanceof GoParserBase.qualifiedIdentifierContext) {
+                                    GoParserBase.qualifiedIdentifierContext context = (GoParserBase.qualifiedIdentifierContext)finalContext;
+                                    if (context.pkg != null) {
+                                        continue;
+                                    }
+
+                                    if (inCompositeLiteral) {
+                                        LOGGER.log(Level.FINE, "TODO: resolve enclosing compositeLiteral for further analysis");
+                                    } else {
+                                        if (finalContext.getParent() instanceof GoParserBase.typeNameContext) {
+                                            LOGGER.log(Level.FINE, "TODO: resolve visible type");
+                                            continue;
+                                        }
+
+                                        assert finalContext.getParent() instanceof GoParserBase.operandContext;
+                                        LOGGER.log(Level.FINE, "TODO: resolve unqualified const, var, or func name");
+                                    }
+                                } else if (finalContext instanceof GoParserBase.baseTypeNameContext) {
+                                    // this is the name of a type in the current package
+                                    if (getFileModel() == null) {
+                                        continue;
+                                    }
+
+                                    PackageModel packageModel = getFileModel().getPackage();
+                                    Collection<? extends TypeModel> types = packageModel.getTypes();
+                                    for (TypeModel typeModel : types) {
+                                        if (intermediateResults.containsKey(typeModel.getName())) {
+                                            continue;
+                                        }
+
+                                        intermediateResults.put(typeModel.getName(), new TypeReferenceCompletionItem(typeModel));
+                                    }
+                                } else if (finalContext instanceof GoParserBase.labelContext) {
+                                    if (finalContext.getParent() instanceof GoParserBase.labeledStmtContext) {
+                                        continue;
+                                    }
+
+                                    final List<Token> labels = new ArrayList<Token>();
+                                    ParseTreeListener<Token> listener = new BlankGoParserBaseListener() {
+
+                                        @Override
+                                        public void enterRule(labeledStmtContext ctx) {
+                                            if (ctx.lbl != null && ctx.lbl.name != null) {
+                                                labels.add(ctx.lbl.name);
+                                            }
+                                        }
+
+                                    };
+                                    
+                                    ParseTreeWalker.DEFAULT.walk(listener, entry.getKey());
+                                    for (Token token : labels) {
+                                        if (intermediateResults.containsKey(token.getText())) {
+                                            continue;
+                                        }
+
+                                        intermediateResults.put(token.getText(), new LabelReferenceCompletionItem(token.getText()));
+                                    }
+                                } else if (finalContext instanceof GoParserBase.builtinCallContext) {
+                                    // this is easy - just add the names of built in methods
+                                    for (String builtin : SemanticHighlighter.PREDEFINED_FUNCTIONS) {
+                                        if (intermediateResults.containsKey(builtin)) {
+                                            continue;
+                                        }
+
+                                        intermediateResults.put(builtin, new FunctionReferenceCompletionItem(builtin));
+                                    }
+                                } else if (finalContext instanceof GoParserBase.methodNameContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParserBase.receiverContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParserBase.functionDeclContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParserBase.typeSpecContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParserBase.identifierListContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParserBase.typeSwitchGuardContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                }
+                            }
+                        }
+
+                        /*
+                         * GLOBAL SCOPE ANALYSIS
+                         */
+                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                            RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                            if (finalContext == null) {
                                 continue;
                             }
 
-                            inExpression = true;
-                            GoCompletionProvider.incompleteCompletionSupport();
-                            //ActionExpressionAnalyzer expressionAnalyzer = new ActionExpressionAnalyzer(fileModel, finalContext);
-                            //ParseTreeWalker.DEFAULT.walk(expressionAnalyzer, expressionRoot);
-                            //for (AttributeModel member : expressionAnalyzer.getMembers()) {
-                            //    CompletionItem item = new MemberCompletionItem(member);
-                            //    intermediateResults.put(item.getInsertPrefix().toString(), item);
-                            //}
+                            Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
+                            assert transitions != null;
+                            assert transitions.size() == 1;
+                            List<Transition> singleTransitionList = transitions.values().iterator().next();
+                            assert singleTransitionList.size() == 1;
+                            Transition transition = singleTransitionList.get(0);
+                            // only interested in identifiers
+                            if (!transition.label().contains(GoParserBase.IDENTIFIER)) {
+                                continue;
+                            }
                         }
 
+                        /*
+                         * LABEL ANALYSIS
+                         */
                         for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
                             ParseTree parseTree = entry.getKey();
                             RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
@@ -923,6 +1188,23 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
         }
 
+        private FileModel getFileModel() {
+            if (fileModel == null && !fileModelDataFailed) {
+                Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                try {
+                    fileModel = futureFileModelData.get().getData();
+                } catch (InterruptedException ex) {
+                    Exceptions.printStackTrace(ex);
+                    fileModelDataFailed = true;
+                } catch (ExecutionException ex) {
+                    Exceptions.printStackTrace(ex);
+                    fileModelDataFailed = true;
+                }
+            }
+
+            return fileModel;
+        }
+
         private boolean isInContext(Parser parser, RuleContext context, IntervalSet values) {
             return isInContext(parser, context, values, true);
         }
@@ -1023,6 +1305,81 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                 }
             } catch (RecognitionException ex) {
                 // not a viable path
+            }
+        }
+
+        private ParseTreeAnnotations annotations = new ParseTreeAnnotations();
+
+        //private class LabelAnalyzer extends BlankGoParserBaseListener {
+        //    private static final String ATTR_LABEL_DEF = "label-def";
+        //
+        //    public boolean isLabelDefinition(GoParserBase.labelContext context) {
+        //
+        //    }
+        //}
+
+        private class TargetAnalyzer extends BlankGoParserBaseListener {
+            private static final String ATTR_TARGET = "target";
+
+            public Collection<? extends CodeElementModel> resolveTarget(ParserRuleContext<Token> selector) {
+                Collection<? extends CodeElementModel> result = getTargetProperty(selector);
+                if (result != null) {
+                    return result;
+                }
+
+                LOGGER.log(Level.FINE, "TODO: resolve selector target");
+                ParseTreeWalker.DEFAULT.walk(this, selector);
+                result = getTargetProperty(selector);
+                return result != null ? result : Collections.<CodeElementModel>emptyList();
+            }
+
+            @Override
+            public void enterRule(packageNameContext ctx) {
+                FileModel fileModel = getFileModel();
+                if (ctx.name == null || fileModel == null) {
+                    return;
+                }
+
+                if (ctx.getParent() instanceof GoParserBase.packageClauseContext) {
+                    setTargetProperty(ctx, Collections.singletonList(fileModel.getPackage()));
+                } else {
+                    // look up the package by import
+                    CodeModelCache cache = CodeModelCacheImpl.getInstance();
+                    Collection<CodeElementModel> resolved = new ArrayList<CodeElementModel>();
+                    Collection<? extends ImportDeclarationModel> imports = fileModel.getImportDeclarations();
+                    for (ImportDeclarationModel model : imports) {
+                        if (model.getName().equals(ctx.start.getText())) {
+                            resolved.addAll(cache.getPackages(null, model.getPath()));
+                        }
+                    }
+
+                    setTargetProperty(ctx, resolved);
+                }
+            }
+
+            @Override
+            public void exitRule(selectorExprContext ctx) {
+                Collection<? extends CodeElementModel> target = resolveTarget(ctx.e);
+                if (target == null) {
+                    annotations.putProperty(ctx, ATTR_TARGET, null);
+                    return;
+                }
+
+                super.exitRule(ctx);
+            }
+
+            @SuppressWarnings("unchecked")
+            private Collection<? extends CodeElementModel> getTargetProperty(ParserRuleContext<Token> context) {
+                Object result = annotations.getProperty(context, ATTR_TARGET);
+                if (result instanceof Collection<?>) {
+                    return (Collection<? extends CodeElementModel>)result;
+                }
+
+                return null;
+            }
+
+            private void setTargetProperty(ParserRuleContext<?> context, Collection<? extends CodeElementModel> model) {
+                annotations.putProperty(context, ATTR_TARGET, model);
             }
         }
     }
