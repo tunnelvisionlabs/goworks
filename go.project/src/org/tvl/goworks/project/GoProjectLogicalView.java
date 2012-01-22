@@ -75,12 +75,13 @@ public class GoProjectLogicalView implements LogicalViewProvider {
 
         @Override
         public Action[] getActions(boolean arg0) {
-            Action[] nodeActions = new Action[7];
-            nodeActions[0] = CommonProjectActions.newFileAction();
-            nodeActions[1] = CommonProjectActions.copyProjectAction();
-            nodeActions[2] = CommonProjectActions.deleteProjectAction();
-            nodeActions[5] = CommonProjectActions.setAsMainProjectAction();
-            nodeActions[6] = CommonProjectActions.closeProjectAction();
+            Action[] nodeActions = {
+                CommonProjectActions.newFileAction(),
+                CommonProjectActions.copyProjectAction(),
+                CommonProjectActions.deleteProjectAction(),
+                CommonProjectActions.setAsMainProjectAction(),
+                CommonProjectActions.closeProjectAction(),
+            };
             return nodeActions;
         }
 
