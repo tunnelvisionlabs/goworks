@@ -27,19 +27,10 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
-import org.tvl.goworks.editor.go.codemodel.ConstModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
-import org.tvl.goworks.editor.go.codemodel.FunctionModel;
-import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
-import org.tvl.goworks.editor.go.codemodel.PackageDeclarationModel;
-import org.tvl.goworks.editor.go.codemodel.PackageModel;
-import org.tvl.goworks.editor.go.codemodel.TypeModel;
-import org.tvl.goworks.editor.go.codemodel.VarModel;
 
 /**
  *
@@ -52,6 +43,7 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     private final FreezableArrayList<ConstModelImpl> constants = new FreezableArrayList<ConstModelImpl>();
     private final FreezableArrayList<VarModelImpl> vars = new FreezableArrayList<VarModelImpl>();
     private final FreezableArrayList<FunctionModelImpl> functions = new FreezableArrayList<FunctionModelImpl>();
+    @SuppressWarnings("unchecked")
     private final ProxyCollection<CodeElementModel> codeElements = new ProxyCollection<CodeElementModel>(packageDeclarations, importDeclarations, types, constants, vars, functions);
 
     public FileModelImpl(String name, Project project, String packageName) {
