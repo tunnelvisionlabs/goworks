@@ -351,7 +351,7 @@ receiverType
     ;
 
 compositeLiteral
-    :   literalType literalValue
+    :   litTyp=literalType litVal=literalValue
     ;
 
 literalType
