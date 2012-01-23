@@ -39,4 +39,6 @@ public interface FunctionModel extends CodeElementModel {
 
     Collection<? extends ParameterModel> getReturnValues();
 
+    ParameterModel getReceiverParameter();
+
 }

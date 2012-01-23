@@ -27,7 +27,6 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
-import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
 
 /**
@@ -36,8 +35,8 @@ import org.tvl.goworks.editor.go.codemodel.ConstModel;
  */
 public class ConstModelImpl extends AbstractCodeElementModel implements ConstModel {
 
-    public ConstModelImpl(String name, Project project, String packageName) {
-        super(name, project, packageName);
+    public ConstModelImpl(String name, FileModelImpl file) {
+        super(name, file);
     }
 
 }

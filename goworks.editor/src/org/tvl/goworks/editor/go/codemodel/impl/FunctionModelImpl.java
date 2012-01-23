@@ -27,10 +27,10 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import org.netbeans.api.project.Project;
+import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
-import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 
 /**
  *
@@ -38,19 +38,32 @@ import org.tvl.goworks.editor.go.codemodel.ParameterModel;
  */
 public class FunctionModelImpl extends AbstractCodeElementModel implements FunctionModel {
 
-    public FunctionModelImpl(String name, Project project, String packageName) {
-        super(name, project, packageName);
+    private final List<ParameterModelImpl> parameters = new ArrayList<ParameterModelImpl>();
+    private final List<ParameterModelImpl> returnValues = new ArrayList<ParameterModelImpl>();
+    private ParameterModelImpl receiverParameter;
+
+    public FunctionModelImpl(String name, FileModelImpl file) {
+        super(name, file);
     }
 
     @Override
-    public Collection<? extends ParameterModel> getParameters() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<ParameterModelImpl> getParameters() {
+        return parameters;
     }
 
     @Override
-    public Collection<? extends ParameterModel> getReturnValues() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<ParameterModelImpl> getReturnValues() {
+        return returnValues;
     }
 
+    @Override
+    public ParameterModelImpl getReceiverParameter() {
+        return receiverParameter;
+    }
+
+    public void setReceiverParameter(ParameterModelImpl value) {
+        ensureModifiable();
+        receiverParameter = value;
+    }
 
 }

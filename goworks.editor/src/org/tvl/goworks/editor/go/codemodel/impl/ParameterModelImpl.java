@@ -27,24 +27,17 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
-import org.tvl.goworks.editor.go.codemodel.VarModel;
 
 /**
  *
  * @author Sam Harwell
  */
-public class VarModelImpl extends AbstractCodeElementModel implements VarModel {
-    private final TypeModel varType;
+public class ParameterModelImpl extends VarModelImpl implements ParameterModel {
 
-    public VarModelImpl(String name, TypeModel varType, FileModelImpl file) {
-        super(name, file);
-        this.varType = varType;
-    }
-
-    @Override
-    public TypeModel getVarType() {
-        return varType;
+    public ParameterModelImpl(String name, TypeModel varType, FileModelImpl file) {
+        super(name, varType, file);
     }
 
 }
