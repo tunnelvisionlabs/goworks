@@ -112,7 +112,9 @@ import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.GoLexerBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase;
+import org.tvl.goworks.editor.go.parser.GoParserBase.labelContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.labeledStmtContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.methodNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.selectorExprContext;
 import org.tvl.goworks.editor.go.parser.ParseTreeAnnotations;
@@ -933,13 +935,79 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                     if (inCompositeLiteral) {
                                         LOGGER.log(Level.FINE, "TODO: resolve enclosing compositeLiteral for further analysis");
                                     } else {
-                                        if (finalContext.getParent() instanceof GoParserBase.typeNameContext) {
-                                            LOGGER.log(Level.FINE, "TODO: resolve visible type");
-                                            continue;
+                                        // add items from the current package and imported "mergeWithLocal" packages
+                                        List<PackageModel> visiblePackages = new ArrayList<PackageModel>();
+                                        visiblePackages.add(getFileModel().getPackage());
+                                        for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
+                                            if (importDeclarationModel.isMergeWithLocal()) {
+                                                Collection<? extends PackageModel> resolved = CodeModelCacheImpl.getInstance().resolvePackages(importDeclarationModel);
+                                                if (resolved != null) {
+                                                    visiblePackages.addAll(resolved);
+                                                }
+                                            }
                                         }
 
-                                        assert finalContext.getParent() instanceof GoParserBase.operandContext;
-                                        LOGGER.log(Level.FINE, "TODO: resolve unqualified const, var, or func name");
+                                        if (finalContext.getParent() instanceof GoParserBase.typeNameContext) {
+                                            for (String builtin : SemanticHighlighter.PREDEFINED_TYPES) {
+                                                if (intermediateResults.containsKey(builtin)) {
+                                                    continue;
+                                                }
+
+                                                intermediateResults.put(builtin, new TypeReferenceCompletionItem(builtin));
+                                            }
+
+                                            for (PackageModel packageModel : visiblePackages) {
+                                                Collection<? extends TypeModel> types = packageModel.getTypes();
+                                                for (TypeModel model : types) {
+                                                    if (intermediateResults.containsKey(model.getName())) {
+                                                        continue;
+                                                    }
+
+                                                    intermediateResults.put(model.getName(), new TypeReferenceCompletionItem(model));
+                                                }
+                                            }
+                                        } else {
+                                            assert finalContext.getParent() instanceof GoParserBase.operandContext;
+                                            // add builtin items
+                                            for (String builtin : SemanticHighlighter.PREDEFINED_CONSTANTS) {
+                                                if (intermediateResults.containsKey(builtin)) {
+                                                    continue;
+                                                }
+
+                                                intermediateResults.put(builtin, new ConstReferenceCompletionItem(builtin));
+                                            }
+
+                                            for (PackageModel packageModel : visiblePackages) {
+                                                Collection<? extends ConstModel> constants = packageModel.getConstants();
+                                                for (ConstModel model : constants) {
+                                                    if (intermediateResults.containsKey(model.getName())) {
+                                                        continue;
+                                                    }
+
+                                                    intermediateResults.put(model.getName(), new ConstReferenceCompletionItem(model));
+                                                }
+
+                                                Collection<? extends VarModel> vars = packageModel.getVars();
+                                                for (VarModel model : vars) {
+                                                    if (intermediateResults.containsKey(model.getName())) {
+                                                        continue;
+                                                    }
+
+                                                    intermediateResults.put(model.getName(), new VarReferenceCompletionItem(model));
+                                                }
+
+                                                Collection<? extends FunctionModel> functions = packageModel.getFunctions();
+                                                for (FunctionModel model : functions) {
+                                                    if (intermediateResults.containsKey(model.getName())) {
+                                                        continue;
+                                                    }
+
+                                                    intermediateResults.put(model.getName(), new FunctionReferenceCompletionItem(model));
+                                                }
+                                            }
+
+                                            LOGGER.log(Level.FINE, "TODO: Include consts, vars for the current function as obtained from a listener.");
+                                        }
                                     }
                                 } else if (finalContext instanceof GoParserBase.baseTypeNameContext) {
                                     // this is the name of a type in the current package
@@ -981,6 +1049,8 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
 
                                         intermediateResults.put(token.getText(), new LabelReferenceCompletionItem(token.getText()));
                                     }
+
+                                    LOGGER.log(Level.FINE, "TODO: Also include labels for the current function as obtained from the FunctionModel.");
                                 } else if (finalContext instanceof GoParserBase.builtinCallContext) {
                                     // this is easy - just add the names of built in methods
                                     for (String builtin : SemanticHighlighter.PREDEFINED_FUNCTIONS) {
@@ -991,7 +1061,8 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                         intermediateResults.put(builtin, new FunctionReferenceCompletionItem(builtin));
                                     }
                                 } else if (finalContext instanceof GoParserBase.methodNameContext) {
-                                    // this is a declaration not a reference
+                                    // This block only handles non-dotted identifiers, which means this can't be a methodExpr
+                                    // and is therefore always a declaration (never a reference).
                                     continue;
                                 } else if (finalContext instanceof GoParserBase.receiverContext) {
                                     // this is a declaration not a reference
