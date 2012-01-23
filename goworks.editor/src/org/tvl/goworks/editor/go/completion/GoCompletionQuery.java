@@ -355,7 +355,7 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
     private Task getTask(BaseDocument document) {
         VersionedDocument buffer = VersionedDocumentUtilities.getVersionedDocument(document);
         DocumentSnapshot snapshot = buffer.getCurrentSnapshot();
-        return new Task(document, snapshot);
+        return new Task(snapshot);
     }
 
     /*package*/ static boolean isIdentifierPart(String typedText) {
@@ -389,7 +389,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
     }
 
     private class Task implements Callable<Void> {
-        private final BaseDocument document;
         private final DocumentSnapshot snapshot;
         private final ParserTaskManager taskManager;
 
@@ -407,11 +406,9 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
             add(GoParserBase.RULE_forStmt);
         }};
 
-        public Task(BaseDocument document, DocumentSnapshot snapshot) {
-            Parameters.notNull("document", document);
+        public Task(DocumentSnapshot snapshot) {
             Parameters.notNull("snapshot", snapshot);
 
-            this.document = document;
             this.snapshot = snapshot;
             this.taskManager = getParserTaskManager();
 
