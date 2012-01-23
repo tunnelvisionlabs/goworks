@@ -115,9 +115,9 @@ public void setCheckPackageNames(boolean checkPackageNames) {
 }
 
 type
-    :   typeName
-    |   typeLiteral
-    |   '(' type ')'
+    :   name=typeName
+    |   lit=typeLiteral
+    |   lp='(' t=type rp=')'
     ;
 
 typeName
@@ -125,14 +125,14 @@ typeName
     ;
 
 typeLiteral
-    :   arrayType
-    |   structType
-    |   pointerType
-    |   functionType
-    |   interfaceType
-    |   sliceType
-    |   mapType
-    |   channelType
+    :   arrType=arrayType
+    |   strType=structType
+    |   ptrType=pointerType
+    |   fnType=functionType
+    |   ifaceType=interfaceType
+    |   slcType=sliceType
+    |   maptype=mapType
+    |   chanType=channelType
     ;
 
 arrayType
@@ -168,45 +168,45 @@ tag
     ;
 
 pointerType
-    :   '*' baseType
+    :   ptr='*' typ=baseType
     ;
 
 baseType
-    :   type
+    :   typ=type
     ;
 
 functionType
-    :   'func' signature
+    :   'func' sig=signature
     ;
 
 signature
-    :   parameters result?
+    :   params=parameters res=result?
     ;
 
 result
-    :   parameters
+    :   params=parameters
     |   t=type
     ;
 
 parameters
-    :   '(' (parameterList ','?)? ')'
+    :   '(' (params=parameterList ','?)? ')'
     ;
 
 parameterList
-    :   parameterDecl (',' parameterDecl)*
+    :   params+=parameterDecl (',' params+=parameterDecl)*
     ;
 
 parameterDecl
-    :   idList=identifierList? '...'? t=type
+    :   idList=identifierList? ellip='...'? t=type
     ;
 
 interfaceType
-    :   'interface' '{' (methodSpec (';' methodSpec)* ';'?)? '}'
+    :   'interface' '{' (methods+=methodSpec (';' methods+=methodSpec)* ';'?)? '}'
     ;
 
 methodSpec
     :   name=methodName sig=signature
-    |   interfaceTypeName
+    |   ifaceName=interfaceTypeName
     ;
 
 methodName
@@ -214,44 +214,44 @@ methodName
     ;
 
 interfaceTypeName
-    :   typeName
+    :   typName=typeName
     ;
 
 mapType
-    :   'map' '[' keyType ']' elementType
+    :   'map' '[' keyTyp=keyType ']' elemType=elementType
     ;
 
 keyType
-    :   type
+    :   t=type
     ;
 
 channelType
     :   (   'chan' '<-'?
         |   '<-' 'chan'
         )
-        elementType
+        elemType=elementType
     ;
 
 block
-    :   '{' (statement (';' statement)* ';'?)? '}'
+    :   '{' (statements+=statement (';' statements+=statement)* ';'?)? '}'
     ;
 
 declaration
-    :   constDecl
-    |   typeDecl
-    |   varDecl
+    :   cd=constDecl
+    |   td=typeDecl
+    |   vd=varDecl
     ;
 
 topLevelDecl
-    :   declaration
-    |   functionDecl
-    |   methodDecl
+    :   decl=declaration
+    |   fndecl=functionDecl
+    |   methdecl=methodDecl
     ;
 
 constDecl
     :   'const'
-        (   constSpec
-        |   '(' (constSpec (';' constSpec)* ';'?)? ')'
+        (   consts+=constSpec
+        |   '(' (consts+=constSpec (';' consts+=constSpec)* ';'?)? ')'
         )
     ;
 
@@ -269,8 +269,8 @@ expressionList
 
 typeDecl
     :   'type'
-        (   typeSpec
-        |   '(' (typeSpec (';' typeSpec)* ';'?)? ')'
+        (   types+=typeSpec
+        |   '(' (types+=typeSpec (';' types+=typeSpec)* ';'?)? ')'
         )
     ;
 
@@ -280,8 +280,8 @@ typeSpec
 
 varDecl
     :   'var'
-        (   varSpec
-        |   '(' (varSpec (';' varSpec)* ';'?)? ')'
+        (   vars+=varSpec
+        |   '(' (vars+=varSpec (';' vars+=varSpec)* ';'?)? ')'
         )
     ;
 
@@ -301,7 +301,7 @@ functionDecl
     ;
 
 body
-    :   block
+    :   blk=block
     ;
 
 methodDecl
@@ -309,7 +309,7 @@ methodDecl
     ;
 
 receiver
-    :   '(' name=IDENTIFIER? '*'? typ=baseTypeName ')'
+    :   '(' name=IDENTIFIER? ptr='*'? typ=baseTypeName ')'
     ;
 
 baseTypeName
@@ -346,8 +346,8 @@ methodExpr
     ;
 
 receiverType
-    :   typeName
-    |   '(' '*' typeName ')'
+    :   t=typeName
+    |   '(' ptr='*' t=typeName ')'
     ;
 
 compositeLiteral
@@ -364,37 +364,37 @@ literalType
     ;
 
 literalValue
-    :   '{' (elementList ','?)? '}'
+    :   '{' (elements=elementList ','?)? '}'
     ;
 
 elementList
-    :   element (',' element)*
+    :   elements+=element (',' elements+=element)*
     ;
 
 element
-    :   (key ':')? value
+    :   (k=key ':')? v=value
     ;
 
 key
-    :   fieldName
-    |   elementIndex
+    :   field=fieldName
+    |   index=elementIndex
     ;
 
 fieldName
-    :   IDENTIFIER
+    :   field=IDENTIFIER
     ;
 
 elementIndex
-    :   expression
+    :   index=expression
     ;
 
 value
-    :   expression
-    |   literalValue
+    :   expr=expression
+    |   lit=literalValue
     ;
 
 functionLiteral
-    :   typ=functionType body
+    :   typ=functionType bdy=body
     ;
 
 expression
@@ -440,7 +440,7 @@ expression
 //    ;
 
 argumentList
-    :   expressionList '...'?
+    :   exprs=expressionList ellip='...'?
     ;
 
 conversion
@@ -491,19 +491,19 @@ expressionStmt
     ;
 
 sendStmt
-    :   channel '<-' expression
+    :   chan=channel '<-' e=expression
     ;
 
 channel
-    :   expression
+    :   e=expression
     ;
 
 incDecStmt
-    :   expression ('++' | '--')
+    :   e=expression op=('++' | '--')
     ;
 
 assignment
-    :   expressionList assignOp expressionList
+    :   targets=expressionList op=assignOp values=expressionList
     ;
 
 assignOp
