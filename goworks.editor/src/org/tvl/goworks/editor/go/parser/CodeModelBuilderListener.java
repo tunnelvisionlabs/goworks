@@ -30,6 +30,7 @@ package org.tvl.goworks.editor.go.parser;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -37,7 +38,9 @@ import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
+import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.FunctionModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.ImportDeclarationModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.PackageDeclarationModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeAliasModelImpl;
@@ -51,6 +54,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeReferenceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.parser.GoParserBase.arrayTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.builtinArgsContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.channelTypeContext;
@@ -61,6 +65,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.fieldDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.functionDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.functionLiteralContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.functionTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.identifierListContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.importSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.interfaceTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.mapTypeContext;
@@ -115,12 +120,18 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
         String name = snapshot.getVersionedDocument().getFileObject().getNameExt();
         this.fileModel = new FileModelImpl(name, project, packageName);
         this.typeContainerStack.push(this.fileModel.getTypes());
+        this.constContainerStack.push(this.fileModel.getConstants());
+        this.varContainerStack.push(this.fileModel.getVars());
+        this.functionContainerStack.push(this.fileModel.getFunctions());
     }
 
     @Override
     public void exitRule(sourceFileContext ctx) {
         this.fileModel.freeze();
         this.typeContainerStack.pop();
+        this.constContainerStack.pop();
+        this.varContainerStack.pop();
+        this.functionContainerStack.pop();
     }
 
     @Override
@@ -158,7 +169,11 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     private final Deque<TypeStructModelImpl> structModelStack = new ArrayDeque<TypeStructModelImpl>();
     private final Deque<TypeInterfaceModelImpl> interfaceModelStack = new ArrayDeque<TypeInterfaceModelImpl>();
     private final Deque<Collection<TypeModelImpl>> typeContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
+    private final Deque<Collection<ConstModelImpl>> constContainerStack = new ArrayDeque<Collection<ConstModelImpl>>();
+    private final Deque<Collection<VarModelImpl>> varContainerStack = new ArrayDeque<Collection<VarModelImpl>>();
+    private final Deque<Collection<FunctionModelImpl>> functionContainerStack = new ArrayDeque<Collection<FunctionModelImpl>>();
     private final Deque<TypeModelImpl> typeModelStack = new ArrayDeque<TypeModelImpl>();
+    private final Deque<FunctionModelImpl> functionModelStack = new ArrayDeque<FunctionModelImpl>();
 
     @Override
     public void exitRule(typeContext ctx) {
@@ -266,6 +281,15 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void exitRule(constSpecContext ctx) {
+        identifierListContext idList = ctx.idList;
+        List<Token> ids = idList != null ? idList.ids_list : null;
+        if (ids != null && !ids.isEmpty()) {
+            for (Token id : ids) {
+                ConstModelImpl model = new ConstModelImpl(id.getText(), fileModel);
+                constContainerStack.peek().add(model);
+            }
+        }
+
         if (ctx.explicitType != null) {
             typeModelStack.pop();
         }
@@ -280,10 +304,27 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void exitRule(methodDeclContext ctx) {
+
+    }
+
+    @Override
+    public void enterRule(functionDeclContext ctx) {
+        if (ctx.name == null) {
+            return;
+        }
+
+        FunctionModelImpl model = new FunctionModelImpl(ctx.name.getText(), fileModel);
+        functionContainerStack.peek().add(model);
+        functionModelStack.add(model);
     }
 
     @Override
     public void exitRule(functionDeclContext ctx) {
+        if (ctx.name == null) {
+            return;
+        }
+
+        functionModelStack.pop();
     }
 
     @Override
