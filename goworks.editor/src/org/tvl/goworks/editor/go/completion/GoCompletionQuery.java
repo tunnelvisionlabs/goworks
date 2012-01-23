@@ -443,12 +443,7 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
 
             // Add context items (labels, etc). Use anchor points to optimize information gathering.
 
-//            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
-//            DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
-
-//            boolean possibleInAction;
-//            boolean definiteInAction;
-            Map<RuleContext, CaretReachedException> parseTrees = null;
+            Map<RuleContext, CaretReachedException> parseTrees;
             CaretToken caretToken = null;
 
             List<Anchor> anchors;
@@ -526,11 +521,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                         break;
                     }
 
-                    //boolean hasActionConfig = false;
-                    //boolean hasNonActionConfig = false;
-                    //final boolean hasRewriteConfig = false;
-                    //boolean hasNonRewriteConfig = false;
-
                     if (parseTrees != null) {
                         possibleDeclaration = false;
                         possibleReference = false;
@@ -547,44 +537,7 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                             }
 
                             Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                            IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
-                            Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
-                            Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
                             for (ATNConfig c : transitions.keySet()) {
-                                //boolean currentActionConfig = false;
-                                //final boolean currentRewriteConfig = false;
-
-                                visited.clear();
-                                workList.clear();
-                                stateWorkList.clear();
-                                workList.add(c.context);
-                                stateWorkList.add(c.state.stateNumber);
-                                while (!workList.isEmpty()) {
-                                    PredictionContext context = workList.poll();
-                                    int state = stateWorkList.poll();
-                                    if (visited.put(context, context) != null) {
-                                        continue;
-                                    }
-
-                                    for (int i = 0; i < context.invokingStates.length; i++) {
-                                        workList.add(context.parents[i]);
-                                        stateWorkList.add(context.invokingStates[i]);
-                                    }
-
-                                    int ruleIndex = parser.getATN().states.get(state).ruleIndex;
-                                    //if (ruleIndex == GrammarParser.RULE_actionBlock) {
-                                    //    currentActionConfig = true;
-                                    //}
-                                    //
-                                    //if (currentActionConfig && currentRewriteConfig) {
-                                    //    break;
-                                    //}
-                                }
-
-                                //hasActionConfig |= currentActionConfig;
-                                //hasNonActionConfig |= !currentActionConfig;
-                                //hasNonRewriteConfig |= !currentRewriteConfig;
-
                                 for (Transition t : transitions.get(c)) {
                                     if (!t.label().contains(GoParserBase.IDENTIFIER)) {
                                         continue;
@@ -648,10 +601,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                         break;
                                     }
                                 }
-
-                                //if (hasActionConfig && hasNonActionConfig && hasRewriteConfig && hasNonRewriteConfig) {
-                                //    break declarationOrReferenceLoop;
-                                //}
                             }
                         }
                     }
@@ -883,13 +832,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                                     } else {
                                         LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
                                     }
-
-                                    //ActionExpressionAnalyzer expressionAnalyzer = new ActionExpressionAnalyzer(fileModel, finalContext);
-                                    //ParseTreeWalker.DEFAULT.walk(expressionAnalyzer, expressionRoot);
-                                    //for (AttributeModel member : expressionAnalyzer.getMembers()) {
-                                    //    CompletionItem item = new MemberCompletionItem(member);
-                                    //    intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                    //}
                                 }
                             } else if (finalContext instanceof GoParserBase.packageNameContext) {
                                 /* AVAILABLE PACKAGES
@@ -1083,153 +1025,9 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
                             }
                         }
 
-                        /*
-                         * GLOBAL SCOPE ANALYSIS
-                         */
-                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                            RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
-                            if (finalContext == null) {
-                                continue;
-                            }
-
-                            Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                            assert transitions != null;
-                            assert transitions.size() == 1;
-                            List<Transition> singleTransitionList = transitions.values().iterator().next();
-                            assert singleTransitionList.size() == 1;
-                            Transition transition = singleTransitionList.get(0);
-                            // only interested in identifiers
-                            if (!transition.label().contains(GoParserBase.IDENTIFIER)) {
-                                continue;
-                            }
-                        }
-
-                        /*
-                         * LABEL ANALYSIS
-                         */
-                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                            ParseTree parseTree = entry.getKey();
-                            RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
-                            if (true) {
-                                continue;
-                            }
-
-                            GoCompletionProvider.incompleteCompletionSupport();
-                            //LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
-                            //ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
-                            //
-                            //possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
-                            //definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
-                            //possibleKeyword |= !definiteInAction;
-                            //possibleDeclaration &= !definiteInAction;
-                            //possibleReference &= !definiteInAction;
-                            //
-                            //if (grammarType == GrammarParser.COMBINED) {
-                            //    Token enclosingRule = labelAnalyzer.getEnclosingRuleName();
-                            //    if (enclosingRule != null) {
-                            //        if (enclosingRule.getType() == GrammarParser.RULE_REF) {
-                            //            grammarType = GrammarParser.PARSER;
-                            //        } else {
-                            //            grammarType = GrammarParser.LEXER;
-                            //        }
-                            //    }
-                            //}
-                            //
-                            //if (!inExpression && possibleInAction) {
-                            //    if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
-                            //        CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName().getText());
-                            //        intermediateResults.put(item.getInsertPrefix().toString(), item);
-                            //    }
-                            //
-                            //    for (Token label : labelAnalyzer.getLabels()) {
-                            //        CompletionItem item = new RewriteReferenceCompletionItem(label.getText(), true);
-                            //        intermediateResults.put(item.getInsertPrefix().toString(), item);
-                            //    }
-                            //
-                            //    if (possibleInAction && !inExpression) {
-                            //        for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                            //            // only add implicit tokens here. all implicit rule references will be added separately
-                            //            if (Character.isUpperCase(implicit.getText().charAt(0))) {
-                            //                CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
-                            //                intermediateResults.put(item.getInsertPrefix().toString(), item);
-                            //            }
-                            //        }
-                            //
-                            //        if (grammarType != GrammarParser.LEXER) {
-                            //            // Add rules from the grammar
-                            //            if (rules == null) {
-                            //                rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
-                            //            }
-                            //
-                            //            for (Description rule : rules) {
-                            //                if (Character.isLowerCase(rule.getName().charAt(0))) {
-                            //                    results.add(new ActionReferenceCompletionItem(rule.getName(), false));
-                            //                }
-                            //            }
-                            //        }
-                            //
-                            //        switch (grammarType) {
-                            //        case GrammarParser.LEXER:
-                            //            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                            //            intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                            //            intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                            //            intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                            //            intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                            //            intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
-                            //            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                            //            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                            //            intermediateResults.put("$int", new KeywordCompletionItem("$int"));
-                            //            break;
-                            //
-                            //        case GrammarParser.PARSER:
-                            //            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                            //            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                            //            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                            //            intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
-                            //            break;
-                            //
-                            //        default:
-                            //            // if we're unsure about the type, include all possibilities to make sure we're covered
-                            //            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                            //            intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                            //            intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                            //            intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                            //            intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                            //            intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
-                            //            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                            //            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                            //            intermediateResults.put("$int", new KeywordCompletionItem("$int"));
-                            //            intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
-                            //            break;
-                            //        }
-                            //    }
-                            //}
-                        }
-
                         results.addAll(intermediateResults.values());
                     }
                 }
-            }
-
-            if (parseTrees == null && possibleKeyword) {
-                // Add keywords
-                results.addAll(KeywordCompletionItem.KEYWORD_ITEMS);
-            }
-
-            if (possibleReference) {
-//                GoCompletionProvider.incompleteCompletionSupport();
-                //boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER;
-                //
-                //// Add rules from the grammar
-                //if (rules == null) {
-                //    rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
-                //}
-                //
-                //for (Description rule : rules) {
-                //    if (!tokenReferencesOnly || Character.isUpperCase(rule.getName().charAt(0))) {
-                //        results.add(new GrammarRuleCompletionItem(rule));
-                //    }
-                //}
             }
 
             OffsetRegion applicableToSpan;
@@ -1380,14 +1178,6 @@ public final class GoCompletionQuery extends AsyncCompletionQuery {
         }
 
         private ParseTreeAnnotations annotations = new ParseTreeAnnotations();
-
-        //private class LabelAnalyzer extends BlankGoParserBaseListener {
-        //    private static final String ATTR_LABEL_DEF = "label-def";
-        //
-        //    public boolean isLabelDefinition(GoParserBase.labelContext context) {
-        //
-        //    }
-        //}
 
         private class TargetAnalyzer extends BlankGoParserBaseListener {
             private static final String ATTR_TARGET = "target";
