@@ -28,6 +28,8 @@
 package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 
@@ -45,8 +47,8 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @SuppressWarnings("unchecked")
     private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<AbstractCodeElementModel>(packageDeclarations, importDeclarations, types, constants, vars, functions);
 
-    public FileModelImpl(String name, Project project, String packageName) {
-        super(name, project, packageName);
+    public FileModelImpl(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
+        super(name, project, packagePath);
     }
 
     @Override
