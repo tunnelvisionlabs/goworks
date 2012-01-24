@@ -30,8 +30,10 @@ package org.tvl.goworks.editor.go.completion;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import javax.swing.ImageIcon;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.parser.GoLexerBase;
 
@@ -85,6 +87,7 @@ public class KeywordCompletionItem extends GoCompletionItem {
             }
         }};
 
+    private static ImageIcon ICON;
     private final String keyword;
     private String leftText;
 
@@ -106,6 +109,15 @@ public class KeywordCompletionItem extends GoCompletionItem {
     @Override
     public CharSequence getInsertPrefix() {
         return keyword;
+    }
+
+    @Override
+    protected ImageIcon getIcon() {
+        if (ICON == null) {
+            ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/duke.png"));
+        }
+
+        return ICON;
     }
 
     @Override

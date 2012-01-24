@@ -27,8 +27,12 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import javax.swing.ImageIcon;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
+import org.tvl.goworks.editor.go.codemodel.TypeAliasModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
@@ -51,6 +55,45 @@ public class TypeReferenceCompletionItem extends GoCompletionItem {
         Parameters.notNull("typeModel", typeModel);
         this.typeModel = typeModel;
         this.typeName = typeModel.getName();
+    }
+
+    @Override
+    protected ImageIcon getIcon() {
+        String resourceLocation = "org/tvl/goworks/editor/go/resources/";
+        String imageName;
+
+        TypeKind kind = typeModel != null ? typeModel.getKind() : TypeKind.UNKNOWN;
+        if (typeModel instanceof TypeAliasModel) {
+            kind = ((TypeAliasModel)typeModel).getType().getKind();
+        }
+
+        switch (kind) {
+        case ALIAS:
+            imageName = "typedef_16.png";
+            break;
+
+        case STRUCT:
+            imageName = "struct_16.png";
+            break;
+
+        case INTERFACE:
+            imageName = "interface.png";
+            break;
+
+        case ARRAY:
+        case CHANNEL:
+        case FUNCTION:
+        case INTRINSIC:
+        case MAP:
+        case POINTER:
+        case SLICE:
+        case UNKNOWN:
+        default:
+            imageName = "typedef_16.png";
+            break;
+        }
+
+        return new ImageIcon(ImageUtilities.loadImage(resourceLocation + imageName));
     }
 
     @Override
@@ -82,11 +125,11 @@ public class TypeReferenceCompletionItem extends GoCompletionItem {
 
     @Override
     protected String getRightHtmlText() {
-        if (typeModel != null) {
-            String name = typeModel.getClass().getSimpleName();
-            name = name.substring(name.lastIndexOf('.') + 1);
-            return name;
-        }
+//        if (typeModel != null) {
+//            String name = typeModel.getClass().getSimpleName();
+//            name = name.substring(name.lastIndexOf('.') + 1);
+//            return name;
+//        }
 
         return "";
     }

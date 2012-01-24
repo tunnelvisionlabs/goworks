@@ -27,9 +27,12 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import javax.swing.ImageIcon;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
+import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 
 /**
  *
@@ -37,20 +40,27 @@ import org.tvl.goworks.editor.go.codemodel.ConstModel;
  */
 public class ConstReferenceCompletionItem extends GoCompletionItem {
 
+    private static ImageIcon ICON;
+    private static ImageIcon ICON_PROTECTED;
+    private static ImageIcon ICON_LOCAL;
+
     private final ConstModel constModel;
     private final String constName;
+    private final boolean localScope;
     private String leftText;
 
-    public ConstReferenceCompletionItem(@NonNull String constName) {
+    public ConstReferenceCompletionItem(@NonNull String constName, boolean localScope) {
         Parameters.notNull("constName", constName);
         this.constModel = null;
         this.constName = constName;
+        this.localScope = localScope;
     }
 
-    public ConstReferenceCompletionItem(@NonNull ConstModel constModel) {
+    public ConstReferenceCompletionItem(@NonNull ConstModel constModel, boolean localScope) {
         Parameters.notNull("constModel", constModel);
         this.constModel = constModel;
         this.constName = constModel.getName();
+        this.localScope = localScope;
     }
 
     @Override
@@ -69,6 +79,29 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    protected ImageIcon getIcon() {
+        ImageIcon icon;
+        if (localScope) {
+            if (ICON_LOCAL == null) {
+                ICON_LOCAL = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/const_protected.png"));
+            }
+            icon = ICON_LOCAL;
+        } else if (Character.isUpperCase(constName.charAt(0)) || SemanticHighlighter.PREDEFINED_CONSTANTS.contains(constName)) {
+            if (ICON == null) {
+                ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/const_static_public.png"));
+            }
+            icon = ICON;
+        } else {
+            if (ICON_PROTECTED == null) {
+                ICON_PROTECTED = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/const_static_protected.png"));
+            }
+            icon = ICON_PROTECTED;
+        }
+
+        return icon;
+    }
+
+    @Override
     protected String getLeftHtmlText() {
         if (leftText == null) {
             StringBuilder builder = new StringBuilder();
@@ -83,12 +116,11 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
     @Override
     protected String getRightHtmlText() {
         if (constModel != null) {
-            String name = constModel.getClass().getSimpleName();
-            name = name.substring(name.lastIndexOf('.') + 1);
-            return name;
+            // TODO: figure out the type
+            return "?";
         }
 
-        return "";
+        return "?";
     }
 
 }

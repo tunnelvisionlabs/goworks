@@ -27,7 +27,9 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import javax.swing.ImageIcon;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
 
 /**
@@ -36,6 +38,7 @@ import org.openide.util.Parameters;
  */
 public class PackageReferenceCompletionItem extends GoCompletionItem {
 
+    private static ImageIcon ICON;
     private final String packageNameOrAlias;
     private String leftText;
 
@@ -60,6 +63,15 @@ public class PackageReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    protected ImageIcon getIcon() {
+        if (ICON == null) {
+            ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/package.png"));
+        }
+
+        return ICON;
+    }
+
+    @Override
     protected String getLeftHtmlText() {
         if (leftText == null) {
             StringBuilder builder = new StringBuilder();
@@ -69,11 +81,6 @@ public class PackageReferenceCompletionItem extends GoCompletionItem {
             leftText = builder.toString();
         }
         return leftText;
-    }
-
-    @Override
-    protected String getRightHtmlText() {
-        return "Package";
     }
 
 }

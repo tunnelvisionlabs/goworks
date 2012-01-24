@@ -27,9 +27,13 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import javax.swing.ImageIcon;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.ParameterModel;
+import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 
 /**
  *
@@ -37,9 +41,15 @@ import org.tvl.goworks.editor.go.codemodel.FunctionModel;
  */
 public class FunctionReferenceCompletionItem extends GoCompletionItem {
 
+    private static ImageIcon FUNCTION_ICON;
+    private static ImageIcon FUNCTION_ICON_PROTECTED;
+    private static ImageIcon METHOD_ICON;
+    private static ImageIcon METHOD_ICON_PROTECTED;
+
     private final FunctionModel functionModel;
     private final String functionName;
     private String leftText;
+    private String rightText;
 
     public FunctionReferenceCompletionItem(@NonNull String typeName) {
         Parameters.notNull("typeName", typeName);
@@ -69,12 +79,57 @@ public class FunctionReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    protected ImageIcon getIcon() {
+        ImageIcon icon;
+        if (functionModel == null || functionModel.getReceiverParameter() == null) {
+            if (Character.isUpperCase(functionName.charAt(0)) || SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(functionName)) {
+                if (FUNCTION_ICON == null) {
+                    FUNCTION_ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/methods_static.png"));
+                }
+                icon = FUNCTION_ICON;
+            } else {
+                if (FUNCTION_ICON_PROTECTED == null) {
+                    FUNCTION_ICON_PROTECTED = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/methods_static_protected.png"));
+                }
+                icon = FUNCTION_ICON_PROTECTED;
+            }
+        } else {
+            if (Character.isUpperCase(functionName.charAt(0))) {
+                if (METHOD_ICON == null) {
+                    METHOD_ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/methods.png"));
+                }
+                icon = METHOD_ICON;
+            } else {
+                if (METHOD_ICON_PROTECTED == null) {
+                    METHOD_ICON_PROTECTED = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/methods_protected.png"));
+                }
+                icon = METHOD_ICON_PROTECTED;
+            }
+        }
+
+        return icon;
+    }
+
+    @Override
     protected String getLeftHtmlText() {
         if (leftText == null) {
             StringBuilder builder = new StringBuilder();
             builder.append(METHOD_COLOR);
             builder.append(functionName);
             builder.append(COLOR_END);
+            if (functionModel != null) {
+                builder.append("(");
+                boolean first = true;
+                for (ParameterModel parameter : functionModel.getParameters()) {
+                    if (!first) {
+                        builder.append(", ");
+                    }
+
+                    appendParameter(builder, parameter);
+                    first = false;
+                }
+                builder.append(")");
+            }
             leftText = builder.toString();
         }
         return leftText;
@@ -82,13 +137,47 @@ public class FunctionReferenceCompletionItem extends GoCompletionItem {
 
     @Override
     protected String getRightHtmlText() {
-        if (functionModel != null) {
-            String name = functionModel.getClass().getSimpleName();
-            name = name.substring(name.lastIndexOf('.') + 1);
-            return name;
+        if (rightText == null) {
+            if (functionModel != null && !functionModel.getReturnValues().isEmpty()) {
+                if (functionModel.getReturnValues().size() == 1) {
+                    ParameterModel model = functionModel.getReturnValues().iterator().next();
+                    if ("_".equals(model.getName())) {
+                        return model.getVarType().getSimpleName();
+                    }
+                } else {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("(");
+                    boolean first = true;
+                    for (ParameterModel parameter : functionModel.getReturnValues()) {
+                        if (!first) {
+                            builder.append(", ");
+                        }
+
+                        appendParameter(builder, parameter);
+                        first = false;
+                    }
+                    builder.append(")");
+                    rightText = builder.toString();
+                }
+            } else {
+                rightText = "";
+            }
         }
 
-        return "";
+        return rightText;
+    }
+
+    private void appendParameter(StringBuilder builder, ParameterModel parameter) {
+        if (!"_".equals(parameter.getName())) {
+            builder.append(PARAMETER_NAME_COLOR);
+            builder.append(parameter.getName());
+            builder.append(COLOR_END);
+            builder.append(" ");
+        }
+
+        builder.append(PARAMETER_TYPE_COLOR);
+        builder.append(parameter.getVarType().getSimpleName());
+        builder.append(COLOR_END);
     }
 
 }

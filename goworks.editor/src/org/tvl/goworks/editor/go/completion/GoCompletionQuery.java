@@ -615,7 +615,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
 
                                             for (ConstModel constant : packageModel.getConstants()) {
-                                                intermediateResults.put(constant.getName(), new ConstReferenceCompletionItem(constant));
+                                                intermediateResults.put(constant.getName(), new ConstReferenceCompletionItem(constant, false));
                                             }
 
                                             for (VarModel var : packageModel.getVars()) {
@@ -770,7 +770,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                     continue;
                                                 }
 
-                                                intermediateResults.put(builtin, new ConstReferenceCompletionItem(builtin));
+                                                intermediateResults.put(builtin, new ConstReferenceCompletionItem(builtin, false));
                                             }
 
                                             for (PackageModel packageModel : visiblePackages) {
@@ -780,7 +780,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                         continue;
                                                     }
 
-                                                    intermediateResults.put(model.getName(), new ConstReferenceCompletionItem(model));
+                                                    intermediateResults.put(model.getName(), new ConstReferenceCompletionItem(model, false));
                                                 }
 
                                                 Collection<? extends VarModel> vars = packageModel.getVars();
@@ -794,7 +794,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                                 Collection<? extends FunctionModel> functions = packageModel.getFunctions();
                                                 for (FunctionModel model : functions) {
-                                                    if (intermediateResults.containsKey(model.getName())) {
+                                                    if (model.getReceiverParameter() != null || intermediateResults.containsKey(model.getName())) {
                                                         continue;
                                                     }
 
@@ -1187,7 +1187,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     Collection<? extends ImportDeclarationModel> imports = fileModel.getImportDeclarations();
                     for (ImportDeclarationModel model : imports) {
                         if (model.getName().equals(ctx.start.getText())) {
-                            resolved.addAll(cache.getPackages(null, model.getPath()));
+                            resolved.addAll(cache.getPackages(fileModel.getPackage().getProject(), model.getPath()));
                         }
                     }
 

@@ -49,6 +49,7 @@ public abstract class GoCompletionItem extends AbstractCompletionItem {
     public static final String FIELD_COLOR = "<font color=#008618>"; //NOI18N
     public static final String METHOD_COLOR = "<font color=#000000>"; //NOI18N
     public static final String PARAMETER_NAME_COLOR = "<font color=#a06001>"; //NOI18N
+    public static final String PARAMETER_TYPE_COLOR = "<font color=#000000>"; //NOI18N
     public static final String REFERENCE_COLOR = "<font color=#a06001>"; //NOI18N
     public static final String PACKAGE_COLOR = "<font color=#a06001>"; //NOI18N
     public static final String TYPE_COLOR = "<font color=#2B91AF>"; //NOI18N
