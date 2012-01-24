@@ -27,10 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 
 /**
@@ -39,8 +37,8 @@ import org.tvl.goworks.editor.go.codemodel.FunctionModel;
  */
 public class FunctionModelImpl extends AbstractCodeElementModel implements FunctionModel {
 
-    private final List<ParameterModelImpl> parameters = new ArrayList<ParameterModelImpl>();
-    private final List<ParameterModelImpl> returnValues = new ArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
     private ParameterModelImpl receiverParameter;
 
     public FunctionModelImpl(String name, FileModelImpl file) {
@@ -70,6 +68,13 @@ public class FunctionModelImpl extends AbstractCodeElementModel implements Funct
     public void setReceiverParameter(ParameterModelImpl value) {
         ensureModifiable();
         receiverParameter = value;
+    }
+
+    @Override
+    protected void freezeImpl() {
+        parameters.freeze();
+        returnValues.freeze();
+        super.freezeImpl();
     }
 
 }
