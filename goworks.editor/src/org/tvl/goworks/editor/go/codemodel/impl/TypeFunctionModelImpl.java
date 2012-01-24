@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.TypeFunctionModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -41,6 +42,8 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
     private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
     private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
 
+    private String simpleName;
+
     public TypeFunctionModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
     }
@@ -52,7 +55,46 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
 
     @Override
     public String getSimpleName() {
-        return getName();
+        if (simpleName == null) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("func(");
+            boolean first = true;
+            for (ParameterModelImpl parameter : getParameters()) {
+                if (!first) {
+                    builder.append(", ");
+                }
+
+                appendParameter(builder, parameter);
+                first = false;
+            }
+            builder.append(")");
+
+            if (!getReturnValues().isEmpty()) {
+                if (getReturnValues().size() == 1) {
+                    ParameterModelImpl model = getReturnValues().get(0);
+                    if ("_".equals(model.getName())) {
+                        builder.append(" ");
+                        builder.append(model.getVarType().getSimpleName());
+                    }
+                } else {
+                    builder.append(" (");
+                    first = true;
+                    for (ParameterModelImpl parameter : getReturnValues()) {
+                        if (!first) {
+                            builder.append(", ");
+                        }
+
+                        appendParameter(builder, parameter);
+                        first = false;
+                    }
+                    builder.append(")");
+                }
+            }
+
+            simpleName = builder.toString();
+        }
+
+        return simpleName;
     }
 
     @Override
@@ -61,12 +103,12 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
     }
 
     @Override
-    public Collection<ParameterModelImpl> getParameters() {
+    public List<ParameterModelImpl> getParameters() {
         return parameters;
     }
 
     @Override
-    public Collection<ParameterModelImpl> getReturnValues() {
+    public List<ParameterModelImpl> getReturnValues() {
         return returnValues;
     }
 
@@ -80,6 +122,15 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
         parameters.freeze();
         returnValues.freeze();
         super.freezeImpl();
+    }
+
+    private void appendParameter(StringBuilder builder, ParameterModelImpl parameter) {
+        if (!"_".equals(parameter.getName())) {
+            builder.append(parameter.getName());
+            builder.append(" ");
+        }
+
+        builder.append(parameter.getVarType().getSimpleName());
     }
 
 }
