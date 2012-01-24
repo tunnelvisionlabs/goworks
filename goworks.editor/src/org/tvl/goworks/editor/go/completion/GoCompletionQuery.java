@@ -1119,7 +1119,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         private class TargetAnalyzer extends BlankGoParserBaseListener {
             private static final String ATTR_TARGET = "target";
 
-            public Collection<? extends CodeElementModel> resolveTarget(ParserRuleContext<Token> context) {
+            @NonNull
+            public Collection<? extends CodeElementModel> resolveTarget(@NullAllowed ParserRuleContext<Token> context) {
+                if (context == null) {
+                    return Collections.emptyList();
+                }
+
                 Collection<? extends CodeElementModel> result = getTargetProperty(context);
                 if (result != null) {
                     return result;
