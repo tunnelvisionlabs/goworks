@@ -319,8 +319,8 @@ baseTypeName
 operand
     :   lit=literal
     |   qid=qualifiedIdentifier
-    |   methodExpr
-    |   '(' expression ')'
+    |   me=methodExpr
+    |   '(' e=expression ')'
     ;
 
 literal
@@ -402,7 +402,7 @@ expression
     |   conv=conversion
         -> conversionOrCallExpr
     |   builtinCall
-    |   e=expression dot='.' IDENTIFIER
+    |   e=expression dot='.' name=IDENTIFIER
         -> selectorExpr
     |   e=expression '[' expression ']'
         -> indexExpr

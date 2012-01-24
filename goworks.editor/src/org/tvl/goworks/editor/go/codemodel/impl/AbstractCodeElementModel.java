@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
@@ -44,17 +46,24 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
     private final Project project;
     @NonNull
     private final String packagePath;
+    @NullAllowed
+    private final FileModelImpl file;
 
     private boolean frozen;
 
     public AbstractCodeElementModel(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
-        this.name = name;
-        this.project = project;
-        this.packagePath = packagePath;
+        this(name, project, packagePath, null);
     }
 
     public AbstractCodeElementModel(@NonNull String name, @NonNull FileModelImpl file) {
-        this(name, file.getProject(), file.getPackagePath());
+        this(name, file.getProject(), file.getPackagePath(), file);
+    }
+
+    private AbstractCodeElementModel(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath, @NullAllowed FileModelImpl file) {
+        this.name = name;
+        this.project = project;
+        this.packagePath = packagePath;
+        this.file= file;
     }
 
     public boolean isFrozen() {
@@ -71,13 +80,26 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
     }
 
     @Override
-    public PackageModel getPackage() {
+    public PackageModelImpl getPackage() {
         return getCodeModelCache().getUniquePackage(project, packagePath);
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    @CheckForNull
+    public FileModelImpl getFile() {
+        return file;
+    }
+
+    @Override
+    public abstract Collection<? extends AbstractCodeElementModel> getMembers();
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
+        return CodeModelCacheImpl.findElementsByName(getMembers(), name);
     }
 
     public Project getProject() {

@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
 
 /**
@@ -37,6 +39,11 @@ public class ConstModelImpl extends AbstractCodeElementModel implements ConstMod
 
     public ConstModelImpl(String name, FileModelImpl file) {
         super(name, file);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
     }
 
 }

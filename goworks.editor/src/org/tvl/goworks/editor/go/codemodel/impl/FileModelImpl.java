@@ -29,7 +29,6 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import org.netbeans.api.project.Project;
-import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 
 /**
@@ -44,14 +43,14 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     private final FreezableArrayList<VarModelImpl> vars = new FreezableArrayList<VarModelImpl>();
     private final FreezableArrayList<FunctionModelImpl> functions = new FreezableArrayList<FunctionModelImpl>();
     @SuppressWarnings("unchecked")
-    private final ProxyCollection<CodeElementModel> codeElements = new ProxyCollection<CodeElementModel>(packageDeclarations, importDeclarations, types, constants, vars, functions);
+    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<AbstractCodeElementModel>(packageDeclarations, importDeclarations, types, constants, vars, functions);
 
     public FileModelImpl(String name, Project project, String packageName) {
         super(name, project, packageName);
     }
 
     @Override
-    public Collection<? extends CodeElementModel> getCodeElements() {
+    public Collection<AbstractCodeElementModel> getMembers() {
         return codeElements;
     }
 

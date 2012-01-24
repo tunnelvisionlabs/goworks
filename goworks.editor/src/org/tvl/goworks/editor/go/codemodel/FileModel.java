@@ -35,8 +35,6 @@ import java.util.Collection;
  */
 public interface FileModel extends CodeElementModel {
 
-    Collection<? extends CodeElementModel> getCodeElements();
-
     // allow multiples to improve ability to recover from syntax errors
     Collection<? extends PackageDeclarationModel> getPackageDeclarations();
 

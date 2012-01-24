@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 
@@ -44,6 +45,11 @@ public class FunctionModelImpl extends AbstractCodeElementModel implements Funct
 
     public FunctionModelImpl(String name, FileModelImpl file) {
         super(name, file);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
     }
 
     @Override

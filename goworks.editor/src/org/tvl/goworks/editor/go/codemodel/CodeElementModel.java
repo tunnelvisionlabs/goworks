@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel;
 
+import java.util.Collection;
+
 /**
  *
  * @author Sam Harwell
@@ -36,5 +38,9 @@ public interface CodeElementModel {
     PackageModel getPackage();
 
     String getName();
+
+    Collection<? extends CodeElementModel> getMembers();
+
+    Collection<? extends CodeElementModel> getMembers(String name);
 
 }
