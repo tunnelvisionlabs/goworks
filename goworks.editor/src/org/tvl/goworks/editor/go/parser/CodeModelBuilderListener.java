@@ -42,6 +42,8 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
@@ -77,6 +79,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.functionTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.identifierListContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.importSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.interfaceTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.interfaceTypeNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.mapTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.methodDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.methodExprContext;
@@ -110,7 +113,6 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     private final DocumentSnapshot snapshot;
     private final TokenStream tokenStream;
 
-    private String packageName;
     private FileModelImpl fileModel;
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream tokenStream) {
@@ -125,14 +127,18 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void enterRule(sourceFileContext ctx) {
-        if (ctx.pkg != null && ctx.pkg.name != null && ctx.pkg.name.name != null) {
-            packageName = ctx.pkg.name.name.getText();
+        FileObject packageFolder = snapshot.getVersionedDocument().getFileObject().getParent();
+        FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
+
+        String packagePath;
+        if (projectFolder != null) {
+            packagePath = FileUtil.getRelativePath(projectFolder, packageFolder);
         } else {
-            packageName = snapshot.getVersionedDocument().getFileObject().getParent().getName();
+            packagePath = packageFolder.getNameExt();
         }
 
         String name = snapshot.getVersionedDocument().getFileObject().getNameExt();
-        this.fileModel = new FileModelImpl(name, project, packageName);
+        this.fileModel = new FileModelImpl(name, project, packagePath);
         this.typeContainerStack.push(this.fileModel.getTypes());
         this.constContainerStack.push(this.fileModel.getConstants());
         this.varContainerStack.push(this.fileModel.getVars());
@@ -182,6 +188,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     private final Deque<TypeStructModelImpl> structModelStack = new ArrayDeque<TypeStructModelImpl>();
     private final Deque<TypeInterfaceModelImpl> interfaceModelStack = new ArrayDeque<TypeInterfaceModelImpl>();
+    private final Deque<Collection<TypeModelImpl>> implementedTypesContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
     private final Deque<Collection<TypeModelImpl>> typeContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
     private final Deque<Collection<ConstModelImpl>> constContainerStack = new ArrayDeque<Collection<ConstModelImpl>>();
     private final Deque<Collection<VarModelImpl>> varContainerStack = new ArrayDeque<Collection<VarModelImpl>>();
@@ -206,6 +213,12 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void exitRule(typeLiteralContext ctx) {
+        // handled by child contexts
+        assert !typeModelStack.isEmpty();
+    }
+
+    @Override
+    public void exitRule(interfaceTypeNameContext ctx) {
         // handled by child contexts
         assert !typeModelStack.isEmpty();
     }
@@ -255,11 +268,13 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     public void enterRule(interfaceTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
         interfaceModelStack.push(new TypeInterfaceModelImpl(typeName, fileModel));
+        implementedTypesContainerStack.push(interfaceModelStack.peek().getImplementedInterfaces());
     }
 
     @Override
     public void exitRule(interfaceTypeContext ctx) {
         typeModelStack.push(interfaceModelStack.pop());
+        implementedTypesContainerStack.pop();
         assert !typeModelStack.isEmpty();
     }
 
@@ -338,16 +353,22 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void enterRule(methodSpecContext ctx) {
-        FunctionModelImpl model = new FunctionModelImpl(ctx.name.name.getText(), fileModel);
-        functionContainerStack.peek().add(model);
-        functionModelStack.push(model);
-        parameterContainerStack.push(model.getParameters());
+        if (ctx.name != null) {
+            FunctionModelImpl model = new FunctionModelImpl(ctx.name.name.getText(), fileModel);
+            functionContainerStack.peek().add(model);
+            functionModelStack.push(model);
+            parameterContainerStack.push(model.getParameters());
+        }
     }
 
     @Override
     public void exitRule(methodSpecContext ctx) {
-        functionModelStack.pop();
-        parameterContainerStack.pop();
+        if (ctx.name != null) {
+            functionModelStack.pop();
+            parameterContainerStack.pop();
+        } else if (ctx.ifaceName != null) {
+            implementedTypesContainerStack.peek().add(typeModelStack.pop());
+        }
     }
 
     @Override
