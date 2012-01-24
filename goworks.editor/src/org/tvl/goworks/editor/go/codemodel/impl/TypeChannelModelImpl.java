@@ -48,6 +48,11 @@ public class TypeChannelModelImpl extends TypeWrapperModelImpl implements TypeCh
     }
 
     @Override
+    public String getSimpleName() {
+        return "chan " + getElementType().getSimpleName();
+    }
+
+    @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return Collections.emptyList();
     }

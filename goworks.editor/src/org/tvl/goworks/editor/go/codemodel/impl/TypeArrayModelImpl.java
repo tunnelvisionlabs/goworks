@@ -48,6 +48,11 @@ public class TypeArrayModelImpl extends TypeWrapperModelImpl implements TypeArra
     }
 
     @Override
+    public String getSimpleName() {
+        return "[...]" + getElementType().getSimpleName();
+    }
+
+    @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return Collections.emptyList();
     }

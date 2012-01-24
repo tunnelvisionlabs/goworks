@@ -51,6 +51,11 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
     }
 
     @Override
+    public String getSimpleName() {
+        return getName();
+    }
+
+    @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return Collections.emptyList();
     }

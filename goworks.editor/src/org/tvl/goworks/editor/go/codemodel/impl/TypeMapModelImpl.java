@@ -53,6 +53,11 @@ public class TypeMapModelImpl extends TypeModelImpl implements TypeMapModel {
     }
 
     @Override
+    public String getSimpleName() {
+        return String.format("map[%s]%s", getKeyType().getSimpleName(), getValueType().getSimpleName());
+    }
+
+    @Override
     public TypeModel getKeyType() {
         return keyType;
     }

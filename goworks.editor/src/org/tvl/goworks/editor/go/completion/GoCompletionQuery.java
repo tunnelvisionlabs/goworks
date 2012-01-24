@@ -1419,6 +1419,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         }
 
         @Override
+        public String getSimpleName() {
+            return "?";
+        }
+
+        @Override
         public Collection<? extends AbstractCodeElementModel> getMembers() {
             return Collections.emptyList();
         }

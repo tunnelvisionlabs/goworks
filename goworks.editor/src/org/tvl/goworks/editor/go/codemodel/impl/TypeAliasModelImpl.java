@@ -51,6 +51,11 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
     }
 
     @Override
+    public String getSimpleName() {
+        return getName();
+    }
+
+    @Override
     public TypeModelImpl getType() {
         return type;
     }

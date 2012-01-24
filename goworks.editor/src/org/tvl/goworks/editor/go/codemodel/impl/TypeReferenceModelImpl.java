@@ -51,6 +51,11 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
         return TypeKind.UNKNOWN;
     }
 
+    @Override
+    public String getSimpleName() {
+        return getName();
+    }
+
     private static String getQualifiedName(String packageName, String typeName) {
         if (packageName == null || packageName.isEmpty()) {
             return typeName;

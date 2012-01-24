@@ -48,6 +48,11 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
     }
 
     @Override
+    public String getSimpleName() {
+        return "interface{...}";
+    }
+
+    @Override
     public Collection<FunctionModelImpl> getInterfaceMethods() {
         return interfaceMethods;
     }

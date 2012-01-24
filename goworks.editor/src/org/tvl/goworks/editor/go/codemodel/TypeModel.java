@@ -35,6 +35,8 @@ import java.util.Collection;
  */
 public interface TypeModel extends CodeElementModel {
 
+    String getSimpleName();
+
     TypeKind getKind();
 
     Collection<? extends VarModel> getFields();

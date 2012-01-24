@@ -48,6 +48,11 @@ public class TypeSliceModelImpl extends TypeWrapperModelImpl implements TypeSlic
     }
 
     @Override
+    public String getSimpleName() {
+        return "[]" + getElementType().getSimpleName();
+    }
+
+    @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return Collections.emptyList();
     }

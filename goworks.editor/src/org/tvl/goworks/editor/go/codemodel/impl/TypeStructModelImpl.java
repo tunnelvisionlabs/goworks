@@ -49,6 +49,11 @@ public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
     }
 
     @Override
+    public String getSimpleName() {
+        return "struct{...}";
+    }
+
+    @Override
     public Collection<VarModelImpl> getFields() {
         return fields;
     }
