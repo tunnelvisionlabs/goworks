@@ -32,6 +32,7 @@ import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
+import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
@@ -60,10 +61,13 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
     }
 
     private AbstractCodeElementModel(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath, @NullAllowed FileModelImpl file) {
+        Parameters.notNull("name", name);
+        Parameters.notNull("packagePath", packagePath);
+
         this.name = name;
         this.project = project;
         this.packagePath = packagePath;
-        this.file= file;
+        this.file = file;
     }
 
     public boolean isFrozen() {
