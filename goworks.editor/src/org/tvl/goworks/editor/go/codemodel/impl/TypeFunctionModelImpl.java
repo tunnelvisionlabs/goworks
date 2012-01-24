@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeFunctionModel;
 
 /**
@@ -37,6 +39,11 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
 
     public TypeFunctionModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
     }
 
 }

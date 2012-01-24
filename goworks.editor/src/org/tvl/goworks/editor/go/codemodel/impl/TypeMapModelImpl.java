@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeMapModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
@@ -52,6 +54,18 @@ public class TypeMapModelImpl extends TypeModelImpl implements TypeMapModel {
     @Override
     public TypeModel getValueType() {
         return valueType;
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    protected void freezeImpl() {
+        keyType.freeze();
+        valueType.freeze();
+        super.freezeImpl();
     }
 
 }

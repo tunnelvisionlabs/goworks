@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.PackageDeclarationModel;
 
@@ -38,6 +40,11 @@ public class PackageDeclarationModelImpl extends AbstractCodeElementModel implem
 
     public PackageDeclarationModelImpl(String name, Project project) {
         super(name, project, name);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
     }
 
 }

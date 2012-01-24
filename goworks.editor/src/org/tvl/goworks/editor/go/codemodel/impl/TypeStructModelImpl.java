@@ -28,6 +28,7 @@
 package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.StructModel;
 
 /**
@@ -35,6 +36,7 @@ import org.tvl.goworks.editor.go.codemodel.StructModel;
  * @author Sam Harwell
  */
 public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
+    private final FreezableArrayList<VarModelImpl> fields = new FreezableArrayList<VarModelImpl>();
 
     public TypeStructModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
@@ -42,12 +44,23 @@ public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
 
     @Override
     public Collection<VarModelImpl> getFields() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return fields;
     }
 
     @Override
     public Collection<VarModelImpl> getFields(String name) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return CodeModelCacheImpl.findElementsByName(getFields(), name);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    protected void freezeImpl() {
+        fields.freeze();
+        super.freezeImpl();
     }
 
 }

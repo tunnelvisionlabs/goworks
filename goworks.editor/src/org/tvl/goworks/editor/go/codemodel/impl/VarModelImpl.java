@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.VarModel;
 
@@ -45,6 +47,11 @@ public class VarModelImpl extends AbstractCodeElementModel implements VarModel {
     @Override
     public TypeModel getVarType() {
         return varType;
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
     }
 
 }

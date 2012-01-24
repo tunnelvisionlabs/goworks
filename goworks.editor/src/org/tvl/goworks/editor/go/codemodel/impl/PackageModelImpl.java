@@ -33,12 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.netbeans.api.project.Project;
-import org.tvl.goworks.editor.go.codemodel.ConstModel;
-import org.tvl.goworks.editor.go.codemodel.FileModel;
-import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
-import org.tvl.goworks.editor.go.codemodel.TypeModel;
-import org.tvl.goworks.editor.go.codemodel.VarModel;
 
 /**
  *
@@ -52,13 +47,33 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
     }
 
     @Override
-    public PackageModel getPackage() {
+    public PackageModelImpl getPackage() {
         return this;
     }
 
     @Override
     public Collection<FileModelImpl> getFiles() {
         return files.values();
+    }
+
+    @Override
+    public Collection<AbstractCodeElementModel> getMembers() {
+        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        for (FileModelImpl file : getFiles()) {
+            members.addAll(file.getMembers());
+        }
+
+        return members;
+    }
+
+    @Override
+    public Collection<AbstractCodeElementModel> getMembers(String name) {
+        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        for (FileModelImpl file : getFiles()) {
+            members.addAll(file.getMembers(name));
+        }
+
+        return members;
     }
 
     @Override

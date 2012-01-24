@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
@@ -56,6 +58,11 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
     @Override
     public boolean isMergeWithLocal() {
         return mergeWithLocal;
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
     }
 
     private static String getAlias(@NonNull String path, @NullAllowed String alias) {

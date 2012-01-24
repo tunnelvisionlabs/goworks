@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeReferenceModel;
 
 /**
@@ -49,5 +51,20 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
         }
 
         return packageName + "." + typeName;
+    }
+
+    @Override
+    public TypeModelImpl resolve() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        TypeModelImpl resolved = resolve();
+        if (resolved != null) {
+            return resolved.getMembers();
+        }
+
+        return Collections.emptyList();
     }
 }

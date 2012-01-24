@@ -48,7 +48,7 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
 
     @Override
     public Collection<VarModelImpl> getFields(String name) {
-        return Collections.emptyList();
+        return CodeModelCacheImpl.findElementsByName(getFields(), name);
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
 
     @Override
     public Collection<FunctionModelImpl> getMethods(String name) {
-        return Collections.emptyList();
+        return CodeModelCacheImpl.findElementsByName(getMethods(), name);
     }
 
 }

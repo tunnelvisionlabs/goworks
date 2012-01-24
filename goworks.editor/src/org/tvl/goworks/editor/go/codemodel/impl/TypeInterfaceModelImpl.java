@@ -28,7 +28,6 @@
 package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
-import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.InterfaceModel;
 
 /**
@@ -36,19 +35,36 @@ import org.tvl.goworks.editor.go.codemodel.InterfaceModel;
  * @author Sam Harwell
  */
 public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceModel {
+    private final FreezableArrayList<FunctionModelImpl> interfaceMethods = new FreezableArrayList<FunctionModelImpl>();
 
     public TypeInterfaceModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
     }
 
     @Override
-    public Collection<? extends FunctionModel> getInterfaceMethods() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<FunctionModelImpl> getInterfaceMethods() {
+        return interfaceMethods;
     }
 
     @Override
-    public Collection<? extends FunctionModel> getInterfaceMethods(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<FunctionModelImpl> getInterfaceMethods(String name) {
+        return CodeModelCacheImpl.findElementsByName(getInterfaceMethods(), name);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return getInterfaceMethods();
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
+        return getInterfaceMethods(name);
+    }
+
+    @Override
+    protected void freezeImpl() {
+        interfaceMethods.freeze();
+        super.freezeImpl();
     }
 
 }

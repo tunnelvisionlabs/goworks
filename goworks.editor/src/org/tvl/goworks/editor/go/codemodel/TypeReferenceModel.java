@@ -33,4 +33,6 @@ package org.tvl.goworks.editor.go.codemodel;
  */
 public interface TypeReferenceModel extends TypeModel {
 
+    TypeModel resolve();
+
 }

@@ -27,6 +27,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
 
 /**
@@ -37,6 +39,11 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
 
     public TypePointerModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
         super(name, elementType, fileModel);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return Collections.emptyList();
     }
 
 }

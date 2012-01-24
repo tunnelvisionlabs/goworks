@@ -27,6 +27,9 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.TypeAliasModel;
 
 /**
@@ -44,6 +47,39 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
     @Override
     public TypeModelImpl getType() {
         return type;
+    }
+
+    @Override
+    public Collection<VarModelImpl> getFields() {
+        return getType().getFields();
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getMethods() {
+        PackageModelImpl packageModel = getPackage();
+        assert packageModel != null;
+
+        List<FunctionModelImpl> methods = new ArrayList<FunctionModelImpl>();
+        for (FunctionModelImpl function : packageModel.getFunctions()) {
+            ParameterModelImpl receiver = function.getReceiverParameter();
+            if (receiver == null) {
+                continue;
+            }
+            
+            if (receiver.getVarType().equals(this)) {
+                methods.add(function);
+            }
+        }
+
+        return methods;
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        members.addAll(getFields());
+        members.addAll(getMethods());
+        return members;
     }
 
 }
