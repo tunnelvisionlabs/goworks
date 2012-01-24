@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.TypeAliasModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
 /**
  *
@@ -42,6 +43,11 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
     public TypeAliasModelImpl(String name, TypeModelImpl type, FileModelImpl fileModel) {
         super(name, fileModel);
         this.type = type;
+    }
+
+    @Override
+    public TypeKind getKind() {
+        return TypeKind.ALIAS;
     }
 
     @Override

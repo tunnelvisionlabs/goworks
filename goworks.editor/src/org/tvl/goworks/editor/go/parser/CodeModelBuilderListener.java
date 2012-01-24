@@ -28,22 +28,28 @@
 package org.tvl.goworks.editor.go.parser;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.misc.IntervalSet;
+import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
-import org.tvl.goworks.editor.go.codemodel.FileModel;
-import org.tvl.goworks.editor.go.codemodel.TypeModel;
+import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FunctionModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.ImportDeclarationModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.PackageDeclarationModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.ParameterModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeAliasModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeArrayModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeChannelModelImpl;
@@ -56,7 +62,9 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeReferenceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
+import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
 import org.tvl.goworks.editor.go.parser.GoParserBase.arrayTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.baseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.builtinArgsContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.channelTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.compositeLiteralContext;
@@ -72,10 +80,12 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.interfaceTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.mapTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.methodDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.methodExprContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.methodSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageClauseContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.parameterDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.pointerTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.receiverContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.resultContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.sliceTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.sourceFileContext;
@@ -93,6 +103,9 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
  * @author Sam Harwell
  */
 public class CodeModelBuilderListener extends BlankGoParserBaseListener {
+    // -J-Dorg.tvl.goworks.editor.go.parser.CodeModelBuilderListener.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(CodeModelBuilderListener.class.getName());
+
     private final Project project;
     private final DocumentSnapshot snapshot;
     private final TokenStream tokenStream;
@@ -101,7 +114,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     private FileModelImpl fileModel;
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream tokenStream) {
-        this.project = null;
+        this.project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
         this.snapshot = snapshot;
         this.tokenStream = tokenStream;
     }
@@ -173,8 +186,9 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     private final Deque<Collection<ConstModelImpl>> constContainerStack = new ArrayDeque<Collection<ConstModelImpl>>();
     private final Deque<Collection<VarModelImpl>> varContainerStack = new ArrayDeque<Collection<VarModelImpl>>();
     private final Deque<Collection<FunctionModelImpl>> functionContainerStack = new ArrayDeque<Collection<FunctionModelImpl>>();
+    private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
     private final Deque<TypeModelImpl> typeModelStack = new ArrayDeque<TypeModelImpl>();
-    private final Deque<FunctionModelImpl> functionModelStack = new ArrayDeque<FunctionModelImpl>();
+    private final Deque<FunctionModel> functionModelStack = new ArrayDeque<FunctionModel>();
 
     @Override
     public void exitRule(typeContext ctx) {
@@ -219,15 +233,21 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(pointerTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        String typeName = createAnonymousTypeName(ctx);
-        typeModelStack.push(new TypePointerModelImpl(typeName, elementType, fileModel));
+        typeModelStack.push(new TypePointerModelImpl(elementType, fileModel));
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void exitRule(functionTypeContext ctx) {
+    public void enterRule(functionTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
-        typeModelStack.push(new TypeFunctionModelImpl(typeName, fileModel));
+        functionModelStack.push(new TypeFunctionModelImpl(typeName, fileModel));
+        parameterContainerStack.push(new ArrayList<ParameterModelImpl>());
+    }
+
+    @Override
+    public void exitRule(functionTypeContext ctx) {
+        parameterContainerStack.pop();
+        typeModelStack.push((TypeFunctionModelImpl)functionModelStack.pop());
         assert !typeModelStack.isEmpty();
     }
 
@@ -246,8 +266,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(sliceTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        String typeName = createAnonymousTypeName(ctx);
-        typeModelStack.push(new TypeSliceModelImpl(typeName, elementType, fileModel));
+        typeModelStack.push(new TypeSliceModelImpl(elementType, fileModel));
         assert !typeModelStack.isEmpty();
     }
 
@@ -304,28 +323,102 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(methodDeclContext ctx) {
+    public void enterRule(methodDeclContext ctx) {
+        FunctionModelImpl model = new FunctionModelImpl(ctx.name.name.getText(), fileModel);
+        functionContainerStack.peek().add(model);
+        functionModelStack.push(model);
+        parameterContainerStack.push(model.getParameters());
+    }
 
+    @Override
+    public void exitRule(methodDeclContext ctx) {
+        functionModelStack.pop();
+        parameterContainerStack.pop();
+    }
+
+    @Override
+    public void enterRule(methodSpecContext ctx) {
+        FunctionModelImpl model = new FunctionModelImpl(ctx.name.name.getText(), fileModel);
+        functionContainerStack.peek().add(model);
+        functionModelStack.push(model);
+        parameterContainerStack.push(model.getParameters());
+    }
+
+    @Override
+    public void exitRule(methodSpecContext ctx) {
+        functionModelStack.pop();
+        parameterContainerStack.pop();
+    }
+
+    @Override
+    public void exitRule(baseTypeNameContext ctx) {
+        String pkgName = null;
+        String typeName = ctx.name.getText();
+        typeModelStack.push(new TypeReferenceModelImpl(pkgName, typeName, fileModel));
+    }
+
+    @Override
+    public void exitRule(receiverContext ctx) {
+        String name = "_";
+        if (ctx.name != null) {
+            name = ctx.name.getText();
+        }
+
+        TypeModelImpl type = typeModelStack.pop();
+        if (ctx.ptr != null) {
+            type = new TypePointerModelImpl(type, fileModel);
+        }
+
+        ParameterModelImpl receiver = new ParameterModelImpl(name, type, fileModel);
+        ((FunctionModelImpl)functionModelStack.peek()).setReceiverParameter(receiver);
     }
 
     @Override
     public void enterRule(functionDeclContext ctx) {
-        if (ctx.name == null) {
-            return;
-        }
-
         FunctionModelImpl model = new FunctionModelImpl(ctx.name.getText(), fileModel);
         functionContainerStack.peek().add(model);
-        functionModelStack.add(model);
+        functionModelStack.push(model);
+        parameterContainerStack.push(model.getParameters());
     }
 
     @Override
     public void exitRule(functionDeclContext ctx) {
-        if (ctx.name == null) {
+        functionModelStack.pop();
+        parameterContainerStack.pop();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void enterRule(resultContext ctx) {
+        parameterContainerStack.pop();
+        parameterContainerStack.push((Collection<ParameterModelImpl>)functionModelStack.peek().getReturnValues());
+    }
+
+    @Override
+    public void exitRule(resultContext ctx) {
+        if (ctx.t != null) {
+            parameterContainerStack.peek().add(new ParameterModelImpl("_", typeModelStack.pop(), fileModel));
+        }
+    }
+
+    @Override
+    public void exitRule(parameterDeclContext ctx) {
+        if (ctx.idList == null && ctx.t == null) {
             return;
         }
 
-        functionModelStack.pop();
+        TypeModelImpl parameterType = ctx.t != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
+        if (ctx.ellip != null) {
+            parameterType = new TypeSliceModelImpl(parameterType, fileModel);
+        }
+
+        if (ctx.idList != null && ctx.idList.ids_list != null) {
+            for (Token id : ctx.idList.ids_list) {
+                parameterContainerStack.peek().add(new ParameterModelImpl(id.getText(), parameterType, fileModel));
+            }
+        } else {
+            parameterContainerStack.peek().add(new ParameterModelImpl("_", parameterType, fileModel));
+        }
     }
 
     @Override
@@ -349,20 +442,6 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
                 VarModelImpl model = new VarModelImpl(id.getText(), fieldType, fileModel);
                 structModelStack.peek().getFields().add(model);
             }
-        }
-    }
-
-    @Override
-    public void exitRule(parameterDeclContext ctx) {
-        if (ctx.t != null) {
-            typeModelStack.pop();
-        }
-    }
-
-    @Override
-    public void exitRule(resultContext ctx) {
-        if (ctx.t != null) {
-            typeModelStack.pop();
         }
     }
 

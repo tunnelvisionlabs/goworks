@@ -30,6 +30,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 import java.util.Collection;
 import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeArrayModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
 /**
  *
@@ -39,6 +40,11 @@ public class TypeArrayModelImpl extends TypeWrapperModelImpl implements TypeArra
 
     public TypeArrayModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
         super(name, elementType, fileModel);
+    }
+
+    @Override
+    public TypeKind getKind() {
+        return TypeKind.ARRAY;
     }
 
     @Override

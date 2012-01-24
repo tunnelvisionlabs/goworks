@@ -30,6 +30,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 import java.util.Collection;
 import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.StructModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
 /**
  *
@@ -40,6 +41,11 @@ public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
 
     public TypeStructModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
+    }
+
+    @Override
+    public TypeKind getKind() {
+        return TypeKind.STRUCT;
     }
 
     @Override

@@ -94,12 +94,15 @@ import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
+import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
 import org.tvl.goworks.editor.go.codemodel.VarModel;
 import org.tvl.goworks.editor.go.codemodel.impl.AbstractCodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.impl.CodeModelCacheImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
@@ -135,6 +138,60 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
     /*package*/ GoCompletionQuery(GoCompletionProvider completionProvider, int queryType, int caretOffset, boolean hasTask, boolean extend) {
         super(completionProvider, queryType, caretOffset, hasTask, extend);
+    }
+
+    public static boolean isInContext(Parser parser, RuleContext context, IntervalSet values) {
+        return isInContext(parser, context, values, true);
+    }
+
+    public static boolean isInContext(Parser parser, RuleContext context, IntervalSet values, boolean checkTop) {
+        return getTopContext(parser, context, values, checkTop) != null;
+    }
+
+    public static boolean isInContext(ParserRuleContext<?> context, IntervalSet values) {
+        return isInContext(context, values, true);
+    }
+
+    public static boolean isInContext(ParserRuleContext<?> context, IntervalSet values, boolean checkTop) {
+        return getTopContext(context, values, checkTop) != null;
+    }
+
+    public static RuleContext getTopContext(Parser parser, RuleContext context, IntervalSet values) {
+        return getTopContext(parser, context, values, true);
+    }
+
+    public static RuleContext getTopContext(Parser parser, RuleContext context, IntervalSet values, boolean checkTop) {
+        if (checkTop && context instanceof ParserRuleContext<?>) {
+            if (values.contains(((ParserRuleContext<?>)context).ruleIndex)) {
+                return context;
+            }
+        }
+
+        if (context.isEmpty()) {
+            return null;
+        }
+
+        if (values.contains(parser.getATN().states.get(context.invokingState).ruleIndex)) {
+            return context.parent;
+        }
+
+        return getTopContext(parser, context.parent, values, false);
+    }
+
+    public static ParserRuleContext<?> getTopContext(ParserRuleContext<?> context, IntervalSet values) {
+        return getTopContext(context, values, true);
+    }
+
+    public static ParserRuleContext<?> getTopContext(ParserRuleContext<?> context, IntervalSet values, boolean checkTop) {
+        if (checkTop && values.contains(context.ruleIndex)) {
+            return context;
+        }
+
+        if (context.isEmpty()) {
+            return null;
+        }
+
+        return getTopContext((ParserRuleContext<?>)context.parent, values, true);
     }
 
     @Override
@@ -186,9 +243,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             add(GoParserBase.RULE_selectStmt);
         }};
 
-        private final IntervalSet CONTINUE_SCOPES = new IntervalSet() {{
-            add(GoParserBase.RULE_forStmt);
-        }};
+        private final IntervalSet CONTINUE_SCOPES = IntervalSet.of(GoParserBase.RULE_forStmt);
 
         public TaskImpl(BaseDocument document, DocumentSnapshot snapshot) {
             super(document);
@@ -935,36 +990,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             return fileModel;
         }
 
-        private boolean isInContext(Parser parser, RuleContext context, IntervalSet values) {
-            return isInContext(parser, context, values, true);
-        }
-
-        private boolean isInContext(Parser parser, RuleContext context, IntervalSet values, boolean checkTop) {
-            return getTopContext(parser, context, values, checkTop) != null;
-        }
-
-        private RuleContext getTopContext(Parser parser, RuleContext context, IntervalSet values) {
-            return getTopContext(parser, context, values, true);
-        }
-
-        private RuleContext getTopContext(Parser parser, RuleContext context, IntervalSet values, boolean checkTop) {
-            if (checkTop && context instanceof ParserRuleContext<?>) {
-                if (values.contains(((ParserRuleContext<?>)context).ruleIndex)) {
-                    return context;
-                }
-            }
-
-            if (context.isEmpty()) {
-                return null;
-            }
-
-            if (values.contains(parser.getATN().states.get(context.invokingState).ruleIndex)) {
-                return context.parent;
-            }
-
-            return getTopContext(parser, context.parent, values, false);
-        }
-
         private ParseTreeAnnotations annotations = new ParseTreeAnnotations();
 
         private class LocalsAnalyzer {
@@ -1237,14 +1262,23 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 PackageModel currentPackage = getFileModel().getPackage();
                 Collection<? extends TypeModel> types = currentPackage.getTypes(ctx.name.getText());
 
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 receiverContext receiverContext = (receiverContext)ctx.parent;
                 boolean isptr = receiverContext.ptr != null;
                 if (isptr) {
-                    LOGGER.log(Level.FINE, "TODO: handle pointer types");
+                    for (TypeModel model : types) {
+                        assert model instanceof TypeModelImpl;
+                        if (!(model instanceof TypeModelImpl)) {
+                            continue;
+                        }
+
+                        TypePointerModel ptr = new TypePointerModelImpl((TypeModelImpl)model, (FileModelImpl)getFileModel());
+                        result.add(ptr);
+                    }
+                } else {
+                    result.addAll(types);
                 }
 
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
-                result.addAll(types);
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
 
@@ -1369,7 +1403,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
     }
 
-    private static class UnknownTypeModelImpl extends TypeModelImpl {
+    public static class UnknownTypeModelImpl extends TypeModelImpl {
 
         public UnknownTypeModelImpl(FileModelImpl fileModel) {
             this("?", fileModel);
@@ -1377,6 +1411,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
         public UnknownTypeModelImpl(String name, FileModelImpl fileModel) {
             super(name, fileModel);
+        }
+
+        @Override
+        public TypeKind getKind() {
+            return TypeKind.UNKNOWN;
         }
 
         @Override

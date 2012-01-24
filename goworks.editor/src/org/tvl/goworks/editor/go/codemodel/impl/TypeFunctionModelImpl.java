@@ -30,6 +30,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 import java.util.Collection;
 import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeFunctionModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
 /**
  *
@@ -37,13 +38,43 @@ import org.tvl.goworks.editor.go.codemodel.TypeFunctionModel;
  */
 public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunctionModel {
 
+    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
+
     public TypeFunctionModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
     }
 
     @Override
+    public TypeKind getKind() {
+        return TypeKind.FUNCTION;
+    }
+
+    @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Collection<ParameterModelImpl> getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public Collection<ParameterModelImpl> getReturnValues() {
+        return returnValues;
+    }
+
+    @Override
+    public ParameterModelImpl getReceiverParameter() {
+        return null;
+    }
+
+    @Override
+    protected void freezeImpl() {
+        parameters.freeze();
+        returnValues.freeze();
+        super.freezeImpl();
     }
 
 }

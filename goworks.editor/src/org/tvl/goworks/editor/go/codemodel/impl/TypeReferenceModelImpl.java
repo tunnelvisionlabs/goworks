@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeReferenceModel;
 
 /**
@@ -43,6 +44,11 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
         super(getQualifiedName(referencedPackageName, referencedTypeName), fileModel);
         this.referencedPackageName = referencedPackageName;
         this.referencedTypeName = referencedTypeName;
+    }
+
+    @Override
+    public TypeKind getKind() {
+        return TypeKind.UNKNOWN;
     }
 
     private static String getQualifiedName(String packageName, String typeName) {

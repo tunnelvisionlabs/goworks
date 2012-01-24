@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeSliceModel;
 
 /**
@@ -37,8 +38,13 @@ import org.tvl.goworks.editor.go.codemodel.TypeSliceModel;
  */
 public class TypeSliceModelImpl extends TypeWrapperModelImpl implements TypeSliceModel {
 
-    public TypeSliceModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
-        super(name, elementType, fileModel);
+    public TypeSliceModelImpl(TypeModelImpl elementType, FileModelImpl fileModel) {
+        super("[]" + elementType.getName(), elementType, fileModel);
+    }
+
+    @Override
+    public TypeKind getKind() {
+        return TypeKind.SLICE;
     }
 
     @Override

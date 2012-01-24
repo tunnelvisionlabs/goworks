@@ -34,6 +34,7 @@ import org.tvl.goworks.editor.go.codemodel.TypeWrapperModel;
  * @author Sam Harwell
  */
 public abstract class TypeWrapperModelImpl extends TypeModelImpl implements TypeWrapperModel {
+
     private final TypeModelImpl elementType;
 
     public TypeWrapperModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {

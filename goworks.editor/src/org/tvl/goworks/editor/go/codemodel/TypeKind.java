@@ -25,31 +25,24 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.codemodel.impl;
-
-import java.util.Collection;
-import java.util.Collections;
-import org.tvl.goworks.editor.go.codemodel.TypeChannelModel;
-import org.tvl.goworks.editor.go.codemodel.TypeKind;
+package org.tvl.goworks.editor.go.codemodel;
 
 /**
  *
  * @author Sam Harwell
  */
-public class TypeChannelModelImpl extends TypeWrapperModelImpl implements TypeChannelModel {
+public enum TypeKind {
 
-    public TypeChannelModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
-        super(name, elementType, fileModel);
-    }
-
-    @Override
-    public TypeKind getKind() {
-        return TypeKind.CHANNEL;
-    }
-
-    @Override
-    public Collection<? extends AbstractCodeElementModel> getMembers() {
-        return Collections.emptyList();
-    }
+    INTRINSIC,
+    STRUCT,
+    INTERFACE,
+    ARRAY,
+    CHANNEL,
+    FUNCTION,
+    MAP,
+    POINTER,
+    SLICE,
+    ALIAS,
+    UNKNOWN,
 
 }

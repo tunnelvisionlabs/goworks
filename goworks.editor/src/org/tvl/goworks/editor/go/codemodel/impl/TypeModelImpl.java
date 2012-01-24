@@ -30,6 +30,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 import java.util.Collection;
 import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
+import org.tvl.goworks.editor.go.codemodel.TypeWrapperModel;
 
 /**
  *
@@ -59,6 +60,27 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
     @Override
     public Collection<FunctionModelImpl> getMethods(String name) {
         return CodeModelCacheImpl.findElementsByName(getMethods(), name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TypeWrapperModel)) {
+            return false;
+        }
+
+        TypeWrapperModel other = (TypeWrapperModel)obj;
+        return getKind().equals(other.getKind())
+            && getPackage().equals(other.getPackage())
+            && getName().equals(other.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 1;
+        hashCode = 7 * hashCode + getKind().hashCode();
+        hashCode = 7 * hashCode + getPackage().hashCode();
+        hashCode = 7 * hashCode + getName().hashCode();
+        return hashCode;
     }
 
 }

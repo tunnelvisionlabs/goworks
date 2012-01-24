@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import org.tvl.goworks.editor.go.codemodel.InterfaceModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
 /**
  *
@@ -39,6 +40,11 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
 
     public TypeInterfaceModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
+    }
+
+    @Override
+    public TypeKind getKind() {
+        return TypeKind.INTERFACE;
     }
 
     @Override

@@ -31,6 +31,6 @@ package org.tvl.goworks.editor.go.codemodel;
  *
  * @author Sam Harwell
  */
-public interface TypeFunctionModel extends TypeModel {
+public interface TypeFunctionModel extends TypeModel, FunctionModel {
 
 }

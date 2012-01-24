@@ -31,7 +31,7 @@ package org.tvl.goworks.editor.go.codemodel;
  *
  * @author Sam Harwell
  */
-public interface TypeWrapperModel {
+public interface TypeWrapperModel extends TypeModel {
 
     TypeModel getElementType();
 

@@ -27,8 +27,13 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import org.tvl.goworks.editor.go.codemodel.ParameterModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
+import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
 
 /**
@@ -37,13 +42,77 @@ import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
  */
 public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePointerModel {
 
-    public TypePointerModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
-        super(name, elementType, fileModel);
+    public TypePointerModelImpl(TypeModelImpl elementType, FileModelImpl fileModel) {
+        super("*" + elementType.getName(), elementType, fileModel);
+    }
+
+    @Override
+    public TypeKind getKind() {
+        return TypeKind.POINTER;
+    }
+
+    @Override
+    public Collection<VarModelImpl> getFields() {
+        return getElementType().getFields();
+    }
+
+    @Override
+    public Collection<VarModelImpl> getFields(String name) {
+        return getElementType().getFields(name);
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getMethods() {
+        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        Collection<? extends FunctionModelImpl> packageFunctions = getPackage().getFunctions();
+        for (FunctionModelImpl function : packageFunctions) {
+            ParameterModel receiver = function.getReceiverParameter();
+            if (receiver == null) {
+                continue;
+            }
+
+            TypeModel receiverType = receiver.getVarType();
+            if (this.equals(receiverType) || this.getElementType().equals(receiverType)) {
+                functions.add(function);
+            }
+        }
+
+        return Collections.unmodifiableList(functions);
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getMethods(String name) {
+        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        Collection<? extends FunctionModelImpl> packageFunctions = getPackage().getFunctions(name);
+        for (FunctionModelImpl function : packageFunctions) {
+            ParameterModel receiver = function.getReceiverParameter();
+            if (receiver == null) {
+                continue;
+            }
+
+            TypeModel receiverType = receiver.getVarType();
+            if (this.equals(receiverType) || this.getElementType().equals(receiverType)) {
+                functions.add(function);
+            }
+        }
+
+        return Collections.unmodifiableList(functions);
     }
 
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
-        return Collections.emptyList();
+        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        members.addAll(getFields());
+        members.addAll(getMethods());
+        return Collections.unmodifiableList(members);
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
+        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        members.addAll(getFields(name));
+        members.addAll(getMethods(name));
+        return Collections.unmodifiableList(members);
     }
 
 }
