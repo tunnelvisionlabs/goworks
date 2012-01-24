@@ -38,8 +38,8 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  */
 public class TypeChannelModelImpl extends TypeWrapperModelImpl implements TypeChannelModel {
 
-    public TypeChannelModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
-        super(name, elementType, fileModel);
+    public TypeChannelModelImpl(TypeModelImpl elementType, FileModelImpl fileModel) {
+        super("chan " + elementType.getName(), elementType, fileModel);
     }
 
     @Override

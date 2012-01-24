@@ -64,6 +64,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeReferenceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
 import org.tvl.goworks.editor.go.parser.GoParserBase.arrayTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.baseTypeNameContext;
@@ -226,8 +227,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(arrayTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        String typeName = createAnonymousTypeName(ctx);
-        typeModelStack.push(new TypeArrayModelImpl(typeName, elementType, fileModel));
+        typeModelStack.push(new TypeArrayModelImpl(elementType, fileModel));
         assert !typeModelStack.isEmpty();
     }
 
@@ -297,8 +297,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(channelTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        String typeName = createAnonymousTypeName(ctx);
-        typeModelStack.push(new TypeChannelModelImpl(typeName, elementType, fileModel));
+        typeModelStack.push(new TypeChannelModelImpl(elementType, fileModel));
         assert !typeModelStack.isEmpty();
     }
 
@@ -332,8 +331,14 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void exitRule(varSpecContext ctx) {
-        if (ctx.varType != null) {
-            typeModelStack.pop();
+        TypeModelImpl varType = ctx.varType != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
+        identifierListContext idList = ctx.idList;
+        List<Token> ids = idList != null ? idList.ids_list : null;
+        if (ids != null && !ids.isEmpty()) {
+            for (Token id : ids) {
+                VarModelImpl model = new VarModelImpl(id.getText(), varType, fileModel);
+                varContainerStack.peek().add(model);
+            }
         }
     }
 
@@ -430,7 +435,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
         TypeModelImpl parameterType = ctx.t != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
         if (ctx.ellip != null) {
-            parameterType = new TypeSliceModelImpl(parameterType, fileModel);
+            parameterType = new VariadicParameterSliceModelImpl(parameterType, fileModel);
         }
 
         if (ctx.idList != null && ctx.idList.ids_list != null) {
