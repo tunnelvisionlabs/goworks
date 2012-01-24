@@ -84,8 +84,8 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.functionTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.identifierListContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.ifStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.importSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.labeledStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.labelContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.labeledStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.methodDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.methodSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.operandContext;
@@ -230,6 +230,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         this.unresolvedIdentifierAttributes = getFontAndColors(settings, "unresolvedIdentifier");
     }
 
+    @Override
     protected final SemanticAnalyzerListener createListener() {
         throw new UnsupportedOperationException();
     }
