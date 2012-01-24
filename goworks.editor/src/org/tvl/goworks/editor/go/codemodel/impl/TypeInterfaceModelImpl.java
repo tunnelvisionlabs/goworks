@@ -50,6 +50,10 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
 
     @Override
     public String getSimpleName() {
+        if (interfaceMethods.isEmpty() && implementedInterfaces.isEmpty()) {
+            return "interface{}";
+        }
+
         return "interface{...}";
     }
 
