@@ -37,6 +37,7 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  */
 public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceModel {
     private final FreezableArrayList<FunctionModelImpl> interfaceMethods = new FreezableArrayList<FunctionModelImpl>();
+    private final FreezableArrayList<TypeModelImpl> implementedInterfaces = new FreezableArrayList<TypeModelImpl>();
 
     public TypeInterfaceModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
@@ -63,6 +64,11 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
     }
 
     @Override
+    public Collection<TypeModelImpl> getImplementedInterfaces() {
+        return implementedInterfaces;
+    }
+
+    @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return getInterfaceMethods();
     }
@@ -75,6 +81,7 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
     @Override
     protected void freezeImpl() {
         interfaceMethods.freeze();
+        implementedInterfaces.freeze();
         super.freezeImpl();
     }
 

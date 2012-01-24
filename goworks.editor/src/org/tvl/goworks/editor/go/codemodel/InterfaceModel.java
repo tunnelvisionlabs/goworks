@@ -39,4 +39,6 @@ public interface InterfaceModel extends TypeModel {
 
     Collection<? extends FunctionModel> getInterfaceMethods(String name);
 
+    Collection<? extends TypeModel> getImplementedInterfaces();
+
 }
