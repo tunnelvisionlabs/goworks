@@ -34,6 +34,7 @@ import org.tvl.goworks.editor.go.codemodel.VarModel;
  * @author Sam Harwell
  */
 public class FieldReferenceKeyCompletionItem extends FieldReferenceCompletionItem {
+    private String leftText;
 
     public FieldReferenceKeyCompletionItem(String varName) {
         super(varName);
@@ -46,6 +47,19 @@ public class FieldReferenceKeyCompletionItem extends FieldReferenceCompletionIte
     @Override
     public CharSequence getInsertPrefix() {
         return super.getInsertPrefix() + ":";
+    }
+
+    @Override
+    protected String getLeftHtmlText() {
+        if (leftText == null) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(FIELD_COLOR);
+            builder.append(getVarName());
+            builder.append(COLOR_END);
+            builder.append(":");
+            leftText = builder.toString();
+        }
+        return leftText;
     }
 
 }

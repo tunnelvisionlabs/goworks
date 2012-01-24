@@ -654,11 +654,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                             TypeModel typeModel = (TypeModel)model;
                                             for (VarModel field : typeModel.getFields()) {
-                                                if (intermediateResults.containsKey(field.getName())) {
+                                                String key = field.getName() + ":";
+                                                if (intermediateResults.containsKey(key)) {
                                                     continue;
                                                 }
 
-                                                intermediateResults.put(field.getName(), new FieldReferenceKeyCompletionItem(field));
+                                                intermediateResults.put(key, new FieldReferenceKeyCompletionItem(field));
                                             }
                                         }
                                     }

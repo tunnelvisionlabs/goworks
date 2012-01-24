@@ -53,6 +53,14 @@ public class VarReferenceCompletionItem extends GoCompletionItem {
         this.varName = varModel.getName();
     }
 
+    public VarModel getVarModel() {
+        return varModel;
+    }
+
+    public String getVarName() {
+        return varName;
+    }
+
     @Override
     public int getSortPriority() {
         return MEMBER_SORT_PRIORITY;
