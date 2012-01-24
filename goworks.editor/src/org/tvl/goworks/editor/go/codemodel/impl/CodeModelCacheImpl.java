@@ -84,7 +84,9 @@ public class CodeModelCacheImpl implements CodeModelCache {
 
     @NonNull
     public Collection<? extends PackageModel> resolvePackages(ImportDeclarationModel importModel) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        Project project = importModel.getPackage().getProject();
+        CodeModelProjectCache projectCache = getProjectCache(project, false);
+        return projectCache.getPackages(importModel.getPath());
     }
 
     @CheckForNull
