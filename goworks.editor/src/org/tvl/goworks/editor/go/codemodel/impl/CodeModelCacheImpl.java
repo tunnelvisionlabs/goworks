@@ -96,7 +96,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
                 if (project == null) {
                     defaultProjectCache = cache;
                 } else {
-                    projectCaches.put(project, defaultProjectCache);
+                    projectCaches.put(project, cache);
                 }
             }
 
