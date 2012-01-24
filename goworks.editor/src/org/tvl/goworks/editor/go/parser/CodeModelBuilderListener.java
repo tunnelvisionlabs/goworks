@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.parser;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -329,8 +330,25 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void exitRule(fieldDeclContext ctx) {
+        TypeModelImpl fieldType = null;
         if (ctx.fieldType != null || ctx.anonField != null) {
-            typeModelStack.pop();
+            fieldType = typeModelStack.pop();
+        }
+
+        identifierListContext idList = ctx.idList;
+        List<Token> ids = idList != null ? idList.ids_list : null;
+        if (ids == null && ctx.anonField != null) {
+            Token name = ctx.anonField.fieldType.qid.id;
+            if (name != null) {
+                ids = Collections.singletonList(name);
+            }
+        }
+
+        if (ids != null && !ids.isEmpty()) {
+            for (Token id : ids) {
+                VarModelImpl model = new VarModelImpl(id.getText(), fieldType, fileModel);
+                structModelStack.peek().getFields().add(model);
+            }
         }
     }
 
