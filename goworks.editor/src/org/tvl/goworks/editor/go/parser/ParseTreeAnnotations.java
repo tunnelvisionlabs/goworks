@@ -27,10 +27,15 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.Tree;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
+import org.openide.util.Parameters;
 
 /**
  *
@@ -40,7 +45,16 @@ public class ParseTreeAnnotations {
     private final Map<Tree, Map<String, Object>> properties =
         new IdentityHashMap<Tree, Map<String, Object>>();
 
-    public Object getProperty(Tree tree, String name) {
+    @NonNull
+    public Map<Tree, Map<String, Object>> getProperties() {
+        return properties;
+    }
+
+    @CheckForNull
+    public Object getProperty(@NonNull Tree tree, @NonNull String name) {
+        Parameters.notNull("tree", tree);
+        Parameters.notNull("name", name);
+
         Map<String, Object> nodeProperties = properties.get(tree);
         if (nodeProperties == null) {
             return null;
@@ -49,7 +63,11 @@ public class ParseTreeAnnotations {
         return nodeProperties.get(name);
     }
 
-    public Object putProperty(Tree tree, String name, Object value) {
+    @CheckForNull
+    public Object putProperty(@NonNull Tree tree, @NonNull String name, @NullAllowed Object value) {
+        Parameters.notNull("tree", tree);
+        Parameters.notNull("name", name);
+
         Map<String, Object> nodeProperties = properties.get(tree);
         if (nodeProperties == null) {
             nodeProperties = new HashMap<String, Object>();
@@ -57,5 +75,37 @@ public class ParseTreeAnnotations {
         }
 
         return nodeProperties.put(name, value);
+    }
+
+    @NonNull
+    public Map<? extends String, ? extends Object> getProperties(@NonNull Tree tree) {
+        Parameters.notNull("tree", tree);
+
+        Map<String, Object> nodeProperties = this.properties.get(tree);
+        if (nodeProperties == null) {
+            return Collections.emptyMap();
+        }
+
+        return nodeProperties;
+    }
+
+    public void putProperties(@NonNull Tree tree, @NonNull Map<? extends String, ? extends Object> properties) {
+        Parameters.notNull("tree", tree);
+        Parameters.notNull("properties", properties);
+
+        Map<String, Object> nodeProperties = this.properties.get(tree);
+        if (nodeProperties == null) {
+            nodeProperties = new HashMap<String, Object>(properties);
+            this.properties.put(tree, nodeProperties);
+        } else {
+            nodeProperties.putAll(properties);
+        }
+    }
+
+    @CheckForNull
+    public Map<? extends String, ? extends Object> removeProperties(@NonNull Tree tree) {
+        Parameters.notNull("tree", tree);
+
+        return properties.remove(tree);
     }
 }
