@@ -57,6 +57,11 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
     }
 
     @Override
+    public PackageModelImpl getPackage() {
+        return getElementType().getPackage();
+    }
+
+    @Override
     public Collection<VarModelImpl> getFields() {
         return getElementType().getFields();
     }
