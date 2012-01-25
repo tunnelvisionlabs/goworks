@@ -46,6 +46,11 @@ public class FunctionModelImpl extends AbstractCodeElementModel implements Funct
     }
 
     @Override
+    public boolean isMethod() {
+        return receiverParameter != null;
+    }
+
+    @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return Collections.emptyList();
     }

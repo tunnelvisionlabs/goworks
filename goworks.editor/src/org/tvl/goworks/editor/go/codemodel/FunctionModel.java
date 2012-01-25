@@ -35,6 +35,8 @@ import java.util.Collection;
  */
 public interface FunctionModel extends CodeElementModel {
 
+    boolean isMethod();
+
     Collection<? extends ParameterModel> getParameters();
 
     Collection<? extends ParameterModel> getReturnValues();

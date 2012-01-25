@@ -49,6 +49,11 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
     }
 
     @Override
+    public boolean isMethod() {
+        return false;
+    }
+
+    @Override
     public TypeKind getKind() {
         return TypeKind.FUNCTION;
     }
