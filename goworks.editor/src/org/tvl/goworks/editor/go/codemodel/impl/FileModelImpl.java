@@ -31,6 +31,7 @@ import java.util.Collection;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
+import org.openide.filesystems.FileObject;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 
 /**
@@ -38,6 +39,7 @@ import org.tvl.goworks.editor.go.codemodel.FileModel;
  * @author Sam Harwell
  */
 public class FileModelImpl extends AbstractCodeElementModel implements FileModel {
+    private final FileObject fileObject;
     private final FreezableArrayList<PackageDeclarationModelImpl> packageDeclarations = new FreezableArrayList<PackageDeclarationModelImpl>();
     private final FreezableArrayList<ImportDeclarationModelImpl> importDeclarations = new FreezableArrayList<ImportDeclarationModelImpl>();
     private final FreezableArrayList<TypeModelImpl> types = new FreezableArrayList<TypeModelImpl>();
@@ -47,13 +49,18 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @SuppressWarnings("unchecked")
     private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<AbstractCodeElementModel>(packageDeclarations, importDeclarations, types, constants, vars, functions);
 
-    public FileModelImpl(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
-        super(name, project, packagePath);
+    public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed Project project, @NonNull String packagePath) {
+        super(fileObject.getNameExt(), project, packagePath);
+        this.fileObject = fileObject;
     }
 
     @Override
     public FileModelImpl getFile() {
         return this;
+    }
+
+    public FileObject getFileObject() {
+        return fileObject;
     }
 
     @Override

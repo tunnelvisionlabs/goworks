@@ -138,8 +138,8 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
             packagePath = packageFolder.getNameExt();
         }
 
-        String name = snapshot.getVersionedDocument().getFileObject().getNameExt();
-        this.fileModel = new FileModelImpl(name, project, packagePath);
+        FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
+        this.fileModel = new FileModelImpl(fileObject, project, packagePath);
         this.typeContainerStack.push(this.fileModel.getTypes());
         this.constContainerStack.push(this.fileModel.getConstants());
         this.varContainerStack.push(this.fileModel.getVars());
