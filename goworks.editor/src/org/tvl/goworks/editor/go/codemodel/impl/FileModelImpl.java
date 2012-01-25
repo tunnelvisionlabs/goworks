@@ -52,6 +52,11 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     }
 
     @Override
+    public FileModelImpl getFile() {
+        return this;
+    }
+
+    @Override
     public Collection<AbstractCodeElementModel> getMembers() {
         return codeElements;
     }
