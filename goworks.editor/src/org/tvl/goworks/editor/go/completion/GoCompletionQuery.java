@@ -619,7 +619,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
 
                                             for (VarModel var : packageModel.getVars()) {
-                                                intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var));
+                                                intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
                                             }
 
                                             for (TypeModel type : packageModel.getTypes()) {
@@ -647,7 +647,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
 
                                             for (VarModel var : varType.getFields()) {
-                                                intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var));
+                                                intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
                                             }
                                         } else {
                                             LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
@@ -789,7 +789,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                         continue;
                                                     }
 
-                                                    intermediateResults.put(model.getName(), new VarReferenceCompletionItem(model));
+                                                    intermediateResults.put(model.getName(), new VarReferenceCompletionItem(model, false));
                                                 }
 
                                                 Collection<? extends FunctionModel> functions = packageModel.getFunctions();
@@ -834,7 +834,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                     }
 
                                                     VarModelImpl varModel = new VarModelImpl(name, (TypeModel)varType, (FileModelImpl)getFileModel());
-                                                    intermediateResults.put(name, new VarReferenceCompletionItem(varModel));
+                                                    intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
                                                     break;
                                                 }
                                             }

@@ -36,11 +36,11 @@ import org.tvl.goworks.editor.go.codemodel.VarModel;
 public class FieldReferenceCompletionItem extends VarReferenceCompletionItem {
 
     public FieldReferenceCompletionItem(String varName) {
-        super(varName);
+        super(varName, false);
     }
 
     public FieldReferenceCompletionItem(VarModel varModel) {
-        super(varModel);
+        super(varModel, false);
     }
 
 }

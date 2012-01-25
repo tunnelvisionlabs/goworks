@@ -40,21 +40,26 @@ import org.tvl.goworks.editor.go.codemodel.VarModel;
 public class VarReferenceCompletionItem extends GoCompletionItem {
 
     private static ImageIcon ICON;
+    private static ImageIcon ICON_PROTECTED;
+    private static ImageIcon ICON_LOCAL;
 
     private final VarModel varModel;
     private final String varName;
+    private final boolean localScope;
     private String leftText;
 
-    public VarReferenceCompletionItem(@NonNull String varName) {
+    public VarReferenceCompletionItem(@NonNull String varName, boolean localScope) {
         Parameters.notNull("varName", varName);
         this.varModel = null;
         this.varName = varName;
+        this.localScope = localScope;
     }
 
-    public VarReferenceCompletionItem(@NonNull VarModel varModel) {
+    public VarReferenceCompletionItem(@NonNull VarModel varModel, boolean localScope) {
         Parameters.notNull("varModel", varModel);
         this.varModel = varModel;
         this.varName = varModel.getName();
+        this.localScope = localScope;
     }
 
     public VarModel getVarModel() {
@@ -82,11 +87,25 @@ public class VarReferenceCompletionItem extends GoCompletionItem {
 
     @Override
     protected ImageIcon getIcon() {
-        if (ICON == null) {
-            ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/fields.png"));
+        ImageIcon icon;
+        if (localScope) {
+            if (ICON_LOCAL == null) {
+                ICON_LOCAL = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/fields.png"));
+            }
+            icon = ICON_LOCAL;
+        } else if (Character.isUpperCase(varName.charAt(0))) {
+            if (ICON == null) {
+                ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/field_static_16.png"));
+            }
+            icon = ICON;
+        } else {
+            if (ICON_PROTECTED == null) {
+                ICON_PROTECTED = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/field_static_protected_16.png"));
+            }
+            icon = ICON_PROTECTED;
         }
 
-        return ICON;
+        return icon;
     }
 
     @Override
