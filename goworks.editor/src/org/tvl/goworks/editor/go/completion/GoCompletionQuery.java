@@ -101,25 +101,40 @@ import org.tvl.goworks.editor.go.codemodel.VarModel;
 import org.tvl.goworks.editor.go.codemodel.impl.AbstractCodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.impl.CodeModelCacheImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeArrayModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeChannelModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.GoLexerBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase;
+import org.tvl.goworks.editor.go.parser.GoParserBase.arrayTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.baseTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.baseTypeNameContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.callExprContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.channelTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.constSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.expressionContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.functionTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.interfaceTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.labeledStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.literalTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.mapTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.operandContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.parameterDeclContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.pointerTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.qualifiedIdentifierContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.receiverContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.selectorExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.shortVarDeclContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.sliceTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.structTypeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.typeContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.typeLiteralContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
 import org.tvl.goworks.editor.go.parser.ParseTreeAnnotations;
@@ -1233,6 +1248,143 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
+            public void enterRule(typeContext ctx) {
+                Collection<? extends CodeElementModel> result;
+                if (ctx.name != null) {
+                    result = resolveTarget(ctx.name);
+                } else if (ctx.lit != null) {
+                    result = resolveTarget(ctx.lit);
+                } else if (ctx.t != null) {
+                    result = resolveTarget(ctx.t);
+                } else {
+                    LOGGER.log(Level.FINE, "Unknown type syntax.");
+                    result = null;
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterRule(typeLiteralContext ctx) {
+                if (ctx.getChildCount() != 1) {
+                    LOGGER.log(Level.FINE, "Unknown typeLiteral syntax.");
+                    return;
+                }
+
+                @SuppressWarnings("unchecked")
+                Collection<? extends CodeElementModel> result = resolveTarget((ParserRuleContext<Token>)ctx.getChild(0));
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterRule(arrayTypeContext ctx) {
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                if (ctx.elemType != null) {
+                    result.addAll(resolveTarget(ctx.elemType));
+                }
+
+                for (int i = result.size() - 1; i >= 0; i--) {
+                    if (!(result.get(i) instanceof TypeModelImpl)) {
+                        result.remove(i);
+                        continue;
+                    }
+
+                    result.set(i, new TypeArrayModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterRule(structTypeContext ctx) {
+                LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+            }
+
+            @Override
+            public void enterRule(pointerTypeContext ctx) {
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                if (ctx.typ != null) {
+                    result.addAll(resolveTarget(ctx.typ));
+                }
+
+                for (int i = result.size() - 1; i >= 0; i--) {
+                    if (!(result.get(i) instanceof TypeModelImpl)) {
+                        result.remove(i);
+                        continue;
+                    }
+
+                    result.set(i, new TypePointerModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterRule(baseTypeContext ctx) {
+                if (ctx.getChildCount() != 1) {
+                    LOGGER.log(Level.FINE, "Unknown baseType syntax.");
+                    return;
+                }
+
+                @SuppressWarnings("unchecked")
+                Collection<? extends CodeElementModel> result = resolveTarget(ctx.typ);
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterRule(functionTypeContext ctx) {
+                LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+            }
+
+            @Override
+            public void enterRule(interfaceTypeContext ctx) {
+                LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+            }
+
+            @Override
+            public void enterRule(sliceTypeContext ctx) {
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                if (ctx.elemType != null) {
+                    result.addAll(resolveTarget(ctx.elemType));
+                }
+
+                for (int i = result.size() - 1; i >= 0; i--) {
+                    if (!(result.get(i) instanceof TypeModelImpl)) {
+                        result.remove(i);
+                        continue;
+                    }
+
+                    result.set(i, new TypeSliceModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterRule(mapTypeContext ctx) {
+                LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+            }
+
+            @Override
+            public void enterRule(channelTypeContext ctx) {
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                if (ctx.elemType != null) {
+                    result.addAll(resolveTarget(ctx.elemType));
+                }
+
+                for (int i = result.size() - 1; i >= 0; i--) {
+                    if (!(result.get(i) instanceof TypeModelImpl)) {
+                        result.remove(i);
+                        continue;
+                    }
+
+                    result.set(i, new TypeChannelModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
             public void enterRule(literalTypeContext ctx) {
                 if (ctx.getChildCount() != 1) {
                     LOGGER.log(Level.FINE, "TODO: resolve implicit array creation.");
@@ -1247,7 +1399,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterRule(typeNameContext ctx) {
                 if (ctx.qid == null) {
-                    LOGGER.log(Level.FINE, "TODO: unknown typeName syntax.");
+                    LOGGER.log(Level.FINE, "Unknown typeName syntax.");
                     return;
                 }
 
@@ -1299,6 +1451,25 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterRule(callExprContext ctx) {
+                if (ctx.e == null) {
+                    return;
+                }
+
+                Collection<? extends CodeElementModel> methodResults = resolveTarget(ctx.e);
+                List<CodeElementModel> results = new ArrayList<CodeElementModel>();
+                for (CodeElementModel model : methodResults) {
+                    if (!(model instanceof FunctionModel)) {
+                        continue;
+                    }
+
+                    results.addAll(((FunctionModel)model).getReturnValues());
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, results);
             }
 
             @Override
