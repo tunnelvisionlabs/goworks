@@ -46,8 +46,12 @@ public class ParseTreeAnnotations {
         new IdentityHashMap<Tree, Map<String, Object>>();
 
     @NonNull
-    public Map<Tree, Map<String, Object>> getProperties() {
+    public Map<? extends Tree, ? extends Map<? extends String, ? extends Object>> getProperties() {
         return properties;
+    }
+
+    public void clear() {
+        properties.clear();
     }
 
     @CheckForNull
