@@ -110,6 +110,7 @@ public class CurrentMemberContextParserTask implements ParserTask {
                 GoLexer lexer = new GoLexer(input);
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
                 GoParser parser = new GoParser(tokens, snapshot);
+                parser.getInterpreter().disable_global_context = true;
                 parser.setBuildParseTree(true);
                 context = parser.topLevelDecl();
             }

@@ -100,6 +100,7 @@ public class CompiledModelParser {
             GoLexer lexer = new GoLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GoParser parser = new GoParser(tokens, snapshot);
+            parser.getInterpreter().disable_global_context = true;
             parser.setBuildParseTree(true);
             try {
                 sourceFileContext context = parser.sourceFile();
