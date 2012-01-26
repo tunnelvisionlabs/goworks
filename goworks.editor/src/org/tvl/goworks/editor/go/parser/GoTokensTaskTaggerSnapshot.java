@@ -43,7 +43,7 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<SimpleLexerState> {
-    private final Map<Thread, Reference<GoLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<GoLexerWrapper>>();
+    private static final Map<Thread, Reference<GoLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<GoLexerWrapper>>();
 
     public GoTokensTaskTaggerSnapshot(@NonNull DocumentSnapshot snapshot) {
         super(snapshot);

@@ -27,10 +27,14 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -54,6 +58,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.shared.TaggerTokenSource;
 import org.antlr.works.editor.shared.completion.Anchor;
@@ -70,6 +75,9 @@ import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
  * @author Sam Harwell
  */
 public class ReferenceAnchorsParserTask implements ParserTask {
+    private static final Map<Thread, Reference<GoParser>> parserCache =
+        new WeakHashMap<Thread, Reference<GoParser>>();
+
     private static final Logger LOGGER = Logger.getLogger(ReferenceAnchorsParserTask.class.getName());
 
     private final VersionedDocument document;
@@ -83,6 +91,22 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         return Definition.INSTANCE;
     }
 
+    protected GoParser createParser(TokenStream input, DocumentSnapshot snapshot) {
+        synchronized (parserCache) {
+            Reference<GoParser> ref = parserCache.get(Thread.currentThread());
+            GoParser parser = ref != null ? ref.get() : null;
+            if (parser == null) {
+                parser = new GoParser(input, snapshot);
+                parserCache.put(Thread.currentThread(), new SoftReference<GoParser>(parser));
+            } else {
+                parser.setTokenStream(input);
+            }
+
+            parser.setBuildParseTree(true);
+            return parser;
+        }
+    }
+
     @Override
     public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS);
@@ -90,8 +114,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
 
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-        GoParser parser = new GoParser(tokenStream, snapshot);
-        parser.setBuildParseTree(true);
+        GoParser parser = createParser(tokenStream, snapshot);
         ParserRuleContext<Token> parseResult = parser.sourceFile();
 
         ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(GoParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
