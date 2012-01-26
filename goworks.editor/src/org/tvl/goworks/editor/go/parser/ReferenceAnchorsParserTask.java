@@ -97,10 +97,12 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(GoParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
         results.addResult(parseTreeResult);
 
-        GoParserAnchorListener listener = new GoParserAnchorListener(snapshot);
-        ParseTreeWalker.DEFAULT.walk(listener, parseResult);
-        ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
-        results.addResult(result);
+        if (snapshot.getVersionedDocument().getDocument() != null) {
+            GoParserAnchorListener listener = new GoParserAnchorListener(snapshot);
+            ParseTreeWalker.DEFAULT.walk(listener, parseResult);
+            ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
+            results.addResult(result);
+        }
 
         try {
             CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
