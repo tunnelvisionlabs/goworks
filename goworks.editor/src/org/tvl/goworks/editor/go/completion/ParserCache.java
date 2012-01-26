@@ -27,7 +27,6 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
-import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
@@ -46,9 +45,7 @@ public class ParserCache extends AbstractParserCache<CodeCompletionGoParser> {
             throw new UnsupportedOperationException();
         }
 
-        DocumentSnapshotCharStream documentSnapshotCharStream = (DocumentSnapshotCharStream)charStream;
-        DocumentSnapshot snapshot = documentSnapshotCharStream.getSnapshot();
-        return new CodeCompletionGoParser(input, snapshot);
+        return new CodeCompletionGoParser(input);
     }
 
 }

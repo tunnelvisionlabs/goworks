@@ -48,8 +48,11 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -86,17 +89,35 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
 //        GrammarLexer lexer = new GrammarLexer(input);
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-        TemplateParser parser = new TemplateParser(tokenStream);
-        parser.setBuildParseTree(true);
-        ParserRuleContext<Token> parseResult = parser.group();
+        ParserRuleContext<Token> parseResult;
+        TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokenStream);
+        try {
+            parser.setBuildParseTree(true);
+            parser.setErrorHandler(new BailErrorStrategy());
+            parseResult = parser.group();
+        } catch (RuntimeException ex) {
+            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                // retry with default error handler
+                tokenStream.reset();
+                parser.setTokenStream(tokenStream);
+                parser.setErrorHandler(new DefaultErrorStrategy());
+                parseResult = parser.group();
+            } else {
+                throw ex;
+            }
+        } finally {
+            TemplateParserCache.DEFAULT.putParser(parser);
+        }
 
         ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
         results.addResult(parseTreeResult);
 
-        TemplateParserAnchorListener listener = new TemplateParserAnchorListener(snapshot);
-        ParseTreeWalker.DEFAULT.walk(listener, parseResult);
-        ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(TemplateParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
-        results.addResult(result);
+        if (snapshot.getVersionedDocument().getDocument() != null) {
+            TemplateParserAnchorListener listener = new TemplateParserAnchorListener(snapshot);
+            ParseTreeWalker.DEFAULT.walk(listener, parseResult);
+            ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(TemplateParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
+            results.addResult(result);
+        }
 
         CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
         ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);

@@ -114,9 +114,14 @@ public class CurrentRuleContextParserTask implements ParserTask {
                 input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                 GrammarLexer lexer = new GrammarLexer(input);
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
-                GrammarParser parser = new GrammarParser(tokens);
-                parser.setBuildParseTree(true);
-                ruleContext = parser.rule();
+                GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokens);
+                try {
+                    parser.getInterpreter().disable_global_context = true;
+                    parser.setBuildParseTree(true);
+                    ruleContext = parser.rule();
+                } finally {
+                    GrammarParserCache.DEFAULT.putParser(parser);
+                }
             }
         }
 

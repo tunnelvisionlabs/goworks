@@ -48,8 +48,11 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -95,17 +98,35 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
 //        GrammarLexer lexer = new GrammarLexer(input);
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-        GrammarParser parser = new GrammarParser(tokenStream);
-        parser.setBuildParseTree(true);
-        GrammarParser.grammarSpecContext parseResult = parser.grammarSpec();
+        ParserRuleContext<Token> parseResult;
+        GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokenStream);
+        try {
+            parser.setBuildParseTree(true);
+            parser.setErrorHandler(new BailErrorStrategy());
+            parseResult = parser.grammarSpec();
+        } catch (RuntimeException ex) {
+            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                // retry with default error handler
+                tokenStream.reset();
+                parser.setTokenStream(tokenStream);
+                parser.setErrorHandler(new DefaultErrorStrategy());
+                parseResult = parser.grammarSpec();
+            } else {
+                throw ex;
+            }
+        } finally {
+            GrammarParserCache.DEFAULT.putParser(parser);
+        }
 
         ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
         results.addResult(parseTreeResult);
 
-        GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
-        ParseTreeWalker.DEFAULT.walk(listener, parseResult);
-        ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
-        results.addResult(result);
+        if (snapshot.getVersionedDocument().getDocument() != null) {
+            GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
+            ParseTreeWalker.DEFAULT.walk(listener, parseResult);
+            ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
+            results.addResult(result);
+        }
 
         CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
         ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);

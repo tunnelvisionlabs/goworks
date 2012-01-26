@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -191,7 +191,7 @@ public abstract class ParserTaskScheduler {
             }
         }
     }
-    
+
     protected int getParseDelayMilliseconds() {
         return 500;
     }

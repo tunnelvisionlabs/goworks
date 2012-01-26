@@ -49,9 +49,13 @@ public class GoParser extends GoParserBase {
     private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
     private DocumentSnapshot snapshot;
 
-    public GoParser(TokenStream input, DocumentSnapshot snapshot) {
+    public GoParser(TokenStream input) {
         super(input);
-        this.snapshot = snapshot;
+        CharStream charStream = input.getTokenSource().getInputStream();
+        if (charStream instanceof DocumentSnapshotCharStream) {
+            DocumentSnapshotCharStream documentSnapshotCharStream = (DocumentSnapshotCharStream)charStream;
+            this.snapshot = documentSnapshotCharStream.getSnapshot();
+        }
         this.addErrorListener(new ErrorListener());
     }
 

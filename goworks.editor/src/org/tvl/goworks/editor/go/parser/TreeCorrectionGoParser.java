@@ -27,7 +27,6 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
-import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.TokenStream;
 
 /**
@@ -36,8 +35,8 @@ import org.antlr.v4.runtime.TokenStream;
  */
 public class TreeCorrectionGoParser extends GoParser {
 
-    public TreeCorrectionGoParser(TokenStream input, DocumentSnapshot snapshot) {
-        super(input, snapshot);
+    public TreeCorrectionGoParser(TokenStream input) {
+        super(input);
     }
 
     @Override

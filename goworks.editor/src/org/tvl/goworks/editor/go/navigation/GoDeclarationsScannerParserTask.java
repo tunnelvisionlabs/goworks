@@ -94,7 +94,7 @@ public class GoDeclarationsScannerParserTask implements ParserTask {
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("Go Declarations Scanner", INPUTS, OUTPUTS, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("Go Declarations Scanner", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
         }
     }
 

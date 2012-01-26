@@ -54,7 +54,7 @@ public class SemanticCorrections {
 
     public SemanticCorrections(@NonNull ParserRuleContext<?> parseTree, @NonNull TokenStream input, @NonNull DocumentSnapshot snapshot) {
         this.parseTree = parseTree;
-        this.correctionParser = new TreeCorrectionGoParser(input, snapshot);
+        this.correctionParser = new TreeCorrectionGoParser(input);
         this.correctionSimulator = correctionParser.getInterpreter();
     }
 

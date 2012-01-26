@@ -27,9 +27,7 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +41,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
@@ -99,10 +96,9 @@ public class CompiledModelParser {
 
             GoLexer lexer = new GoLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-            GoParser parser = new GoParser(tokens, snapshot);
-            parser.getInterpreter().disable_global_context = true;
-            parser.setBuildParseTree(true);
+            GoParser parser = GoParserCache.DEFAULT.getParser(tokens);
             try {
+                parser.setBuildParseTree(true);
                 sourceFileContext context = parser.sourceFile();
                 FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
                 @SuppressWarnings("unchecked")
@@ -113,6 +109,8 @@ public class CompiledModelParser {
                     LOGGER.log(Level.FINE, "A recognition exception occurred while parsing.", ex);
                 }
                 return null;
+            } finally {
+                GoParserCache.DEFAULT.putParser(parser);
             }
         } catch (Exception ex) {
             throw new ExecutionException("An unexpected error occurred.", ex);

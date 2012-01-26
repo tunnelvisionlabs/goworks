@@ -25,26 +25,32 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.tvl.goworks.editor.go.completion;
+package org.antlr.works.editor.st4.experimental;
 
+import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
-import org.tvl.goworks.editor.go.parser.GoParser;
+import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 
 /**
  *
  * @author Sam Harwell
  */
-public class CodeCompletionGoParser extends GoParser implements CodeCompletionParser {
+public class TemplateParserCache extends AbstractParserCache<TemplateParser> {
+    public static final TemplateParserCache DEFAULT = new TemplateParserCache();
 
-    public CodeCompletionGoParser(TokenStream input) {
-        super(input);
-        _interp = new CompletionParserATNSimulator(this, _ATN);
+    @Override
+    protected TemplateParser createParser(TokenStream input) {
+        TemplateParser parser = new TemplateParser(input);
+        parser.getInterpreter().disable_global_context = true;
+        return parser;
     }
 
     @Override
-    public CompletionParserATNSimulator getInterpreter() {
-        return (CompletionParserATNSimulator)super.getInterpreter();
+    public TemplateParser getParser(TokenStream input) {
+        TemplateParser result = super.getParser(input);
+        result.setBuildParseTree(false);
+        result.setErrorHandler(new DefaultErrorStrategy());
+        return result;
     }
 
 }
