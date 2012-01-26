@@ -54,8 +54,11 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
@@ -100,6 +103,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                 parserCache.put(Thread.currentThread(), new SoftReference<GoParser>(parser));
             } else {
                 parser.setTokenStream(input);
+                parser.setErrorHandler(new DefaultErrorStrategy());
             }
 
             parser.setBuildParseTree(true);
@@ -114,8 +118,21 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
 
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
+        ParserRuleContext<Token> parseResult;
         GoParser parser = createParser(tokenStream, snapshot);
-        ParserRuleContext<Token> parseResult = parser.sourceFile();
+        try {
+            parser.setErrorHandler(new BailErrorStrategy());
+            parseResult = parser.sourceFile();
+        } catch (RuntimeException ex) {
+            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                // retry with default error handler
+                tokenStream.reset();
+                parser = createParser(tokenStream, snapshot);
+                parseResult = parser.sourceFile();
+            } else {
+                throw ex;
+            }
+        }
 
         ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(GoParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
         results.addResult(parseTreeResult);
