@@ -339,6 +339,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         region = OffsetRegion.fromBounds(previous.getSpan().getEndPosition(snapshot).getOffset(), regionEnd);
                     }
 
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE, "Code completion from anchor region: {0}.", region);
+                    }
+
                     TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
                     TokenSource tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                     CommonTokenStream tokens = new CommonTokenStream(tokenSource);
