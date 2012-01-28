@@ -60,7 +60,7 @@ public class GoParser extends GoParserBase {
     }
 
     public List<SyntaxError> getSyntaxErrors() {
-        return syntaxErrors;
+        return new ArrayList<SyntaxError>(syntaxErrors);
     }
 
     @Override

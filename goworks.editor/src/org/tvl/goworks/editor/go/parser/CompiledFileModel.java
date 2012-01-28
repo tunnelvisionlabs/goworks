@@ -48,7 +48,6 @@ public class CompiledFileModel {
     private final FileObject fileObject;
     private final Token[] tokens;
 
-    private final GoParser parser;
     private final sourceFileContext result;
     private final List<? extends SyntaxError> syntaxErrors;
 
@@ -57,17 +56,15 @@ public class CompiledFileModel {
 
         this.fileObject = fileObject;
         this.tokens = null;
-        this.parser = null;
         this.result = null;
         this.syntaxErrors = null;
     }
 
-    public CompiledFileModel(GoParser parser, sourceFileContext result, List<? extends SyntaxError> syntaxErrors, @NonNull FileObject fileObject, @NullAllowed Token[] tokens) {
+    public CompiledFileModel(sourceFileContext result, List<? extends SyntaxError> syntaxErrors, @NonNull FileObject fileObject, @NullAllowed Token[] tokens) {
         Parameters.notNull("fileObject", fileObject);
 
         this.fileObject = fileObject;
         this.tokens = tokens;
-        this.parser = parser;
         this.result = result;
         this.syntaxErrors = syntaxErrors;
     }
@@ -78,10 +75,6 @@ public class CompiledFileModel {
 
     public @CheckForNull Token[] getTokens() {
         return tokens;
-    }
-
-    public GoParser getParser() {
-        return parser;
     }
 
     public sourceFileContext getResult() {

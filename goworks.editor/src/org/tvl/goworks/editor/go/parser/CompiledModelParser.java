@@ -33,14 +33,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
@@ -91,9 +94,7 @@ public class CompiledModelParser {
         }
 
         try {
-            ANTLRInputStream input = new ANTLRInputStream(snapshot.getText().toString());
-            input.name = snapshot.getVersionedDocument().getFileObject().getNameExt();
-
+            CharStream input = new DocumentSnapshotCharStream(snapshot, new OffsetRegion(0, snapshot.length()));
             GoLexer lexer = new GoLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GoParser parser = GoParserCache.DEFAULT.getParser(tokens);
@@ -103,7 +104,7 @@ public class CompiledModelParser {
                 FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
                 @SuppressWarnings("unchecked")
                 Token[] groupTokens = tokens.getTokens().toArray(new Token[0]);
-                return new CompiledModel(snapshot, new CompiledFileModel(parser, context, parser.getSyntaxErrors(), fileObject, groupTokens));
+                return new CompiledModel(snapshot, new CompiledFileModel(context, parser.getSyntaxErrors(), fileObject, groupTokens));
             } catch (RecognitionException ex) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE, "A recognition exception occurred while parsing.", ex);
