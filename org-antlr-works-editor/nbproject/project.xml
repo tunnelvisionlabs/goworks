@@ -277,7 +277,12 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>org.antlr.works.editor.shared</package>
+                <package>org.antlr.works.editor.shared.completion</package>
+                <package>org.antlr.works.editor.shared.fold</package>
+                <package>org.antlr.works.editor.shared.parser</package>
+            </public-packages>
         </data>
     </configuration>
 </project>
