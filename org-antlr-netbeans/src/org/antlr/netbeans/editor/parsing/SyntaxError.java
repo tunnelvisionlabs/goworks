@@ -25,58 +25,35 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.parser;
+package org.antlr.netbeans.editor.parsing;
 
-import java.util.List;
-import org.antlr.grammar.v3.ANTLRParser;
-import org.antlr.netbeans.editor.parsing.SyntaxError;
-import org.antlr.runtime.CommonToken;
-import org.netbeans.api.annotations.common.CheckForNull;
-import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.annotations.common.NullAllowed;
-import org.openide.filesystems.FileObject;
-import org.openide.util.Parameters;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.netbeans.spi.editor.hints.Severity;
 
 /**
  *
  * @author Sam Harwell
  */
-public class CompiledFileModelV3 extends CompiledFileModel {
+public class SyntaxError {
+    private final SnapshotPositionRegion location;
+    private final String message;
+    private final Severity severity;
 
-    @NonNull
-    private final ANTLRErrorProvidingParser parser;
-    @NullAllowed
-    private final GrammarWrapper grammar;
-    @NullAllowed
-    private final ANTLRParser.grammar__return result;
-
-    public CompiledFileModelV3(@NonNull ANTLRErrorProvidingParser parser, @NullAllowed GrammarWrapper grammar, @NullAllowed ANTLRParser.grammar__return result, @NonNull FileObject fileObject, @NullAllowed CommonToken[] tokens) {
-        super(fileObject, tokens);
-        Parameters.notNull("parser", parser);
-
-        this.parser = parser;
-        this.grammar = grammar;
-        this.result = result;
+    public SyntaxError(SnapshotPositionRegion location, String message, Severity severity) {
+        this.location = location;
+        this.message = message;
+        this.severity = severity;
     }
 
-    @CheckForNull
-    public GrammarWrapper getGrammar() {
-        return grammar;
+    public SnapshotPositionRegion getLocation() {
+        return location;
     }
 
-    @CheckForNull
-    public ANTLRParser.grammar__return getResult() {
-        return result;
+    public String getMessage() {
+        return message;
     }
 
-    @NonNull
-    public ANTLRErrorProvidingParser getParser() {
-        return parser;
+    public Severity getSeverity() {
+        return severity;
     }
-
-    @Override
-    public List<? extends SyntaxError> getSyntaxErrors() {
-        return getParser().getSyntaxErrors();
-    }
-
 }

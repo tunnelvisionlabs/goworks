@@ -28,7 +28,7 @@
 package org.tvl.goworks.editor.go.fold;
 
 import java.util.prefs.Preferences;
-import org.antlr.works.editor.shared.fold.AbstractFoldManager;
+import org.antlr.netbeans.editor.fold.AbstractFoldManager;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.spi.editor.fold.FoldOperation;
 import org.tvl.goworks.editor.GoEditorKit;

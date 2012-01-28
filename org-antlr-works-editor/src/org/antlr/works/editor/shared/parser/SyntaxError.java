@@ -32,8 +32,10 @@ import org.netbeans.spi.editor.hints.Severity;
 
 /**
  *
+ * @deprecated
  * @author Sam Harwell
  */
+@Deprecated
 public class SyntaxError {
     private final SnapshotPositionRegion location;
     private final String message;

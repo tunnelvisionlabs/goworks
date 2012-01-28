@@ -29,13 +29,13 @@ package org.tvl.goworks.editor.go;
 
 import java.util.List;
 import org.antlr.netbeans.editor.classification.TokenTag;
+import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
