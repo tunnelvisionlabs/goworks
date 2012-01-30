@@ -116,6 +116,17 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     private FileModelImpl fileModel;
 
+    private final Deque<TypeStructModelImpl> structModelStack = new ArrayDeque<TypeStructModelImpl>();
+    private final Deque<TypeInterfaceModelImpl> interfaceModelStack = new ArrayDeque<TypeInterfaceModelImpl>();
+    private final Deque<Collection<TypeModelImpl>> implementedTypesContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
+    private final Deque<Collection<TypeModelImpl>> typeContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
+    private final Deque<Collection<ConstModelImpl>> constContainerStack = new ArrayDeque<Collection<ConstModelImpl>>();
+    private final Deque<Collection<VarModelImpl>> varContainerStack = new ArrayDeque<Collection<VarModelImpl>>();
+    private final Deque<Collection<FunctionModelImpl>> functionContainerStack = new ArrayDeque<Collection<FunctionModelImpl>>();
+    private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
+    private final Deque<TypeModelImpl> typeModelStack = new ArrayDeque<TypeModelImpl>();
+    private final Deque<FunctionModel> functionModelStack = new ArrayDeque<FunctionModel>();
+
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream tokenStream) {
         this.project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
         this.snapshot = snapshot;
@@ -186,17 +197,6 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
         ImportDeclarationModelImpl model = new ImportDeclarationModelImpl(path, alias, ctx.dot != null, fileModel);
         fileModel.getImportDeclarations().add(model);
     }
-
-    private final Deque<TypeStructModelImpl> structModelStack = new ArrayDeque<TypeStructModelImpl>();
-    private final Deque<TypeInterfaceModelImpl> interfaceModelStack = new ArrayDeque<TypeInterfaceModelImpl>();
-    private final Deque<Collection<TypeModelImpl>> implementedTypesContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
-    private final Deque<Collection<TypeModelImpl>> typeContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
-    private final Deque<Collection<ConstModelImpl>> constContainerStack = new ArrayDeque<Collection<ConstModelImpl>>();
-    private final Deque<Collection<VarModelImpl>> varContainerStack = new ArrayDeque<Collection<VarModelImpl>>();
-    private final Deque<Collection<FunctionModelImpl>> functionContainerStack = new ArrayDeque<Collection<FunctionModelImpl>>();
-    private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
-    private final Deque<TypeModelImpl> typeModelStack = new ArrayDeque<TypeModelImpl>();
-    private final Deque<FunctionModel> functionModelStack = new ArrayDeque<FunctionModel>();
 
     @Override
     public void exitRule(typeContext ctx) {
