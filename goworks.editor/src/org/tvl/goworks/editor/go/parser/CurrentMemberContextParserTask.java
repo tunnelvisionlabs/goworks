@@ -35,7 +35,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -47,6 +46,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenSource;
@@ -61,7 +61,6 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.topLevelDeclContext;
  * @author Sam Harwell
  */
 public class CurrentMemberContextParserTask implements ParserTask {
-    private static final CurrentMemberContextParserTask INSTANCE = new CurrentMemberContextParserTask();
 
     private CurrentMemberContextParserTask() {
     }
@@ -153,7 +152,7 @@ public class CurrentMemberContextParserTask implements ParserTask {
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserTaskProvider.class)
-    public static final class Provider implements ParserTaskProvider {
+    public static final class Provider extends SingletonParserTaskProvider {
 
         @Override
         public ParserTaskDefinition getDefinition() {
@@ -161,7 +160,7 @@ public class CurrentMemberContextParserTask implements ParserTask {
         }
 
         @Override
-        public ParserTask createTask(VersionedDocument document) {
+        public ParserTask createTaskImpl() {
             return new CurrentMemberContextParserTask();
         }
 

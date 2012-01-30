@@ -37,7 +37,6 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -49,6 +48,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
@@ -60,7 +60,6 @@ import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
  * @author Sam Harwell
  */
 public class NavigatorUpdateParserTask implements ParserTask {
-    private static final NavigatorUpdateParserTask INSTANCE = new NavigatorUpdateParserTask();
 
     private final Object lock = new Object();
 
@@ -126,7 +125,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserTaskProvider.class)
-    public static final class Provider implements ParserTaskProvider {
+    public static final class Provider extends SingletonParserTaskProvider {
 
         @Override
         public ParserTaskDefinition getDefinition() {
@@ -134,8 +133,8 @@ public class NavigatorUpdateParserTask implements ParserTask {
         }
 
         @Override
-        public ParserTask createTask(VersionedDocument document) {
-            return NavigatorUpdateParserTask.INSTANCE;
+        public ParserTask createTaskImpl() {
+            return new NavigatorUpdateParserTask();
         }
 
     }

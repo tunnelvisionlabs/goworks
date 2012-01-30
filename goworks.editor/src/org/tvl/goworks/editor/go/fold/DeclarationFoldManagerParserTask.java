@@ -33,7 +33,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
@@ -43,6 +42,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
@@ -89,7 +89,7 @@ public class DeclarationFoldManagerParserTask implements ParserTask {
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserTaskProvider.class)
-    public static final class Provider implements ParserTaskProvider {
+    public static final class Provider extends SingletonParserTaskProvider {
 
         @Override
         public ParserTaskDefinition getDefinition() {
@@ -97,7 +97,7 @@ public class DeclarationFoldManagerParserTask implements ParserTask {
         }
 
         @Override
-        public ParserTask createTask(VersionedDocument document) {
+        public ParserTask createTaskImpl() {
             return new DeclarationFoldManagerParserTask();
         }
 

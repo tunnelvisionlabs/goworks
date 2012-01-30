@@ -58,6 +58,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.FontColorSettings;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
+import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -245,35 +246,6 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         return new SemanticAnalyzerListener(fileModel);
     }
 
-    @Override
-    protected Callable<Void> createAnalyzerTask(final ParserData<? extends ParserRuleContext<Token>> parserData) {
-        return new Callable<Void>() {
-            @Override
-            public Void call() {
-                final SemanticAnalyzerListener listener = createListener(parserData);
-
-                try {
-                    ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
-                } catch (RuntimeException ex) {
-                    Exceptions.printStackTrace(ex);
-                    throw ex;
-                }
-
-                ((BaseDocument)getDocument()).render(new Runnable() {
-                    @Override
-                    public void run() {
-                        getContainer().clear();
-                        DocumentSnapshot sourceSnapshot = parserData.getSnapshot();
-                        DocumentSnapshot currentSnapshot = sourceSnapshot.getVersionedDocument().getCurrentSnapshot();
-                        updateHighlights(getContainer(), sourceSnapshot, currentSnapshot, listener);
-                    }
-                });
-
-                return null;
-            }
-        };
-    }
-
     private final Set<Token> resolvedTokens = new HashSet<Token>();
 
     @Override
@@ -286,46 +258,46 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
-        synchronized (resolvedTokens) {
-            container.clear();
-            resolvedTokens.clear();
+    protected void updateHighlights(OffsetsBag targetContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
+        OffsetsBag container = new OffsetsBag(currentSnapshot.getVersionedDocument().getDocument());
+        resolvedTokens.clear();
 
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getPackageDeclarations(), packageDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getPackageUses(), packageUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalConstDeclarations(), globalConstDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalConstUses(), globalConstUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalConstDeclarations(), localConstDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalConstUses(), localConstUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFuncDeclarations(), funcDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFuncUses(), funcUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getMethodDeclarations(), methodDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getMethodUses(), methodUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTypeDeclarations(), typeDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTypeUses(), typeUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getBuiltinTypeUses(), builtinTypeUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getBuiltinConstUses(), builtinConstUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getBuiltinFunctionUses(), builtinFunctionUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterUses(), parameterUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getReturnParameterDeclarations(), returnParameterDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getReturnParameterUses(), returnParameterUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getVarUses(), varUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalVarDeclarations(), globalVarDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalVarUses(), globalVarUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFieldVarDeclarations(), fieldVarDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFieldVarUses(), fieldVarUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalVarDeclarations(), localVarDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalVarUses(), localVarUseAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLabelDeclarations(), labelDeclarationAttributes);
-            addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLabelUses(), labelUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getPackageDeclarations(), packageDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getPackageUses(), packageUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalConstDeclarations(), globalConstDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalConstUses(), globalConstUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalConstDeclarations(), localConstDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalConstUses(), localConstUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFuncDeclarations(), funcDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFuncUses(), funcUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getMethodDeclarations(), methodDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getMethodUses(), methodUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTypeDeclarations(), typeDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTypeUses(), typeUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getBuiltinTypeUses(), builtinTypeUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getBuiltinConstUses(), builtinConstUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getBuiltinFunctionUses(), builtinFunctionUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterUses(), parameterUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getReturnParameterDeclarations(), returnParameterDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getReturnParameterUses(), returnParameterUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getVarUses(), varUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalVarDeclarations(), globalVarDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getGlobalVarUses(), globalVarUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFieldVarDeclarations(), fieldVarDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getFieldVarUses(), fieldVarUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalVarDeclarations(), localVarDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalVarUses(), localVarUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLabelDeclarations(), labelDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLabelUses(), labelUseAttributes);
 
-            if (LOGGER.isLoggable(Level.FINE)) {
-                Collection<Token> unresolved = listener.getUnresolvedIdentifiers();
-                unresolved.removeAll(resolvedTokens);
-                addHighlights(container, sourceSnapshot, currentSnapshot, unresolved, unresolvedIdentifierAttributes);
-            }
+        if (LOGGER.isLoggable(Level.FINE)) {
+            Collection<Token> unresolved = listener.getUnresolvedIdentifiers();
+            unresolved.removeAll(resolvedTokens);
+            addHighlights(container, sourceSnapshot, currentSnapshot, unresolved, unresolvedIdentifierAttributes);
         }
+
+        targetContainer.setHighlights(container);
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=HighlightsLayerFactory.class)

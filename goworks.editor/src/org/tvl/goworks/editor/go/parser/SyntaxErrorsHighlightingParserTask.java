@@ -39,7 +39,6 @@ import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
-import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
@@ -49,6 +48,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.hints.ErrorDescription;
 import org.netbeans.spi.editor.hints.ErrorDescriptionFactory;
@@ -119,7 +119,7 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserTaskProvider.class)
-    public static final class Provider implements ParserTaskProvider {
+    public static final class Provider extends SingletonParserTaskProvider {
 
         @Override
         public ParserTaskDefinition getDefinition() {
@@ -127,7 +127,7 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
         }
 
         @Override
-        public ParserTask createTask(VersionedDocument document) {
+        public ParserTask createTaskImpl() {
             return new SyntaxErrorsHighlightingParserTask();
         }
 
