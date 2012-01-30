@@ -72,7 +72,7 @@ public class CompiledModelParserTask implements ParserTask {
 
     private static final class Definition extends ParserTaskDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
-            Collections.<ParserDataDefinition<?>>emptyList();
+            Collections.<ParserDataDefinition<?>>singletonList(GoParserDataDefinitions.LEXER_TOKENS);
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Collections.<ParserDataDefinition<?>>singletonList(GoParserDataDefinitions.COMPILED_MODEL);
 

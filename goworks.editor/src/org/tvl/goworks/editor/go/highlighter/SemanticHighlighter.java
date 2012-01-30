@@ -37,7 +37,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -49,7 +48,6 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.netbeans.api.annotations.common.NonNull;
@@ -57,9 +55,7 @@ import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.FontColorSettings;
-import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
-import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -71,6 +67,7 @@ import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.impl.CodeModelCacheImpl;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.baseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.blockContext;
@@ -110,7 +107,7 @@ import org.tvl.goworks.editor.go.parser.ParseTreeAnnotations;
  *
  * @author Sam Harwell
  */
-public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, ParserRuleContext<Token>> {
+public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, CompiledModel> {
     // -J-Dorg.tvl.goworks.editor.go.highlighter.SemanticHighlighter.level=FINE
     private static final Logger LOGGER = Logger.getLogger(SemanticHighlighter.class.getName());
 
@@ -196,7 +193,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     private final AttributeSet unresolvedIdentifierAttributes;
 
     private SemanticHighlighter(@NonNull StyledDocument document) {
-        super(document, GoParserDataDefinitions.REFERENCE_PARSE_TREE);
+        super(document, GoParserDataDefinitions.COMPILED_MODEL);
 
         Lookup lookup = MimeLookup.getLookup(MimePath.parse(GoEditorKit.GO_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
@@ -233,7 +230,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected SemanticAnalyzerListener createListener(ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected SemanticAnalyzerListener createListener(ParserData<? extends CompiledModel> parserData) {
         FileModel fileModel = null;
         try {
             Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.FILE_MODEL);
@@ -248,8 +245,8 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected ParseTree getParseTree(ParserData<? extends ParserRuleContext<Token>> parserData) {
-        return parserData.getData();
+    protected ParseTree getParseTree(ParserData<? extends CompiledModel> parserData) {
+        return parserData.getData().getResult().getResult();
     }
 
     private final Set<Token> resolvedTokens = new HashSet<Token>();

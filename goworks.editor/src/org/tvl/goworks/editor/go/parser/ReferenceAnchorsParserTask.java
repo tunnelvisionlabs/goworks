@@ -32,14 +32,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.completion.Anchor;
-import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
@@ -54,15 +51,9 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.antlr.v4.runtime.BailErrorStrategy;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.GoEditorKit;
@@ -92,36 +83,15 @@ public class ReferenceAnchorsParserTask implements ParserTask {
     @Override
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
-            ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, GoParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<List<Anchor>> anchorPointsResult = taskManager.getData(snapshot, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<FileModel> fileModelResult = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
-            if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
-                Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS);
-                Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
-                TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
-
-                InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-                ParserRuleContext<Token> parseResult;
-                GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);
-                try {
-                    parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new BailErrorStrategy());
-                    parseResult = parser.sourceFile();
-                } catch (RuntimeException ex) {
-                    if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
-                        // retry with default error handler
-                        tokenStream.reset();
-                        parser.setTokenStream(tokenStream);
-                        parser.setErrorHandler(new DefaultErrorStrategy());
-                        parseResult = parser.sourceFile();
-                    } else {
-                        throw ex;
-                    }
-                } finally {
-                    GoParserCache.DEFAULT.putParser(parser);
-                }
-
-                parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(context, GoParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
+            if (anchorPointsResult == null || fileModelResult == null) {
+                Future<ParserData<CompiledModel>> futureCompiledModelData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL);
+                ParserData<CompiledModel> compiledModelData = futureCompiledModelData.get();
+                CompiledModel compiledModel = compiledModelData != null ? compiledModelData.getData() : null;
+                CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;
+                ParserRuleContext<Token> parseResult = compiledFileModel != null ? compiledFileModel.getResult() : null;
+                Token[] tokens = compiledFileModel != null ? compiledFileModel.getTokens() : null;
 
                 if (anchorPointsResult == null && snapshot.getVersionedDocument().getDocument() != null) {
                     GoParserAnchorListener listener = new GoParserAnchorListener(snapshot);
@@ -131,7 +101,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 
                 if (fileModelResult == null) {
                     try {
-                        CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
+                        CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokens);
                         ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
                         FileModelImpl fileModel = codeModelBuilderListener.getFileModel();
                         if (fileModel != null) {
@@ -151,7 +121,6 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                     }
                 }
 
-                results.addResult(parseTreeResult);
                 results.addResult(fileModelResult);
                 if (anchorPointsResult != null) {
                     results.addResult(anchorPointsResult);
@@ -165,28 +134,12 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         codeModelCache.updateFile(fileModel);
     }
 
-    private static class InterruptableTokenStream extends CommonTokenStream {
-        public InterruptableTokenStream(TokenSource tokenSource) {
-            super(tokenSource);
-        }
-
-        @Override
-        public void consume() {
-            if (Thread.interrupted()) {
-                throw new CancellationException();
-            }
-
-            super.consume();
-        }
-    }
-
     private static final class Definition extends ParserTaskDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS,
-                GoParserDataDefinitions.REFERENCE_PARSE_TREE,
                 GoParserDataDefinitions.FILE_MODEL);
 
         public static final Definition INSTANCE = new Definition();

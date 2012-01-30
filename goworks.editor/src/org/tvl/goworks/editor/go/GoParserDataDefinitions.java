@@ -34,7 +34,6 @@ import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
@@ -50,7 +49,6 @@ public class GoParserDataDefinitions {
     public static final ParserDataDefinition<CompiledModel> COMPILED_MODEL = new CompiledModelDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
-    public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
     public static final ParserDataDefinition<Tagger<TokenTag<Token>>> LEXER_TOKENS = new LexerTokensDataDefinition();
@@ -70,11 +68,6 @@ public class GoParserDataDefinitions {
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<List<Anchor>> getReferenceAnchorPointsDataDefinition() {
         return REFERENCE_ANCHOR_POINTS;
-    }
-
-    @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserDataDefinition.class)
-    public static ParserDataDefinition<ParserRuleContext<Token>> getReferenceParseTreeDataDefinition() {
-        return REFERENCE_PARSE_TREE;
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserDataDefinition.class)
@@ -115,15 +108,6 @@ public class GoParserDataDefinitions {
         @SuppressWarnings("unchecked")
         public ReferenceAnchorPointsDataDefinition() {
             super("Go Reference Anchor Points", (Class<List<Anchor>>)(Object)List.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
-    private static final class ReferenceParseTreeDataDefinition extends ParserDataDefinition<ParserRuleContext<Token>> {
-
-        @SuppressWarnings("unchecked")
-        public ReferenceParseTreeDataDefinition() {
-            super("Go Reference Parse Tree", (Class<ParserRuleContext<Token>>)(Object)ParserRuleContext.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

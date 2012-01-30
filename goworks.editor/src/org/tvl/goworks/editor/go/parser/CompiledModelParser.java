@@ -29,20 +29,24 @@ package org.tvl.goworks.editor.go.parser;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.antlr.netbeans.editor.classification.TokenTag;
+import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
 import org.antlr.netbeans.parsing.spi.ParseContext;
+import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
-import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
+import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
@@ -97,16 +101,32 @@ public class CompiledModelParser {
             }
 
             try {
-                CharStream input = new DocumentSnapshotCharStream(snapshot, new OffsetRegion(0, snapshot.length()));
-                GoLexer lexer = new GoLexer(input);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                GoParser parser = GoParserCache.DEFAULT.getParser(tokens);
+                Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS);
+                Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
+                TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
+                CommonTokenStream tokenStream = new CommonTokenStream(tokenSource);
+                GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);
                 try {
-                    parser.setBuildParseTree(true);
-                    sourceFileContext sourceFileContext = parser.sourceFile();
+                    sourceFileContext sourceFileContext;
+                    try {
+                        parser.setBuildParseTree(true);
+                        parser.setErrorHandler(new BailErrorStrategy());
+                        sourceFileContext = parser.sourceFile();
+                    } catch (RuntimeException ex) {
+                        if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                            // retry with default error handler
+                            tokenStream.reset();
+                            parser.setTokenStream(tokenStream);
+                            parser.setErrorHandler(new DefaultErrorStrategy());
+                            sourceFileContext = parser.sourceFile();
+                        } else {
+                            throw ex;
+                        }
+                    }
+
                     FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
                     @SuppressWarnings("unchecked")
-                    Token[] groupTokens = tokens.getTokens().toArray(new Token[0]);
+                    Token[] groupTokens = tokenStream.getTokens().toArray(new Token[0]);
                     lastSnapshot = snapshot;
                     lastResult = new CompiledFileModel(sourceFileContext, parser.getSyntaxErrors(), fileObject, groupTokens);
                     lastException = null;

@@ -33,19 +33,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
-import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FunctionModelImpl;
@@ -112,7 +108,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     private final Project project;
     private final DocumentSnapshot snapshot;
-    private final TokenStream tokenStream;
+    private final Token[] tokens;
 
     private FileModelImpl fileModel;
 
@@ -127,10 +123,10 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     private final Deque<TypeModelImpl> typeModelStack = new ArrayDeque<TypeModelImpl>();
     private final Deque<FunctionModel> functionModelStack = new ArrayDeque<FunctionModel>();
 
-    public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream tokenStream) {
+    public CodeModelBuilderListener(DocumentSnapshot snapshot, Token[] tokens) {
         this.project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
         this.snapshot = snapshot;
-        this.tokenStream = tokenStream;
+        this.tokens = tokens;
     }
 
     public FileModelImpl getFileModel() {
