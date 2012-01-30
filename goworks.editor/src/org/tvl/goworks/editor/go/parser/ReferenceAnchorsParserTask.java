@@ -120,11 +120,11 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                         throw ex;
                     }
                 }
+            }
 
-                results.addResult(fileModelResult);
-                if (anchorPointsResult != null) {
-                    results.addResult(anchorPointsResult);
-                }
+            results.addResult(fileModelResult);
+            if (anchorPointsResult != null) {
+                results.addResult(anchorPointsResult);
             }
         }
     }
