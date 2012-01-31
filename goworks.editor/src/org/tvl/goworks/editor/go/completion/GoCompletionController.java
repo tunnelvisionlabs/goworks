@@ -27,24 +27,53 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import java.awt.event.KeyEvent;
+import java.util.Collection;
 import javax.swing.text.JTextComponent;
 import org.antlr.works.editor.antlr4.completion.BaseCompletionController;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.spi.editor.completion.CompletionController;
-import org.netbeans.spi.editor.completion.CompletionControllerProvider;
+import org.netbeans.api.editor.mimelookup.MimeLookup;
+import org.netbeans.lib.editor.util.swing.DocumentUtilities;
+import org.netbeans.spi.editor.completion.CompletionItem;
+import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionTask;
-import org.tvl.goworks.editor.GoEditorKit;
+import org.openide.util.Lookup;
 
 /**
  *
  * @author Sam Harwell
  */
-@MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=CompletionControllerProvider.class)
-public class GoCompletionControllerProvider implements CompletionControllerProvider {
+public class GoCompletionController extends BaseCompletionController {
+    private final GoCompletionProvider provider;
+
+    public GoCompletionController(JTextComponent component, CompletionTask task, int queryType) {
+        super(component, task, queryType);
+        Lookup lookup = MimeLookup.getLookup(DocumentUtilities.getMimeType(component));
+        if (lookup != null) {
+            Collection<? extends CompletionProvider> providers = lookup.lookupAll(CompletionProvider.class);
+            GoCompletionProvider goCompletionProvider = null;
+            for (CompletionProvider completionProvider : providers) {
+                if (completionProvider instanceof GoCompletionProvider) {
+                    goCompletionProvider = (GoCompletionProvider)completionProvider;
+                    break;
+                }
+            }
+            this.provider = goCompletionProvider;
+        } else {
+            this.provider = null;
+        }
+    }
 
     @Override
-    public CompletionController createController(JTextComponent component, CompletionTask task, int queryType) {
-        return new GoCompletionController(component, task, queryType);
+    public void processKeyEvent(KeyEvent evt, CompletionItem bestMatch, boolean isSelected) {
+        if (provider != null) {
+            if (isSelected && evt.getID() == KeyEvent.KEY_PRESSED && provider.getCompletionSelectors().indexOf(evt.getKeyChar()) >= 0) {
+                evt.consume();
+                defaultAction(bestMatch, isSelected);
+                return;
+            }
+        }
+
+        super.processKeyEvent(evt, bestMatch, isSelected);
     }
 
 }
