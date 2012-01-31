@@ -44,6 +44,13 @@ public class GoLexer extends GoLexerBase {
     }
 
     @Override
+    public void reset() {
+        insertSemicolonAtEol = false;
+        deferredEol = null;
+        super.reset();
+    }
+
+    @Override
     public Token nextToken() {
         Token result;
         if (deferredEol != null) {
