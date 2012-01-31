@@ -45,9 +45,12 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
+import org.antlr.netbeans.semantics.ObjectDecorator;
+import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.netbeans.api.annotations.common.NonNull;
@@ -101,7 +104,6 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.typeNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeSwitchStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
-import org.tvl.goworks.editor.go.parser.ParseTreeAnnotations;
 
 /**
  *
@@ -318,12 +320,12 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     public static class SemanticAnalyzerListener extends BlankGoParserBaseListener {
-        private static final String ATTR_LITERAL = "literal";
-        private static final String ATTR_DECLARATION = "declaration";
+        private static final ObjectProperty<Boolean> ATTR_LITERAL = new ObjectProperty<Boolean>("literal", false);
+        private static final ObjectProperty<Boolean> ATTR_DECLARATION = new ObjectProperty<Boolean>("declaration", false);
 
         private final FileModel fileModel;
 
-        private final ParseTreeAnnotations annotations = new ParseTreeAnnotations();
+        private final ObjectDecorator<Tree> annotations = new ObjectDecorator<Tree>();
 
         private final List<Token> packageDeclarations = new ArrayList<Token>();
         private final List<Token> packageUses = new ArrayList<Token>();

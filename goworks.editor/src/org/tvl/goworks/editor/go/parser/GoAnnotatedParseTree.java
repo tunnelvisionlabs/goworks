@@ -27,6 +27,7 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
+import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
@@ -39,7 +40,8 @@ import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
  */
 public class GoAnnotatedParseTree extends AnnotatedParseTree {
 
-    private static final String PROP_ELEMENT_REFERENCE = "element-reference";
+    private static final ObjectProperty<CodeElementReference> PROP_ELEMENT_REFERENCE =
+        new ObjectProperty<CodeElementReference>("element-reference", CodeElementReference.MISSING);
 
     private final CodeElementModel context;
 
@@ -57,12 +59,7 @@ public class GoAnnotatedParseTree extends AnnotatedParseTree {
 
     @NonNull
     public CodeElementReference getTarget(ParserRuleContext<Token> parseTree) {
-        Object property = getAnnotations().getProperty(parseTree, PROP_ELEMENT_REFERENCE);
-        if (!(property instanceof CodeElementReference)) {
-            return CodeElementReference.MISSING;
-        }
-
-        return (CodeElementReference)property;
+        return getAnnotations().getProperty(parseTree, PROP_ELEMENT_REFERENCE);
     }
 
 }

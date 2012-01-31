@@ -29,6 +29,7 @@ package org.tvl.goworks.editor.go.parser;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import org.antlr.netbeans.semantics.ObjectDecorator;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -42,7 +43,7 @@ import org.openide.util.Parameters;
  */
 public class AnnotatedParseTree {
 
-    private final ParseTreeAnnotations annotations = new ParseTreeAnnotations();
+    private final ObjectDecorator<Tree> annotations = new ObjectDecorator<Tree>();
     private ParserRuleContext<Token> parseTree;
 
     public AnnotatedParseTree(@NonNull ParserRuleContext<Token> parseTree) {
@@ -56,7 +57,7 @@ public class AnnotatedParseTree {
         return parseTree;
     }
 
-    protected final ParseTreeAnnotations getAnnotations() {
+    protected final ObjectDecorator<Tree> getAnnotations() {
         return annotations;
     }
 

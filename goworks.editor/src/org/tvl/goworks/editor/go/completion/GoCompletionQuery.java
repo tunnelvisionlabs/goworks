@@ -56,6 +56,8 @@ import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.netbeans.semantics.ObjectDecorator;
+import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -137,7 +139,6 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.typeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeLiteralContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
-import org.tvl.goworks.editor.go.parser.ParseTreeAnnotations;
 
 /**
  *
@@ -240,6 +241,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
     protected CompletionItem createDeclarationCompletionItem(Document document, TrackingPositionRegion applicableTo) {
         return new DeclarationCompletionItem(document, applicableTo);
     }
+
+    private static final ObjectProperty<Map<Token, ParserRuleContext<Token>>> ATTR_CONSTANTS = new ObjectProperty<Map<Token, ParserRuleContext<Token>>>("constants");
+    private static final ObjectProperty<Map<Token, ParserRuleContext<Token>>> ATTR_LOCALS = new ObjectProperty<Map<Token, ParserRuleContext<Token>>>("locals");
+    private static final ObjectProperty<Map<Token, ParserRuleContext<Token>>> ATTR_PARAMETER = new ObjectProperty<Map<Token, ParserRuleContext<Token>>>("parameter");
+    private static final ObjectProperty<Map<Token, ParserRuleContext<Token>>> ATTR_RECEIVER_PARAMETER = new ObjectProperty<Map<Token, ParserRuleContext<Token>>>("receiver-parameter");
+    private static final ObjectProperty<Map<Token, ParserRuleContext<Token>>> ATTR_RETURN_PARAMETER = new ObjectProperty<Map<Token, ParserRuleContext<Token>>>("return-parameter");
+
+    private static final ObjectProperty<Collection<? extends CodeElementModel>> ATTR_TARGET = new ObjectProperty<Collection<? extends CodeElementModel>>("target");
 
     private class TaskImpl extends Task {
         private final DocumentSnapshot snapshot;
@@ -1009,14 +1018,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             return fileModel;
         }
 
-        private ParseTreeAnnotations annotations = new ParseTreeAnnotations();
+        private ObjectDecorator<Tree> annotations = new ObjectDecorator<Tree>();
 
         private class LocalsAnalyzer {
-            private static final String ATTR_CONSTANTS = "constants";
-            private static final String ATTR_LOCALS = "locals";
-            private static final String ATTR_PARAMETER = "parameter";
-            private static final String ATTR_RECEIVER_PARAMETER = "receiver-parameter";
-            private static final String ATTR_RETURN_PARAMETER = "return-parameter";
 
 //            private final List<Token> labels = new ArrayList<Token>();
 
@@ -1045,8 +1049,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 return getLocals(context, ATTR_RETURN_PARAMETER);
             }
 
-            private Map<Token, ParserRuleContext<Token>> getLocals(ParserRuleContext<Token> context, String attr) {
-                Map<Token, ParserRuleContext<Token>> result = getLocalsProperty(context, attr);
+            private Map<Token, ParserRuleContext<Token>> getLocals(ParserRuleContext<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property) {
+                Map<Token, ParserRuleContext<Token>> result = getLocalsProperty(context, property);
                 if (result != null) {
                     return result;
                 }
@@ -1059,7 +1063,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 setLocalsProperty(context, ATTR_RECEIVER_PARAMETER, listener.getReceiverParameters());
                 setLocalsProperty(context, ATTR_RETURN_PARAMETER, listener.getReturnParameters());
 
-                result = getLocalsProperty(context, attr);
+                result = getLocalsProperty(context, property);
                 if (result == null) {
                     LOGGER.log(Level.FINE, "TODO: resolve locals");
                 }
@@ -1072,18 +1076,18 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 //            }
 
             @SuppressWarnings("unchecked")
-            private Map<Token, ParserRuleContext<Token>> getLocalsProperty(ParserRuleContext<Token> context, String attr) {
-                Object result = annotations.getProperty(context, attr);
-                if (result instanceof Map<?,?>) {
-                    return (Map<Token, ParserRuleContext<Token>>)result;
+            private Map<Token, ParserRuleContext<Token>> getLocalsProperty(ParserRuleContext<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property) {
+                Map<Token, ParserRuleContext<Token>> result = annotations.getProperty(context, property);
+                if (result != null) {
+                    return result;
                 }
 
                 return null;
             }
 
-            private void setLocalsProperty(ParserRuleContext<?> context, String attr, @NonNull Map<Token, ParserRuleContext<Token>> locals) {
+            private void setLocalsProperty(ParserRuleContext<?> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property, @NonNull Map<Token, ParserRuleContext<Token>> locals) {
                 Parameters.notNull("locals", locals);
-                annotations.putProperty(context, attr, locals);
+                annotations.putProperty(context, property, locals);
             }
 
             private class Listener extends BlankGoParserBaseListener {
@@ -1168,7 +1172,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         }
 
         private class TargetAnalyzer extends BlankGoParserBaseListener {
-            private static final String ATTR_TARGET = "target";
 
             @NonNull
             public Collection<? extends CodeElementModel> resolveTarget(@NullAllowed ParserRuleContext<Token> context) {
