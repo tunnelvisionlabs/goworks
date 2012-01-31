@@ -72,7 +72,7 @@ public class GoCompletionProvider extends AbstractCompletionProvider {
     private static final Logger LOGGER = Logger.getLogger(GoCompletionProvider.class.getName());
 
     private static String goCompletionAutoPopupTriggers = ".";
-    private static String goCompletionSelectors = "";
+    private static String goCompletionSelectors = "{}[]()<>.,:;+-*/%&|^!~=?@#'\"\\ ";
 
     public static void incompleteCompletionSupport() {
         assert false : "Editor code completion for Go is not yet complete.";
