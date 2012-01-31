@@ -1,0 +1,136 @@
+/*
+ * [The "BSD license"]
+ *  Copyright (c) 2012 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package org.tvl.goworks.editor.go.completion;
+
+import javax.swing.ImageIcon;
+import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.ImageUtilities;
+import org.openide.util.Parameters;
+import org.tvl.goworks.editor.go.codemodel.VarModel;
+
+/**
+ *
+ * @author Sam Harwell
+ */
+public class VarReferenceCompletionItem extends GoCompletionItem {
+
+    private static ImageIcon ICON;
+    private static ImageIcon ICON_PROTECTED;
+    private static ImageIcon ICON_LOCAL;
+
+    private final VarModel varModel;
+    private final String varName;
+    private final boolean localScope;
+    private String leftText;
+
+    public VarReferenceCompletionItem(@NonNull String varName, boolean localScope) {
+        Parameters.notNull("varName", varName);
+        this.varModel = null;
+        this.varName = varName;
+        this.localScope = localScope;
+    }
+
+    public VarReferenceCompletionItem(@NonNull VarModel varModel, boolean localScope) {
+        Parameters.notNull("varModel", varModel);
+        this.varModel = varModel;
+        this.varName = varModel.getName();
+        this.localScope = localScope;
+    }
+
+    public VarModel getVarModel() {
+        return varModel;
+    }
+
+    public String getVarName() {
+        return varName;
+    }
+
+    @Override
+    public int getSortPriority() {
+        return MEMBER_SORT_PRIORITY;
+    }
+
+    @Override
+    public String getSortTextImpl() {
+        return varName;
+    }
+
+    @Override
+    public CharSequence getInsertPrefix() {
+        return varName;
+    }
+
+    @Override
+    protected ImageIcon getIcon() {
+        ImageIcon icon;
+        if (localScope) {
+            if (ICON_LOCAL == null) {
+                ICON_LOCAL = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/fields.png"));
+            }
+            icon = ICON_LOCAL;
+        } else if (Character.isUpperCase(varName.charAt(0))) {
+            if (ICON == null) {
+                ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/field_static_16.png"));
+            }
+            icon = ICON;
+        } else {
+            if (ICON_PROTECTED == null) {
+                ICON_PROTECTED = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/field_static_protected_16.png"));
+            }
+            icon = ICON_PROTECTED;
+        }
+
+        return icon;
+    }
+
+    @Override
+    protected String getLeftHtmlText() {
+        if (leftText == null) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(FIELD_COLOR);
+            builder.append(varName);
+            builder.append(COLOR_END);
+            leftText = builder.toString();
+        }
+        return leftText;
+    }
+
+    @Override
+    protected String getRightHtmlText() {
+        if (varModel != null) {
+            String name = varModel.getVarType().getSimpleName();
+            return "    " + name;
+            //String name = varModel.getClass().getSimpleName();
+            //name = name.substring(name.lastIndexOf('.') + 1);
+            //return name;
+        }
+
+        return "";
+    }
+
+}
