@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.parser;
+package org.tvl.goworks.editor.go.semantics;
 
 import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.ParserRuleContext;

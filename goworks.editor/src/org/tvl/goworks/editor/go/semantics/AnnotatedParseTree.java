@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.parser;
+package org.tvl.goworks.editor.go.semantics;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.Tree;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
+import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 
 /**
  *

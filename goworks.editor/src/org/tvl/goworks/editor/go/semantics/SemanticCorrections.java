@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.parser;
+package org.tvl.goworks.editor.go.semantics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.annotations.common.NonNull;
+import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.builtinCallContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.conversionOrCallExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;

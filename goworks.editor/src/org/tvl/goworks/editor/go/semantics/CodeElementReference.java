@@ -6,17 +6,22 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.parser;
+package org.tvl.goworks.editor.go.semantics;
 
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 
 /**
  *
  * @author Sam Harwell
  */
-public class SemanticAnalyzer {
+public class CodeElementReference {
+    public static final CodeElementReference MISSING = new CodeElementReference();
 
-    public static AnnotatedParseTree analyze(ParserRuleContext<?> context) {
+    public boolean isDefinition() {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
+    public CodeElementModel resolve() {
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 

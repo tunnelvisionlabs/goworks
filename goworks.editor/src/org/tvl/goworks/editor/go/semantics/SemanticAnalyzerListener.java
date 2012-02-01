@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.parser;
+package org.tvl.goworks.editor.go.semantics;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -133,6 +133,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.unaryExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.valueContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
+import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
 
 /**
  *

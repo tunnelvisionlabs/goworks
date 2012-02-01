@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.parser;
+package org.tvl.goworks.editor.go.semantics;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +38,7 @@ import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
+import org.tvl.goworks.editor.go.parser.CompiledModel;
 
 /**
  *
