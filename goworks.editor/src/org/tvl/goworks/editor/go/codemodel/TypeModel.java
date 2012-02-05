@@ -20,9 +20,9 @@ public interface TypeModel extends CodeElementModel {
 
     TypeKind getKind();
 
-    Collection<? extends VarModel> getFields();
+    Collection<? extends FieldModel> getFields();
 
-    Collection<? extends VarModel> getFields(String name);
+    Collection<? extends FieldModel> getFields(String name);
 
     Collection<? extends FunctionModel> getMethods();
 

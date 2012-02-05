@@ -39,4 +39,13 @@ public class TypeArrayModelImpl extends TypeWrapperModelImpl implements TypeArra
         return Collections.emptyList();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TypeArrayModel)) {
+            return false;
+        }
+
+        return super.equals(obj);
+    }
+
 }

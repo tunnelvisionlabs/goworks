@@ -38,4 +38,13 @@ public class TypeSliceModelImpl extends TypeWrapperModelImpl implements TypeSlic
         return Collections.emptyList();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TypeSliceModel)) {
+            return false;
+        }
+
+        return super.equals(obj);
+    }
+
 }

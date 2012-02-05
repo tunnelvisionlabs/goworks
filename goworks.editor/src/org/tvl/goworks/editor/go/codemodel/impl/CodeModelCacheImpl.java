@@ -44,7 +44,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
 
     @CheckForNull
     @Override
-    public Collection<? extends PackageModel> getPackages(Project project, String path) {
+    public Collection<? extends PackageModelImpl> getPackages(Project project, String path) {
         CodeModelProjectCache cache = getProjectCache(project, false);
         if (cache == null) {
             return null;

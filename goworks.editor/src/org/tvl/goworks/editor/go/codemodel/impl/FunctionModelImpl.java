@@ -10,7 +10,9 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.v4.runtime.misc.Utils;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 
 /**
  *
@@ -61,6 +63,32 @@ public class FunctionModelImpl extends AbstractCodeElementModel implements Funct
         parameters.freeze();
         returnValues.freeze();
         super.freezeImpl();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("func");
+
+        ParameterModelImpl receiver = getReceiverParameter();
+        if (receiver != null) {
+            builder.append(" (").append(receiver).append(")");
+        }
+
+        builder.append(" ").append(getName());
+        builder.append("(");
+        builder.append(Utils.join(getParameters().iterator(), ", "));
+        builder.append(")");
+
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
+        Collection<? extends ParameterModel> returnValues = getReturnValues();
+        if (returnValues.size() == 1 && returnValues.iterator().next().getName().equals("_")) {
+            builder.append(" ").append(returnValues.iterator().next().getVarType());
+        } else if (!returnValues.isEmpty()) {
+            builder.append(" (").append(Utils.join(returnValues.iterator(), ", ")).append(")");
+        }
+
+        return builder.toString();
     }
 
 }

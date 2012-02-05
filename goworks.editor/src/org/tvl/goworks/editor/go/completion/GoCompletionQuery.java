@@ -80,6 +80,7 @@ import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
+import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.codemodel.VarModel;
 import org.tvl.goworks.editor.go.codemodel.impl.AbstractCodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.impl.CodeModelCacheImpl;
@@ -842,7 +843,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                         continue;
                                                     }
 
-                                                    VarModelImpl varModel = new VarModelImpl(name, (TypeModel)varType, (FileModelImpl)getFileModel());
+                                                    // TODO: use the proper var kind
+                                                    VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModel)varType, (FileModelImpl)getFileModel());
                                                     intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
                                                     break;
                                                 }
@@ -1301,7 +1303,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         continue;
                     }
 
-                    result.set(i, new TypePointerModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                    result.set(i, new TypePointerModelImpl((TypeModelImpl)result.get(i)));
                 }
 
                 annotations.putProperty(ctx, ATTR_TARGET, result);
@@ -1412,7 +1414,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             continue;
                         }
 
-                        TypePointerModel ptr = new TypePointerModelImpl((TypeModelImpl)model, (FileModelImpl)getFileModel());
+                        TypePointerModel ptr = new TypePointerModelImpl((TypeModelImpl)model);
                         result.add(ptr);
                     }
                 } else {
@@ -1516,7 +1518,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             continue;
                         }
 
-                        VarModelImpl varModel = new VarModelImpl(name, (TypeModel)varType, (FileModelImpl)getFileModel());
+                        // TODO: use proper var kind
+                        VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModel)varType, (FileModelImpl)getFileModel());
                         members.add(varModel);
                     }
                 }

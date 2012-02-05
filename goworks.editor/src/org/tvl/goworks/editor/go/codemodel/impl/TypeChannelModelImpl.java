@@ -38,4 +38,13 @@ public class TypeChannelModelImpl extends TypeWrapperModelImpl implements TypeCh
         return Collections.emptyList();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TypeChannelModel)) {
+            return false;
+        }
+
+        return super.equals(obj);
+    }
+
 }

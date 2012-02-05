@@ -8,8 +8,10 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeReferenceModel;
 
@@ -29,7 +31,12 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
 
     @Override
     public TypeKind getKind() {
-        return TypeKind.UNKNOWN;
+        Collection<? extends TypeModelImpl> resolved = resolve();
+        if (resolved.isEmpty()) {
+            return TypeKind.UNKNOWN;
+        }
+
+        return resolved.iterator().next().getKind();
     }
 
     @Override
@@ -46,17 +53,80 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
     }
 
     @Override
-    public TypeModelImpl resolve() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Collection<? extends TypeModelImpl> resolve() {
+        CodeModelCacheImpl cache = CodeModelCacheImpl.getInstance();
+        Collection<? extends PackageModelImpl> packages;
+        if (referencedPackageName != null) {
+            packages = cache.getPackages(getProject(), referencedPackageName);
+        } else {
+            packages = Collections.singletonList(getPackage());
+        }
+
+        Collection<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>();
+        for (PackageModelImpl packageModel : packages) {
+            resolved.addAll(packageModel.getTypes(referencedTypeName));
+        }
+
+        return resolved;
+    }
+
+    @Override
+    public Collection<FieldModelImpl> getFields() {
+        Collection<? extends TypeModelImpl> resolved = resolve();
+        if (resolved == null || resolved.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        if (resolved.size() == 1) {
+            TypeModelImpl model = resolved.iterator().next();
+            return model.getFields();
+        } else {
+            List<FieldModelImpl> elements = new ArrayList<FieldModelImpl>();
+            for (TypeModelImpl model : resolved) {
+                elements.addAll(model.getFields());
+            }
+
+            return elements;
+        }
+    }
+
+    @Override
+    public Collection<FunctionModelImpl> getMethods() {
+        Collection<? extends TypeModelImpl> resolved = resolve();
+        if (resolved == null || resolved.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        if (resolved.size() == 1) {
+            TypeModelImpl model = resolved.iterator().next();
+            return model.getMethods();
+        } else {
+            List<FunctionModelImpl> elements = new ArrayList<FunctionModelImpl>();
+            for (TypeModelImpl model : resolved) {
+                elements.addAll(model.getMethods());
+            }
+
+            return elements;
+        }
     }
 
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
-        TypeModelImpl resolved = resolve();
-        if (resolved != null) {
-            return resolved.getMembers();
+        Collection<? extends TypeModelImpl> resolved = resolve();
+        if (resolved == null || resolved.isEmpty()) {
+            return Collections.emptyList();
         }
 
-        return Collections.emptyList();
+        if (resolved.size() == 1) {
+            TypeModelImpl model = resolved.iterator().next();
+            return model.getMembers();
+        } else {
+            List<AbstractCodeElementModel> elements = new ArrayList<AbstractCodeElementModel>();
+            for (TypeModelImpl model : resolved) {
+                elements.addAll(model.getMembers());
+            }
+
+            return elements;
+        }
     }
 }

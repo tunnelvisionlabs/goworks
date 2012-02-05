@@ -11,6 +11,7 @@ package org.tvl.goworks.editor.go.semantics;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import org.antlr.netbeans.semantics.ObjectDecorator;
+import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -25,7 +26,8 @@ import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
  */
 public class AnnotatedParseTree {
 
-    private final ObjectDecorator<Tree> annotations = new ObjectDecorator<Tree>();
+    private final ObjectDecorator<Tree> treeAnnotations = new ObjectDecorator<Tree>(new IdentityHashMap<Tree, Map<ObjectProperty<?>, Object>>());
+    private final ObjectDecorator<Token> tokenAnnotations = new ObjectDecorator<Token>();
     private ParserRuleContext<Token> parseTree;
 
     public AnnotatedParseTree(@NonNull ParserRuleContext<Token> parseTree) {
@@ -39,8 +41,12 @@ public class AnnotatedParseTree {
         return parseTree;
     }
 
-    protected final ObjectDecorator<Tree> getAnnotations() {
-        return annotations;
+    public final ObjectDecorator<Tree> getTreeDecorator() {
+        return treeAnnotations;
+    }
+
+    public final ObjectDecorator<Token> getTokenDecorator() {
+        return tokenAnnotations;
     }
 
     public final void setParseTree(@NonNull ParserRuleContext<Token> parseTree) {
@@ -51,7 +57,7 @@ public class AnnotatedParseTree {
         Parameters.notNull("parseTree", parseTree);
 
         if (this.parseTree != parseTree && compactAnnotations) {
-            annotations.clear();
+            treeAnnotations.clear();
             compactAnnotations = false;
         }
 
@@ -80,14 +86,14 @@ public class AnnotatedParseTree {
 
         final Map<Tree, Tree> extras = new IdentityHashMap<Tree, Tree>();
         ParseTreeWalker.DEFAULT.walk(listener, parseTree);
-        for (Map.Entry<? extends Tree, ?> entry : annotations.getProperties().entrySet()) {
+        for (Map.Entry<? extends Tree, ?> entry : treeAnnotations.getProperties().entrySet()) {
             if (!map.containsKey(entry.getKey())) {
                 extras.put(entry.getKey(), entry.getKey());
             }
         }
 
         for (Tree tree : extras.keySet()) {
-            annotations.removeProperties(tree);
+            treeAnnotations.removeProperties(tree);
         }
     }
 

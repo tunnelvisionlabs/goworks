@@ -188,8 +188,8 @@ keyType
     ;
 
 channelType
-    :   (   'chan' '<-'?
-        |   '<-' 'chan'
+    :   (   'chan' send='<-'?
+        |   recv='<-' 'chan'
         )
         elemType=elementType
     ;
@@ -286,9 +286,9 @@ operand
     ;
 
 literal
-    :   basicLiteral
-    |   compositeLiteral
-    |   functionLiteral
+    :   bl=basicLiteral
+    |   cl=compositeLiteral
+    |   fl=functionLiteral
     ;
 
 basicLiteral
@@ -375,14 +375,14 @@ expression
     |   e=expression lp='(' (args=argumentList ','?)? rp=')'
         -> callExpr
 
-    |   ('+' | '-' | '!' | '^' | '*' | '&' | '<-') e=expression
+    |   (op='+' | op='-' | op='!' | op='^' | op='*' | op='&' | op='<-') e=expression
         -> unaryExpr
 
-    |   e=expression ('*' | '/' | '%' | '<<' | '>>' | '&' | '&^') right=expression
+    |   e=expression (op='*' | op='/' | op='%' | op='<<' | op='>>' | op='&' | op='&^') right=expression
         -> multExpr
-    |   e=expression ('+' | '-' | '|' | '^') right=expression
+    |   e=expression (op='+' | op='-' | op='|' | op='^') right=expression
         -> addExpr
-    |   e=expression ('==' | '!=' | '<' | '<=' | '>' | '>=') right=expression
+    |   e=expression (op='==' | op='!=' | op='<' | op='<=' | op='>' | op='>=') right=expression
         -> compareExpr
     |   e=expression '&&' right=expression
         -> andExpr

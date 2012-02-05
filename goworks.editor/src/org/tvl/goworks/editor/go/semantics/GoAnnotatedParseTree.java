@@ -8,12 +8,11 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
-import org.antlr.netbeans.semantics.ObjectProperty;
+import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
-import org.openide.util.Parameters;
-import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
 /**
  *
@@ -21,26 +20,43 @@ import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
  */
 public class GoAnnotatedParseTree extends AnnotatedParseTree {
 
-    private static final ObjectProperty<CodeElementReference> PROP_ELEMENT_REFERENCE =
-        new ObjectProperty<CodeElementReference>("element-reference", CodeElementReference.MISSING);
-
-    private final CodeElementModel context;
-
-    public GoAnnotatedParseTree(@NonNull CodeElementModel context, @NonNull ParserRuleContext<Token> parseTree) {
+    public GoAnnotatedParseTree(@NonNull ParserRuleContext<Token> parseTree) {
         super(parseTree);
-        Parameters.notNull("context", context);
-
-        this.context = context;
-    }
-
-    @NonNull
-    public CodeElementModel getContext() {
-        return context;
     }
 
     @NonNull
     public CodeElementReference getTarget(ParserRuleContext<Token> parseTree) {
-        return getAnnotations().getProperty(parseTree, PROP_ELEMENT_REFERENCE);
+        return getTreeDecorator().getProperty(parseTree, GoAnnotations.PROP_ELEMENT_REFERENCE);
+    }
+
+    public NodeType getNodeType(Token symbol) {
+        return getTokenDecorator().getProperty(symbol, GoAnnotations.NODE_TYPE);
+    }
+
+    public VarKind getVarType(Token symbol) {
+        return getTokenDecorator().getProperty(symbol, GoAnnotations.VAR_TYPE);
+    }
+
+    public TypeKind getTypeKind(Token symbol) {
+        return getTokenDecorator().getProperty(symbol, GoAnnotations.TYPE_KIND);
+    }
+
+    public boolean isGlobal(Token symbol) {
+        return getTokenDecorator().getProperty(symbol, GoAnnotations.GLOBAL);
+    }
+
+    public boolean isDeclaration(Token symbol) {
+        return getNodeType(symbol).isDeclaration();
+    }
+
+    public boolean isResolved(Token symbol) {
+        return getTokenDecorator().getProperty(symbol, GoAnnotations.RESOLVED)
+            || isDeclaration(symbol)
+            || isBuiltin(symbol);
+    }
+
+    public boolean isBuiltin(Token symbol) {
+        return getTokenDecorator().getProperty(symbol, GoAnnotations.BUILTIN);
     }
 
 }

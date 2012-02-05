@@ -14,6 +14,8 @@ package org.tvl.goworks.editor.go.codemodel;
  */
 public interface VarModel extends CodeElementModel {
 
+    VarKind getVarKind();
+
     TypeModel getVarType();
 
 }

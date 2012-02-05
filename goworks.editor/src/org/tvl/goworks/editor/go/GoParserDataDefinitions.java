@@ -21,6 +21,7 @@ import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
+import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
 
 /**
  *
@@ -28,6 +29,7 @@ import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
  */
 public class GoParserDataDefinitions {
     public static final ParserDataDefinition<CompiledModel> COMPILED_MODEL = new CompiledModelDataDefinition();
+    public static final ParserDataDefinition<GoAnnotatedParseTree> ANNOTATED_PARSE_TREE = new AnnotatedParseTreeDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
 
@@ -44,6 +46,11 @@ public class GoParserDataDefinitions {
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<CompiledModel> getCompiledModelDataDefinition() {
         return COMPILED_MODEL;
+    }
+
+    @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<GoAnnotatedParseTree> getAnnotatedParseTreeDataDefinition() {
+        return ANNOTATED_PARSE_TREE;
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ParserDataDefinition.class)
@@ -80,6 +87,14 @@ public class GoParserDataDefinitions {
 
         public CompiledModelDataDefinition() {
             super("Go Compiled Model", CompiledModel.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class AnnotatedParseTreeDataDefinition extends ParserDataDefinition<GoAnnotatedParseTree> {
+
+        public AnnotatedParseTreeDataDefinition() {
+            super("Go Annotated Parse Tree", GoAnnotatedParseTree.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

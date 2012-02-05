@@ -76,14 +76,18 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 
                 if (anchorPointsResult == null && snapshot.getVersionedDocument().getDocument() != null) {
                     GoParserAnchorListener listener = new GoParserAnchorListener(snapshot);
-                    ParseTreeWalker.DEFAULT.walk(listener, parseResult);
+                    if (parseResult != null) {
+                        ParseTreeWalker.DEFAULT.walk(listener, parseResult);
+                    }
                     anchorPointsResult = new BaseParserData<List<Anchor>>(context, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
                 }
 
                 if (fileModelResult == null) {
                     try {
                         CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokens);
-                        ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
+                        if (parseResult != null) {
+                            ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
+                        }
                         FileModelImpl fileModel = codeModelBuilderListener.getFileModel();
                         if (fileModel != null) {
                             updateCodeModelCache(fileModel);

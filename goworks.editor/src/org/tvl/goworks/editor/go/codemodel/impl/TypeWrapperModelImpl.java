@@ -28,4 +28,25 @@ public abstract class TypeWrapperModelImpl extends TypeModelImpl implements Type
         return elementType;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TypeWrapperModel)) {
+            return false;
+        }
+
+        if (!super.equals(obj)) {
+            return false;
+        }
+
+        return getElementType().equals(((TypeWrapperModel)obj).getElementType());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 31 * hash + super.hashCode();
+        hash = 31 * hash + elementType.hashCode();
+        return hash;
+    }
+
 }

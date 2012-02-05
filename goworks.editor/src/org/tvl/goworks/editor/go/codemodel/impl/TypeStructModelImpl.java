@@ -18,7 +18,7 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  * @author Sam Harwell
  */
 public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
-    private final FreezableArrayList<VarModelImpl> fields = new FreezableArrayList<VarModelImpl>();
+    private final FreezableArrayList<FieldModelImpl> fields = new FreezableArrayList<FieldModelImpl>();
 
     public TypeStructModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
@@ -35,18 +35,23 @@ public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
     }
 
     @Override
-    public Collection<VarModelImpl> getFields() {
+    public Collection<FieldModelImpl> getFields() {
         return fields;
     }
 
     @Override
-    public Collection<VarModelImpl> getFields(String name) {
+    public Collection<FieldModelImpl> getFields(String name) {
         return CodeModelCacheImpl.findElementsByName(getFields(), name);
     }
 
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
-        return Collections.emptyList();
+        return getFields();
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
+        return getFields(name);
     }
 
     @Override

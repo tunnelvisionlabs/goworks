@@ -23,7 +23,9 @@ import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.FieldModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FunctionModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.ImportDeclarationModelImpl;
@@ -223,7 +225,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(pointerTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        typeModelStack.push(new TypePointerModelImpl(elementType, fileModel));
+        typeModelStack.push(new TypePointerModelImpl(elementType));
         assert !typeModelStack.isEmpty();
     }
 
@@ -246,12 +248,14 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
         String typeName = createAnonymousTypeName(ctx);
         interfaceModelStack.push(new TypeInterfaceModelImpl(typeName, fileModel));
         implementedTypesContainerStack.push(interfaceModelStack.peek().getImplementedInterfaces());
+        functionContainerStack.push(interfaceModelStack.peek().getInterfaceMethods());
     }
 
     @Override
     public void exitRule(interfaceTypeContext ctx) {
         typeModelStack.push(interfaceModelStack.pop());
         implementedTypesContainerStack.pop();
+        functionContainerStack.pop();
         assert !typeModelStack.isEmpty();
     }
 
@@ -266,8 +270,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     public void exitRule(mapTypeContext ctx) {
         TypeModelImpl valueType = typeModelStack.pop();
         TypeModelImpl keyType = typeModelStack.pop();
-        String typeName = createAnonymousTypeName(ctx);
-        typeModelStack.push(new TypeMapModelImpl(typeName, keyType, valueType, fileModel));
+        typeModelStack.push(new TypeMapModelImpl(keyType, valueType, fileModel));
         assert !typeModelStack.isEmpty();
     }
 
@@ -312,8 +315,9 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
         identifierListContext idList = ctx.idList;
         List<Token> ids = idList != null ? idList.ids_list : null;
         if (ids != null && !ids.isEmpty()) {
+            boolean isGlobal = varContainerStack.peek() == fileModel.getVars();
             for (Token id : ids) {
-                VarModelImpl model = new VarModelImpl(id.getText(), varType, fileModel);
+                VarModelImpl model = new VarModelImpl(id.getText(), isGlobal ? VarKind.GLOBAL : VarKind.LOCAL, varType, fileModel);
                 varContainerStack.peek().add(model);
             }
         }
@@ -369,10 +373,10 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
         TypeModelImpl type = typeModelStack.pop();
         if (ctx.ptr != null) {
-            type = new TypePointerModelImpl(type, fileModel);
+            type = new TypePointerModelImpl(type);
         }
 
-        ParameterModelImpl receiver = new ParameterModelImpl(name, type, fileModel);
+        ParameterModelImpl receiver = new ParameterModelImpl(name, VarKind.RECEIVER, type, fileModel);
         ((FunctionModelImpl)functionModelStack.peek()).setReceiverParameter(receiver);
     }
 
@@ -400,7 +404,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(resultContext ctx) {
         if (ctx.t != null) {
-            parameterContainerStack.peek().add(new ParameterModelImpl("_", typeModelStack.pop(), fileModel));
+            parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, typeModelStack.pop(), fileModel));
         }
     }
 
@@ -415,12 +419,13 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
             parameterType = new VariadicParameterSliceModelImpl(parameterType, fileModel);
         }
 
+        boolean isReturnParameter = functionModelStack.peek().getReturnValues() == parameterContainerStack.peek();
         if (ctx.idList != null && ctx.idList.ids_list != null) {
             for (Token id : ctx.idList.ids_list) {
-                parameterContainerStack.peek().add(new ParameterModelImpl(id.getText(), parameterType, fileModel));
+                parameterContainerStack.peek().add(new ParameterModelImpl(id.getText(), isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, fileModel));
             }
         } else {
-            parameterContainerStack.peek().add(new ParameterModelImpl("_", parameterType, fileModel));
+            parameterContainerStack.peek().add(new ParameterModelImpl("_", isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, fileModel));
         }
     }
 
@@ -442,7 +447,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
         if (ids != null && !ids.isEmpty()) {
             for (Token id : ids) {
-                VarModelImpl model = new VarModelImpl(id.getText(), fieldType, fileModel);
+                FieldModelImpl model = new FieldModelImpl(id.getText(), fieldType, ctx.anonField != null, fileModel);
                 structModelStack.peek().getFields().add(model);
             }
         }

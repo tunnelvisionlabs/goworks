@@ -22,8 +22,8 @@ public class TypeMapModelImpl extends TypeModelImpl implements TypeMapModel {
     private final TypeModelImpl keyType;
     private final TypeModelImpl valueType;
 
-    public TypeMapModelImpl(String name, TypeModelImpl keyType, TypeModelImpl valueType, FileModelImpl fileModel) {
-        super(name, fileModel);
+    public TypeMapModelImpl(TypeModelImpl keyType, TypeModelImpl valueType, FileModelImpl fileModel) {
+        super("map[" + keyType.getName() + "]" + valueType.getName(), fileModel);
         this.keyType = keyType;
         this.valueType = valueType;
     }

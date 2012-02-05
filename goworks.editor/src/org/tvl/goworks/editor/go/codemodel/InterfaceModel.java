@@ -20,6 +20,7 @@ public interface InterfaceModel extends TypeModel {
 
     Collection<? extends FunctionModel> getInterfaceMethods(String name);
 
+    // extends TypeModel since it may contain aliases/references which resolve to interfaces
     Collection<? extends TypeModel> getImplementedInterfaces();
 
 }

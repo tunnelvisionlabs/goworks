@@ -23,8 +23,8 @@ import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
  */
 public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePointerModel {
 
-    public TypePointerModelImpl(TypeModelImpl elementType, FileModelImpl fileModel) {
-        super("*" + elementType.getName(), elementType, fileModel);
+    public TypePointerModelImpl(TypeModelImpl elementType) {
+        super("*" + elementType.getName(), elementType, elementType.getFile());
     }
 
     @Override
@@ -43,12 +43,12 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
     }
 
     @Override
-    public Collection<VarModelImpl> getFields() {
+    public Collection<FieldModelImpl> getFields() {
         return getElementType().getFields();
     }
 
     @Override
-    public Collection<VarModelImpl> getFields(String name) {
+    public Collection<FieldModelImpl> getFields(String name) {
         return getElementType().getFields(name);
     }
 
@@ -91,19 +91,12 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
     }
 
     @Override
-    public Collection<? extends AbstractCodeElementModel> getMembers() {
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
-        members.addAll(getFields());
-        members.addAll(getMethods());
-        return Collections.unmodifiableList(members);
-    }
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TypePointerModel)) {
+            return false;
+        }
 
-    @Override
-    public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
-        members.addAll(getFields(name));
-        members.addAll(getMethods(name));
-        return Collections.unmodifiableList(members);
+        return super.equals(obj);
     }
 
 }

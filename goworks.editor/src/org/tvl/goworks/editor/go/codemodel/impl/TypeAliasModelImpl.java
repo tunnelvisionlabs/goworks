@@ -42,12 +42,17 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
     }
 
     @Override
-    public Collection<VarModelImpl> getFields() {
+    public Collection<FieldModelImpl> getFields() {
         return getType().getFields();
     }
 
     @Override
     public Collection<FunctionModelImpl> getMethods() {
+        TypeModelImpl target = getType();
+        if (target instanceof TypeInterfaceModelImpl) {
+            return ((TypeInterfaceModelImpl)target).getInterfaceMethods();
+        }
+
         PackageModelImpl packageModel = getPackage();
         assert packageModel != null;
 
@@ -64,14 +69,6 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
         }
 
         return methods;
-    }
-
-    @Override
-    public Collection<? extends AbstractCodeElementModel> getMembers() {
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
-        members.addAll(getFields());
-        members.addAll(getMethods());
-        return members;
     }
 
 }

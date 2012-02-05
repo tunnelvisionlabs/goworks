@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
+import org.tvl.goworks.editor.go.codemodel.VarKind;
 
 /**
  *
@@ -17,8 +18,8 @@ import org.tvl.goworks.editor.go.codemodel.TypeModel;
  */
 public class ParameterModelImpl extends VarModelImpl implements ParameterModel {
 
-    public ParameterModelImpl(String name, TypeModel varType, FileModelImpl file) {
-        super(name, varType, file);
+    public ParameterModelImpl(String name, VarKind kind, TypeModel varType, FileModelImpl file) {
+        super(name, kind, varType, file);
     }
 
 }

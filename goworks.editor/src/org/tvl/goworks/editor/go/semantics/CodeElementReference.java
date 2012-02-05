@@ -8,21 +8,35 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.logging.Logger;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
 /**
  *
  * @author Sam Harwell
  */
-public class CodeElementReference {
-    public static final CodeElementReference MISSING = new CodeElementReference();
+public abstract class CodeElementReference {
+    protected static final Logger LOGGER = Logger.getLogger(CodeElementReference.class.getName());
+
+    public static final CodeElementReference UNKNOWN = new Unknown();
+    public static final CodeElementReference MISSING = new Unknown();
 
     public boolean isDefinition() {
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
-    public CodeElementModel resolve() {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
+    public abstract Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages);
 
+    public static class Unknown extends CodeElementReference {
+
+        @Override
+        public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
+            return Collections.emptyList();
+        }
+
+    }
 }

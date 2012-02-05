@@ -41,6 +41,12 @@
     <fontcolor name="typeUse" default="identifier" foreColor="FF2B91AF" />
     <fontcolor name="typeDeclaration" default="typeUse" />
 
+    <fontcolor name="structUse" default="typeUse" />
+    <fontcolor name="structDeclaration" default="structUse" />
+
+    <fontcolor name="interfaceUse" default="typeUse" />
+    <fontcolor name="interfaceDeclaration" default="interfaceUse" />
+
     <fontcolor name="builtinTypeUse" default="typeUse" foreColor="FF0000FF" />
     <fontcolor name="builtinConstUse" default="constUse" foreColor="FF0000FF" />
     <fontcolor name="builtinFunctionUse" default="funcUse" />

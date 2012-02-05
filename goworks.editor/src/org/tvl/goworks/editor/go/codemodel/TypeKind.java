@@ -25,5 +25,6 @@ public enum TypeKind {
     SLICE,
     ALIAS,
     UNKNOWN,
+    UNDEFINED,
 
 }

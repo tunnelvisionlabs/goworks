@@ -8,10 +8,11 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
-import org.tvl.goworks.editor.go.codemodel.TypeWrapperModel;
 
 /**
  *
@@ -24,12 +25,12 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
     }
 
     @Override
-    public Collection<VarModelImpl> getFields() {
+    public Collection<FieldModelImpl> getFields() {
         return Collections.emptyList();
     }
 
     @Override
-    public Collection<VarModelImpl> getFields(String name) {
+    public Collection<FieldModelImpl> getFields(String name) {
         return CodeModelCacheImpl.findElementsByName(getFields(), name);
     }
 
@@ -44,12 +45,28 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
     }
 
     @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        members.addAll(getFields());
+        members.addAll(getMethods());
+        return members;
+    }
+
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
+        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        members.addAll(getFields(name));
+        members.addAll(getMethods(name));
+        return members;
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof TypeWrapperModel)) {
+        if (!(obj instanceof TypeModel)) {
             return false;
         }
 
-        TypeWrapperModel other = (TypeWrapperModel)obj;
+        TypeModel other = (TypeModel)obj;
         return getKind().equals(other.getKind())
             && getPackage().equals(other.getPackage())
             && getName().equals(other.getName());
@@ -62,6 +79,11 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
         hashCode = 7 * hashCode + getPackage().hashCode();
         hashCode = 7 * hashCode + getName().hashCode();
         return hashCode;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
 }
