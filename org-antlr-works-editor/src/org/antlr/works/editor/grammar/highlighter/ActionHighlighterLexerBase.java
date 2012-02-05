@@ -1,4 +1,4 @@
-// $ANTLR 3.4 ActionHighlighterLexerBase.g 2012-01-31 21:39:22
+// $ANTLR 3.4 ActionHighlighterLexerBase.g 2012-01-31 21:52:57
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
