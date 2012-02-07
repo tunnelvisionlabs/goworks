@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
+import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.TypeReferenceModel;
 
 /**
@@ -54,6 +56,14 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
 
     @Override
     public Collection<? extends TypeModelImpl> resolve() {
+        if (referencedPackageName == null || referencedPackageName.isEmpty()) {
+            // check for built-in types
+            TypeModel intrinsicType = IntrinsicTypeModels.getIntrinsicType(referencedTypeName);
+            if (intrinsicType != null) {
+                return Collections.singletonList((TypeModelImpl)intrinsicType);
+            }
+        }
+
         CodeModelCacheImpl cache = CodeModelCacheImpl.getInstance();
         Collection<? extends PackageModelImpl> packages;
         if (referencedPackageName != null) {

@@ -9,8 +9,10 @@
 package org.tvl.goworks.editor.go.semantics;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
 /**
@@ -48,7 +50,12 @@ public class BuiltinTypeReference extends CodeElementReference {
 
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        CodeElementModel type = IntrinsicTypeModels.getIntrinsicType(name);
+        if (type == null) {
+            return Collections.emptyList();
+        }
+
+        return Collections.singletonList(type);
     }
 
 }

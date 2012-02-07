@@ -76,7 +76,8 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
     public int hashCode() {
         int hashCode = 1;
         hashCode = 7 * hashCode + getKind().hashCode();
-        hashCode = 7 * hashCode + getPackage().hashCode();
+        PackageModelImpl packageModel = getPackage();
+        hashCode = 7 * hashCode + (packageModel != null ? packageModel.hashCode() : 0);
         hashCode = 7 * hashCode + getName().hashCode();
         return hashCode;
     }

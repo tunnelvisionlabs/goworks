@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
@@ -35,11 +36,17 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
         this.fileObject = fileObject;
     }
 
+    public FileModelImpl(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
+        super(name, project, packagePath);
+        this.fileObject = null;
+    }
+
     @Override
     public FileModelImpl getFile() {
         return this;
     }
 
+    @CheckForNull
     public FileObject getFileObject() {
         return fileObject;
     }
