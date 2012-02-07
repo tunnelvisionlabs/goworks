@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.project.Project;
 
 /**
@@ -17,8 +18,10 @@ import org.netbeans.api.project.Project;
  */
 public interface CodeModelCache {
 
+    @NonNull
     public Collection<? extends PackageModel> getPackages(Project project);
 
+    @NonNull
     public Collection<? extends PackageModel> getPackages(Project project, String path);
 
 }

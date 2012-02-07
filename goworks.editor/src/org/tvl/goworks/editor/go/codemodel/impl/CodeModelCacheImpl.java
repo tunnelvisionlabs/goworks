@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -43,12 +44,12 @@ public class CodeModelCacheImpl implements CodeModelCache {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @CheckForNull
+    @NonNull
     @Override
     public Collection<? extends PackageModelImpl> getPackages(Project project, String path) {
         CodeModelProjectCache cache = getProjectCache(project, false);
         if (cache == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         return cache.getPackages(path);
