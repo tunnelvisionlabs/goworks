@@ -47,7 +47,7 @@ public class SliceTypeReference extends CodeElementReference {
             }
 
             TypeModelImpl typeModel = (TypeModelImpl)model;
-            sliceTypes.add(new TypeSliceModelImpl(typeModel, typeModel.getFile()));
+            sliceTypes.add(new TypeSliceModelImpl(typeModel));
         }
 
         return sliceTypes;

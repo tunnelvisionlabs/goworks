@@ -19,8 +19,8 @@ import org.tvl.goworks.editor.go.codemodel.TypeSliceModel;
  */
 public class TypeSliceModelImpl extends TypeWrapperModelImpl implements TypeSliceModel {
 
-    public TypeSliceModelImpl(TypeModelImpl elementType, FileModelImpl fileModel) {
-        super("[]" + elementType.getName(), elementType, fileModel);
+    public TypeSliceModelImpl(TypeModelImpl elementType) {
+        super("[]" + elementType.getName(), elementType);
     }
 
     @Override

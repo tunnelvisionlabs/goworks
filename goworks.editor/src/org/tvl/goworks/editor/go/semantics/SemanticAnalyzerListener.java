@@ -604,7 +604,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                     }
 
                     TypeModelImpl elementType = (TypeModelImpl)model;
-                    TypeModelImpl arrayType = new TypeArrayModelImpl(elementType, elementType.getFile());
+                    TypeModelImpl arrayType = new TypeArrayModelImpl(elementType);
                     arrayTypes.add(arrayType);
                 }
 
@@ -652,7 +652,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                     }
 
                     TypeModelImpl elementType = (TypeModelImpl)model;
-                    TypeModelImpl sliceType = new TypeSliceModelImpl(elementType, elementType.getFile());
+                    TypeModelImpl sliceType = new TypeSliceModelImpl(elementType);
                     sliceTypes.add(sliceType);
                 }
 
@@ -683,7 +683,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
                         TypeModelImpl keyType = (TypeModelImpl)keyModel;
                         TypeModelImpl elementType = (TypeModelImpl)model;
-                        TypeModelImpl mapType = new TypeMapModelImpl(keyType, elementType, elementType.getFile());
+                        TypeModelImpl mapType = new TypeMapModelImpl(keyType, elementType);
                         mapTypes.add(mapType);
                     }
                 }
@@ -708,7 +708,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                     }
 
                     TypeModelImpl elementType = (TypeModelImpl)model;
-                    TypeModelImpl channelType = new TypeChannelModelImpl(elementType, elementType.getFile());
+                    TypeModelImpl channelType = new TypeChannelModelImpl(elementType);
                     channelTypes.add(channelType);
                 }
 

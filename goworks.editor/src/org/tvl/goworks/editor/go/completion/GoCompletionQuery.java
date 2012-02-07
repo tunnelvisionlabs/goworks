@@ -1338,7 +1338,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         continue;
                     }
 
-                    result.set(i, new TypeArrayModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                    result.set(i, new TypeArrayModelImpl((TypeModelImpl)result.get(i)));
                 }
 
                 annotations.putProperty(ctx, ATTR_TARGET, result);
@@ -1403,7 +1403,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         continue;
                     }
 
-                    result.set(i, new TypeSliceModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                    result.set(i, new TypeSliceModelImpl((TypeModelImpl)result.get(i)));
                 }
 
                 annotations.putProperty(ctx, ATTR_TARGET, result);
@@ -1427,7 +1427,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         continue;
                     }
 
-                    result.set(i, new TypeChannelModelImpl((TypeModelImpl)result.get(i), (FileModelImpl)getFileModel()));
+                    result.set(i, new TypeChannelModelImpl((TypeModelImpl)result.get(i)));
                 }
 
                 annotations.putProperty(ctx, ATTR_TARGET, result);

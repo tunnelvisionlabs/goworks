@@ -24,7 +24,7 @@ import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
 public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePointerModel {
 
     public TypePointerModelImpl(TypeModelImpl elementType) {
-        super("*" + elementType.getName(), elementType, elementType.getFile());
+        super("*" + elementType.getName(), elementType);
     }
 
     @Override

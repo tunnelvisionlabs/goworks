@@ -14,8 +14,8 @@ package org.tvl.goworks.editor.go.codemodel.impl;
  */
 public class VariadicParameterSliceModelImpl extends TypeSliceModelImpl {
 
-    public VariadicParameterSliceModelImpl(TypeModelImpl elementType, FileModelImpl fileModel) {
-        super(elementType, fileModel);
+    public VariadicParameterSliceModelImpl(TypeModelImpl elementType) {
+        super(elementType);
     }
 
     @Override

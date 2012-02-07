@@ -18,8 +18,8 @@ public abstract class TypeWrapperModelImpl extends TypeModelImpl implements Type
 
     private final TypeModelImpl elementType;
 
-    public TypeWrapperModelImpl(String name, TypeModelImpl elementType, FileModelImpl fileModel) {
-        super(name, fileModel);
+    public TypeWrapperModelImpl(String name, TypeModelImpl elementType) {
+        super(name, elementType.getFile());
         this.elementType = elementType;
     }
 

@@ -206,7 +206,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(arrayTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        typeModelStack.push(new TypeArrayModelImpl(elementType, fileModel));
+        typeModelStack.push(new TypeArrayModelImpl(elementType));
         assert !typeModelStack.isEmpty();
     }
 
@@ -262,7 +262,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(sliceTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        typeModelStack.push(new TypeSliceModelImpl(elementType, fileModel));
+        typeModelStack.push(new TypeSliceModelImpl(elementType));
         assert !typeModelStack.isEmpty();
     }
 
@@ -270,14 +270,14 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     public void exitRule(mapTypeContext ctx) {
         TypeModelImpl valueType = typeModelStack.pop();
         TypeModelImpl keyType = typeModelStack.pop();
-        typeModelStack.push(new TypeMapModelImpl(keyType, valueType, fileModel));
+        typeModelStack.push(new TypeMapModelImpl(keyType, valueType));
         assert !typeModelStack.isEmpty();
     }
 
     @Override
     public void exitRule(channelTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        typeModelStack.push(new TypeChannelModelImpl(elementType, fileModel));
+        typeModelStack.push(new TypeChannelModelImpl(elementType));
         assert !typeModelStack.isEmpty();
     }
 
@@ -419,7 +419,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
         TypeModelImpl parameterType = ctx.t != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
         if (ctx.ellip != null) {
-            parameterType = new VariadicParameterSliceModelImpl(parameterType, fileModel);
+            parameterType = new VariadicParameterSliceModelImpl(parameterType);
         }
 
         boolean isReturnParameter = functionModelStack.peek().getReturnValues() == parameterContainerStack.peek();

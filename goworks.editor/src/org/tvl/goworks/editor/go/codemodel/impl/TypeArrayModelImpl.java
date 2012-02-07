@@ -20,8 +20,8 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  */
 public class TypeArrayModelImpl extends TypeWrapperModelImpl implements TypeArrayModel {
 
-    public TypeArrayModelImpl(@NonNull TypeModelImpl elementType, @NonNull FileModelImpl fileModel) {
-        super("[...]" + elementType.getName(), elementType, fileModel);
+    public TypeArrayModelImpl(@NonNull TypeModelImpl elementType) {
+        super("[...]" + elementType.getName(), elementType);
     }
 
     @Override

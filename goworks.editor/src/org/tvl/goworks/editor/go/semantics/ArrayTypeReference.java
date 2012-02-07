@@ -47,7 +47,7 @@ public class ArrayTypeReference extends CodeElementReference {
             }
 
             TypeModelImpl typeModel = (TypeModelImpl)model;
-            arrayTypes.add(new TypeArrayModelImpl(typeModel, typeModel.getFile()));
+            arrayTypes.add(new TypeArrayModelImpl(typeModel));
         }
 
         return arrayTypes;
