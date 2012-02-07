@@ -19,6 +19,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
@@ -45,7 +46,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
 
     private static FoldInfo createFold(ParserRuleContext<Token> child, String blockHint, DocumentSnapshot snapshot) {
         Token startToken = child.start;
-        Token stopToken = child.stop;
+        Token stopToken = ParseTrees.getStopSymbol(child);
 
         int startLine = snapshot.findLineNumber(startToken.getStartIndex());
         int stopLine = snapshot.findLineNumber(stopToken.getStopIndex());
