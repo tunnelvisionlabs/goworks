@@ -83,7 +83,8 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
     public abstract Collection<? extends AbstractCodeElementModel> getMembers();
 
     @Override
-    public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
+    public Collection<? extends AbstractCodeElementModel> getMembers(@NonNull String name) {
+        Parameters.notNull("name", name);
         return CodeModelCacheImpl.findElementsByName(getMembers(), name);
     }
 

@@ -13,7 +13,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.project.Project;
+import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
 /**
@@ -48,7 +50,9 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
     }
 
     @Override
-    public Collection<AbstractCodeElementModel> getMembers(String name) {
+    public Collection<AbstractCodeElementModel> getMembers(@NonNull String name) {
+        Parameters.notNull("name", name);
+
         List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
         for (FileModelImpl file : getFiles()) {
             members.addAll(file.getMembers(name));

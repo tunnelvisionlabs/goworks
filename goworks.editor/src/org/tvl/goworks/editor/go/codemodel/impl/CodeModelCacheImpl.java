@@ -18,6 +18,7 @@ import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
 import org.openide.util.Lookup;
+import org.openide.util.Parameters;
 import org.openide.util.lookup.ServiceProvider;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.CodeModelCache;
@@ -102,7 +103,9 @@ public class CodeModelCacheImpl implements CodeModelCache {
         return instance;
     }
 
-    public static <T extends CodeElementModel> Collection<T> findElementsByName(Collection<? extends T> elements, String name) {
+    public static <T extends CodeElementModel> Collection<T> findElementsByName(Collection<? extends T> elements, @NonNull String name) {
+        Parameters.notNull("name", name);
+
         List<T> result = new ArrayList<T>();
         for (T element : elements) {
             if (name.equals(element.getName())) {
