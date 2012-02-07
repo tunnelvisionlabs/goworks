@@ -56,4 +56,9 @@ public class TypeChannelModelImpl extends TypeWrapperModelImpl implements TypeCh
         return super.equals(obj);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

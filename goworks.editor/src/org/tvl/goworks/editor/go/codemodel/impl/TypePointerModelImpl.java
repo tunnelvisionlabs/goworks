@@ -115,4 +115,9 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
         return super.equals(obj);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

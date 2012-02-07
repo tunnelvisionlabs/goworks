@@ -47,4 +47,9 @@ public class TypeSliceModelImpl extends TypeWrapperModelImpl implements TypeSlic
         return super.equals(obj);
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }
