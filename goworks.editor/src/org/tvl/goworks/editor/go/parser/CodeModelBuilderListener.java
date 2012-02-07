@@ -22,6 +22,7 @@ import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.tvl.goworks.editor.go.codemodel.ChannelKind;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
@@ -277,7 +278,14 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     @Override
     public void exitRule(channelTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
-        typeModelStack.push(new TypeChannelModelImpl(elementType));
+        ChannelKind channelKind = ChannelKind.SendReceive;
+        if (ctx.send != null) {
+            channelKind = ChannelKind.Send;
+        } else if (ctx.recv != null) {
+            channelKind = ChannelKind.Receive;
+        }
+
+        typeModelStack.push(new TypeChannelModelImpl(elementType, channelKind));
         assert !typeModelStack.isEmpty();
     }
 

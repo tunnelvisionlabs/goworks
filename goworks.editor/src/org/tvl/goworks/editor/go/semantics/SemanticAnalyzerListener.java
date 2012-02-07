@@ -701,6 +701,13 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                     return;
                 }
 
+                ChannelKind channelKind = ChannelKind.SendReceive;
+                if (ctx.send != null) {
+                    channelKind = ChannelKind.Send;
+                } else if (ctx.recv != null) {
+                    channelKind = ChannelKind.Receive;
+                }
+
                 List<TypeModelImpl> channelTypes = new ArrayList<TypeModelImpl>();
                 for (CodeElementModel model : elementTypes) {
                     if (!(model instanceof TypeModelImpl)) {
@@ -708,7 +715,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                     }
 
                     TypeModelImpl elementType = (TypeModelImpl)model;
-                    TypeModelImpl channelType = new TypeChannelModelImpl(elementType);
+                    TypeModelImpl channelType = new TypeChannelModelImpl(elementType, channelKind);
                     channelTypes.add(channelType);
                 }
 

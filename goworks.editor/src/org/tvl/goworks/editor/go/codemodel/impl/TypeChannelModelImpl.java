@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.tvl.goworks.editor.go.codemodel.ChannelKind;
 import org.tvl.goworks.editor.go.codemodel.TypeChannelModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -19,13 +20,21 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  */
 public class TypeChannelModelImpl extends TypeWrapperModelImpl implements TypeChannelModel {
 
-    public TypeChannelModelImpl(TypeModelImpl elementType) {
+    private final ChannelKind channelKind;
+
+    public TypeChannelModelImpl(TypeModelImpl elementType, ChannelKind channelKind) {
         super("chan " + elementType.getName(), elementType);
+        this.channelKind = channelKind;
     }
 
     @Override
     public TypeKind getKind() {
         return TypeKind.CHANNEL;
+    }
+
+    @Override
+    public ChannelKind getChannelKind() {
+        return channelKind;
     }
 
     @Override

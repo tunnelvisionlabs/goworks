@@ -71,6 +71,7 @@ import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
+import org.tvl.goworks.editor.go.codemodel.ChannelKind;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.CodeModelCache;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
@@ -1421,13 +1422,20 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result.addAll(resolveTarget(ctx.elemType));
                 }
 
+                ChannelKind channelKind = ChannelKind.SendReceive;
+                if (ctx.send != null) {
+                    channelKind = ChannelKind.Send;
+                } else if (ctx.recv != null) {
+                    channelKind = ChannelKind.Receive;
+                }
+
                 for (int i = result.size() - 1; i >= 0; i--) {
                     if (!(result.get(i) instanceof TypeModelImpl)) {
                         result.remove(i);
                         continue;
                     }
 
-                    result.set(i, new TypeChannelModelImpl((TypeModelImpl)result.get(i)));
+                    result.set(i, new TypeChannelModelImpl((TypeModelImpl)result.get(i), channelKind));
                 }
 
                 annotations.putProperty(ctx, ATTR_TARGET, result);

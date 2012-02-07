@@ -14,4 +14,6 @@ package org.tvl.goworks.editor.go.codemodel;
  */
 public interface TypeChannelModel extends TypeWrapperModel {
 
+    ChannelKind getChannelKind();
+
 }
