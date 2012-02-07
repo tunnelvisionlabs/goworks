@@ -9,7 +9,10 @@
 package org.tvl.goworks.editor.go.parser;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -28,6 +31,7 @@ import org.netbeans.spi.editor.hints.Severity;
  */
 public class GoParser extends GoParserBase {
     private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+	private final Set<String> packageNames = new HashSet<String>();
     private DocumentSnapshot snapshot;
 
     public GoParser(TokenStream input) {
@@ -47,6 +51,9 @@ public class GoParser extends GoParserBase {
     @Override
     public void reset() {
         super.reset();
+        if (packageNames != null) {
+            packageNames.clear();
+        }
         if (syntaxErrors != null) {
             syntaxErrors.clear();
         }
@@ -63,6 +70,30 @@ public class GoParser extends GoParserBase {
         } else {
             this.snapshot = null;
         }
+    }
+
+    @Override
+    protected void addPackageName(Token token) {
+        String name = getPackageName(token);
+        if (name == null || name.isEmpty()) {
+            return;
+        }
+
+        packageNames.add(name);
+    }
+
+    @Override
+    protected boolean isPackageName(Token token) {
+        return token != null && packageNames.contains(token.getText());
+    }
+
+    public Collection<? extends String> getPackageNames() {
+        return packageNames;
+    }
+
+    public void setPackageNames(Collection<? extends String> names) {
+        packageNames.clear();
+        packageNames.addAll(names);
     }
 
     protected class ErrorListener implements ANTLRErrorListener<Token> {
