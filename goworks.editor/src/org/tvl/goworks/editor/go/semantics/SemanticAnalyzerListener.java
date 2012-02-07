@@ -2310,12 +2310,34 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void enterRule(rangeClauseContext ctx) {
         if (ctx.defeq != null) {
-            LOGGER.log(Level.WARNING, "Failed to create local vars for range clause.");
+            if (ctx.e1 != null && ctx.e1.start == ParseTrees.getStopSymbol(ctx.e1)) {
+                Token token = ctx.e1.start;
+                visibleLocals.peek().put(token.getText(), token);
+                tokenDecorator.putProperty(token, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+                tokenDecorator.putProperty(token, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
+                tokenDecorator.putProperty(token, GoAnnotations.IMPLICIT_TYPE, ctx);
+                tokenDecorator.putProperty(token, GoAnnotations.IMPLICIT_INDEX, 0);
+            }
+
+            if (ctx.e2 != null && ctx.e2.start == ParseTrees.getStopSymbol(ctx.e2)) {
+                Token token = ctx.e2.start;
+                visibleLocals.peek().put(token.getText(), token);
+                tokenDecorator.putProperty(token, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+                tokenDecorator.putProperty(token, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
+                tokenDecorator.putProperty(token, GoAnnotations.IMPLICIT_TYPE, ctx);
+                tokenDecorator.putProperty(token, GoAnnotations.IMPLICIT_INDEX, 1);
+            }
         }
     }
 
     @Override
     public void exitRule(rangeClauseContext ctx) {
+        CodeElementReference exprType = CodeElementReference.UNKNOWN;
+        if (ctx.e != null) {
+            exprType = new RangeClauseResultReference(treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE));
+        }
+
+        treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
     }
 
     @Override
@@ -2453,6 +2475,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             add(channelContext.class);
             add(conditionContext.class);
             add(recvExprContext.class);
+            add(rangeClauseContext.class);
         }};
 
     private static final Set<Class<? extends ParseTree>> CODE_CLASS_CONTEXTS =
