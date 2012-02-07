@@ -8,8 +8,10 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.netbeans.api.annotations.common.NonNull;
 import org.tvl.goworks.editor.go.codemodel.TypeArrayModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
@@ -22,6 +24,20 @@ public class TypeArrayModelImpl extends TypeWrapperModelImpl implements TypeArra
 
     public TypeArrayModelImpl(@NonNull TypeModelImpl elementType) {
         super("[...]" + elementType.getName(), elementType);
+    }
+
+    @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        if (isResolved()) {
+            return Collections.singletonList(this);
+        }
+
+        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getElementType().resolve());
+        for (int i = 0; i < resolved.size(); i++) {
+            resolved.set(i, new TypeArrayModelImpl(resolved.get(i)));
+        }
+
+        return resolved;
     }
 
     @Override

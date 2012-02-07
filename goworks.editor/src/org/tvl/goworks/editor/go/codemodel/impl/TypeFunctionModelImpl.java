@@ -30,6 +30,16 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
     }
 
     @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        return Collections.singletonList(this);
+    }
+
+    @Override
+    public boolean isResolved() {
+        return true;
+    }
+
+    @Override
     public boolean isMethod() {
         return false;
     }

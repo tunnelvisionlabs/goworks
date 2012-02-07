@@ -9,12 +9,16 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
 public interface TypeModel extends CodeElementModel {
+
+    @NonNull
+    Collection<? extends TypeModel> resolve();
 
     String getSimpleName();
 

@@ -8,14 +8,10 @@
  */
 package org.tvl.goworks.editor.go.codemodel;
 
-import java.util.Collection;
-
 /**
  *
  * @author Sam Harwell
  */
 public interface TypeReferenceModel extends TypeModel {
-
-    Collection<? extends TypeModel> resolve();
 
 }

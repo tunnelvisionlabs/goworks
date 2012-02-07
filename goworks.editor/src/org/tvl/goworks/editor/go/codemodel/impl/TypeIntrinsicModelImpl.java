@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.IntrinsicKind;
 import org.tvl.goworks.editor.go.codemodel.TypeIntrinsicModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
@@ -23,6 +25,16 @@ public class TypeIntrinsicModelImpl extends TypeModelImpl implements TypeIntrins
     public TypeIntrinsicModelImpl(IntrinsicKind kind) {
         super(kind.toString().toLowerCase(), IntrinsicFileModelImpl.INSTANCE);
         this.kind = kind;
+    }
+
+    @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        return Collections.singletonList(this);
+    }
+
+    @Override
+    public boolean isResolved() {
+        return true;
     }
 
     @Override

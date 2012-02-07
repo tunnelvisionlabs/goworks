@@ -25,6 +25,16 @@ public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
     }
 
     @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        return Collections.singletonList(this);
+    }
+
+    @Override
+    public boolean isResolved() {
+        return true;
+    }
+
+    @Override
     public TypeKind getKind() {
         return TypeKind.STRUCT;
     }

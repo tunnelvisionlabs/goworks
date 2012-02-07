@@ -8,11 +8,12 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeMapModel;
-import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
  *
@@ -29,6 +30,29 @@ public class TypeMapModelImpl extends TypeModelImpl implements TypeMapModel {
     }
 
     @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        if (isResolved()) {
+            return Collections.singletonList(this);
+        }
+
+        Collection<? extends TypeModelImpl> resolvedKey = getKeyType().resolve();
+        Collection<? extends TypeModelImpl> resolvedValue = getValueType().resolve();
+        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>();
+        for (TypeModelImpl keyModel : resolvedKey) {
+            for (TypeModelImpl valueModel : resolvedValue) {
+                resolved.add(new TypeMapModelImpl(keyModel, valueModel));
+            }
+        }
+
+        return resolved;
+    }
+
+    @Override
+    public boolean isResolved() {
+        return keyType.isResolved() && valueType.isResolved();
+    }
+
+    @Override
     public TypeKind getKind() {
         return TypeKind.MAP;
     }
@@ -39,12 +63,12 @@ public class TypeMapModelImpl extends TypeModelImpl implements TypeMapModel {
     }
 
     @Override
-    public TypeModel getKeyType() {
+    public TypeModelImpl getKeyType() {
         return keyType;
     }
 
     @Override
-    public TypeModel getValueType() {
+    public TypeModelImpl getValueType() {
         return valueType;
     }
 

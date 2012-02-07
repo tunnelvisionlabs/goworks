@@ -24,6 +24,11 @@ public abstract class TypeWrapperModelImpl extends TypeModelImpl implements Type
     }
 
     @Override
+    public boolean isResolved() {
+        return elementType.isResolved();
+    }
+
+    @Override
     public TypeModelImpl getElementType() {
         return elementType;
     }

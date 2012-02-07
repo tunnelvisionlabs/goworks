@@ -94,6 +94,11 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
     }
 
     @Override
+    public boolean isResolved() {
+        return false;
+    }
+
+    @Override
     public Collection<FieldModelImpl> getFields() {
         Collection<? extends TypeModelImpl> resolved = resolve();
         if (resolved == null || resolved.isEmpty()) {

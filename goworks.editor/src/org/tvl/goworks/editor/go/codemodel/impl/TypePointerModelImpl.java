@@ -28,6 +28,20 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
     }
 
     @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        if (isResolved()) {
+            return Collections.singletonList(this);
+        }
+
+        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getElementType().resolve());
+        for (int i = 0; i < resolved.size(); i++) {
+            resolved.set(i, new TypePointerModelImpl(resolved.get(i)));
+        }
+
+        return resolved;
+    }
+
+    @Override
     public TypeKind getKind() {
         return TypeKind.POINTER;
     }

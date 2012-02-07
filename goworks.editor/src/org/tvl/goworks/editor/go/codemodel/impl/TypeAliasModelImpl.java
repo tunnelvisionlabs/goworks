@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.tvl.goworks.editor.go.codemodel.TypeAliasModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
@@ -19,11 +20,31 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  * @author Sam Harwell
  */
 public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel {
+
     private final TypeModelImpl type;
 
     public TypeAliasModelImpl(String name, TypeModelImpl type, FileModelImpl fileModel) {
         super(name, fileModel);
         this.type = type;
+    }
+
+    @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        if (isResolved()) {
+            return Collections.singletonList(this);
+        }
+
+        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getType().resolve());
+        for (int i = 0; i < resolved.size(); i++) {
+            resolved.set(i, new TypeAliasModelImpl(getName(), resolved.get(i), getFile()));
+        }
+
+        return resolved;
+    }
+
+    @Override
+    public boolean isResolved() {
+        return type.isResolved();
     }
 
     @Override

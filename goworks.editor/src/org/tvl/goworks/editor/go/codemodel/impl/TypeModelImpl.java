@@ -25,6 +25,13 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
     }
 
     @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        return Collections.singletonList(this);
+    }
+
+    public abstract boolean isResolved();
+
+    @Override
     public Collection<FieldModelImpl> getFields() {
         return Collections.emptyList();
     }

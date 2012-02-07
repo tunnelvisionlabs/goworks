@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import org.tvl.goworks.editor.go.codemodel.InterfaceModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -22,6 +23,16 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
 
     public TypeInterfaceModelImpl(String name, FileModelImpl fileModel) {
         super(name, fileModel);
+    }
+
+    @Override
+    public Collection<? extends TypeModelImpl> resolve() {
+        return Collections.singletonList(this);
+    }
+
+    @Override
+    public boolean isResolved() {
+        return true;
     }
 
     @Override

@@ -1755,6 +1755,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         }
 
         @Override
+        public Collection<? extends TypeModelImpl> resolve() {
+            return Collections.singletonList(this);
+        }
+
+        @Override
+        public boolean isResolved() {
+            return true;
+        }
+
+        @Override
         public TypeKind getKind() {
             return TypeKind.UNKNOWN;
         }
