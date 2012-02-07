@@ -62,6 +62,7 @@ import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionErrorStrategy;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionTokenSource;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
@@ -121,6 +122,11 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.typeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeLiteralContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
+import org.tvl.goworks.editor.go.semantics.CodeElementReference;
+import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
+import org.tvl.goworks.editor.go.semantics.GoAnnotations;
+import org.tvl.goworks.editor.go.semantics.NodeType;
+import org.tvl.goworks.editor.go.semantics.SemanticAnalyzer;
 
 /**
  *
@@ -272,6 +278,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             // Add context items (labels, etc). Use anchor points to optimize information gathering.
 
             Map<RuleContext, CaretReachedException> parseTrees;
+            Map<RuleContext, GoAnnotatedParseTree> annotatedParseTrees;
             CaretToken caretToken = null;
 
             List<Anchor> anchors;
@@ -342,15 +349,29 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     try {
                         parser.setBuildParseTree(true);
                         parser.setErrorHandler(new CodeCompletionErrorStrategy());
-                        parser.setCheckPackageNames(false);
+                        @SuppressWarnings("LocalVariableHidesMemberVariable")
+                        FileModel fileModel = getFileModel();
+                        if (fileModel != null) {
+                            Set<String> packageNames = new HashSet<String>();
+                            for (ImportDeclarationModel model : fileModel.getImportDeclarations()) {
+                                String name = model.getName();
+                                if (!name.isEmpty() && !name.equals(".")) {
+                                    packageNames.add(name);
+                                }
+                            }
+
+                            parser.setPackageNames(packageNames);
+                        }
 
                         switch (previous.getRule()) {
                         case GoParserBase.RULE_topLevelDecl:
                             parseTrees = getParseTrees(parser);
+                            annotatedParseTrees = analyzeParseTrees(snapshot.getVersionedDocument(), parseTrees);
                             break;
 
                         default:
                             parseTrees = null;
+                            annotatedParseTrees = null;
                             break;
                         }
 
@@ -380,8 +401,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         switch (ruleIndex) {
                                         case GoParserBase.RULE_methodName:
                                             {
-                                                int invokingState = entry.getValue().getFinalContext().invokingState;
-                                                int invokingRule = invokingState > 0 ? parser.getATN().states.get(invokingState).ruleIndex : -1;
+                                                int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
                                                 if (invokingRule == GoParserBase.RULE_methodSpec || invokingRule == GoParserBase.RULE_methodDecl) {
                                                     possibleDeclaration = true;
                                                 } else {
@@ -392,8 +412,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                         case GoParserBase.RULE_label:
                                             {
-                                                int invokingState = entry.getValue().getFinalContext().invokingState;
-                                                if (invokingState > 0 && parser.getATN().states.get(invokingState).ruleIndex == GoParserBase.RULE_labeledStmt) {
+                                                int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
+                                                if (invokingRule == GoParserBase.RULE_labeledStmt) {
                                                     possibleDeclaration = true;
                                                 } else {
                                                     possibleReference = true;
@@ -605,63 +625,102 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         continue;
                                     }
 
-                                    String text = tokens.toString(selectorTarget.start, selectorTarget.stop);
-                                    if (text == null || text.isEmpty()) {
-                                        continue;
+                                    final boolean INCLUDE_EXPRESSION = false;
+                                    if (INCLUDE_EXPRESSION) {
+                                        String text = tokens.toString(selectorTarget.start, selectorTarget.stop);
+                                        if (text != null && !text.isEmpty()) {
+                                            intermediateResults.put(text, new KeywordCompletionItem(text));
+                                        }
                                     }
 
-                                    Collection<? extends CodeElementModel> models = targetAnalyzer.resolveTarget(selectorTarget);
-                                    assert models != null;
-
-                                    for (CodeElementModel model : models) {
-                                        if (model instanceof PackageModel) {
-                                            PackageModel packageModel = (PackageModel)model;
-                                            if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
-                                                continue;
-                                            }
-
-                                            for (FunctionModel function : packageModel.getFunctions()) {
-                                                intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
-                                            }
-
-                                            for (ConstModel constant : packageModel.getConstants()) {
-                                                intermediateResults.put(constant.getName(), new ConstReferenceCompletionItem(constant, false));
-                                            }
-
-                                            for (VarModel var : packageModel.getVars()) {
-                                                intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
-                                            }
-
-                                            for (TypeModel type : packageModel.getTypes()) {
-                                                intermediateResults.put(type.getName(), new TypeReferenceCompletionItem(type));
-                                            }
-                                        } else if (model instanceof TypeModel) {
-                                            TypeModel typeModel = (TypeModel)model;
-                                            if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
-                                                for (FunctionModel method : typeModel.getMethods()) {
-                                                    intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
-                                                }
-                                                continue;
-                                            }
-
-                                            // TODO: any other possibilities?
-                                        } else if (model instanceof VarModel) {
-                                            VarModel varModel = (VarModel)model;
-                                            if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
-                                                continue;
-                                            }
-
-                                            TypeModel varType = varModel.getVarType();
-                                            for (FunctionModel method : varType.getMethods()) {
-                                                intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
-                                            }
-
-                                            for (VarModel var : varType.getFields()) {
-                                                intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
-                                            }
-                                        } else {
-                                            LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
+                                    GoAnnotatedParseTree annotatedParseTree = annotatedParseTrees.get(entry.getKey());
+                                    Map<?, ?> properties = annotatedParseTree.getTreeDecorator().getProperties(selectorTarget);
+                                    PackageModel currentPackage = getFileModel().getPackage();
+                                    Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
+                                    for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
+                                        Collection<PackageModel> packages = resolvedPackages.get(importDeclarationModel.getName());
+                                        if (packages == null) {
+                                            packages = new ArrayList<PackageModel>();
+                                            resolvedPackages.put(importDeclarationModel.getName(), packages);
                                         }
+
+                                        packages.addAll(CodeModelCacheImpl.getInstance().getPackages(getFileModel().getPackage().getProject(), importDeclarationModel.getPath()));
+                                    }
+
+                                    Collection<? extends CodeElementModel> models = resolveSelectorTarget(selectorTarget, annotatedParseTree, currentPackage, resolvedPackages);
+                                    if (models == null || models.isEmpty()) {
+                                        models = targetAnalyzer.resolveTarget(selectorTarget);
+                                    }
+
+                                    assert models != null;
+                                    for (CodeElementModel model : models) {
+                                        Collection<? extends CodeElementModel> selected = SemanticAnalyzer.getSelectableMembers(model);
+                                        for (CodeElementModel selectedModel : selected) {
+                                            if (selectedModel instanceof FunctionModel) {
+                                                FunctionModel function = (FunctionModel)selectedModel;
+                                                intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
+                                            } else if (selectedModel instanceof ConstModel) {
+                                                ConstModel function = (ConstModel)selectedModel;
+                                                intermediateResults.put(function.getName(), new ConstReferenceCompletionItem(function, false));
+                                            } else if (selectedModel instanceof VarModel) {
+                                                VarModel function = (VarModel)selectedModel;
+                                                intermediateResults.put(function.getName(), new VarReferenceCompletionItem(function, false));
+                                            } else if (selectedModel instanceof TypeModel) {
+                                                TypeModel function = (TypeModel)selectedModel;
+                                                intermediateResults.put(function.getName(), new TypeReferenceCompletionItem(function));
+                                            } else {
+                                                LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
+                                            }
+                                        }
+
+                                        //if (model instanceof PackageModel) {
+                                        //    PackageModel packageModel = (PackageModel)model;
+                                        //    if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                        //        continue;
+                                        //    }
+                                        //
+                                        //    for (FunctionModel function : packageModel.getFunctions()) {
+                                        //        intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
+                                        //    }
+                                        //
+                                        //    for (ConstModel constant : packageModel.getConstants()) {
+                                        //        intermediateResults.put(constant.getName(), new ConstReferenceCompletionItem(constant, false));
+                                        //    }
+                                        //
+                                        //    for (VarModel var : packageModel.getVars()) {
+                                        //        intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
+                                        //    }
+                                        //
+                                        //    for (TypeModel type : packageModel.getTypes()) {
+                                        //        intermediateResults.put(type.getName(), new TypeReferenceCompletionItem(type));
+                                        //    }
+                                        //} else if (model instanceof TypeModel) {
+                                        //    TypeModel typeModel = (TypeModel)model;
+                                        //    if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                        //        for (FunctionModel method : typeModel.getMethods()) {
+                                        //            intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
+                                        //        }
+                                        //        continue;
+                                        //    }
+                                        //
+                                        //    // TODO: any other possibilities?
+                                        //} else if (model instanceof VarModel) {
+                                        //    VarModel varModel = (VarModel)model;
+                                        //    if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                        //        continue;
+                                        //    }
+                                        //
+                                        //    TypeModel varType = varModel.getVarType();
+                                        //    for (FunctionModel method : varType.getMethods()) {
+                                        //        intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
+                                        //    }
+                                        //
+                                        //    for (VarModel var : varType.getFields()) {
+                                        //        intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
+                                        //    }
+                                        //} else {
+                                        //    LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
+                                        //}
                                     }
                                 } else if (finalContext instanceof GoParserBase.packageNameContext) {
                                     /* AVAILABLE PACKAGES
@@ -1542,6 +1601,118 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 annotations.putProperty(context, ATTR_TARGET, models);
             }
+        }
+
+        private Collection<? extends CodeElementModel> resolveSelectorTarget(ParserRuleContext<Token> qualifier, GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
+            if (qualifier == null) {
+                // don't have the information necessary to resolve
+                return Collections.emptyList();
+            }
+
+            ObjectDecorator<Tree> treeDecorator = annotatedParseTree.getTreeDecorator();
+            ObjectDecorator<Token> tokenDecorator = annotatedParseTree.getTokenDecorator();
+            Collection<? extends CodeElementModel> resolvedQualifier = treeDecorator.getProperty(qualifier, GoAnnotations.MODELS);
+            if (resolvedQualifier == null) {
+                CodeElementReference qualifierCodeClass = treeDecorator.getProperty(qualifier, GoAnnotations.CODE_CLASS);
+                if (qualifierCodeClass != null) {
+                    resolvedQualifier = qualifierCodeClass.resolve(annotatedParseTree, currentPackage, resolvedPackages);
+                }
+            }
+
+            if (resolvedQualifier == null) {
+                CodeElementReference qualifierExprType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPR_TYPE);
+                if (qualifierExprType != null) {
+                    resolvedQualifier = qualifierExprType.resolve(annotatedParseTree, currentPackage, resolvedPackages);
+                }
+            }
+
+            if (resolvedQualifier == null) {
+                NodeType qualifierNodeType = treeDecorator.getProperty(qualifier, GoAnnotations.NODE_TYPE);
+                if (qualifierNodeType == NodeType.UNDEFINED) {
+                    if (treeDecorator.getProperty(qualifier, GoAnnotations.QUALIFIED_EXPR)) {
+                        // haven't resolved the qualifier, which is itself a qualified expression
+                        return Collections.emptyList();
+                    }
+
+                    Token unqualifiedLink = treeDecorator.getProperty(qualifier, GoAnnotations.UNQUALIFIED_LINK);
+                    if (unqualifiedLink != null) {
+                        Map<? extends ObjectProperty<?>, ?> properties = tokenDecorator.getProperties(unqualifiedLink);
+//                        treeDecorator.putProperties(qualifier, properties);
+                        qualifierNodeType = treeDecorator.getProperty(qualifier, GoAnnotations.NODE_TYPE);
+                        if (qualifierNodeType == NodeType.UNDEFINED) {
+//                            treeDecorator.putProperty(qualifier, GoAnnotations.NODE_TYPE, NodeType.UNKNOWN);
+                            qualifierNodeType = NodeType.UNKNOWN;
+                        }
+                    } else {
+                        LOGGER.log(Level.WARNING, "Unable to resolve unqualified link from qualifier: {0}", qualifier);
+                        qualifierNodeType = NodeType.UNKNOWN;
+                    }
+                }
+
+                assert qualifierNodeType != NodeType.UNDEFINED;
+
+                if (qualifierNodeType == NodeType.UNKNOWN) {
+                    // can't resolve a dereference if the qualifier couldn't be resolved
+//                    tokenDecorator.putProperty(token, GoAnnotations.NODE_TYPE, NodeType.UNKNOWN);
+//                    treeDecorator.putProperty(node, GoAnnotations.NODE_TYPE, NodeType.UNKNOWN);
+                    return Collections.emptyList();
+                }
+
+                if (qualifierNodeType == NodeType.TYPE_LITERAL) {
+                    throw new UnsupportedOperationException("Not yet implemented");
+                    //return resolveQualifierType(qualifier, currentPackage, resolvedPackages);
+                } else if (qualifierNodeType == NodeType.PACKAGE_REF) {
+                    assert qualifier instanceof packageNameContext;
+                    String packageName = ((packageNameContext)qualifier).name.getText();
+                    resolvedQualifier = resolvedPackages.get(packageName);
+                    if (resolvedQualifier == null) {
+                        resolvedQualifier = Collections.emptyList();
+                    }
+                } else if (qualifierNodeType == NodeType.VAR_REF) {
+                    // must be referring to something within the current file since it's resolved internally
+                    Token target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
+                    assert tokenDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
+                    ParserRuleContext<Token> explicitType = tokenDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE);
+                    if (explicitType != null) {
+                        LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier);
+                        resolvedQualifier = Collections.emptyList();
+                    } else {
+                        ParserRuleContext<Token> implicitType = tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE);
+                        int implicitIndex = tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX);
+                        LOGGER.log(Level.WARNING, "Unable to resolve implicit type for qualifier: {0}", qualifier);
+                        resolvedQualifier = Collections.emptyList();
+                    }
+                } else {
+                    LOGGER.log(Level.WARNING, "Unable to resolve qualifier: {0}", qualifier);
+                    resolvedQualifier = Collections.emptyList();
+                }
+            }
+
+            assert resolvedQualifier != null;
+            if (resolvedQualifier == null) {
+                LOGGER.log(Level.WARNING, "Should not have a null resolved qualifier at this point.");
+                resolvedQualifier = Collections.emptyList();
+            }
+
+            return resolvedQualifier;
+            //List<CodeElementModel> qualifiedModels = new ArrayList<CodeElementModel>();
+            //for (CodeElementModel model : resolvedQualifier) {
+            //    qualifiedModels.addAll(SemanticAnalyzer.getSelectableMembers(model));
+            //}
+            //
+            //return qualifiedModels;
+        }
+
+        private Map<RuleContext, GoAnnotatedParseTree> analyzeParseTrees(VersionedDocument document, Map<? extends RuleContext, ? extends CaretReachedException> parseTrees) {
+            Map<RuleContext, GoAnnotatedParseTree> result = new IdentityHashMap<RuleContext, GoAnnotatedParseTree>();
+            for (Map.Entry<? extends RuleContext, ? extends CaretReachedException> entry : parseTrees.entrySet()) {
+                @SuppressWarnings("unchecked")
+                ParserRuleContext<Token> context = (ParserRuleContext<Token>)entry.getKey();
+                GoAnnotatedParseTree annotatedTree = SemanticAnalyzer.analyze(document, context);
+                result.put(context, annotatedTree);
+            }
+
+            return result;
         }
     }
 
