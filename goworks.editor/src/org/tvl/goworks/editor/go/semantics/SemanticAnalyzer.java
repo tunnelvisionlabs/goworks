@@ -59,6 +59,10 @@ public final class SemanticAnalyzer {
             name = "";
         }
 
+        if (model instanceof BundledReturnTypeModel) {
+            model = ((BundledReturnTypeModel)model).getReturnValues().get(0);
+        }
+
         CodeElementModel source = model;
         if (source instanceof VarModel) {
             source = ((VarModel)source).getVarType();
