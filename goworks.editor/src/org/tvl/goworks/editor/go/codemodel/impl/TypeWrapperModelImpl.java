@@ -43,7 +43,7 @@ public abstract class TypeWrapperModelImpl extends TypeModelImpl implements Type
             return false;
         }
 
-        return getElementType().equals(((TypeWrapperModel)obj).getElementType());
+        return getElementType().resolve().equals(((TypeWrapperModel)obj).getElementType().resolve());
     }
 
     @Override

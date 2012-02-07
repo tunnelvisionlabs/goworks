@@ -81,16 +81,22 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
         }
 
         List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
-        Collection<? extends FunctionModelImpl> packageFunctions = getPackage().getFunctions();
-        for (FunctionModelImpl function : packageFunctions) {
-            ParameterModel receiver = function.getReceiverParameter();
-            if (receiver == null) {
-                continue;
+        if (!isResolved()) {
+            for (TypeModelImpl resolved : this.resolve()) {
+                functions.addAll(resolved.getMethods());
             }
+        } else {
+            Collection<? extends FunctionModelImpl> packageFunctions = getElementType().getPackage().getFunctions();
+            for (FunctionModelImpl function : packageFunctions) {
+                ParameterModel receiver = function.getReceiverParameter();
+                if (receiver == null) {
+                    continue;
+                }
 
-            TypeModel receiverType = receiver.getVarType();
-            if (this.equals(receiverType) || this.getElementType().equals(receiverType)) {
-                functions.add(function);
+                TypeModel receiverType = receiver.getVarType();
+                if (this.equals(receiverType) || this.getElementType().equals(receiverType)) {
+                    functions.add(function);
+                }
             }
         }
 
@@ -104,16 +110,22 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
         }
 
         List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
-        Collection<? extends FunctionModelImpl> packageFunctions = getPackage().getFunctions(name);
-        for (FunctionModelImpl function : packageFunctions) {
-            ParameterModel receiver = function.getReceiverParameter();
-            if (receiver == null) {
-                continue;
+        if (!isResolved()) {
+            for (TypeModelImpl resolved : this.resolve()) {
+                functions.addAll(resolved.getMethods(name));
             }
+        } else {
+            Collection<? extends FunctionModelImpl> packageFunctions = getElementType().getPackage().getFunctions(name);
+            for (FunctionModelImpl function : packageFunctions) {
+                ParameterModel receiver = function.getReceiverParameter();
+                if (receiver == null) {
+                    continue;
+                }
 
-            TypeModel receiverType = receiver.getVarType();
-            if (this.equals(receiverType) || this.getElementType().equals(receiverType)) {
-                functions.add(function);
+                TypeModel receiverType = receiver.getVarType();
+                if (this.equals(receiverType) || this.getElementType().equals(receiverType)) {
+                    functions.add(function);
+                }
             }
         }
 
