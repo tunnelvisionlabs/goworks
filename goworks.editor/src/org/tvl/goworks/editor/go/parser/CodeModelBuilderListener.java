@@ -325,7 +325,8 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
 
     @Override
     public void enterRule(methodDeclContext ctx) {
-        FunctionModelImpl model = new FunctionModelImpl(ctx.name.name.getText(), fileModel);
+        String name = ctx.name != null && ctx.name.name != null ? ctx.name.name.getText() : createAnonymousTypeName(ctx);
+        FunctionModelImpl model = new FunctionModelImpl(name, fileModel);
         functionContainerStack.peek().add(model);
         functionModelStack.push(model);
         parameterContainerStack.push(model.getParameters());
@@ -371,13 +372,15 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
             name = ctx.name.getText();
         }
 
-        TypeModelImpl type = typeModelStack.pop();
-        if (ctx.ptr != null) {
-            type = new TypePointerModelImpl(type);
-        }
+        if (ctx.typ != null) {
+            TypeModelImpl type = typeModelStack.pop();
+            if (ctx.ptr != null) {
+                type = new TypePointerModelImpl(type);
+            }
 
-        ParameterModelImpl receiver = new ParameterModelImpl(name, VarKind.RECEIVER, type, fileModel);
-        ((FunctionModelImpl)functionModelStack.peek()).setReceiverParameter(receiver);
+            ParameterModelImpl receiver = new ParameterModelImpl(name, VarKind.RECEIVER, type, fileModel);
+            ((FunctionModelImpl)functionModelStack.peek()).setReceiverParameter(receiver);
+        }
     }
 
     @Override
