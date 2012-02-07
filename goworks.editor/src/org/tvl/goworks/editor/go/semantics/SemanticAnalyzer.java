@@ -46,11 +46,19 @@ public final class SemanticAnalyzer {
         return annotatedParseTree;
     }
 
+    public static Collection<? extends CodeElementModel> getSelectableMembers(CodeElementModel model) {
+        return getSelectableMembers(model, "", true);
+    }
+
     public static Collection<? extends CodeElementModel> getSelectableMembers(CodeElementModel model, String name) {
         return getSelectableMembers(model, name, true);
     }
 
     public static Collection<? extends CodeElementModel> getSelectableMembers(CodeElementModel model, String name, boolean includeExtendedMembers) {
+        if (name == null) {
+            name = "";
+        }
+
         CodeElementModel source = model;
         if (source instanceof VarModel) {
             source = ((VarModel)source).getVarType();
@@ -88,7 +96,7 @@ public final class SemanticAnalyzer {
             source = new TypePointerModelImpl(typeSource);
         }
 
-        Collection<? extends CodeElementModel> members = source.getMembers(name);
+        Collection<? extends CodeElementModel> members = name.isEmpty() ? source.getMembers() : source.getMembers(name);
         if (!includeExtendedMembers) {
             return members;
         }
