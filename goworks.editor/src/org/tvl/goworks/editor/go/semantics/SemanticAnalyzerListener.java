@@ -57,6 +57,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.addAssignOpContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.addExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.andExprContext;
@@ -246,6 +247,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         this.annotatedParseTree = annotatedParseTree;
         this.treeDecorator = annotatedParseTree.getTreeDecorator();
         this.tokenDecorator = annotatedParseTree.getTokenDecorator();
+        pushVarScope();
     }
 
     public void resolveReferences() {
@@ -765,8 +767,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterRule(packageNameContext ctx) {
-        NodeType nodeType = treeDecorator.getProperty(ctx, GoAnnotations.NODE_TYPE);
-        assert nodeType == NodeType.PACKAGE_DECL || nodeType == NodeType.PACKAGE_REF;
+        int invokingRule = ParseTrees.getInvokingRule(GoParserBase._ATN, ctx);
+        NodeType nodeType = invokingRule == GoParser.RULE_packageClause ? NodeType.PACKAGE_DECL : NodeType.PACKAGE_REF;
+        treeDecorator.putProperty(ctx, GoAnnotations.NODE_TYPE, nodeType);
         if (ctx.name != null) {
             tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, nodeType);
             if (treeDecorator.getProperty(ctx, GoAnnotations.RESOLVED)) {
@@ -1387,10 +1390,6 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
             packageList.add(target);
         }
-
-        if (ctx.name != null) {
-            treeDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.PACKAGE_REF);
-        }
     }
 
     @Override
@@ -1488,9 +1487,6 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterRule(packageClauseContext ctx) {
-        if (ctx.name != null) {
-            treeDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.PACKAGE_DECL);
-        }
     }
 
     @Override
@@ -1571,7 +1567,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         if (ctx.getChildCount() == 1 && ctx.getChild(0) instanceof operandContext) {
             treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.getChild(0)));
         } else {
-            LOGGER.log(Level.WARNING, "Expression resolution links are not supported for context: {0}", ctx);
+            LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParserBase(null)));
         }
     }
 
@@ -1610,7 +1606,6 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void enterRule(qualifiedIdentifierContext ctx) {
         if (ctx.pkg != null) {
-            treeDecorator.putProperty(ctx.pkg, GoAnnotations.NODE_TYPE, NodeType.PACKAGE_REF);
             if (ctx.id != null) {
                 tokenDecorator.putProperty(ctx.id, GoAnnotations.QUALIFIED_EXPR, true);
                 tokenDecorator.putProperty(ctx.id, GoAnnotations.QUALIFIER, ctx.pkg);
@@ -1943,13 +1938,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterRule(sourceFileContext ctx) {
-        pushVarScope();
     }
 
     @Override
     public void exitRule(sourceFileContext ctx) {
-        // popping var scope here breaks a later call to resolveReferences
-        //popVarScope();
     }
 
     @Override
@@ -2341,7 +2333,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         if (ctx.qid != null) {
             treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.qid));
         } else {
-            LOGGER.log(Level.WARNING, "Expression resolution links are not supported for context: {0}", ctx);
+            LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParserBase(null)));
         }
     }
 
