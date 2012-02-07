@@ -20,6 +20,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
@@ -115,7 +116,7 @@ public class GoDeclarationsScanner {
             identifierListContext idListContext = ctx.idList;
             List<Token> identifiers = idListContext.ids_list;
             for (Token identifier : identifiers) {
-                Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
+                Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.CONSTANT);
@@ -135,7 +136,7 @@ public class GoDeclarationsScanner {
             identifierListContext idListContext = ctx.idList;
             List<Token> identifiers = idListContext.ids_list;
             for (Token identifier : identifiers) {
-                Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
+                Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
@@ -155,7 +156,7 @@ public class GoDeclarationsScanner {
             identifierListContext idListContext = ctx.idList;
             List<Token> identifiers = idListContext.ids_list;
             for (Token identifier : identifiers) {
-                Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
+                Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
@@ -171,7 +172,7 @@ public class GoDeclarationsScanner {
             if (idListContext != null) {
                 List<Token> identifiers = idListContext.ids_list;
                 for (Token identifier : identifiers) {
-                    Interval sourceInterval = new Interval(identifier.getStartIndex(), ctx.stop.getStopIndex());
+                    Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                     String signature = String.format("%s", identifier.getText());
 
                     GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FIELD);
@@ -184,7 +185,7 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterRule(structTypeContext ctx) {
-            Interval sourceInterval = new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+            Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.STRUCT);
@@ -202,7 +203,7 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterRule(functionDeclContext ctx) {
-            Interval sourceInterval = new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+            Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = String.format("%s", ctx.name.getText());
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FUNCTION);
@@ -220,8 +221,9 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterRule(methodDeclContext ctx) {
-            Interval sourceInterval = new Interval(ctx.start.getStartIndex(), ctx.stop.getStopIndex());
-            String signature = String.format("%s", ctx.name.name.getText());
+            Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
+            String name = ctx.name != null && ctx.name.name != null ? ctx.name.name.getText() : "?";
+            String signature = String.format("%s", name);
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
