@@ -8,11 +8,13 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import java.util.Set;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -69,6 +71,21 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
         }
 
         return super.adaptivePredict(input, decision, outerContext);
+    }
+
+    @Override
+    public IntervalSet getAmbiguousAlts(Set<ATNConfig> configs) {
+        IntervalSet result = super.getAmbiguousAlts(configs);
+        if (result != null) {
+            // (workaround) make sure the result contains all possible configs or premature resolution could occur
+            for (ATNConfig config : configs) {
+                if (!result.contains(config.alt)) {
+                    return null;
+                }
+            }
+        }
+
+        return result;
     }
 
 }

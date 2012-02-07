@@ -8,6 +8,7 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
+import java.util.Set;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -15,9 +16,11 @@ import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 
@@ -82,6 +85,21 @@ public class GoParserCache extends AbstractParserCache<GoParser> {
             }
 
             return super.adaptivePredict(input, decision, outerContext);
+        }
+
+        @Override
+        public IntervalSet getAmbiguousAlts(Set<ATNConfig> configs) {
+            IntervalSet result = super.getAmbiguousAlts(configs);
+            if (result != null) {
+                // (workaround) make sure the result contains all possible configs or premature resolution could occur
+                for (ATNConfig config : configs) {
+                    if (!result.contains(config.alt)) {
+                        return null;
+                    }
+                }
+            }
+
+            return result;
         }
 
     }
