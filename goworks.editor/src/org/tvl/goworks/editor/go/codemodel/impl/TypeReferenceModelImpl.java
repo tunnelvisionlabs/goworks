@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
@@ -65,11 +66,23 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
         }
 
         CodeModelCacheImpl cache = CodeModelCacheImpl.getInstance();
-        Collection<? extends PackageModelImpl> packages;
-        if (referencedPackageName != null) {
-            packages = cache.getPackages(getProject(), referencedPackageName);
-        } else {
-            packages = Collections.singletonList(getPackage());
+        List<PackageModelImpl> packages = new ArrayList<PackageModelImpl>();
+
+        for (ImportDeclarationModel importModel : getFile().getImportDeclarations()) {
+            boolean include = false;
+            if (referencedPackageName != null && !importModel.isMergeWithLocal() && referencedPackageName.equals(importModel.getName())) {
+                include = true;
+            } else if (referencedPackageName == null && importModel.isMergeWithLocal()) {
+                include = true;
+            }
+
+            if (include) {
+                packages.addAll(cache.resolvePackages(importModel));
+            }
+        }
+
+        if (referencedPackageName == null) {
+            packages.add(getPackage());
         }
 
         Collection<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>();

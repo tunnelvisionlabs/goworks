@@ -52,7 +52,12 @@ public class CodeModelCacheImpl implements CodeModelCache {
             return Collections.emptyList();
         }
 
-        return cache.getPackages(path);
+        PackageModelImpl unique = cache.getUniquePackage(path);
+        if (unique == null) {
+            return Collections.emptyList();
+        }
+
+        return Collections.singletonList(unique);
     }
 
     @CheckForNull
@@ -66,10 +71,15 @@ public class CodeModelCacheImpl implements CodeModelCache {
     }
 
     @NonNull
-    public Collection<? extends PackageModel> resolvePackages(ImportDeclarationModel importModel) {
+    public Collection<? extends PackageModelImpl> resolvePackages(ImportDeclarationModel importModel) {
         Project project = importModel.getPackage().getProject();
         CodeModelProjectCache projectCache = getProjectCache(project, false);
-        return projectCache.getPackages(importModel.getPath());
+        PackageModelImpl unique = projectCache.getUniquePackage(importModel.getPath());
+        if (unique == null) {
+            return Collections.emptyList();
+        }
+
+        return Collections.singletonList(unique);
     }
 
     @CheckForNull
