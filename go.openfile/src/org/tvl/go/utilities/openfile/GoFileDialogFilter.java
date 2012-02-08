@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.utilities.openfile;
+package org.tvl.go.utilities.openfile;
 
 import org.netbeans.modules.openfile.OpenFileDialogFilter;
 import org.openide.util.lookup.ServiceProvider;
