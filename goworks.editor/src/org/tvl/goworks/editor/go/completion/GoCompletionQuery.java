@@ -335,7 +335,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     if (enclosing != null) {
                         region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
                     } else {
-                        region = OffsetRegion.fromBounds(previous.getSpan().getEndPosition(snapshot).getOffset(), regionEnd);
+                        // at least for now, include the previous span due to the way error handling places bounds on an anchor
+                        region = OffsetRegion.fromBounds(previous.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
                     }
 
                     if (LOGGER.isLoggable(Level.FINE)) {
@@ -1041,7 +1042,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
         @Override
         protected RuleContext parseImpl(CodeCompletionParser parser) {
-            return ((CodeCompletionGoParser)parser).topLevelDecl();
+            return ((CodeCompletionGoParser)parser).sourceFile();
         }
 
         private FileModel getFileModel() {
