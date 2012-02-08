@@ -510,7 +510,7 @@ typeSwitchStmt
 
 // this should reference primaryExpr, but the ".(type)" extension is unambig
 typeSwitchGuard
-    :   (id=IDENTIFIER ':=')? e=expression dot='.' '(' 'type' ')'
+    :   (id=IDENTIFIER defeq=':=')? e=expression dot='.' '(' 'type' ')'
     ;
 
 typeCaseClause
@@ -568,7 +568,7 @@ commCase
     ;
 
 recvStmt
-    :   (expression (',' expression)? ('=' | ':='))? recvExpr
+    :   (e1=expression (',' e2=expression)? (eq='=' | defeq=':='))? recvExpr
     ;
 
 recvExpr
@@ -609,7 +609,7 @@ builtinArgs
     ;
 
 sourceFile
-    :   pkg=packageClause ';' (importDecls+=importDecl ';')* (decls+=topLevelDecl ';')*
+    :   (pkg=packageClause ';')? (importDecls+=importDecl ';')* (decls+=topLevelDecl ';')*
     ;
 
 packageClause
