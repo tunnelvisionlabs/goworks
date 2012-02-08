@@ -4,7 +4,7 @@
     <folder name="Editors">
         <folder name="Preferences">
             <folder name="Defaults">
-                <file name="org-antlr-works-branding-preferences.xml" url="resources/ANTLRWorks-preferences.xml"/>
+                <file name="org-tvl-goworks-branding-preferences.xml" url="resources/GoWorks-preferences.xml"/>
             </folder>
         </folder>
     </folder>
