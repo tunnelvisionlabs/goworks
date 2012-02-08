@@ -59,6 +59,7 @@ import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
+import org.tvl.goworks.editor.go.completion.CompletionParserATNSimulator;
 import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
 import org.tvl.goworks.editor.go.parser.GoLexerBase;
@@ -220,9 +221,17 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
                 continue;
             }
 
-            token = taggedRegion.getTag().getToken();
-            if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
-                break;
+            Token previousToken = token;
+            Token nextToken = taggedRegion.getTag().getToken();
+            if (nextToken.getStartIndex() <= offset && nextToken.getStopIndex() + 1 >= offset) {
+                if (previousToken != null && previousToken.getStopIndex() + 1 == offset) {
+                    // prefer the end of a word token to the beginning of a non-word token
+                    if (CompletionParserATNSimulator.WORDLIKE_TOKEN_TYPES.contains(previousToken.getType())) {
+                        break;
+                    }
+                }
+
+                token = nextToken;
             }
         }
 

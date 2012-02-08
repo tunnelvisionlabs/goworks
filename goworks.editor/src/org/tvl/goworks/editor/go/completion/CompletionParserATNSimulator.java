@@ -41,7 +41,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
         }
     }
 
-    private static final IntervalSet WORDLIKE_TOKEN_TYPES =
+    public static final IntervalSet WORDLIKE_TOKEN_TYPES =
         new IntervalSet() {{
             // keywords
             addAll(KeywordCompletionItem.KEYWORD_TYPES);
