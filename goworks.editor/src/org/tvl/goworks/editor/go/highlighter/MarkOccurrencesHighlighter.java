@@ -40,7 +40,9 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -276,6 +278,8 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
         private final Token currentToken;
 
+        @NullAllowed
+        private final Token referencedToken;
         @NonNull
         private final Collection<? extends CodeElementModel> referencedElements;
 
@@ -284,6 +288,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             this.annotatedParseTree = annotatedParseTree;
 
             this.currentToken = getContext(position);
+            this.referencedToken = currentToken != null ? findReferencedToken(currentToken) : null;
             this.referencedElements = currentToken != null ? findReferencedElements(currentToken) : Collections.<CodeElementModel>emptyList();
         }
 
@@ -294,6 +299,14 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
         @Override
         public void visitTerminal(ParserRuleContext<Token> ctx, Token symbol) {
+            Token otherReferenced = findReferencedToken(symbol);
+            if (referencedToken != null && otherReferenced != null) {
+                if (referencedToken.equals(otherReferenced)) {
+                    markedOccurrences.add(symbol);
+                    return;
+                }
+            }
+
             if (referencedElements.isEmpty()) {
                 return;
             }
@@ -311,6 +324,20 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
                     }
                 }
             }
+        }
+
+        @CheckForNull
+        private Token findReferencedToken(Token symbol) {
+            Token target = annotatedParseTree.getTokenDecorator().getProperty(symbol, GoAnnotations.LOCAL_TARGET);
+            if (target != null) {
+                return target;
+            }
+
+            if (annotatedParseTree.isDeclaration(symbol)) {
+                return symbol;
+            }
+
+            return null;
         }
 
         @NonNull
