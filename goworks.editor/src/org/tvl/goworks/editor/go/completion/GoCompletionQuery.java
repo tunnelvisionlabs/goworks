@@ -639,7 +639,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                     }
 
                                     GoAnnotatedParseTree annotatedParseTree = annotatedParseTrees.get(entry.getKey());
-                                    Map<?, ?> properties = annotatedParseTree.getTreeDecorator().getProperties(selectorTarget);
                                     PackageModel currentPackage = getFileModel().getPackage();
                                     Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
                                     for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
@@ -653,10 +652,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                     }
 
                                     Collection<? extends CodeElementModel> models = resolveSelectorTarget(selectorTarget, annotatedParseTree, currentPackage, resolvedPackages);
-                                    if (models == null || models.isEmpty()) {
-                                        models = targetAnalyzer.resolveTarget(selectorTarget);
-                                    }
-
                                     assert models != null;
                                     for (CodeElementModel model : models) {
                                         Collection<? extends CodeElementModel> selected = SemanticAnalyzer.getSelectableMembers(model);
