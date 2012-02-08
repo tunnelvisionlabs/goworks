@@ -909,7 +909,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                 }
                                             }
 
-                                            LOGGER.log(Level.FINE, "TODO: constants");
+                                            LOGGER.log(Level.FINE, "TODO: local constants");
     //                                        for (Map.Entry<Token, ParserRuleContext<Token>> constEntry : constants.entrySet()) {
     //                                            String name = constEntry.getKey().getText();
     //                                            if (intermediateResults.containsKey(name)) {
