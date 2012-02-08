@@ -114,7 +114,9 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.parameterDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.pointerTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.qualifiedIdentifierContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.rangeClauseContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.receiverContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.recvStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.selectorExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.shortVarDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.sliceTypeContext;
@@ -122,6 +124,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.structTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeLiteralContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeNameContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.typeSwitchGuardContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
 import org.tvl.goworks.editor.go.semantics.CodeElementReference;
 import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
@@ -1169,6 +1172,39 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @Override
                 public void enterRule(shortVarDeclContext ctx) {
                     addVars(locals, ctx.idList, null, ctx.exprList);
+                }
+
+                @Override
+                public void enterRule(rangeClauseContext ctx) {
+                    if (ctx.defeq != null) {
+                        if (ctx.e1 != null && ctx.e1.start != null) {
+                            locals.put(ctx.e1.start, null);
+                        }
+
+                        if (ctx.e2 != null && ctx.e2.start != null) {
+                            locals.put(ctx.e2.start, null);
+                        }
+                    }
+                }
+
+                @Override
+                public void enterRule(typeSwitchGuardContext ctx) {
+                    if (ctx.id != null) {
+                        locals.put(ctx.id, null);
+                    }
+                }
+
+                @Override
+                public void enterRule(recvStmtContext ctx) {
+                    if (ctx.defeq != null) {
+                        if (ctx.e1 != null && ctx.e1.start != null) {
+                            locals.put(ctx.e1.start, null);
+                        }
+
+                        if (ctx.e2 != null && ctx.e2.start != null) {
+                            locals.put(ctx.e2.start, null);
+                        }
+                    }
                 }
 
                 @Override
