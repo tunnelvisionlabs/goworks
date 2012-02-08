@@ -8,11 +8,11 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
-import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
+import org.tvl.goworks.editor.go.codemodel.VarKind;
 
 /**
  *
