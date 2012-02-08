@@ -35,6 +35,7 @@ public class GoAnnotations {
     public static final ObjectProperty<Token> UNQUALIFIED_LINK = new ObjectProperty<Token>("unqualified-link");
     public static final ObjectProperty<Collection<? extends CodeElementModel>> MODELS = new ObjectProperty<Collection<? extends CodeElementModel>>("models");
     public static final ObjectProperty<Boolean> POINTER_RECEIVER = new ObjectProperty<Boolean>("pointer-receiver", false);
+    public static final ObjectProperty<Boolean> VARIADIC = new ObjectProperty<Boolean>("variadic", false);
 
     public static final ObjectProperty<ParserRuleContext<Token>> EXPLICIT_TYPE = new ObjectProperty<ParserRuleContext<Token>>("explicit-type");
     public static final ObjectProperty<ParserRuleContext<Token>> IMPLICIT_TYPE = new ObjectProperty<ParserRuleContext<Token>>("implicit-type");

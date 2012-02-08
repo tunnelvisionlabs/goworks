@@ -1296,6 +1296,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     public void enterRule(parameterDeclContext ctx) {
         if (ctx.idList != null) {
             treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+            if (ctx.ellip != null) {
+                treeDecorator.putProperty(ctx.idList, GoAnnotations.VARIADIC, true);
+            }
             treeDecorator.putProperty(ctx.idList, GoAnnotations.EXPLICIT_TYPE, ctx.t);
             if (ParseTrees.isInContexts(ctx, false, GoParser.RULE_parameterDecl, GoParser.RULE_parameterList, GoParser.RULE_parameters, GoParser.RULE_result)) {
                 treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.RETURN);
@@ -2121,6 +2124,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     public void enterRule(identifierListContext ctx) {
         NodeType nodeType = treeDecorator.getProperty(ctx, GoAnnotations.NODE_TYPE);
         VarKind varType = treeDecorator.getProperty(ctx, GoAnnotations.VAR_TYPE);
+        boolean variadic = treeDecorator.getProperty(ctx, GoAnnotations.VARIADIC);
         ParserRuleContext<Token> explicitType = treeDecorator.getProperty(ctx, GoAnnotations.EXPLICIT_TYPE);
         boolean global =
             (varType != VarKind.LOCAL && varType != VarKind.RECEIVER && varType != VarKind.PARAMETER && varType != VarKind.RETURN)
@@ -2150,6 +2154,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
             if (varType != null) {
                 tokenDecorator.putProperty(token, GoAnnotations.VAR_TYPE, varType);
+            }
+
+            if (variadic) {
+                tokenDecorator.putProperty(token, GoAnnotations.VARIADIC, variadic);
             }
 
             if (explicitType != null) {

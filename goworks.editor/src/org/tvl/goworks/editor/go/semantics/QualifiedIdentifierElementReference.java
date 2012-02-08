@@ -92,6 +92,9 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
                     ParseTree explicitType = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.EXPLICIT_TYPE);
                     if (explicitType != null) {
                         varType = annotatedParseTree.getTreeDecorator().getProperty(explicitType, GoAnnotations.CODE_CLASS);
+                        if (annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.VARIADIC)) {
+                            varType = new VariadicParameterTypeReference(varType);
+                        }
                     } else {
                         ParseTree implicitType = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.IMPLICIT_TYPE);
                         if (implicitType == null) {
