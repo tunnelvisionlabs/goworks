@@ -8,10 +8,14 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 
 /**
  *
@@ -27,7 +31,17 @@ public class SliceExpressionTypeReference extends CodeElementReference {
 
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<CodeElementModel> resolved = new ArrayList<CodeElementModel>(expression.resolve(annotatedParseTree, currentPackage, resolvedPackages));
+        for (int i = 0; i < resolved.size(); i++) {
+            CodeElementModel model = resolved.get(i);
+            if (!(model instanceof TypeModelImpl)) {
+                continue;
+            }
+
+            resolved.set(i, new TypeSliceModelImpl((TypeModelImpl)model));
+        }
+
+        return resolved;
     }
 
 }
