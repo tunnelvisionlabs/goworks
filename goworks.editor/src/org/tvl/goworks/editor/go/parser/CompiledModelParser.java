@@ -92,6 +92,7 @@ public class CompiledModelParser {
                     try {
                         parser.setBuildParseTree(true);
                         parser.setErrorHandler(new BailErrorStrategy());
+                        parser.getInterpreter().disable_global_context = true;
                         sourceFileContext = parser.sourceFile();
                     } catch (RuntimeException ex) {
                         if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
@@ -99,6 +100,7 @@ public class CompiledModelParser {
                             tokenStream.reset();
                             parser.setTokenStream(tokenStream);
                             parser.setErrorHandler(new DefaultErrorStrategy());
+                            parser.getInterpreter().disable_global_context = false;
                             sourceFileContext = parser.sourceFile();
                         } else {
                             throw ex;

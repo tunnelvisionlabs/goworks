@@ -91,6 +91,7 @@ public class CurrentMemberContextParserTask implements ParserTask {
                 GoParser parser = GoParserCache.DEFAULT.getParser(tokens);
                 try {
                     parser.setBuildParseTree(true);
+                    parser.getInterpreter().disable_global_context = false;
                     context = parser.topLevelDecl();
                 } finally {
                     GoParserCache.DEFAULT.putParser(parser);
