@@ -56,6 +56,11 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
+        if (snapshot.getVersionedDocument().getDocument() == null) {
+            // no errors update for background parsed document
+            return;
+        }
+
         Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
         ParserData<CompiledModel> parserData = futureData.get();
         CompiledModel model = parserData.getData();

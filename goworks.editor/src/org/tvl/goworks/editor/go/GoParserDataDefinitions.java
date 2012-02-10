@@ -145,7 +145,7 @@ public class GoParserDataDefinitions {
     private static final class NavigatorRootDataDefinition extends ParserDataDefinition<Description> {
 
         public NavigatorRootDataDefinition() {
-            super("Go Navigator Root", Description.class, false, true, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
+            super("Go Navigator Root", Description.class, false, true, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
         }
 
     }

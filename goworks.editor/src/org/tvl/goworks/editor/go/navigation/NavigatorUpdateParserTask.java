@@ -57,6 +57,11 @@ public class NavigatorUpdateParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
+        if (snapshot.getVersionedDocument().getDocument() == null) {
+            // no navigator updates for background parsing
+            return;
+        }
+
         synchronized (lock) {
             JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
             if (currentComponent == null) {
@@ -92,7 +97,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
     private static final class Definition extends ParserTaskDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
-                GoParserDataDefinitions.NAVIGATOR_ROOT,
+                GoParserDataDefinitions.COMPILED_MODEL,
                 GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT);
 
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
