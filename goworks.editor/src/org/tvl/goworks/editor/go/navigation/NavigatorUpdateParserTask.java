@@ -73,7 +73,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
                 return;
             }
 
-            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT);
             ParserData<Description> parserData = futureData.get();
             if (parserData == null) {
                 return;
