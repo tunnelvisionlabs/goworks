@@ -49,7 +49,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     }
 
     @Override
-    public int adaptivePredict(SymbolStream<Token> input, int decision, ParserRuleContext<?> outerContext) {
+    public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<?> outerContext) {
         boolean ll1opt = optimize_ll1;
         try {
             startIndex = input.index();

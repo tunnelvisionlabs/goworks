@@ -8,13 +8,13 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
-import java.util.Set;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNConfig;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -55,7 +55,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
     }
 
     @Override
-    public int adaptivePredict(SymbolStream<Token> input, int decision, ParserRuleContext<?> outerContext) {
+    public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<?> outerContext) {
         if (decision == QID_DECISION && QID_DECISION >= 0) {
             if (input.LA(1) == GoParser.IDENTIFIER) {
                 if (input.LA(2) == GoParser.Dot) {
@@ -74,8 +74,8 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
     }
 
     @Override
-    public IntervalSet getAmbiguousAlts(Set<ATNConfig> configs) {
-        IntervalSet result = super.getAmbiguousAlts(configs);
+    public IntervalSet getConflictingAlts(ATNConfigSet configs) {
+        IntervalSet result = super.getConflictingAlts(configs);
         if (result != null) {
             // (workaround) make sure the result contains all possible configs or premature resolution could occur
             for (ATNConfig config : configs) {

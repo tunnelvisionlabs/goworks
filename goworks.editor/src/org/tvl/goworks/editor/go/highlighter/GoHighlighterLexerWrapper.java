@@ -48,17 +48,17 @@ public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<GoHighl
 
     @Override
     public GoHighlighterLexerState getState() {
-        if (lexer.modeStack == null) {
-            return getCachedState(lexer.mode, null);
+        if (lexer._modeStack == null) {
+            return getCachedState(lexer._mode, null);
         }
 
-        int[] modes = new int[lexer.modeStack.size()];
+        int[] modes = new int[lexer._modeStack.size()];
         int index = 0;
-        for (int mode : lexer.modeStack) {
+        for (int mode : lexer._modeStack) {
             modes[index++] = mode;
         }
 
-        return getCachedState(lexer.mode, modes);
+        return getCachedState(lexer._mode, modes);
     }
 
     private static GoHighlighterLexerState getCachedState(int mode, int[] modeStack) {
@@ -76,19 +76,19 @@ public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<GoHighl
     }
     public void setState(CharStream input, GoHighlighterLexerState state) {
         lexer.setInputStream(input);
-        lexer.mode = state.getMode();
+        lexer._mode = state.getMode();
         if (state.getModeStack() != null && state.getModeStack().length > 0) {
-            if (lexer.modeStack == null) {
-                lexer.modeStack = new ArrayDeque<Integer>();
+            if (lexer._modeStack == null) {
+                lexer._modeStack = new ArrayDeque<Integer>();
             } else {
-                lexer.modeStack.clear();
+                lexer._modeStack.clear();
             }
 
             for (int mode : state.getModeStack()) {
-                lexer.modeStack.add(mode);
+                lexer._modeStack.add(mode);
             }
-        } else if (lexer.modeStack != null) {
-            lexer.modeStack.clear();
+        } else if (lexer._modeStack != null) {
+            lexer._modeStack.clear();
         }
     }
 

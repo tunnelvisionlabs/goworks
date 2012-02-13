@@ -35,21 +35,23 @@ public class GoLexerBase extends Lexer {
 		Colon=74, IDENTIFIER=75, WS=76, NEWLINE=77, COMMENT=78, ML_COMMENT=79, 
 		INT_LITERAL=80, IMAGINARY_LITERAL=81, FLOAT_LITERAL=82, CharLiteral=83, 
 		StringLiteral=84, ANYCHAR=85;
-    public static String[] modeNames = {
-        "DEFAULT_MODE"
-    };
+	public static String[] modeNames = {
+		"DEFAULT_MODE"
+	};
 
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
-		"break", "case", "chan", "const", "continue", "default", "defer", "else", 
-		"fallthrough", "for", "func", "go", "goto", "if", "import", "interface", 
-		"map", "package", "range", "return", "select", "struct", "switch", "type", 
-		"var", "+", "-", "*", "/", "%", "&", "|", "^", "<<", ">>", "&^", "+=", 
-		"-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "&^=", "&&", "||", 
-		"<-", "++", "--", "==", "<", ">", "=", "!", "!=", "<=", ">=", ":=", "...", 
-		"(", ")", "[", "]", "{", "}", ",", ".", ";", ":", "IDENTIFIER", "WS", 
-		"NEWLINE", "COMMENT", "ML_COMMENT", "INT_LITERAL", "IMAGINARY_LITERAL", 
-		"FLOAT_LITERAL", "CharLiteral", "StringLiteral", "ANYCHAR"
+		"'break'", "'case'", "'chan'", "'const'", "'continue'", "'default'", "'defer'", 
+		"'else'", "'fallthrough'", "'for'", "'func'", "'go'", "'goto'", "'if'", 
+		"'import'", "'interface'", "'map'", "'package'", "'range'", "'return'", 
+		"'select'", "'struct'", "'switch'", "'type'", "'var'", "'+'", "'-'", "'*'", 
+		"'/'", "'%'", "'&'", "'|'", "'^'", "'<<'", "'>>'", "'&^'", "'+='", "'-='", 
+		"'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", "'&^='", 
+		"'&&'", "'||'", "'<-'", "'++'", "'--'", "'=='", "'<'", "'>'", "'='", "'!'", 
+		"'!='", "'<='", "'>='", "':='", "'...'", "'('", "')'", "'['", "']'", "'{'", 
+		"'}'", "','", "'.'", "';'", "':'", "IDENTIFIER", "WS", "NEWLINE", "COMMENT", 
+		"ML_COMMENT", "INT_LITERAL", "IMAGINARY_LITERAL", "FLOAT_LITERAL", "CharLiteral", 
+		"StringLiteral", "ANYCHAR"
 	};
 	public static final String[] ruleNames = {
 		"Break", "Case", "Chan", "Const", "Continue", "Default", "Defer", "Else", 
@@ -74,7 +76,7 @@ public class GoLexerBase extends Lexer {
 
 
 	protected int getMultilineCommentType() {
-	    return modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
+	    return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
 	}
 
 
@@ -396,7 +398,7 @@ public class GoLexerBase extends Lexer {
 	}
 	public void COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 2 : channel =  HIDDEN; break;
+			case 2 : _channel =  HIDDEN; break;
 		}
 	}
 	public void INT_LITERAL_action(RuleContext _localctx, int actionIndex) {
@@ -457,7 +459,7 @@ public class GoLexerBase extends Lexer {
 	}
 	public void WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 0 : channel =  HIDDEN; break;
+			case 0 : _channel =  HIDDEN; break;
 		}
 	}
 	public void Break_action(RuleContext _localctx, int actionIndex) {
@@ -578,7 +580,7 @@ public class GoLexerBase extends Lexer {
 	}
 	public void ML_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 3 : channel =  HIDDEN; break;
+			case 3 : _channel =  HIDDEN; break;
 		}
 	}
 	public void StarEqual_action(RuleContext _localctx, int actionIndex) {
@@ -727,7 +729,7 @@ public class GoLexerBase extends Lexer {
 	}
 	public void NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 1 : channel =  HIDDEN; break;
+			case 1 : _channel =  HIDDEN; break;
 		}
 	}
 	public void Dot_action(RuleContext _localctx, int actionIndex) {

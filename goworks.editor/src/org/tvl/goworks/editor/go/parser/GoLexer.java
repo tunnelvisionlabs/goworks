@@ -73,11 +73,11 @@ public class GoLexer extends GoLexerBase {
     @Override
     public Token emit() {
         Token semicolonToken = null;
-        if (type == NEWLINE || type == COMMENT) {
+        if (_type == NEWLINE || _type == COMMENT) {
             if (insertSemicolonAtEol) {
                 // emit the virtual semicolon token first
                 // TODO: text is separately set due to bug in CommonTokenFactory
-                semicolonToken = _factory.create(this, Semi, null, DEFAULT_TOKEN_CHANNEL, tokenStartCharIndex, tokenStartCharIndex - 1, tokenStartLine, tokenStartCharPositionInLine);
+                semicolonToken = _factory.create(this, Semi, null, DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
                 ((CommonToken)semicolonToken).setText(";");
                 emit(semicolonToken);
             }
@@ -89,7 +89,7 @@ public class GoLexer extends GoLexerBase {
         Token result = super.emit();
         if (semicolonToken != null) {
             deferredEol = result;
-            token = semicolonToken; // Lexer.nextToken ignores the return value from emit()
+            _token = semicolonToken; // Lexer.nextToken ignores the return value from emit()
             return semicolonToken;
         }
 
@@ -102,7 +102,7 @@ public class GoLexer extends GoLexerBase {
         if (insertSemicolonAtEol) {
             // emit the virtual semicolon token first
             // TODO: text is separately set due to bug in CommonTokenFactory
-            semicolonToken = _factory.create(this, Semi, ";", DEFAULT_TOKEN_CHANNEL, tokenStartCharIndex, tokenStartCharIndex - 1, tokenStartLine, tokenStartCharPositionInLine);
+            semicolonToken = _factory.create(this, Semi, ";", DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
             ((CommonToken)semicolonToken).setText(";");
             emit(semicolonToken);
             // don't want to emit it twice

@@ -40,15 +40,17 @@ public class GoParserBase extends Parser {
 		Slash=31, RightBrace=70;
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
-		"break", "case", "chan", "const", "continue", "default", "defer", "else", 
-		"fallthrough", "for", "func", "go", "goto", "if", "import", "interface", 
-		"map", "package", "range", "return", "select", "struct", "switch", "type", 
-		"var", "+", "-", "*", "/", "%", "&", "|", "^", "<<", ">>", "&^", "+=", 
-		"-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "&^=", "&&", "||", 
-		"<-", "++", "--", "==", "<", ">", "=", "!", "!=", "<=", ">=", ":=", "...", 
-		"(", ")", "[", "]", "{", "}", ",", ".", ";", ":", "IDENTIFIER", "WS", 
-		"NEWLINE", "COMMENT", "ML_COMMENT", "INT_LITERAL", "IMAGINARY_LITERAL", 
-		"FLOAT_LITERAL", "CharLiteral", "StringLiteral", "ANYCHAR"
+		"'break'", "'case'", "'chan'", "'const'", "'continue'", "'default'", "'defer'", 
+		"'else'", "'fallthrough'", "'for'", "'func'", "'go'", "'goto'", "'if'", 
+		"'import'", "'interface'", "'map'", "'package'", "'range'", "'return'", 
+		"'select'", "'struct'", "'switch'", "'type'", "'var'", "'+'", "'-'", "'*'", 
+		"'/'", "'%'", "'&'", "'|'", "'^'", "'<<'", "'>>'", "'&^'", "'+='", "'-='", 
+		"'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", "'&^='", 
+		"'&&'", "'||'", "'<-'", "'++'", "'--'", "'=='", "'<'", "'>'", "'='", "'!'", 
+		"'!='", "'<='", "'>='", "':='", "'...'", "'('", "')'", "'['", "']'", "'{'", 
+		"'}'", "','", "'.'", "';'", "':'", "IDENTIFIER", "WS", "NEWLINE", "COMMENT", 
+		"ML_COMMENT", "INT_LITERAL", "IMAGINARY_LITERAL", "FLOAT_LITERAL", "CharLiteral", 
+		"StringLiteral", "ANYCHAR"
 	};
 	public static final int
 		RULE_type = 0, RULE_typeName = 1, RULE_typeLiteral = 2, RULE_arrayType = 3, 
@@ -169,11 +171,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -226,11 +228,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -268,11 +270,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -359,11 +361,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -397,11 +399,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -432,11 +434,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -467,11 +469,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -505,11 +507,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -525,15 +527,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt187 = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt187!=2 && _alt187!=-1 ) {
-			    if ( _alt187==1 ) {
-			        {
-			        {
-			        setState(276); _localctx.fields = fieldDecl();
-			        _localctx.fields_list.add(_localctx.fields);
-			        setState(278); match(Semi);
-			        }
-			        } 
-			    }
+				if ( _alt187==1 ) {
+					{
+					{
+					setState(276); _localctx.fields = fieldDecl();
+					_localctx.fields_list.add(_localctx.fields);
+					setState(278); match(Semi);
+					}
+					} 
+				}
 				setState(284);
 				_errHandler.sync(this);
 				_alt187 = getInterpreter().adaptivePredict(_input,2,_ctx);
@@ -572,11 +574,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -632,11 +634,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -675,11 +677,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -711,11 +713,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -747,11 +749,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -782,11 +784,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -819,11 +821,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -864,11 +866,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -912,11 +914,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -967,11 +969,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -987,15 +989,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt350 = getInterpreter().adaptivePredict(_input,11,_ctx);
 			while ( _alt350!=2 && _alt350!=-1 ) {
-			    if ( _alt350==1 ) {
-			        {
-			        {
-			        setState(347); match(Comma);
-			        setState(349); _localctx.params = parameterDecl();
-			        _localctx.params_list.add(_localctx.params);
-			        }
-			        } 
-			    }
+				if ( _alt350==1 ) {
+					{
+					{
+					setState(347); match(Comma);
+					setState(349); _localctx.params = parameterDecl();
+					_localctx.params_list.add(_localctx.params);
+					}
+					} 
+				}
 				setState(355);
 				_errHandler.sync(this);
 				_alt350 = getInterpreter().adaptivePredict(_input,11,_ctx);
@@ -1022,11 +1024,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1076,11 +1078,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1103,15 +1105,15 @@ public class GoParserBase extends Parser {
 					_errHandler.sync(this);
 					int _alt394 = getInterpreter().adaptivePredict(_input,14,_ctx);
 					while ( _alt394!=2 && _alt394!=-1 ) {
-					    if ( _alt394==1 ) {
-					        {
-					        {
-					        setState(372); match(Semi);
-					        setState(374); _localctx.methods = methodSpec();
-					        _localctx.methods_list.add(_localctx.methods);
-					        }
-					        } 
-					    }
+						if ( _alt394==1 ) {
+							{
+							{
+							setState(372); match(Semi);
+							setState(374); _localctx.methods = methodSpec();
+							_localctx.methods_list.add(_localctx.methods);
+							}
+							} 
+						}
 						setState(380);
 						_errHandler.sync(this);
 						_alt394 = getInterpreter().adaptivePredict(_input,14,_ctx);
@@ -1151,11 +1153,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1200,11 +1202,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1235,11 +1237,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1271,11 +1273,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1310,11 +1312,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1347,11 +1349,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1408,11 +1410,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1434,15 +1436,15 @@ public class GoParserBase extends Parser {
 					_errHandler.sync(this);
 					int _alt522 = getInterpreter().adaptivePredict(_input,20,_ctx);
 					while ( _alt522!=2 && _alt522!=-1 ) {
-					    if ( _alt522==1 ) {
-					        {
-					        {
-					        setState(431); match(Semi);
-					        setState(433); _localctx.statements = statement();
-					        _localctx.statements_list.add(_localctx.statements);
-					        }
-					        } 
-					    }
+						if ( _alt522==1 ) {
+							{
+							{
+							setState(431); match(Semi);
+							setState(433); _localctx.statements = statement();
+							_localctx.statements_list.add(_localctx.statements);
+							}
+							} 
+						}
 						setState(439);
 						_errHandler.sync(this);
 						_alt522 = getInterpreter().adaptivePredict(_input,20,_ctx);
@@ -1482,11 +1484,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1539,11 +1541,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1595,11 +1597,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1634,15 +1636,15 @@ public class GoParserBase extends Parser {
 							_errHandler.sync(this);
 							int _alt605 = getInterpreter().adaptivePredict(_input,25,_ctx);
 							while ( _alt605!=2 && _alt605!=-1 ) {
-							    if ( _alt605==1 ) {
-							        {
-							        {
-							        setState(472); match(Semi);
-							        setState(474); _localctx.consts = constSpec();
-							        _localctx.consts_list.add(_localctx.consts);
-							        }
-							        } 
-							    }
+								if ( _alt605==1 ) {
+									{
+									{
+									setState(472); match(Semi);
+									setState(474); _localctx.consts = constSpec();
+									_localctx.consts_list.add(_localctx.consts);
+									}
+									} 
+								}
 								setState(480);
 								_errHandler.sync(this);
 								_alt605 = getInterpreter().adaptivePredict(_input,25,_ctx);
@@ -1685,11 +1687,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1740,11 +1742,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1760,15 +1762,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt657 = getInterpreter().adaptivePredict(_input,31,_ctx);
 			while ( _alt657!=2 && _alt657!=-1 ) {
-			    if ( _alt657==1 ) {
-			        {
-			        {
-			        setState(505); match(Comma);
-			        setState(507); _localctx.ids = match(IDENTIFIER);
-			        _localctx.ids_list.add(_localctx.ids);
-			        }
-			        } 
-			    }
+				if ( _alt657==1 ) {
+					{
+					{
+					setState(505); match(Comma);
+					setState(507); _localctx.ids = match(IDENTIFIER);
+					_localctx.ids_list.add(_localctx.ids);
+					}
+					} 
+				}
 				setState(513);
 				_errHandler.sync(this);
 				_alt657 = getInterpreter().adaptivePredict(_input,31,_ctx);
@@ -1794,11 +1796,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1814,15 +1816,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt676 = getInterpreter().adaptivePredict(_input,32,_ctx);
 			while ( _alt676!=2 && _alt676!=-1 ) {
-			    if ( _alt676==1 ) {
-			        {
-			        {
-			        setState(516); match(Comma);
-			        setState(518); _localctx.expressions = expression(0);
-			        _localctx.expressions_list.add(_localctx.expressions);
-			        }
-			        } 
-			    }
+				if ( _alt676==1 ) {
+					{
+					{
+					setState(516); match(Comma);
+					setState(518); _localctx.expressions = expression(0);
+					_localctx.expressions_list.add(_localctx.expressions);
+					}
+					} 
+				}
 				setState(524);
 				_errHandler.sync(this);
 				_alt676 = getInterpreter().adaptivePredict(_input,32,_ctx);
@@ -1848,11 +1850,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1887,15 +1889,15 @@ public class GoParserBase extends Parser {
 							_errHandler.sync(this);
 							int _alt708 = getInterpreter().adaptivePredict(_input,33,_ctx);
 							while ( _alt708!=2 && _alt708!=-1 ) {
-							    if ( _alt708==1 ) {
-							        {
-							        {
-							        setState(533); match(Semi);
-							        setState(535); _localctx.types = typeSpec();
-							        _localctx.types_list.add(_localctx.types);
-							        }
-							        } 
-							    }
+								if ( _alt708==1 ) {
+									{
+									{
+									setState(533); match(Semi);
+									setState(535); _localctx.types = typeSpec();
+									_localctx.types_list.add(_localctx.types);
+									}
+									} 
+								}
 								setState(541);
 								_errHandler.sync(this);
 								_alt708 = getInterpreter().adaptivePredict(_input,33,_ctx);
@@ -1937,11 +1939,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -1974,11 +1976,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2013,15 +2015,15 @@ public class GoParserBase extends Parser {
 							_errHandler.sync(this);
 							int _alt763 = getInterpreter().adaptivePredict(_input,37,_ctx);
 							while ( _alt763!=2 && _alt763!=-1 ) {
-							    if ( _alt763==1 ) {
-							        {
-							        {
-							        setState(564); match(Semi);
-							        setState(566); _localctx.vars = varSpec();
-							        _localctx.vars_list.add(_localctx.vars);
-							        }
-							        } 
-							    }
+								if ( _alt763==1 ) {
+									{
+									{
+									setState(564); match(Semi);
+									setState(566); _localctx.vars = varSpec();
+									_localctx.vars_list.add(_localctx.vars);
+									}
+									} 
+								}
 								setState(572);
 								_errHandler.sync(this);
 								_alt763 = getInterpreter().adaptivePredict(_input,37,_ctx);
@@ -2064,11 +2066,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2126,11 +2128,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2165,11 +2167,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2211,11 +2213,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2249,11 +2251,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2298,11 +2300,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2353,11 +2355,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2391,11 +2393,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2457,11 +2459,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2511,11 +2513,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2582,11 +2584,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2631,11 +2633,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2669,11 +2671,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2721,11 +2723,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2756,11 +2758,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2835,11 +2837,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2890,11 +2892,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2910,15 +2912,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt1143 = getInterpreter().adaptivePredict(_input,55,_ctx);
 			while ( _alt1143!=2 && _alt1143!=-1 ) {
-			    if ( _alt1143==1 ) {
-			        {
-			        {
-			        setState(745); match(Comma);
-			        setState(747); _localctx.elements = element();
-			        _localctx.elements_list.add(_localctx.elements);
-			        }
-			        } 
-			    }
+				if ( _alt1143==1 ) {
+					{
+					{
+					setState(745); match(Comma);
+					setState(747); _localctx.elements = element();
+					_localctx.elements_list.add(_localctx.elements);
+					}
+					} 
+				}
 				setState(753);
 				_errHandler.sync(this);
 				_alt1143 = getInterpreter().adaptivePredict(_input,55,_ctx);
@@ -2944,11 +2946,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -2990,11 +2992,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3038,11 +3040,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3073,11 +3075,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3109,11 +3111,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3158,11 +3160,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3222,541 +3224,541 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class multExprContext extends expressionContext {
 		public multExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class andExprContext extends expressionContext {
 		public andExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class selectorExprContext extends expressionContext {
 		public selectorExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class sliceExprContext extends expressionContext {
 		public sliceExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class unaryExprContext extends expressionContext {
 		public unaryExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class conversionOrCallExprContext extends expressionContext {
 		public conversionOrCallExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class addExprContext extends expressionContext {
 		public addExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class callExprContext extends expressionContext {
 		public callExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class typeAssertionExprContext extends expressionContext {
 		public typeAssertionExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class indexExprContext extends expressionContext {
 		public indexExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class compareExprContext extends expressionContext {
 		public compareExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 	public static class orExprContext extends expressionContext {
 		public orExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
 	public final expressionContext expression(int _p) throws RecognitionException {
-	    ParserRuleContext<Token> _parentctx = _ctx;
+		ParserRuleContext<Token> _parentctx = _ctx;
 		expressionContext _localctx = new expressionContext(_ctx, 118, _p);
 		expressionContext _prevctx = _localctx;
 		int _startState = 118;
-	    pushNewRecursionContext(_localctx, RULE_expression);
+		pushNewRecursionContext(_localctx, RULE_expression);
 		try {
-		    enterOuterAlt(_localctx, 1);
-		    {
-		    setState(806);
-		    //_errHandler.sync(this);
-		    switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
-		    	case 1:
-		    		{
-		    		_localctx = new unaryExprContext(_localctx);
-		    		_ctx = _localctx;
-		    		_prevctx = _localctx;
-		    		setState(796);
-		    		//_errHandler.sync(this);
-		    		switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
-		    			case 1:
-		    				{
-		    				setState(782); _localctx.op = match(Plus);
-		    				}
-		    				break;
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(806);
+			//_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
+				case 1:
+					{
+					_localctx = new unaryExprContext(_localctx);
+					_ctx = _localctx;
+					_prevctx = _localctx;
+					setState(796);
+					//_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
+						case 1:
+							{
+							setState(782); _localctx.op = match(Plus);
+							}
+							break;
 
-		    			case 2:
-		    				{
-		    				setState(784); _localctx.op = match(Minus);
-		    				}
-		    				break;
+						case 2:
+							{
+							setState(784); _localctx.op = match(Minus);
+							}
+							break;
 
-		    			case 3:
-		    				{
-		    				setState(786); _localctx.op = match(Bang);
-		    				}
-		    				break;
+						case 3:
+							{
+							setState(786); _localctx.op = match(Bang);
+							}
+							break;
 
-		    			case 4:
-		    				{
-		    				setState(788); _localctx.op = match(Caret);
-		    				}
-		    				break;
+						case 4:
+							{
+							setState(788); _localctx.op = match(Caret);
+							}
+							break;
 
-		    			case 5:
-		    				{
-		    				setState(790); _localctx.op = match(Star);
-		    				}
-		    				break;
+						case 5:
+							{
+							setState(790); _localctx.op = match(Star);
+							}
+							break;
 
-		    			case 6:
-		    				{
-		    				setState(792); _localctx.op = match(Amp);
-		    				}
-		    				break;
+						case 6:
+							{
+							setState(792); _localctx.op = match(Amp);
+							}
+							break;
 
-		    			case 7:
-		    				{
-		    				setState(794); _localctx.op = match(LeftArrow);
-		    				}
-		    				break;
-		    		}
-		    		setState(798); _localctx.e = expression(6);
-		    		}
-		    		break;
+						case 7:
+							{
+							setState(794); _localctx.op = match(LeftArrow);
+							}
+							break;
+					}
+					setState(798); _localctx.e = expression(6);
+					}
+					break;
 
-		    	case 2:
-		    		{
-		    		setState(800); operand();
-		    		}
-		    		break;
+				case 2:
+					{
+					setState(800); operand();
+					}
+					break;
 
-		    	case 3:
-		    		{
-		    		_localctx = new conversionOrCallExprContext(_localctx);
-		    		_ctx = _localctx;
-		    		_prevctx = _localctx;
-		    		setState(802); _localctx.conv = conversion();
-		    		}
-		    		break;
+				case 3:
+					{
+					_localctx = new conversionOrCallExprContext(_localctx);
+					_ctx = _localctx;
+					_prevctx = _localctx;
+					setState(802); _localctx.conv = conversion();
+					}
+					break;
 
-		    	case 4:
-		    		{
-		    		setState(804); builtinCall();
-		    		}
-		    		break;
-		    }
-		    _ctx.stop = _input.LT(-1);
-		    setState(928);
-		    _errHandler.sync(this);
-		    int _alt302 = getInterpreter().adaptivePredict(_input,69,_ctx);
-		    while ( _alt302!=2 && _alt302!=-1 ) {
-		        if ( _alt302==1 ) {
-		    	    if ( _parseListeners!=null ) triggerExitRuleEvent();
-		    	    _prevctx = _localctx;
-		    	    _prevctx.stop = _input.LT(-1);
-		            {
-		            setState(926);
-		            //_errHandler.sync(this);
-		            switch ( getInterpreter().adaptivePredict(_input,68,_ctx) ) {
-		            	case 1:
-		            		{
-		            		_localctx = new multExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(808);
-		            		if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {5 >= $_p}?");
-		            		setState(824);
-		            		//_errHandler.sync(this);
-		            		switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
-		            			case 1:
-		            				{
-		            				setState(810); _localctx.op = match(Star);
-		            				}
-		            				break;
+				case 4:
+					{
+					setState(804); builtinCall();
+					}
+					break;
+			}
+			_ctx.stop = _input.LT(-1);
+			setState(928);
+			_errHandler.sync(this);
+			int _alt302 = getInterpreter().adaptivePredict(_input,69,_ctx);
+			while ( _alt302!=2 && _alt302!=-1 ) {
+				if ( _alt302==1 ) {
+					if ( _parseListeners!=null ) triggerExitRuleEvent();
+					_prevctx = _localctx;
+					_prevctx.stop = _input.LT(-1);
+					{
+					setState(926);
+					//_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,68,_ctx) ) {
+						case 1:
+							{
+							_localctx = new multExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(808);
+							if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {5 >= $_p}?");
+							setState(824);
+							//_errHandler.sync(this);
+							switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
+								case 1:
+									{
+									setState(810); _localctx.op = match(Star);
+									}
+									break;
 
-		            			case 2:
-		            				{
-		            				setState(812); _localctx.op = match(Slash);
-		            				}
-		            				break;
+								case 2:
+									{
+									setState(812); _localctx.op = match(Slash);
+									}
+									break;
 
-		            			case 3:
-		            				{
-		            				setState(814); _localctx.op = match(Percent);
-		            				}
-		            				break;
+								case 3:
+									{
+									setState(814); _localctx.op = match(Percent);
+									}
+									break;
 
-		            			case 4:
-		            				{
-		            				setState(816); _localctx.op = match(LeftShift);
-		            				}
-		            				break;
+								case 4:
+									{
+									setState(816); _localctx.op = match(LeftShift);
+									}
+									break;
 
-		            			case 5:
-		            				{
-		            				setState(818); _localctx.op = match(RightShift);
-		            				}
-		            				break;
+								case 5:
+									{
+									setState(818); _localctx.op = match(RightShift);
+									}
+									break;
 
-		            			case 6:
-		            				{
-		            				setState(820); _localctx.op = match(Amp);
-		            				}
-		            				break;
+								case 6:
+									{
+									setState(820); _localctx.op = match(Amp);
+									}
+									break;
 
-		            			case 7:
-		            				{
-		            				setState(822); _localctx.op = match(AmpCaret);
-		            				}
-		            				break;
-		            		}
-		            		setState(826); _localctx.right = expression(6);
-		            		}
-		            		break;
+								case 7:
+									{
+									setState(822); _localctx.op = match(AmpCaret);
+									}
+									break;
+							}
+							setState(826); _localctx.right = expression(6);
+							}
+							break;
 
-		            	case 2:
-		            		{
-		            		_localctx = new addExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(828);
-		            		if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {4 >= $_p}?");
-		            		setState(838);
-		            		//_errHandler.sync(this);
-		            		switch ( getInterpreter().adaptivePredict(_input,62,_ctx) ) {
-		            			case 1:
-		            				{
-		            				setState(830); _localctx.op = match(Plus);
-		            				}
-		            				break;
+						case 2:
+							{
+							_localctx = new addExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(828);
+							if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {4 >= $_p}?");
+							setState(838);
+							//_errHandler.sync(this);
+							switch ( getInterpreter().adaptivePredict(_input,62,_ctx) ) {
+								case 1:
+									{
+									setState(830); _localctx.op = match(Plus);
+									}
+									break;
 
-		            			case 2:
-		            				{
-		            				setState(832); _localctx.op = match(Minus);
-		            				}
-		            				break;
+								case 2:
+									{
+									setState(832); _localctx.op = match(Minus);
+									}
+									break;
 
-		            			case 3:
-		            				{
-		            				setState(834); _localctx.op = match(Pipe);
-		            				}
-		            				break;
+								case 3:
+									{
+									setState(834); _localctx.op = match(Pipe);
+									}
+									break;
 
-		            			case 4:
-		            				{
-		            				setState(836); _localctx.op = match(Caret);
-		            				}
-		            				break;
-		            		}
-		            		setState(840); _localctx.right = expression(5);
-		            		}
-		            		break;
+								case 4:
+									{
+									setState(836); _localctx.op = match(Caret);
+									}
+									break;
+							}
+							setState(840); _localctx.right = expression(5);
+							}
+							break;
 
-		            	case 3:
-		            		{
-		            		_localctx = new compareExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(842);
-		            		if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {3 >= $_p}?");
-		            		setState(856);
-		            		//_errHandler.sync(this);
-		            		switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
-		            			case 1:
-		            				{
-		            				setState(844); _localctx.op = match(EqualEqual);
-		            				}
-		            				break;
+						case 3:
+							{
+							_localctx = new compareExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(842);
+							if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {3 >= $_p}?");
+							setState(856);
+							//_errHandler.sync(this);
+							switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
+								case 1:
+									{
+									setState(844); _localctx.op = match(EqualEqual);
+									}
+									break;
 
-		            			case 2:
-		            				{
-		            				setState(846); _localctx.op = match(BangEqual);
-		            				}
-		            				break;
+								case 2:
+									{
+									setState(846); _localctx.op = match(BangEqual);
+									}
+									break;
 
-		            			case 3:
-		            				{
-		            				setState(848); _localctx.op = match(LessThan);
-		            				}
-		            				break;
+								case 3:
+									{
+									setState(848); _localctx.op = match(LessThan);
+									}
+									break;
 
-		            			case 4:
-		            				{
-		            				setState(850); _localctx.op = match(LessEqual);
-		            				}
-		            				break;
+								case 4:
+									{
+									setState(850); _localctx.op = match(LessEqual);
+									}
+									break;
 
-		            			case 5:
-		            				{
-		            				setState(852); _localctx.op = match(GreaterThan);
-		            				}
-		            				break;
+								case 5:
+									{
+									setState(852); _localctx.op = match(GreaterThan);
+									}
+									break;
 
-		            			case 6:
-		            				{
-		            				setState(854); _localctx.op = match(GreaterEqual);
-		            				}
-		            				break;
-		            		}
-		            		setState(858); _localctx.right = expression(4);
-		            		}
-		            		break;
+								case 6:
+									{
+									setState(854); _localctx.op = match(GreaterEqual);
+									}
+									break;
+							}
+							setState(858); _localctx.right = expression(4);
+							}
+							break;
 
-		            	case 4:
-		            		{
-		            		_localctx = new andExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(860);
-		            		if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {2 >= $_p}?");
-		            		setState(862); match(And);
-		            		setState(864); _localctx.right = expression(3);
-		            		}
-		            		break;
+						case 4:
+							{
+							_localctx = new andExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(860);
+							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {2 >= $_p}?");
+							setState(862); match(And);
+							setState(864); _localctx.right = expression(3);
+							}
+							break;
 
-		            	case 5:
-		            		{
-		            		_localctx = new orExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(866);
-		            		if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {1 >= $_p}?");
-		            		setState(868); match(Or);
-		            		setState(870); _localctx.right = expression(2);
-		            		}
-		            		break;
+						case 5:
+							{
+							_localctx = new orExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(866);
+							if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {1 >= $_p}?");
+							setState(868); match(Or);
+							setState(870); _localctx.right = expression(2);
+							}
+							break;
 
-		            	case 6:
-		            		{
-		            		_localctx = new selectorExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(872);
-		            		if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {11 >= $_p}?");
-		            		setState(874); _localctx.dot = match(Dot);
-		            		setState(876); _localctx.name = match(IDENTIFIER);
-		            		}
-		            		break;
+						case 6:
+							{
+							_localctx = new selectorExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(872);
+							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {11 >= $_p}?");
+							setState(874); _localctx.dot = match(Dot);
+							setState(876); _localctx.name = match(IDENTIFIER);
+							}
+							break;
 
-		            	case 7:
-		            		{
-		            		_localctx = new indexExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(878);
-		            		if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {10 >= $_p}?");
-		            		setState(880); match(LeftBrack);
-		            		setState(882); expression(0);
-		            		setState(884); match(RightBrack);
-		            		}
-		            		break;
+						case 7:
+							{
+							_localctx = new indexExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(878);
+							if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {10 >= $_p}?");
+							setState(880); match(LeftBrack);
+							setState(882); expression(0);
+							setState(884); match(RightBrack);
+							}
+							break;
 
-		            	case 8:
-		            		{
-		            		_localctx = new sliceExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(886);
-		            		if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {9 >= $_p}?");
-		            		setState(888); match(LeftBrack);
-		            		setState(892);
-		            		//_errHandler.sync(this);
-		            		switch ( getInterpreter().adaptivePredict(_input,64,_ctx) ) {
-		            			case 1:
-		            				{
-		            				setState(890); expression(0);
-		            				}
-		            				break;
-		            		}
-		            		setState(894); match(Colon);
-		            		setState(898);
-		            		//_errHandler.sync(this);
-		            		switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
-		            			case 1:
-		            				{
-		            				setState(896); expression(0);
-		            				}
-		            				break;
-		            		}
-		            		setState(900); match(RightBrack);
-		            		}
-		            		break;
+						case 8:
+							{
+							_localctx = new sliceExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(886);
+							if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {9 >= $_p}?");
+							setState(888); match(LeftBrack);
+							setState(892);
+							//_errHandler.sync(this);
+							switch ( getInterpreter().adaptivePredict(_input,64,_ctx) ) {
+								case 1:
+									{
+									setState(890); expression(0);
+									}
+									break;
+							}
+							setState(894); match(Colon);
+							setState(898);
+							//_errHandler.sync(this);
+							switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
+								case 1:
+									{
+									setState(896); expression(0);
+									}
+									break;
+							}
+							setState(900); match(RightBrack);
+							}
+							break;
 
-		            	case 9:
-		            		{
-		            		_localctx = new typeAssertionExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(902);
-		            		if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {8 >= $_p}?");
-		            		setState(904); _localctx.dot = match(Dot);
-		            		setState(906); _localctx.lp = match(LeftParen);
-		            		setState(908); _localctx.t = type();
-		            		setState(910); _localctx.rp = match(RightParen);
-		            		}
-		            		break;
+						case 9:
+							{
+							_localctx = new typeAssertionExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(902);
+							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {8 >= $_p}?");
+							setState(904); _localctx.dot = match(Dot);
+							setState(906); _localctx.lp = match(LeftParen);
+							setState(908); _localctx.t = type();
+							setState(910); _localctx.rp = match(RightParen);
+							}
+							break;
 
-		            	case 10:
-		            		{
-		            		_localctx = new callExprContext(new expressionContext(_parentctx, _startState, _p));
-		            		_localctx.addChild(_prevctx);
-		            		_localctx.e = _prevctx;
-		            		pushNewRecursionContext(_localctx, RULE_expression);
-		            		_localctx.start = _prevctx.start;
-		            		setState(912);
-		            		if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {7 >= $_p}?");
-		            		setState(914); _localctx.lp = match(LeftParen);
-		            		setState(922);
-		            		//_errHandler.sync(this);
-		            		switch ( getInterpreter().adaptivePredict(_input,67,_ctx) ) {
-		            			case 1:
-		            				{
-		            				setState(916); _localctx.args = argumentList();
-		            				setState(920);
-		            				//_errHandler.sync(this);
-		            				switch ( getInterpreter().adaptivePredict(_input,66,_ctx) ) {
-		            					case 1:
-		            						{
-		            						setState(918); match(Comma);
-		            						}
-		            						break;
-		            				}
-		            				}
-		            				break;
-		            		}
-		            		setState(924); _localctx.rp = match(RightParen);
-		            		}
-		            		break;
-		            }
-		            } 
-		        }
-		    	setState(930);
-		    	_errHandler.sync(this);
-		    	_alt302 = getInterpreter().adaptivePredict(_input,69,_ctx);
-		    }
-		    }
+						case 10:
+							{
+							_localctx = new callExprContext(new expressionContext(_parentctx, _startState, _p));
+							_localctx.addChild(_prevctx);
+							_localctx.e = _prevctx;
+							pushNewRecursionContext(_localctx, RULE_expression);
+							_localctx.start = _prevctx.start;
+							setState(912);
+							if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {7 >= $_p}?");
+							setState(914); _localctx.lp = match(LeftParen);
+							setState(922);
+							//_errHandler.sync(this);
+							switch ( getInterpreter().adaptivePredict(_input,67,_ctx) ) {
+								case 1:
+									{
+									setState(916); _localctx.args = argumentList();
+									setState(920);
+									//_errHandler.sync(this);
+									switch ( getInterpreter().adaptivePredict(_input,66,_ctx) ) {
+										case 1:
+											{
+											setState(918); match(Comma);
+											}
+											break;
+									}
+									}
+									break;
+							}
+							setState(924); _localctx.rp = match(RightParen);
+							}
+							break;
+					}
+					} 
+				}
+				setState(930);
+				_errHandler.sync(this);
+				_alt302 = getInterpreter().adaptivePredict(_input,69,_ctx);
+			}
+			}
 			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
@@ -3777,11 +3779,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3822,11 +3824,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3859,11 +3861,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -3997,11 +3999,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4072,11 +4074,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4106,11 +4108,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4143,11 +4145,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4177,11 +4179,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4213,11 +4215,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4250,11 +4252,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4286,11 +4288,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4331,11 +4333,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4367,11 +4369,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4421,11 +4423,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4482,11 +4484,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4564,11 +4566,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4634,11 +4636,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4681,11 +4683,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4720,13 +4722,13 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt1972 = getInterpreter().adaptivePredict(_input,82,_ctx);
 			while ( _alt1972!=2 && _alt1972!=-1 ) {
-			    if ( _alt1972==1 ) {
-			        {
-			        {
-			        setState(1097); exprCaseClause();
-			        }
-			        } 
-			    }
+				if ( _alt1972==1 ) {
+					{
+					{
+					setState(1097); exprCaseClause();
+					}
+					} 
+				}
 				setState(1103);
 				_errHandler.sync(this);
 				_alt1972 = getInterpreter().adaptivePredict(_input,82,_ctx);
@@ -4751,11 +4753,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4777,14 +4779,14 @@ public class GoParserBase extends Parser {
 					_errHandler.sync(this);
 					int _alt1994 = getInterpreter().adaptivePredict(_input,83,_ctx);
 					while ( _alt1994!=2 && _alt1994!=-1 ) {
-					    if ( _alt1994==1 ) {
-					        {
-					        {
-					        setState(1112); match(Semi);
-					        setState(1114); statement();
-					        }
-					        } 
-					    }
+						if ( _alt1994==1 ) {
+							{
+							{
+							setState(1112); match(Semi);
+							setState(1114); statement();
+							}
+							} 
+						}
 						setState(1120);
 						_errHandler.sync(this);
 						_alt1994 = getInterpreter().adaptivePredict(_input,83,_ctx);
@@ -4820,11 +4822,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4868,11 +4870,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4899,13 +4901,13 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt2035 = getInterpreter().adaptivePredict(_input,88,_ctx);
 			while ( _alt2035!=2 && _alt2035!=-1 ) {
-			    if ( _alt2035==1 ) {
-			        {
-			        {
-			        setState(1147); typeCaseClause();
-			        }
-			        } 
-			    }
+				if ( _alt2035==1 ) {
+					{
+					{
+					setState(1147); typeCaseClause();
+					}
+					} 
+				}
 				setState(1153);
 				_errHandler.sync(this);
 				_alt2035 = getInterpreter().adaptivePredict(_input,88,_ctx);
@@ -4934,11 +4936,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -4982,11 +4984,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5008,14 +5010,14 @@ public class GoParserBase extends Parser {
 					_errHandler.sync(this);
 					int _alt2090 = getInterpreter().adaptivePredict(_input,90,_ctx);
 					while ( _alt2090!=2 && _alt2090!=-1 ) {
-					    if ( _alt2090==1 ) {
-					        {
-					        {
-					        setState(1178); match(Semi);
-					        setState(1180); statement();
-					        }
-					        } 
-					    }
+						if ( _alt2090==1 ) {
+							{
+							{
+							setState(1178); match(Semi);
+							setState(1180); statement();
+							}
+							} 
+						}
 						setState(1186);
 						_errHandler.sync(this);
 						_alt2090 = getInterpreter().adaptivePredict(_input,90,_ctx);
@@ -5051,11 +5053,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5101,11 +5103,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5121,15 +5123,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt2128 = getInterpreter().adaptivePredict(_input,94,_ctx);
 			while ( _alt2128!=2 && _alt2128!=-1 ) {
-			    if ( _alt2128==1 ) {
-			        {
-			        {
-			        setState(1203); match(Comma);
-			        setState(1205); _localctx.types = type();
-			        _localctx.types_list.add(_localctx.types);
-			        }
-			        } 
-			    }
+				if ( _alt2128==1 ) {
+					{
+					{
+					setState(1203); match(Comma);
+					setState(1205); _localctx.types = type();
+					_localctx.types_list.add(_localctx.types);
+					}
+					} 
+				}
 				setState(1211);
 				_errHandler.sync(this);
 				_alt2128 = getInterpreter().adaptivePredict(_input,94,_ctx);
@@ -5153,11 +5155,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5209,11 +5211,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5243,11 +5245,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5305,11 +5307,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5339,11 +5341,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5378,11 +5380,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5439,11 +5441,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5474,11 +5476,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5494,13 +5496,13 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt2254 = getInterpreter().adaptivePredict(_input,101,_ctx);
 			while ( _alt2254!=2 && _alt2254!=-1 ) {
-			    if ( _alt2254==1 ) {
-			        {
-			        {
-			        setState(1272); commClause();
-			        }
-			        } 
-			    }
+				if ( _alt2254==1 ) {
+					{
+					{
+					setState(1272); commClause();
+					}
+					} 
+				}
 				setState(1278);
 				_errHandler.sync(this);
 				_alt2254 = getInterpreter().adaptivePredict(_input,101,_ctx);
@@ -5525,11 +5527,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5551,14 +5553,14 @@ public class GoParserBase extends Parser {
 					_errHandler.sync(this);
 					int _alt2276 = getInterpreter().adaptivePredict(_input,102,_ctx);
 					while ( _alt2276!=2 && _alt2276!=-1 ) {
-					    if ( _alt2276==1 ) {
-					        {
-					        {
-					        setState(1287); match(Semi);
-					        setState(1289); statement();
-					        }
-					        } 
-					    }
+						if ( _alt2276==1 ) {
+							{
+							{
+							setState(1287); match(Semi);
+							setState(1289); statement();
+							}
+							} 
+						}
 						setState(1295);
 						_errHandler.sync(this);
 						_alt2276 = getInterpreter().adaptivePredict(_input,102,_ctx);
@@ -5594,11 +5596,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5660,11 +5662,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5728,11 +5730,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5762,11 +5764,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5805,11 +5807,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5848,11 +5850,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5891,11 +5893,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5926,11 +5928,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5960,11 +5962,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -5997,11 +5999,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -6053,11 +6055,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -6115,11 +6117,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -6143,15 +6145,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt2479 = getInterpreter().adaptivePredict(_input,118,_ctx);
 			while ( _alt2479!=2 && _alt2479!=-1 ) {
-			    if ( _alt2479==1 ) {
-			        {
-			        {
-			        setState(1394); _localctx.importDecls = importDecl();
-			        _localctx.importDecls_list.add(_localctx.importDecls);
-			        setState(1396); match(Semi);
-			        }
-			        } 
-			    }
+				if ( _alt2479==1 ) {
+					{
+					{
+					setState(1394); _localctx.importDecls = importDecl();
+					_localctx.importDecls_list.add(_localctx.importDecls);
+					setState(1396); match(Semi);
+					}
+					} 
+				}
 				setState(1402);
 				_errHandler.sync(this);
 				_alt2479 = getInterpreter().adaptivePredict(_input,118,_ctx);
@@ -6160,15 +6162,15 @@ public class GoParserBase extends Parser {
 			_errHandler.sync(this);
 			int _alt2488 = getInterpreter().adaptivePredict(_input,119,_ctx);
 			while ( _alt2488!=2 && _alt2488!=-1 ) {
-			    if ( _alt2488==1 ) {
-			        {
-			        {
-			        setState(1403); _localctx.decls = topLevelDecl();
-			        _localctx.decls_list.add(_localctx.decls);
-			        setState(1405); match(Semi);
-			        }
-			        } 
-			    }
+				if ( _alt2488==1 ) {
+					{
+					{
+					setState(1403); _localctx.decls = topLevelDecl();
+					_localctx.decls_list.add(_localctx.decls);
+					setState(1405); match(Semi);
+					}
+					} 
+				}
 				setState(1411);
 				_errHandler.sync(this);
 				_alt2488 = getInterpreter().adaptivePredict(_input,119,_ctx);
@@ -6193,11 +6195,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -6230,11 +6232,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -6266,11 +6268,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -6305,15 +6307,15 @@ public class GoParserBase extends Parser {
 							_errHandler.sync(this);
 							int _alt2543 = getInterpreter().adaptivePredict(_input,120,_ctx);
 							while ( _alt2543!=2 && _alt2543!=-1 ) {
-							    if ( _alt2543==1 ) {
-							        {
-							        {
-							        setState(1428); match(Semi);
-							        setState(1430); _localctx.importSpecs = importSpec();
-							        _localctx.importSpecs_list.add(_localctx.importSpecs);
-							        }
-							        } 
-							    }
+								if ( _alt2543==1 ) {
+									{
+									{
+									setState(1428); match(Semi);
+									setState(1430); _localctx.importSpecs = importSpec();
+									_localctx.importSpecs_list.add(_localctx.importSpecs);
+									}
+									} 
+								}
 								setState(1436);
 								_errHandler.sync(this);
 								_alt2543 = getInterpreter().adaptivePredict(_input,120,_ctx);
@@ -6356,11 +6358,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 
@@ -6415,11 +6417,11 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
 		}
 	}
 

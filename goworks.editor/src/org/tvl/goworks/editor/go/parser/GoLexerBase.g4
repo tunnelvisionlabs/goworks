@@ -21,7 +21,7 @@ package org.tvl.goworks.editor.go.parser;
 
 @members {
 protected int getMultilineCommentType() {
-    return modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
+    return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
 }
 }
 

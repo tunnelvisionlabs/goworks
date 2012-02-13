@@ -39,23 +39,25 @@ public class GoHighlighterLexerBase extends Lexer {
 		RawLiteralNewline=92, ContinueRawLiteral=93, EndRawLiteral=94, RawLiteral_ANYCHAR=95;
 	public static final int BlockComment = 1;
 	public static final int RawLiteralMode = 2;
-    public static String[] modeNames = {
-        "DEFAULT_MODE", "BlockComment", "RawLiteralMode"
-    };
+	public static String[] modeNames = {
+		"DEFAULT_MODE", "BlockComment", "RawLiteralMode"
+	};
 
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
-		"break", "case", "chan", "const", "continue", "default", "defer", "else", 
-		"fallthrough", "for", "func", "go", "goto", "if", "import", "interface", 
-		"map", "package", "range", "return", "select", "struct", "switch", "type", 
-		"var", "+", "-", "Star", "/", "%", "&", "|", "^", "<<", ">>", "&^", "+=", 
-		"-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "&^=", "&&", "||", 
-		"<-", "++", "--", "==", "<", ">", "=", "!", "!=", "<=", ">=", ":=", "...", 
-		"(", ")", "[", "]", "{", "}", ",", ".", ";", ":", "IDENTIFIER", "WS", 
-		"NEWLINE", "COMMENT", "/*", "INT_LITERAL", "IMAGINARY_LITERAL", "FLOAT_LITERAL", 
-		"CharLiteral", "RawStringLiteral", "InterpretedStringLiteral", "ANYCHAR", 
-		"BlockComment_NEWLINE", "CONTINUE_ML_COMMENT", "*/", "*", "BlockComment_ANYCHAR", 
-		"RawLiteralNewline", "ContinueRawLiteral", "`", "RawLiteral_ANYCHAR"
+		"'break'", "'case'", "'chan'", "'const'", "'continue'", "'default'", "'defer'", 
+		"'else'", "'fallthrough'", "'for'", "'func'", "'go'", "'goto'", "'if'", 
+		"'import'", "'interface'", "'map'", "'package'", "'range'", "'return'", 
+		"'select'", "'struct'", "'switch'", "'type'", "'var'", "'+'", "'-'", "Star", 
+		"'/'", "'%'", "'&'", "'|'", "'^'", "'<<'", "'>>'", "'&^'", "'+='", "'-='", 
+		"'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", "'&^='", 
+		"'&&'", "'||'", "'<-'", "'++'", "'--'", "'=='", "'<'", "'>'", "'='", "'!'", 
+		"'!='", "'<='", "'>='", "':='", "'...'", "'('", "')'", "'['", "']'", "'{'", 
+		"'}'", "','", "'.'", "';'", "':'", "IDENTIFIER", "WS", "NEWLINE", "COMMENT", 
+		"'/*'", "INT_LITERAL", "IMAGINARY_LITERAL", "FLOAT_LITERAL", "CharLiteral", 
+		"RawStringLiteral", "InterpretedStringLiteral", "ANYCHAR", "BlockComment_NEWLINE", 
+		"CONTINUE_ML_COMMENT", "'*/'", "'*'", "BlockComment_ANYCHAR", "RawLiteralNewline", 
+		"ContinueRawLiteral", "'`'", "RawLiteral_ANYCHAR"
 	};
 	public static final String[] ruleNames = {
 		"Break", "Case", "Chan", "Const", "Continue", "Default", "Defer", "Else", 
@@ -82,7 +84,7 @@ public class GoHighlighterLexerBase extends Lexer {
 
 
 	protected int getMultilineCommentType() {
-	    return modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
+	    return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
 	}
 
 
@@ -420,7 +422,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void ML_COMMENT_STAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 5 : type =  getMultilineCommentType(); break;
+			case 5 : _type =  getMultilineCommentType(); break;
 		}
 	}
 	public void COMMENT_action(RuleContext _localctx, int actionIndex) {
@@ -429,7 +431,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void RawLiteral_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 10 : type =  ANYCHAR; break;
+			case 10 : _type =  ANYCHAR; break;
 		}
 	}
 	public void INT_LITERAL_action(RuleContext _localctx, int actionIndex) {
@@ -510,7 +512,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void CONTINUE_ML_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 3 : type =  getMultilineCommentType(); break;
+			case 3 : _type =  getMultilineCommentType(); break;
 		}
 	}
 	public void LeftBrace_action(RuleContext _localctx, int actionIndex) {
@@ -564,7 +566,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void BlockComment_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 2 : type =  NEWLINE; break;
+			case 2 : _type =  NEWLINE; break;
 		}
 	}
 	public void UNICODE_CHAR_NODQUOTE_action(RuleContext _localctx, int actionIndex) {
@@ -573,7 +575,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void END_ML_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 4 : type =  getMultilineCommentType(); popMode(); break;
+			case 4 : _type =  getMultilineCommentType(); popMode(); break;
 		}
 	}
 	public void GreaterEqual_action(RuleContext _localctx, int actionIndex) {
@@ -594,7 +596,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void EndRawLiteral_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 9 : type =  RawStringLiteral; popMode(); break;
+			case 9 : _type =  RawStringLiteral; popMode(); break;
 		}
 	}
 	public void EscapedChar_action(RuleContext _localctx, int actionIndex) {
@@ -740,7 +742,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void ContinueRawLiteral_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 8 : type =  RawStringLiteral; break;
+			case 8 : _type =  RawStringLiteral; break;
 		}
 	}
 	public void LeftShift_action(RuleContext _localctx, int actionIndex) {
@@ -781,7 +783,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void BlockComment_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 6 : type =  ANYCHAR; break;
+			case 6 : _type =  ANYCHAR; break;
 		}
 	}
 	public void NEWLINE_action(RuleContext _localctx, int actionIndex) {
@@ -790,7 +792,7 @@ public class GoHighlighterLexerBase extends Lexer {
 	}
 	public void RawLiteralNewline_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 7 : type =  NEWLINE; break;
+			case 7 : _type =  NEWLINE; break;
 		}
 	}
 	public void Dot_action(RuleContext _localctx, int actionIndex) {
