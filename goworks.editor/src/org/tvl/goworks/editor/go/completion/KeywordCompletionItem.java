@@ -55,7 +55,7 @@ public class KeywordCompletionItem extends GoCompletionItem {
     public static final Collection<String> KEYWORDS =
         new ArrayList<String>() {{
             for (int i : KEYWORD_TYPES.toArray()) {
-                add(GoLexerBase.tokenNames[i]);
+                add(GoLexerBase.tokenNames[i].substring(1, GoLexerBase.tokenNames[i].length() - 1));
             }
 
             Collections.sort(this);

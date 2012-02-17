@@ -540,7 +540,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             }
 
                             for (int keyword : allowedKeywords.toArray()) {
-                                KeywordCompletionItem item = new KeywordCompletionItem(GoLexerBase.tokenNames[keyword]);
+                                KeywordCompletionItem item = new KeywordCompletionItem(GoLexerBase.tokenNames[keyword].substring(1, GoLexerBase.tokenNames[keyword].length() - 1));
                                 intermediateResults.put(item.getInsertPrefix().toString(), item);
                             }
 
