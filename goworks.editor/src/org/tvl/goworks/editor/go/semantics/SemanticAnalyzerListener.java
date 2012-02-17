@@ -55,7 +55,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
-import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 import org.tvl.goworks.editor.go.parser.GoParser;
 import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.addAssignOpContext;
@@ -75,6 +75,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.bodyContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.breakStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.builtinArgsContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.builtinCallContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.builtinCallExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.callExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.channelContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.channelTypeContext;
@@ -136,6 +137,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.methodSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.mulAssignOpContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.multExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.operandContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.operandExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.orExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageClauseContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;
@@ -581,7 +583,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private class QualifierTypeResolver extends BlankGoParserBaseListener {
+    private class QualifierTypeResolver extends GoParserBaseBaseListener {
 
         public boolean resolveType(ParserRuleContext<Token> qualifier) {
             ParseTreeWalker.DEFAULT.walk(this, qualifier);
@@ -589,7 +591,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         }
 
         @Override
-        public void exitRule(arrayTypeContext ctx) {
+        public void arrayTypeExit(arrayTypeContext ctx) {
             Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
@@ -613,7 +615,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         }
 
         @Override
-        public void exitRule(pointerTypeContext ctx) {
+        public void pointerTypeExit(pointerTypeContext ctx) {
             Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.typ, GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
@@ -637,7 +639,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         }
 
         @Override
-        public void exitRule(sliceTypeContext ctx) {
+        public void sliceTypeExit(sliceTypeContext ctx) {
             Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
@@ -661,7 +663,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         }
 
         @Override
-        public void exitRule(mapTypeContext ctx) {
+        public void mapTypeExit(mapTypeContext ctx) {
             Collection<? extends CodeElementModel> keyTypes = treeDecorator.getProperty(ctx.keyTyp, GoAnnotations.MODELS);
             Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
             if (keyTypes != null && elementTypes != null) {
@@ -693,7 +695,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         }
 
         @Override
-        public void exitRule(channelTypeContext ctx) {
+        public void channelTypeExit(channelTypeContext ctx) {
             Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
@@ -725,11 +727,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(multExprContext ctx) {
+    public void multExprEnter(multExprContext ctx) {
     }
 
     @Override
-    public void exitRule(multExprContext ctx) {
+    public void multExprExit(multExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.e != null && ctx.op != null && ctx.right == null) {
             CodeElementReference left = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
@@ -741,11 +743,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(channelTypeContext ctx) {
+    public void channelTypeEnter(channelTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(channelTypeContext ctx) {
+    public void channelTypeExit(channelTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.elemType != null) {
             ChannelKind kind = ChannelKind.SendReceive;
@@ -765,15 +767,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(mulAssignOpContext ctx) {
+    public void mulAssignOpEnter(mulAssignOpContext ctx) {
     }
 
     @Override
-    public void exitRule(mulAssignOpContext ctx) {
+    public void mulAssignOpExit(mulAssignOpContext ctx) {
     }
 
     @Override
-    public void enterRule(packageNameContext ctx) {
+    public void packageNameEnter(packageNameContext ctx) {
         int invokingRule = ParseTrees.getInvokingRule(GoParserBase._ATN, ctx);
         NodeType nodeType = invokingRule == GoParser.RULE_packageClause ? NodeType.PACKAGE_DECL : NodeType.PACKAGE_REF;
         treeDecorator.putProperty(ctx, GoAnnotations.NODE_TYPE, nodeType);
@@ -791,12 +793,12 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(packageNameContext ctx) {
+    public void packageNameExit(packageNameContext ctx) {
         // not qualified!
     }
 
     @Override
-    public void enterRule(receiverContext ctx) {
+    public void receiverEnter(receiverContext ctx) {
         if (ctx.name != null) {
             tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             tokenDecorator.putProperty(ctx.name, GoAnnotations.VAR_TYPE, VarKind.RECEIVER);
@@ -810,15 +812,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(receiverContext ctx) {
+    public void receiverExit(receiverContext ctx) {
     }
 
     @Override
-    public void enterRule(arrayTypeContext ctx) {
+    public void arrayTypeEnter(arrayTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(arrayTypeContext ctx) {
+    public void arrayTypeExit(arrayTypeContext ctx) {
         CodeElementReference elemClass = CodeElementReference.UNKNOWN;
         if (ctx.elemType != null) {
             elemClass = treeDecorator.getProperty(ctx.elemType, GoAnnotations.CODE_CLASS);
@@ -832,31 +834,31 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(expressionListContext ctx) {
+    public void expressionListEnter(expressionListContext ctx) {
     }
 
     @Override
-    public void exitRule(expressionListContext ctx) {
+    public void expressionListExit(expressionListContext ctx) {
     }
 
     @Override
-    public void enterRule(tagContext ctx) {
+    public void tagEnter(tagContext ctx) {
     }
 
     @Override
-    public void exitRule(tagContext ctx) {
+    public void tagExit(tagContext ctx) {
     }
 
     @Override
-    public void enterRule(fallthroughStmtContext ctx) {
+    public void fallthroughStmtEnter(fallthroughStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(fallthroughStmtContext ctx) {
+    public void fallthroughStmtExit(fallthroughStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(selectorExprContext ctx) {
+    public void selectorExprEnter(selectorExprContext ctx) {
         if (ctx.name != null) {
             tokenDecorator.putProperty(ctx.name, GoAnnotations.QUALIFIED_EXPR, true);
             if (ctx.e != null) {
@@ -866,7 +868,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(selectorExprContext ctx) {
+    public void selectorExprExit(selectorExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.e != null && ctx.name != null) {
             exprType = new SelectedElementReference(treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE), ctx.name);
@@ -882,64 +884,64 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(parameterListContext ctx) {
+    public void parameterListEnter(parameterListContext ctx) {
     }
 
     @Override
-    public void exitRule(parameterListContext ctx) {
+    public void parameterListExit(parameterListContext ctx) {
     }
 
     @Override
-    public void enterRule(receiverTypeContext ctx) {
+    public void receiverTypeEnter(receiverTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(receiverTypeContext ctx) {
+    public void receiverTypeExit(receiverTypeContext ctx) {
     }
 
     @Override
-    public void enterRule(fieldNameContext ctx) {
+    public void fieldNameEnter(fieldNameContext ctx) {
     }
 
     @Override
-    public void exitRule(fieldNameContext ctx) {
+    public void fieldNameExit(fieldNameContext ctx) {
     }
 
     @Override
-    public void enterRule(ifStmtContext ctx) {
+    public void ifStmtEnter(ifStmtContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(ifStmtContext ctx) {
+    public void ifStmtExit(ifStmtContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(methodNameContext ctx) {
+    public void methodNameEnter(methodNameContext ctx) {
         if (ctx.name != null) {
             tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.METHOD_DECL);
         }
     }
 
     @Override
-    public void exitRule(methodNameContext ctx) {
+    public void methodNameExit(methodNameContext ctx) {
     }
 
     @Override
-    public void enterRule(signatureContext ctx) {
+    public void signatureEnter(signatureContext ctx) {
     }
 
     @Override
-    public void exitRule(signatureContext ctx) {
+    public void signatureExit(signatureContext ctx) {
     }
 
     @Override
-    public void enterRule(mapTypeContext ctx) {
+    public void mapTypeEnter(mapTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(mapTypeContext ctx) {
+    public void mapTypeExit(mapTypeContext ctx) {
         CodeElementReference keyType = CodeElementReference.UNKNOWN;
         if (ctx.keyTyp != null) {
             keyType = treeDecorator.getProperty(ctx.keyTyp, GoAnnotations.CODE_CLASS);
@@ -958,19 +960,19 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(elementContext ctx) {
+    public void elementEnter(elementContext ctx) {
     }
 
     @Override
-    public void exitRule(elementContext ctx) {
+    public void elementExit(elementContext ctx) {
     }
 
     @Override
-    public void enterRule(callExprContext ctx) {
+    public void callExprEnter(callExprContext ctx) {
     }
 
     @Override
-    public void exitRule(callExprContext ctx) {
+    public void callExprExit(callExprContext ctx) {
         CodeElementReference returnType = CodeElementReference.UNKNOWN;
         if (ctx.e != null) {
             boolean builtin = false;
@@ -984,10 +986,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                 argumentListContext args = ctx.args;
                 if (args != null) {
                     expressionListContext exprs = args.exprs;
-                    if (exprs != null && exprs.expressions_list != null && !exprs.expressions_list.isEmpty()) {
-                        typeArgument = treeDecorator.getProperty(exprs.expressions_list.get(0), GoAnnotations.CODE_CLASS);
+                    if (exprs != null && exprs.expressions != null && !exprs.expressions.isEmpty()) {
+                        typeArgument = treeDecorator.getProperty(exprs.expressions.get(0), GoAnnotations.CODE_CLASS);
                         if (typeArgument == null) {
-                            typeArgument = treeDecorator.getProperty(exprs.expressions_list.get(0), GoAnnotations.EXPR_TYPE);
+                            typeArgument = treeDecorator.getProperty(exprs.expressions.get(0), GoAnnotations.EXPR_TYPE);
                         }
                     }
                 }
@@ -1002,36 +1004,36 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(typeCaseClauseContext ctx) {
+    public void typeCaseClauseEnter(typeCaseClauseContext ctx) {
     }
 
     @Override
-    public void exitRule(typeCaseClauseContext ctx) {
+    public void typeCaseClauseExit(typeCaseClauseContext ctx) {
     }
 
     @Override
-    public void enterRule(exprCaseClauseContext ctx) {
+    public void exprCaseClauseEnter(exprCaseClauseContext ctx) {
     }
 
     @Override
-    public void exitRule(exprCaseClauseContext ctx) {
+    public void exprCaseClauseExit(exprCaseClauseContext ctx) {
     }
 
     @Override
-    public void enterRule(typeSwitchGuardContext ctx) {
+    public void typeSwitchGuardEnter(typeSwitchGuardContext ctx) {
     }
 
     @Override
-    public void exitRule(typeSwitchGuardContext ctx) {
+    public void typeSwitchGuardExit(typeSwitchGuardContext ctx) {
     }
 
     @Override
-    public void enterRule(functionLiteralContext ctx) {
+    public void functionLiteralEnter(functionLiteralContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(functionLiteralContext ctx) {
+    public void functionLiteralExit(functionLiteralContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         LOGGER.log(Level.WARNING, "Element references not implemented for context {0}.", ctx.getClass().getSimpleName());
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -1040,20 +1042,20 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(orExprContext ctx) {
+    public void orExprEnter(orExprContext ctx) {
     }
 
     @Override
-    public void exitRule(orExprContext ctx) {
+    public void orExprExit(orExprContext ctx) {
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, BuiltinTypeReference.BOOL);
     }
 
     @Override
-    public void enterRule(recvExprContext ctx) {
+    public void recvExprEnter(recvExprContext ctx) {
     }
 
     @Override
-    public void exitRule(recvExprContext ctx) {
+    public void recvExprExit(recvExprContext ctx) {
         assert ctx.getChildCount() <= 1;
         assert ctx.getChildCount() == 0 || ctx.getChild(0) instanceof expressionContext;
 
@@ -1066,25 +1068,25 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(topLevelDeclContext ctx) {
+    public void topLevelDeclEnter(topLevelDeclContext ctx) {
     }
 
     @Override
-    public void exitRule(topLevelDeclContext ctx) {
+    public void topLevelDeclExit(topLevelDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(methodSpecContext ctx) {
+    public void methodSpecEnter(methodSpecContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(methodSpecContext ctx) {
+    public void methodSpecExit(methodSpecContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(constSpecContext ctx) {
+    public void constSpecEnter(constSpecContext ctx) {
         if (ctx.idList != null) {
             treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.CONST_DECL);
             boolean global = ParseTrees.isInContexts(ctx, false, GoParser.RULE_constSpec, GoParser.RULE_constDecl, GoParser.RULE_declaration, GoParser.RULE_topLevelDecl);
@@ -1093,15 +1095,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(constSpecContext ctx) {
+    public void constSpecExit(constSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(compositeLiteralContext ctx) {
+    public void compositeLiteralEnter(compositeLiteralContext ctx) {
     }
 
     @Override
-    public void exitRule(compositeLiteralContext ctx) {
+    public void compositeLiteralExit(compositeLiteralContext ctx) {
         CodeElementReference exprType;
         if (ctx.litTyp != null) {
             exprType = treeDecorator.getProperty(ctx.litTyp, GoAnnotations.CODE_CLASS);
@@ -1116,31 +1118,31 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(forClauseContext ctx) {
+    public void forClauseEnter(forClauseContext ctx) {
     }
 
     @Override
-    public void exitRule(forClauseContext ctx) {
+    public void forClauseExit(forClauseContext ctx) {
     }
 
     @Override
-    public void enterRule(shortVarDeclContext ctx) {
+    public void shortVarDeclEnter(shortVarDeclContext ctx) {
         if (ctx.idList != null) {
             treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
             if (ctx.exprList != null) {
-                int varCount = ctx.idList.ids_list != null ? ctx.idList.ids_list.size() : 0;
-                int exprCount = ctx.exprList.expressions_list != null ? ctx.exprList.expressions_list.size() : 0;
+                int varCount = ctx.idList.ids != null ? ctx.idList.ids.size() : 0;
+                int exprCount = ctx.exprList.expressions != null ? ctx.exprList.expressions.size() : 0;
                 if (varCount > 1 && exprCount == 1) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions_list.get(0));
-                        tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(0));
+                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 } else if (varCount == exprCount) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions_list.get(i));
+                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(i));
                         if (varCount > 1) {
-                            tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                            tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
                         }
                     }
                 }
@@ -1149,23 +1151,23 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(shortVarDeclContext ctx) {
+    public void shortVarDeclExit(shortVarDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(gotoStmtContext ctx) {
+    public void gotoStmtEnter(gotoStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(gotoStmtContext ctx) {
+    public void gotoStmtExit(gotoStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(arrayLengthContext ctx) {
+    public void arrayLengthEnter(arrayLengthContext ctx) {
     }
 
     @Override
-    public void exitRule(arrayLengthContext ctx) {
+    public void arrayLengthExit(arrayLengthContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.expr != null) {
             exprType = treeDecorator.getProperty(ctx.expr, GoAnnotations.EXPR_TYPE);
@@ -1175,11 +1177,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(interfaceTypeContext ctx) {
+    public void interfaceTypeEnter(interfaceTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(interfaceTypeContext ctx) {
+    public void interfaceTypeExit(interfaceTypeContext ctx) {
         CodeElementReference codeClass = new InterfaceTypeReference();
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
 
@@ -1188,11 +1190,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(conversionContext ctx) {
+    public void conversionEnter(conversionContext ctx) {
     }
 
     @Override
-    public void exitRule(conversionContext ctx) {
+    public void conversionExit(conversionContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.t != null) {
             exprType = treeDecorator.getProperty(ctx.t, GoAnnotations.CODE_CLASS);
@@ -1202,40 +1204,40 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(blockContext ctx) {
+    public void blockEnter(blockContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(blockContext ctx) {
+    public void blockExit(blockContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(breakStmtContext ctx) {
+    public void breakStmtEnter(breakStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(breakStmtContext ctx) {
+    public void breakStmtExit(breakStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(emptyStmtContext ctx) {
+    public void emptyStmtEnter(emptyStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(emptyStmtContext ctx) {
+    public void emptyStmtExit(emptyStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(functionTypeContext ctx) {
+    public void functionTypeEnter(functionTypeContext ctx) {
         if (!ParseTrees.isInContexts(ctx, false, GoParser.RULE_functionType, GoParser.RULE_functionLiteral)) {
             pushVarScope();
         }
     }
 
     @Override
-    public void exitRule(functionTypeContext ctx) {
+    public void functionTypeExit(functionTypeContext ctx) {
         CodeElementReference codeClass = new FunctionTypeReference();
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
 
@@ -1248,11 +1250,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(baseTypeContext ctx) {
+    public void baseTypeEnter(baseTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(baseTypeContext ctx) {
+    public void baseTypeExit(baseTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.typ != null) {
             codeClass = treeDecorator.getProperty(ctx.typ, GoAnnotations.CODE_CLASS);
@@ -1262,7 +1264,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(fieldDeclContext ctx) {
+    public void fieldDeclEnter(fieldDeclContext ctx) {
         if (ctx.idList != null) {
             treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.FIELD);
@@ -1271,29 +1273,29 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(fieldDeclContext ctx) {
+    public void fieldDeclExit(fieldDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(exprSwitchStmtContext ctx) {
+    public void exprSwitchStmtEnter(exprSwitchStmtContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(exprSwitchStmtContext ctx) {
+    public void exprSwitchStmtExit(exprSwitchStmtContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(goStmtContext ctx) {
+    public void goStmtEnter(goStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(goStmtContext ctx) {
+    public void goStmtExit(goStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(parameterDeclContext ctx) {
+    public void parameterDeclEnter(parameterDeclContext ctx) {
         if (ctx.idList != null) {
             treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             if (ctx.ellip != null) {
@@ -1306,40 +1308,40 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                 treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.PARAMETER);
             }
 
-            for (Token id : ParseTrees.emptyIfNull(ctx.idList.ids_list)) {
+            for (Token id : ParseTrees.emptyIfNull(ctx.idList.ids)) {
                 visibleLocals.peek().put(id.getText(), id);
             }
         }
     }
 
     @Override
-    public void exitRule(parameterDeclContext ctx) {
+    public void parameterDeclExit(parameterDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(basicLiteralContext ctx) {
+    public void basicLiteralEnter(basicLiteralContext ctx) {
     }
 
     @Override
-    public void exitRule(basicLiteralContext ctx) {
+    public void basicLiteralExit(basicLiteralContext ctx) {
         assert ctx.stop == null || ctx.start == ctx.stop;
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new LiteralTypeReference(ctx.start));
     }
 
     @Override
-    public void enterRule(exprSwitchCaseContext ctx) {
+    public void exprSwitchCaseEnter(exprSwitchCaseContext ctx) {
     }
 
     @Override
-    public void exitRule(exprSwitchCaseContext ctx) {
+    public void exprSwitchCaseExit(exprSwitchCaseContext ctx) {
     }
 
     @Override
-    public void enterRule(typeLiteralContext ctx) {
+    public void typeLiteralEnter(typeLiteralContext ctx) {
     }
 
     @Override
-    public void exitRule(typeLiteralContext ctx) {
+    public void typeLiteralExit(typeLiteralContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.getChildCount() == 1) {
             codeClass = treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.CODE_CLASS);
@@ -1349,15 +1351,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(selectStmtContext ctx) {
+    public void selectStmtEnter(selectStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(selectStmtContext ctx) {
+    public void selectStmtExit(selectStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(importSpecContext ctx) {
+    public void importSpecEnter(importSpecContext ctx) {
         String name = null;
         String path = null;
         Token target = null;
@@ -1403,15 +1405,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(importSpecContext ctx) {
+    public void importSpecExit(importSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(typeNameContext ctx) {
+    public void typeNameEnter(typeNameContext ctx) {
     }
 
     @Override
-    public void exitRule(typeNameContext ctx) {
+    public void typeNameExit(typeNameContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.qid != null) {
             codeClass = new QualifiedIdentifierElementReference(ctx.qid);
@@ -1431,11 +1433,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(literalTypeContext ctx) {
+    public void literalTypeEnter(literalTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(literalTypeContext ctx) {
+    public void literalTypeExit(literalTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.getChildCount() == 1) {
             ParseTree child = ctx.getChild(0);
@@ -1460,31 +1462,31 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(assignmentContext ctx) {
+    public void assignmentEnter(assignmentContext ctx) {
     }
 
     @Override
-    public void exitRule(assignmentContext ctx) {
+    public void assignmentExit(assignmentContext ctx) {
     }
 
     @Override
-    public void enterRule(assignOpContext ctx) {
+    public void assignOpEnter(assignOpContext ctx) {
     }
 
     @Override
-    public void exitRule(assignOpContext ctx) {
+    public void assignOpExit(assignOpContext ctx) {
     }
 
     @Override
-    public void enterRule(recvStmtContext ctx) {
+    public void recvStmtEnter(recvStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(recvStmtContext ctx) {
+    public void recvStmtExit(recvStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(typeSpecContext ctx) {
+    public void typeSpecEnter(typeSpecContext ctx) {
         if (ctx.name != null) {
             tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.TYPE_DECL);
             visibleTypes.peek().put(ctx.name.getText(), ctx.name);
@@ -1492,32 +1494,32 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(typeSpecContext ctx) {
+    public void typeSpecExit(typeSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(packageClauseContext ctx) {
+    public void packageClauseEnter(packageClauseContext ctx) {
     }
 
     @Override
-    public void exitRule(packageClauseContext ctx) {
+    public void packageClauseExit(packageClauseContext ctx) {
     }
 
     @Override
-    public void enterRule(literalValueContext ctx) {
+    public void literalValueEnter(literalValueContext ctx) {
     }
 
     @Override
-    public void exitRule(literalValueContext ctx) {
+    public void literalValueExit(literalValueContext ctx) {
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new LiteralValueElementReference());
     }
 
     @Override
-    public void enterRule(indexExprContext ctx) {
+    public void indexExprEnter(indexExprContext ctx) {
     }
 
     @Override
-    public void exitRule(indexExprContext ctx) {
+    public void indexExprExit(indexExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.e != null) {
             CodeElementReference arrayType = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
@@ -1528,7 +1530,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(varSpecContext ctx) {
+    public void varSpecEnter(varSpecContext ctx) {
         if (ctx.idList != null) {
             treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             if (ParseTrees.isInContexts(ctx, false, GoParser.RULE_varSpec, GoParser.RULE_varDecl, GoParser.RULE_declaration, GoParser.RULE_topLevelDecl)) {
@@ -1540,17 +1542,17 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             if (ctx.varType != null) {
                 treeDecorator.putProperty(ctx.idList, GoAnnotations.EXPLICIT_TYPE, ctx.varType);
             } else if (ctx.exprList != null) {
-                int varCount = ctx.idList.ids_list != null ? ctx.idList.ids_list.size() : 0;
-                int exprCount = ctx.exprList.expressions_list != null ? ctx.exprList.expressions_list.size() : 0;
+                int varCount = ctx.idList.ids!= null ? ctx.idList.ids.size() : 0;
+                int exprCount = ctx.exprList.expressions!= null ? ctx.exprList.expressions.size() : 0;
                 if (varCount > 1 && exprCount == 1) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions_list.get(0));
-                        tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(0));
+                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 } else if (varCount == exprCount) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions_list.get(i));
-                        tokenDecorator.putProperty(ctx.idList.ids_list.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(i));
+                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 }
             }
@@ -1558,16 +1560,24 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(varSpecContext ctx) {
+    public void varSpecExit(varSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(expressionContext ctx) {
+    public void expressionEnter(expressionContext ctx) {
     }
 
     @Override
-    public void exitRule(expressionContext ctx) {
-        if (ctx.getChildCount() == 1 && (ctx.getChild(0) instanceof operandContext || ctx.getChild(0) instanceof builtinCallContext)) {
+    public void expressionExit(expressionContext ctx) {
+    }
+
+    @Override
+    public void operandExprEnter(operandExprContext ctx) {
+    }
+
+    @Override
+    public void operandExprExit(operandExprContext ctx) {
+        if (ctx.getChildCount() == 1 && ctx.getChild(0) instanceof operandContext) {
             treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.EXPR_TYPE));
         } else {
             LOGGER.log(Level.WARNING, "Unrecognized tree structure.");
@@ -1582,14 +1592,30 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(bodyContext ctx) {
+    public void builtinCallExprEnter(builtinCallExprContext ctx) {
+    }
+
+    @Override
+    public void builtinCallExprExit(builtinCallExprContext ctx) {
+        if (ctx.getChildCount() == 1 && ctx.getChild(0) instanceof builtinCallContext) {
+            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.EXPR_TYPE));
+        } else {
+            LOGGER.log(Level.WARNING, "Unrecognized tree structure.");
+            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, CodeElementReference.UNKNOWN);
+        }
+
+        LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParserBase(null)));
+    }
+
+    @Override
+    public void bodyEnter(bodyContext ctx) {
         pushVarScope();
         visibleLabels.push(new HashMap<String, Token>());
         unresolvedLabels.push(new ArrayList<Token>());
     }
 
     @Override
-    public void exitRule(bodyContext ctx) {
+    public void bodyExit(bodyContext ctx) {
         for (Token labelReference : unresolvedLabels.peek()) {
             Token target = visibleLabels.peek().get(labelReference.getText());
             if (target == null) {
@@ -1606,15 +1632,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(commClauseContext ctx) {
+    public void commClauseEnter(commClauseContext ctx) {
     }
 
     @Override
-    public void exitRule(commClauseContext ctx) {
+    public void commClauseExit(commClauseContext ctx) {
     }
 
     @Override
-    public void enterRule(qualifiedIdentifierContext ctx) {
+    public void qualifiedIdentifierEnter(qualifiedIdentifierContext ctx) {
         if (ctx.pkg != null) {
             if (ctx.id != null) {
                 tokenDecorator.putProperty(ctx.id, GoAnnotations.QUALIFIED_EXPR, true);
@@ -1678,7 +1704,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(qualifiedIdentifierContext ctx) {
+    public void qualifiedIdentifierExit(qualifiedIdentifierContext ctx) {
         if (ctx.pkg != null) {
             treeDecorator.putProperty(ctx, GoAnnotations.QUALIFIED_EXPR, true);
         } else if (ctx.id != null) {
@@ -1687,27 +1713,27 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(returnStmtContext ctx) {
+    public void returnStmtEnter(returnStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(returnStmtContext ctx) {
+    public void returnStmtExit(returnStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(simpleStmtContext ctx) {
+    public void simpleStmtEnter(simpleStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(simpleStmtContext ctx) {
+    public void simpleStmtExit(simpleStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(typeAssertionExprContext ctx) {
+    public void typeAssertionExprEnter(typeAssertionExprContext ctx) {
     }
 
     @Override
-    public void exitRule(typeAssertionExprContext ctx) {
+    public void typeAssertionExprExit(typeAssertionExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.t != null) {
             exprType = treeDecorator.getProperty(ctx.t, GoAnnotations.CODE_CLASS);
@@ -1717,11 +1743,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(typeContext ctx) {
+    public void typeEnter(typeContext ctx) {
     }
 
     @Override
-    public void exitRule(typeContext ctx) {
+    public void typeExit(typeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.name != null) {
             codeClass = treeDecorator.getProperty(ctx.name, GoAnnotations.CODE_CLASS);
@@ -1735,27 +1761,27 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(interfaceTypeNameContext ctx) {
+    public void interfaceTypeNameEnter(interfaceTypeNameContext ctx) {
     }
 
     @Override
-    public void exitRule(interfaceTypeNameContext ctx) {
+    public void interfaceTypeNameExit(interfaceTypeNameContext ctx) {
     }
 
     @Override
-    public void enterRule(continueStmtContext ctx) {
+    public void continueStmtEnter(continueStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(continueStmtContext ctx) {
+    public void continueStmtExit(continueStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(valueContext ctx) {
+    public void valueEnter(valueContext ctx) {
     }
 
     @Override
-    public void exitRule(valueContext ctx) {
+    public void valueExit(valueContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.expr != null) {
             exprType = treeDecorator.getProperty(ctx.expr, GoAnnotations.EXPR_TYPE);
@@ -1767,77 +1793,77 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(methodDeclContext ctx) {
+    public void methodDeclEnter(methodDeclContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(methodDeclContext ctx) {
+    public void methodDeclExit(methodDeclContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(labeledStmtContext ctx) {
+    public void labeledStmtEnter(labeledStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(labeledStmtContext ctx) {
+    public void labeledStmtExit(labeledStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(parametersContext ctx) {
+    public void parametersEnter(parametersContext ctx) {
     }
 
     @Override
-    public void exitRule(parametersContext ctx) {
+    public void parametersExit(parametersContext ctx) {
     }
 
     @Override
-    public void enterRule(deferStmtContext ctx) {
+    public void deferStmtEnter(deferStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(deferStmtContext ctx) {
+    public void deferStmtExit(deferStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(keyContext ctx) {
+    public void keyEnter(keyContext ctx) {
     }
 
     @Override
-    public void exitRule(keyContext ctx) {
+    public void keyExit(keyContext ctx) {
     }
 
     @Override
-    public void enterRule(declarationContext ctx) {
+    public void declarationEnter(declarationContext ctx) {
     }
 
     @Override
-    public void exitRule(declarationContext ctx) {
+    public void declarationExit(declarationContext ctx) {
     }
 
     @Override
-    public void enterRule(commCaseContext ctx) {
+    public void commCaseEnter(commCaseContext ctx) {
     }
 
     @Override
-    public void exitRule(commCaseContext ctx) {
+    public void commCaseExit(commCaseContext ctx) {
     }
 
     @Override
-    public void enterRule(builtinArgsContext ctx) {
+    public void builtinArgsEnter(builtinArgsContext ctx) {
     }
 
     @Override
-    public void exitRule(builtinArgsContext ctx) {
+    public void builtinArgsExit(builtinArgsContext ctx) {
     }
 
     @Override
-    public void enterRule(conditionContext ctx) {
+    public void conditionEnter(conditionContext ctx) {
     }
 
     @Override
-    public void exitRule(conditionContext ctx) {
+    public void conditionExit(conditionContext ctx) {
         assert ctx.getChildCount() <= 1;
         assert ctx.getChildCount() == 0 || ctx.getChild(0) instanceof expressionContext;
 
@@ -1850,11 +1876,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(conversionOrCallExprContext ctx) {
+    public void conversionOrCallExprEnter(conversionOrCallExprContext ctx) {
     }
 
     @Override
-    public void exitRule(conversionOrCallExprContext ctx) {
+    public void conversionOrCallExprExit(conversionOrCallExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.conv != null) {
             exprType = new ConversionOrCallResultReference(treeDecorator.getProperty(ctx.conv, GoAnnotations.EXPR_TYPE));
@@ -1864,7 +1890,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(labelContext ctx) {
+    public void labelEnter(labelContext ctx) {
         if (ctx.name == null) {
             return;
         }
@@ -1880,15 +1906,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(labelContext ctx) {
+    public void labelExit(labelContext ctx) {
     }
 
     @Override
-    public void enterRule(elementTypeContext ctx) {
+    public void elementTypeEnter(elementTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(elementTypeContext ctx) {
+    public void elementTypeExit(elementTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.typ != null) {
             codeClass = treeDecorator.getProperty(ctx.typ, GoAnnotations.CODE_CLASS);
@@ -1898,7 +1924,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(functionDeclContext ctx) {
+    public void functionDeclEnter(functionDeclContext ctx) {
         if (ctx.name != null) {
             tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.FUNC_DECL);
             visibleFunctions.peek().put(ctx.name.getText(), ctx.name);
@@ -1908,24 +1934,24 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(functionDeclContext ctx) {
+    public void functionDeclExit(functionDeclContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(statementContext ctx) {
+    public void statementEnter(statementContext ctx) {
     }
 
     @Override
-    public void exitRule(statementContext ctx) {
+    public void statementExit(statementContext ctx) {
     }
 
     @Override
-    public void enterRule(pointerTypeContext ctx) {
+    public void pointerTypeEnter(pointerTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(pointerTypeContext ctx) {
+    public void pointerTypeExit(pointerTypeContext ctx) {
         CodeElementReference elemClass = CodeElementReference.UNKNOWN;
         if (ctx.typ != null) {
             elemClass = treeDecorator.getProperty(ctx.typ, GoAnnotations.CODE_CLASS);
@@ -1939,27 +1965,27 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(addAssignOpContext ctx) {
+    public void addAssignOpEnter(addAssignOpContext ctx) {
     }
 
     @Override
-    public void exitRule(addAssignOpContext ctx) {
+    public void addAssignOpExit(addAssignOpContext ctx) {
     }
 
     @Override
-    public void enterRule(sourceFileContext ctx) {
+    public void sourceFileEnter(sourceFileContext ctx) {
     }
 
     @Override
-    public void exitRule(sourceFileContext ctx) {
+    public void sourceFileExit(sourceFileContext ctx) {
     }
 
     @Override
-    public void enterRule(sliceExprContext ctx) {
+    public void sliceExprEnter(sliceExprContext ctx) {
     }
 
     @Override
-    public void exitRule(sliceExprContext ctx) {
+    public void sliceExprExit(sliceExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.e != null) {
             exprType = new SliceExpressionTypeReference(treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE));
@@ -1969,7 +1995,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(baseTypeNameContext ctx) {
+    public void baseTypeNameEnter(baseTypeNameContext ctx) {
         if (ctx.name != null) {
             @SuppressWarnings("unchecked")
             TerminalNode<Token> node = (TerminalNode<Token>)ParseTrees.findTerminalNode(ctx.children, ctx.name);
@@ -1978,7 +2004,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(baseTypeNameContext ctx) {
+    public void baseTypeNameExit(baseTypeNameContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.name != null) {
             codeClass = new ReceiverTypeReference(ctx.name, treeDecorator.getProperty(ctx, GoAnnotations.POINTER_RECEIVER));
@@ -1988,22 +2014,22 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(methodExprContext ctx) {
+    public void methodExprEnter(methodExprContext ctx) {
     }
 
     @Override
-    public void exitRule(methodExprContext ctx) {
+    public void methodExprExit(methodExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         LOGGER.log(Level.WARNING, "Element references not implemented for context {0}.", ctx.getClass().getSimpleName());
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
     }
 
     @Override
-    public void enterRule(elementIndexContext ctx) {
+    public void elementIndexEnter(elementIndexContext ctx) {
     }
 
     @Override
-    public void exitRule(elementIndexContext ctx) {
+    public void elementIndexExit(elementIndexContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.index != null) {
             exprType = treeDecorator.getProperty(ctx.index, GoAnnotations.EXPR_TYPE);
@@ -2013,23 +2039,23 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(typeListContext ctx) {
+    public void typeListEnter(typeListContext ctx) {
     }
 
     @Override
-    public void exitRule(typeListContext ctx) {
+    public void typeListExit(typeListContext ctx) {
     }
 
     @Override
-    public void enterRule(incDecStmtContext ctx) {
+    public void incDecStmtEnter(incDecStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(incDecStmtContext ctx) {
+    public void incDecStmtExit(incDecStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(builtinCallContext ctx) {
+    public void builtinCallEnter(builtinCallContext ctx) {
         if (ctx.name != null) {
             if (SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.name.getText())) {
                 tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.FUNC_REF);
@@ -2043,7 +2069,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(builtinCallContext ctx) {
+    public void builtinCallExit(builtinCallContext ctx) {
         CodeElementReference typeArgument = CodeElementReference.UNKNOWN;
         builtinArgsContext args = ctx.args;
         if (args != null) {
@@ -2052,7 +2078,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             } else {
                 expressionListContext exprList = args.args;
                 if (exprList != null) {
-                    List<expressionContext> exprs = exprList.expressions_list;
+                    List<expressionContext> exprs = exprList.expressions;
                     if (exprs != null && !exprs.isEmpty()) {
                         typeArgument = treeDecorator.getProperty(exprs.get(0), GoAnnotations.EXPR_TYPE);
                         if (typeArgument == null) {
@@ -2067,36 +2093,36 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(constDeclContext ctx) {
+    public void constDeclEnter(constDeclContext ctx) {
     }
 
     @Override
-    public void exitRule(constDeclContext ctx) {
+    public void constDeclExit(constDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(resultContext ctx) {
+    public void resultEnter(resultContext ctx) {
     }
 
     @Override
-    public void exitRule(resultContext ctx) {
+    public void resultExit(resultContext ctx) {
     }
 
     @Override
-    public void enterRule(andExprContext ctx) {
+    public void andExprEnter(andExprContext ctx) {
     }
 
     @Override
-    public void exitRule(andExprContext ctx) {
+    public void andExprExit(andExprContext ctx) {
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, BuiltinTypeReference.BOOL);
     }
 
     @Override
-    public void enterRule(structTypeContext ctx) {
+    public void structTypeEnter(structTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(structTypeContext ctx) {
+    public void structTypeExit(structTypeContext ctx) {
         CodeElementReference codeClass = new StructTypeReference();
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
 
@@ -2105,23 +2131,23 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(varDeclContext ctx) {
+    public void varDeclEnter(varDeclContext ctx) {
     }
 
     @Override
-    public void exitRule(varDeclContext ctx) {
+    public void varDeclExit(varDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(initStmtContext ctx) {
+    public void initStmtEnter(initStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(initStmtContext ctx) {
+    public void initStmtExit(initStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(identifierListContext ctx) {
+    public void identifierListEnter(identifierListContext ctx) {
         NodeType nodeType = treeDecorator.getProperty(ctx, GoAnnotations.NODE_TYPE);
         VarKind varType = treeDecorator.getProperty(ctx, GoAnnotations.VAR_TYPE);
         boolean variadic = treeDecorator.getProperty(ctx, GoAnnotations.VARIADIC);
@@ -2140,7 +2166,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             return;
         }
 
-        for (Token token : ParseTrees.emptyIfNull(ctx.ids_list)) {
+        for (Token token : ParseTrees.emptyIfNull(ctx.ids)) {
             if (nodeType == NodeType.VAR_DECL) {
                 if (varType != VarKind.FIELD) {
                     visibleLocals.peek().put(token.getText(), token);
@@ -2171,15 +2197,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(identifierListContext ctx) {
+    public void identifierListExit(identifierListContext ctx) {
     }
 
     @Override
-    public void enterRule(sliceTypeContext ctx) {
+    public void sliceTypeEnter(sliceTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(sliceTypeContext ctx) {
+    public void sliceTypeExit(sliceTypeContext ctx) {
         CodeElementReference elemClass = CodeElementReference.UNKNOWN;
         if (ctx.elemType != null) {
             elemClass = treeDecorator.getProperty(ctx.elemType, GoAnnotations.CODE_CLASS);
@@ -2193,36 +2219,36 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(compareExprContext ctx) {
+    public void compareExprEnter(compareExprContext ctx) {
     }
 
     @Override
-    public void exitRule(compareExprContext ctx) {
+    public void compareExprExit(compareExprContext ctx) {
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, BuiltinTypeReference.BOOL);
     }
 
     @Override
-    public void enterRule(importDeclContext ctx) {
+    public void importDeclEnter(importDeclContext ctx) {
     }
 
     @Override
-    public void exitRule(importDeclContext ctx) {
+    public void importDeclExit(importDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(elementListContext ctx) {
+    public void elementListEnter(elementListContext ctx) {
     }
 
     @Override
-    public void exitRule(elementListContext ctx) {
+    public void elementListExit(elementListContext ctx) {
     }
 
     @Override
-    public void enterRule(keyTypeContext ctx) {
+    public void keyTypeEnter(keyTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(keyTypeContext ctx) {
+    public void keyTypeExit(keyTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.t != null) {
             codeClass = treeDecorator.getProperty(ctx.t, GoAnnotations.CODE_CLASS);
@@ -2232,27 +2258,27 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(importPathContext ctx) {
+    public void importPathEnter(importPathContext ctx) {
     }
 
     @Override
-    public void exitRule(importPathContext ctx) {
+    public void importPathExit(importPathContext ctx) {
     }
 
     @Override
-    public void enterRule(anonymousFieldContext ctx) {
+    public void anonymousFieldEnter(anonymousFieldContext ctx) {
     }
 
     @Override
-    public void exitRule(anonymousFieldContext ctx) {
+    public void anonymousFieldExit(anonymousFieldContext ctx) {
     }
 
     @Override
-    public void enterRule(addExprContext ctx) {
+    public void addExprEnter(addExprContext ctx) {
     }
 
     @Override
-    public void exitRule(addExprContext ctx) {
+    public void addExprExit(addExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.e != null && ctx.op != null && ctx.right == null) {
             CodeElementReference left = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
@@ -2264,59 +2290,59 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(expressionStmtContext ctx) {
+    public void expressionStmtEnter(expressionStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(expressionStmtContext ctx) {
+    public void expressionStmtExit(expressionStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(sendStmtContext ctx) {
+    public void sendStmtEnter(sendStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(sendStmtContext ctx) {
+    public void sendStmtExit(sendStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(switchStmtContext ctx) {
+    public void switchStmtEnter(switchStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(switchStmtContext ctx) {
+    public void switchStmtExit(switchStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(postStmtContext ctx) {
+    public void postStmtEnter(postStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(postStmtContext ctx) {
+    public void postStmtExit(postStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(forStmtContext ctx) {
+    public void forStmtEnter(forStmtContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(forStmtContext ctx) {
+    public void forStmtExit(forStmtContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(typeSwitchCaseContext ctx) {
+    public void typeSwitchCaseEnter(typeSwitchCaseContext ctx) {
         pushVarScope();
     }
 
     @Override
-    public void exitRule(typeSwitchCaseContext ctx) {
+    public void typeSwitchCaseExit(typeSwitchCaseContext ctx) {
         popVarScope();
     }
 
     @Override
-    public void enterRule(rangeClauseContext ctx) {
+    public void rangeClauseEnter(rangeClauseContext ctx) {
         if (ctx.defeq != null) {
             if (ctx.e1 != null && ctx.e1.start == ParseTrees.getStopSymbol(ctx.e1)) {
                 Token token = ctx.e1.start;
@@ -2339,7 +2365,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void exitRule(rangeClauseContext ctx) {
+    public void rangeClauseExit(rangeClauseContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.e != null) {
             exprType = new RangeClauseResultReference(treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE));
@@ -2349,11 +2375,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(operandContext ctx) {
+    public void operandEnter(operandContext ctx) {
     }
 
     @Override
-    public void exitRule(operandContext ctx) {
+    public void operandExit(operandContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.lit != null) {
             exprType = treeDecorator.getProperty(ctx.lit, GoAnnotations.EXPR_TYPE);
@@ -2375,35 +2401,35 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(argumentListContext ctx) {
+    public void argumentListEnter(argumentListContext ctx) {
     }
 
     @Override
-    public void exitRule(argumentListContext ctx) {
+    public void argumentListExit(argumentListContext ctx) {
     }
 
     @Override
-    public void enterRule(typeSwitchStmtContext ctx) {
+    public void typeSwitchStmtEnter(typeSwitchStmtContext ctx) {
     }
 
     @Override
-    public void exitRule(typeSwitchStmtContext ctx) {
+    public void typeSwitchStmtExit(typeSwitchStmtContext ctx) {
     }
 
     @Override
-    public void enterRule(typeDeclContext ctx) {
+    public void typeDeclEnter(typeDeclContext ctx) {
     }
 
     @Override
-    public void exitRule(typeDeclContext ctx) {
+    public void typeDeclExit(typeDeclContext ctx) {
     }
 
     @Override
-    public void enterRule(unaryExprContext ctx) {
+    public void unaryExprEnter(unaryExprContext ctx) {
     }
 
     @Override
-    public void exitRule(unaryExprContext ctx) {
+    public void unaryExprExit(unaryExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.e != null && ctx.op != null) {
             CodeElementReference e = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
@@ -2414,11 +2440,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(channelContext ctx) {
+    public void channelEnter(channelContext ctx) {
     }
 
     @Override
-    public void exitRule(channelContext ctx) {
+    public void channelExit(channelContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.e != null) {
             exprType = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
@@ -2428,11 +2454,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     }
 
     @Override
-    public void enterRule(literalContext ctx) {
+    public void literalEnter(literalContext ctx) {
     }
 
     @Override
-    public void exitRule(literalContext ctx) {
+    public void literalExit(literalContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.bl != null) {
             exprType = treeDecorator.getProperty(ctx.bl, GoAnnotations.EXPR_TYPE);

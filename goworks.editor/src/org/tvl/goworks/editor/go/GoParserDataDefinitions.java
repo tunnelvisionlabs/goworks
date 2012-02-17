@@ -129,7 +129,7 @@ public class GoParserDataDefinitions {
     private static final class CurrentDeclarationContextDataDefinition extends ParserDataDefinition<CurrentDeclarationContextData> {
 
         public CurrentDeclarationContextDataDefinition() {
-            super("Go Current Rule Context", CurrentDeclarationContextData.class, true, false, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
+            super("Go Current Rule Context", CurrentDeclarationContextData.class, true, true, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

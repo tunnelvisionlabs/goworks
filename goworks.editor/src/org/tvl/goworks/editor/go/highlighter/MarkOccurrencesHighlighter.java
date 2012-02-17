@@ -38,7 +38,6 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
@@ -62,10 +61,9 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.completion.CompletionParserATNSimulator;
-import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
-import org.tvl.goworks.editor.go.parser.GoLexerBase;
 import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
 import org.tvl.goworks.editor.go.semantics.GoAnnotations;
 
@@ -269,7 +267,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
     }
 
-    public static class MarkOccurrencesListener extends BlankGoParserBaseListener {
+    public static class MarkOccurrencesListener extends GoParserBaseBaseListener {
 
         private final FileModel fileModel;
         private final GoAnnotatedParseTree annotatedParseTree;

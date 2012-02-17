@@ -23,7 +23,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
-import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.GoParserBase.blockContext;
@@ -38,6 +37,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.sourceFileContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.structTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.typeSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
+import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 
 /**
  *
@@ -94,7 +94,7 @@ public class GoDeclarationsScanner {
         }
     }
 
-    private static class DeclarationsScannerListener extends BlankGoParserBaseListener {
+    private static class DeclarationsScannerListener extends GoParserBaseBaseListener {
         private final DocumentSnapshot snapshot;
         private final Deque<DeclarationDescription> descriptionStack = new ArrayDeque<DeclarationDescription>();
         private final Deque<String> typeNameStack = new ArrayDeque<String>();
@@ -112,9 +112,9 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void enterRule(constSpecContext ctx) {
+        public void constSpecEnter(constSpecContext ctx) {
             identifierListContext idListContext = ctx.idList;
-            List<Token> identifiers = idListContext.ids_list;
+            List<Token> identifiers = idListContext.ids;
             for (Token identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
@@ -127,14 +127,14 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void enterRule(varSpecContext ctx) {
+        public void varSpecEnter(varSpecContext ctx) {
             // no locals in navigator
             if (blockLevel > 0) {
                 return;
             }
 
             identifierListContext idListContext = ctx.idList;
-            List<Token> identifiers = idListContext.ids_list;
+            List<Token> identifiers = idListContext.ids;
             for (Token identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
@@ -147,14 +147,14 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void enterRule(shortVarDeclContext ctx) {
+        public void shortVarDeclEnter(shortVarDeclContext ctx) {
             // no locals in navigator
             if (blockLevel > 0) {
                 return;
             }
 
             identifierListContext idListContext = ctx.idList;
-            List<Token> identifiers = idListContext.ids_list;
+            List<Token> identifiers = idListContext.ids;
             for (Token identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
@@ -167,10 +167,10 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void enterRule(fieldDeclContext ctx) {
+        public void fieldDeclEnter(fieldDeclContext ctx) {
             identifierListContext idListContext = ctx.idList;
             if (idListContext != null) {
-                List<Token> identifiers = idListContext.ids_list;
+                List<Token> identifiers = idListContext.ids;
                 for (Token identifier : identifiers) {
                     Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                     String signature = String.format("%s", identifier.getText());
@@ -184,7 +184,7 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void enterRule(structTypeContext ctx) {
+        public void structTypeEnter(structTypeContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
 
@@ -197,12 +197,12 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void exitRule(structTypeContext ctx) {
+        public void structTypeExit(structTypeContext ctx) {
             descriptionStack.pop();
         }
 
         @Override
-        public void enterRule(functionDeclContext ctx) {
+        public void functionDeclEnter(functionDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = String.format("%s", ctx.name.getText());
 
@@ -215,12 +215,12 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void exitRule(functionDeclContext ctx) {
+        public void functionDeclExit(functionDeclContext ctx) {
             descriptionStack.pop();
         }
 
         @Override
-        public void enterRule(methodDeclContext ctx) {
+        public void methodDeclEnter(methodDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String name = ctx.name != null && ctx.name.name != null ? ctx.name.name.getText() : "?";
             String signature = String.format("%s", name);
@@ -234,37 +234,37 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        public void exitRule(methodDeclContext ctx) {
+        public void methodDeclExit(methodDeclContext ctx) {
             descriptionStack.pop();
         }
 
         @Override
-        public void enterRule(typeSpecContext ctx) {
+        public void typeSpecEnter(typeSpecContext ctx) {
             typeNameStack.push(ctx.name.getText());
         }
 
         @Override
-        public void exitRule(typeSpecContext ctx) {
+        public void typeSpecExit(typeSpecContext ctx) {
             typeNameStack.pop();
         }
 
         @Override
-        public void enterRule(resultContext ctx) {
+        public void resultEnter(resultContext ctx) {
             resultLevel++;
         }
 
         @Override
-        public void exitRule(resultContext ctx) {
+        public void resultExit(resultContext ctx) {
             resultLevel--;
         }
 
         @Override
-        public void enterRule(blockContext ctx) {
+        public void blockEnter(blockContext ctx) {
             blockLevel++;
         }
 
         @Override
-        public void exitRule(blockContext ctx) {
+        public void blockExit(blockContext ctx) {
             blockLevel--;
         }
 

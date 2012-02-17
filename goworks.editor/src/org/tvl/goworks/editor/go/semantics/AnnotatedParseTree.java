@@ -18,7 +18,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.Tree;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
-import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 
 /**
  *
@@ -70,7 +70,7 @@ public class AnnotatedParseTree {
     public void compactAnnotations() {
         final Map<Tree, Tree> map = new IdentityHashMap<Tree, Tree>();
 
-        BlankGoParserBaseListener listener = new BlankGoParserBaseListener() {
+        GoParserBaseBaseListener listener = new GoParserBaseBaseListener() {
 
             @Override
             public void enterEveryRule(ParserRuleContext<Token> ctx) {

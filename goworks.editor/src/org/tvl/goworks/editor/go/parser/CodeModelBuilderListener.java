@@ -86,7 +86,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.varSpecContext;
  *
  * @author Sam Harwell
  */
-public class CodeModelBuilderListener extends BlankGoParserBaseListener {
+public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     // -J-Dorg.tvl.goworks.editor.go.parser.CodeModelBuilderListener.level=FINE
     private static final Logger LOGGER = Logger.getLogger(CodeModelBuilderListener.class.getName());
 
@@ -118,7 +118,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void enterRule(sourceFileContext ctx) {
+    public void sourceFileEnter(sourceFileContext ctx) {
         FileObject packageFolder = snapshot.getVersionedDocument().getFileObject().getParent();
         FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
 
@@ -138,7 +138,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(sourceFileContext ctx) {
+    public void sourceFileExit(sourceFileContext ctx) {
         this.fileModel.freeze();
         this.typeContainerStack.pop();
         this.constContainerStack.pop();
@@ -147,7 +147,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(packageClauseContext ctx) {
+    public void packageClauseExit(packageClauseContext ctx) {
         packageNameContext nameContext = ctx.name;
         if (nameContext != null && nameContext.name != null) {
             String name = nameContext.name.getText();
@@ -157,7 +157,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(importSpecContext ctx) {
+    public void importSpecExit(importSpecContext ctx) {
         if (ctx.path == null && ctx.path.path == null) {
             return;
         }
@@ -179,13 +179,13 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(typeContext ctx) {
+    public void typeExit(typeContext ctx) {
         // handled by child contexts
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void exitRule(typeNameContext ctx) {
+    public void typeNameExit(typeNameContext ctx) {
         String pkgName = ctx.qid.pkg != null ? ctx.qid.pkg.name.getText() : null;
         String typeName = ctx.qid.id.getText();
         typeModelStack.push(new TypeReferenceModelImpl(pkgName, typeName, fileModel));
@@ -193,59 +193,59 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(typeLiteralContext ctx) {
+    public void typeLiteralExit(typeLiteralContext ctx) {
         // handled by child contexts
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void exitRule(interfaceTypeNameContext ctx) {
+    public void interfaceTypeNameExit(interfaceTypeNameContext ctx) {
         // handled by child contexts
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void exitRule(arrayTypeContext ctx) {
+    public void arrayTypeExit(arrayTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         typeModelStack.push(new TypeArrayModelImpl(elementType));
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void enterRule(structTypeContext ctx) {
+    public void structTypeEnter(structTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
         structModelStack.push(new TypeStructModelImpl(typeName, fileModel));
     }
 
     @Override
-    public void exitRule(structTypeContext ctx) {
+    public void structTypeExit(structTypeContext ctx) {
         typeModelStack.push(structModelStack.pop());
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void exitRule(pointerTypeContext ctx) {
+    public void pointerTypeExit(pointerTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         typeModelStack.push(new TypePointerModelImpl(elementType));
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void enterRule(functionTypeContext ctx) {
+    public void functionTypeEnter(functionTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
         functionModelStack.push(new TypeFunctionModelImpl(typeName, fileModel));
         parameterContainerStack.push(new ArrayList<ParameterModelImpl>());
     }
 
     @Override
-    public void exitRule(functionTypeContext ctx) {
+    public void functionTypeExit(functionTypeContext ctx) {
         parameterContainerStack.pop();
         typeModelStack.push((TypeFunctionModelImpl)functionModelStack.pop());
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void enterRule(interfaceTypeContext ctx) {
+    public void interfaceTypeEnter(interfaceTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
         interfaceModelStack.push(new TypeInterfaceModelImpl(typeName, fileModel));
         implementedTypesContainerStack.push(interfaceModelStack.peek().getImplementedInterfaces());
@@ -253,7 +253,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(interfaceTypeContext ctx) {
+    public void interfaceTypeExit(interfaceTypeContext ctx) {
         typeModelStack.push(interfaceModelStack.pop());
         implementedTypesContainerStack.pop();
         functionContainerStack.pop();
@@ -261,14 +261,14 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(sliceTypeContext ctx) {
+    public void sliceTypeExit(sliceTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         typeModelStack.push(new TypeSliceModelImpl(elementType));
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    public void exitRule(mapTypeContext ctx) {
+    public void mapTypeExit(mapTypeContext ctx) {
         TypeModelImpl valueType = typeModelStack.pop();
         TypeModelImpl keyType = typeModelStack.pop();
         typeModelStack.push(new TypeMapModelImpl(keyType, valueType));
@@ -276,7 +276,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(channelTypeContext ctx) {
+    public void channelTypeExit(channelTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         ChannelKind channelKind = ChannelKind.SendReceive;
         if (ctx.send != null) {
@@ -290,7 +290,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(typeSpecContext ctx) {
+    public void typeSpecExit(typeSpecContext ctx) {
         String name = "?";
         if (ctx.name != null) {
             name = ctx.name.getText();
@@ -302,9 +302,9 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(constSpecContext ctx) {
+    public void constSpecExit(constSpecContext ctx) {
         identifierListContext idList = ctx.idList;
-        List<Token> ids = idList != null ? idList.ids_list : null;
+        List<Token> ids = idList != null ? idList.ids : null;
         if (ids != null && !ids.isEmpty()) {
             for (Token id : ids) {
                 ConstModelImpl model = new ConstModelImpl(id.getText(), fileModel);
@@ -318,10 +318,10 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(varSpecContext ctx) {
+    public void varSpecExit(varSpecContext ctx) {
         TypeModelImpl varType = ctx.varType != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
         identifierListContext idList = ctx.idList;
-        List<Token> ids = idList != null ? idList.ids_list : null;
+        List<Token> ids = idList != null ? idList.ids : null;
         if (ids != null && !ids.isEmpty()) {
             boolean isGlobal = varContainerStack.peek() == fileModel.getVars();
             for (Token id : ids) {
@@ -332,7 +332,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void enterRule(methodDeclContext ctx) {
+    public void methodDeclEnter(methodDeclContext ctx) {
         String name = ctx.name != null && ctx.name.name != null ? ctx.name.name.getText() : createAnonymousTypeName(ctx);
         FunctionModelImpl model = new FunctionModelImpl(name, fileModel);
         functionContainerStack.peek().add(model);
@@ -341,13 +341,13 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(methodDeclContext ctx) {
+    public void methodDeclExit(methodDeclContext ctx) {
         functionModelStack.pop();
         parameterContainerStack.pop();
     }
 
     @Override
-    public void enterRule(methodSpecContext ctx) {
+    public void methodSpecEnter(methodSpecContext ctx) {
         if (ctx.name != null) {
             FunctionModelImpl model = new FunctionModelImpl(ctx.name.name.getText(), fileModel);
             functionContainerStack.peek().add(model);
@@ -357,7 +357,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(methodSpecContext ctx) {
+    public void methodSpecExit(methodSpecContext ctx) {
         if (ctx.name != null) {
             functionModelStack.pop();
             parameterContainerStack.pop();
@@ -367,14 +367,14 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(baseTypeNameContext ctx) {
+    public void baseTypeNameExit(baseTypeNameContext ctx) {
         String pkgName = null;
         String typeName = ctx.name.getText();
         typeModelStack.push(new TypeReferenceModelImpl(pkgName, typeName, fileModel));
     }
 
     @Override
-    public void exitRule(receiverContext ctx) {
+    public void receiverExit(receiverContext ctx) {
         String name = "_";
         if (ctx.name != null) {
             name = ctx.name.getText();
@@ -392,7 +392,7 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void enterRule(functionDeclContext ctx) {
+    public void functionDeclEnter(functionDeclContext ctx) {
         FunctionModelImpl model = new FunctionModelImpl(ctx.name.getText(), fileModel);
         functionContainerStack.peek().add(model);
         functionModelStack.push(model);
@@ -400,27 +400,27 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(functionDeclContext ctx) {
+    public void functionDeclExit(functionDeclContext ctx) {
         functionModelStack.pop();
         parameterContainerStack.pop();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void enterRule(resultContext ctx) {
+    public void resultEnter(resultContext ctx) {
         parameterContainerStack.pop();
         parameterContainerStack.push((Collection<ParameterModelImpl>)functionModelStack.peek().getReturnValues());
     }
 
     @Override
-    public void exitRule(resultContext ctx) {
+    public void resultExit(resultContext ctx) {
         if (ctx.t != null) {
             parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, typeModelStack.pop(), fileModel));
         }
     }
 
     @Override
-    public void exitRule(parameterDeclContext ctx) {
+    public void parameterDeclExit(parameterDeclContext ctx) {
         if (ctx.idList == null && ctx.t == null) {
             return;
         }
@@ -431,8 +431,8 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
         }
 
         boolean isReturnParameter = functionModelStack.peek().getReturnValues() == parameterContainerStack.peek();
-        if (ctx.idList != null && ctx.idList.ids_list != null) {
-            for (Token id : ctx.idList.ids_list) {
+        if (ctx.idList != null && ctx.idList.ids != null) {
+            for (Token id : ctx.idList.ids) {
                 parameterContainerStack.peek().add(new ParameterModelImpl(id.getText(), isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, fileModel));
             }
         } else {
@@ -441,14 +441,14 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(fieldDeclContext ctx) {
+    public void fieldDeclExit(fieldDeclContext ctx) {
         TypeModelImpl fieldType = null;
         if (ctx.fieldType != null || ctx.anonField != null) {
             fieldType = typeModelStack.pop();
         }
 
         identifierListContext idList = ctx.idList;
-        List<Token> ids = idList != null ? idList.ids_list : null;
+        List<Token> ids = idList != null ? idList.ids : null;
         if (ids == null && ctx.anonField != null) {
             Token name = ctx.anonField.fieldType.qid.id;
             if (name != null) {
@@ -465,48 +465,48 @@ public class CodeModelBuilderListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void exitRule(typeAssertionExprContext ctx) {
+    public void typeAssertionExprExit(typeAssertionExprContext ctx) {
         if (ctx.t != null) {
             typeModelStack.pop();
         }
     }
 
     @Override
-    public void exitRule(methodExprContext ctx) {
+    public void methodExprExit(methodExprContext ctx) {
         if (ctx.recvType != null) {
             typeModelStack.pop();
         }
     }
 
     @Override
-    public void exitRule(conversionContext ctx) {
+    public void conversionExit(conversionContext ctx) {
         if (ctx.t != null) {
             typeModelStack.pop();
         }
     }
 
     @Override
-    public void exitRule(builtinArgsContext ctx) {
+    public void builtinArgsExit(builtinArgsContext ctx) {
         if (ctx.typeArg != null) {
             typeModelStack.pop();
         }
     }
 
     @Override
-    public void exitRule(typeListContext ctx) {
-        int typeCount = ctx.types_list != null ? ctx.types_list.size() : 0;
+    public void typeListExit(typeListContext ctx) {
+        int typeCount = ctx.types != null ? ctx.types.size() : 0;
         for (int i = 0; i < typeCount; i++) {
             typeModelStack.pop();
         }
     }
 
     @Override
-    public void exitRule(functionLiteralContext ctx) {
+    public void functionLiteralExit(functionLiteralContext ctx) {
         typeModelStack.pop();
     }
 
     @Override
-    public void exitRule(compositeLiteralContext ctx) {
+    public void compositeLiteralExit(compositeLiteralContext ctx) {
         typeModelStack.pop();
     }
 

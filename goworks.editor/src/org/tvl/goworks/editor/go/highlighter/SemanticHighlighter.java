@@ -41,10 +41,10 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
-import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
 import org.tvl.goworks.editor.go.semantics.NodeType;
 
@@ -280,7 +280,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     }
 
-    public static class SemanticAnalyzerListener extends BlankGoParserBaseListener {
+    public static class SemanticAnalyzerListener extends GoParserBaseBaseListener {
 
         private final FileModel fileModel;
         private final GoAnnotatedParseTree annotatedTree;

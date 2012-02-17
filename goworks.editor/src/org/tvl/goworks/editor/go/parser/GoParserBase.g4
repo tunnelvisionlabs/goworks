@@ -361,9 +361,11 @@ functionLiteral
 
 expression
     :   operand
+        -> operandExpr
     |   conv=conversion
         -> conversionOrCallExpr
     |   builtinCall
+        -> builtinCallExpr
     |   e=expression dot='.' name=IDENTIFIER
         -> selectorExpr
     |   e=expression '[' expression ']'

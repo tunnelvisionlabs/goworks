@@ -94,7 +94,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
-import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 import org.tvl.goworks.editor.go.parser.GoLexerBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.arrayTypeContext;
@@ -949,10 +949,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         }
 
                                         final List<Token> labels = new ArrayList<Token>();
-                                        ParseTreeListener<Token> listener = new BlankGoParserBaseListener() {
+                                        ParseTreeListener<Token> listener = new GoParserBaseBaseListener() {
 
                                             @Override
-                                            public void enterRule(labeledStmtContext ctx) {
+                                            public void labeledStmtEnter(labeledStmtContext ctx) {
                                                 if (ctx.lbl != null && ctx.lbl.name != null) {
                                                     labels.add(ctx.lbl.name);
                                                 }
@@ -1132,7 +1132,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 annotations.putProperty(context, property, locals);
             }
 
-            private class Listener extends BlankGoParserBaseListener {
+            private class Listener extends GoParserBaseBaseListener {
                 private final Map<Token, ParserRuleContext<Token>> locals = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                 private final Map<Token, ParserRuleContext<Token>> receiverParameters = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                 private final Map<Token, ParserRuleContext<Token>> parameters = new IdentityHashMap<Token, ParserRuleContext<Token>>();
@@ -1160,17 +1160,17 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 @Override
-                public void enterRule(varSpecContext ctx) {
+                public void varSpecEnter(varSpecContext ctx) {
                     addVars(locals, ctx.idList, ctx.varType, ctx.exprList);
                 }
 
                 @Override
-                public void enterRule(shortVarDeclContext ctx) {
+                public void shortVarDeclEnter(shortVarDeclContext ctx) {
                     addVars(locals, ctx.idList, null, ctx.exprList);
                 }
 
                 @Override
-                public void enterRule(rangeClauseContext ctx) {
+                public void rangeClauseEnter(rangeClauseContext ctx) {
                     if (ctx.defeq != null) {
                         if (ctx.e1 != null && ctx.e1.start != null) {
                             locals.put(ctx.e1.start, null);
@@ -1183,14 +1183,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 @Override
-                public void enterRule(typeSwitchGuardContext ctx) {
+                public void typeSwitchGuardEnter(typeSwitchGuardContext ctx) {
                     if (ctx.id != null) {
                         locals.put(ctx.id, null);
                     }
                 }
 
                 @Override
-                public void enterRule(recvStmtContext ctx) {
+                public void recvStmtEnter(recvStmtContext ctx) {
                     if (ctx.defeq != null) {
                         if (ctx.e1 != null && ctx.e1.start != null) {
                             locals.put(ctx.e1.start, null);
@@ -1203,14 +1203,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 @Override
-                public void enterRule(receiverContext ctx) {
+                public void receiverEnter(receiverContext ctx) {
                     if (ctx.name != null) {
                         receiverParameters.put(ctx.name, ctx.typ);
                     }
                 }
 
                 @Override
-                public void enterRule(parameterDeclContext ctx) {
+                public void parameterDeclEnter(parameterDeclContext ctx) {
                     if (ctx.idList != null) {
                         GoParserBase.parametersContext parametersContext = (GoParserBase.parametersContext)getTopContext(parser, ctx, IntervalSet.of(GoParserBase.RULE_parameters));
                         Map<Token, ParserRuleContext<Token>> map = parametersContext.parent instanceof GoParserBase.resultContext ? returnParameters : parameters;
@@ -1219,7 +1219,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 @Override
-                public void enterRule(constSpecContext ctx) {
+                public void constSpecEnter(constSpecContext ctx) {
                     addVars(constants, ctx.idList, ctx.explicitType, ctx.valueList);
                 }
 
@@ -1228,13 +1228,13 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                      @NullAllowed GoParserBase.typeContext explicitType,
                                      @NullAllowed GoParserBase.expressionListContext exprList) {
 
-                    if (idList == null || idList.ids_list == null) {
+                    if (idList == null || idList.ids == null) {
                         return;
                     }
 
-                    List<GoParserBase.expressionContext> expressions = exprList != null ? exprList.expressions_list : null;
-                    for (int i = 0; i < idList.ids_list.size(); i++) {
-                        Token name = idList.ids_list.get(i);
+                    List<GoParserBase.expressionContext> expressions = exprList != null ? exprList.expressions : null;
+                    for (int i = 0; i < idList.ids.size(); i++) {
+                        Token name = idList.ids.get(i);
                         ParserRuleContext<Token> type = explicitType;
                         if (type == null && expressions != null && i < expressions.size()) {
                             type = expressions.get(i);
@@ -1246,7 +1246,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
         }
 
-        private class TargetAnalyzer extends BlankGoParserBaseListener {
+        private class TargetAnalyzer extends GoParserBaseBaseListener {
 
             @NonNull
             public Collection<? extends CodeElementModel> resolveTarget(@NullAllowed ParserRuleContext<Token> context) {
@@ -1269,7 +1269,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(packageNameContext ctx) {
+            public void packageNameEnter(packageNameContext ctx) {
                 FileModel fileModel = getFileModel();
                 if (ctx.name == null || fileModel == null) {
                     return;
@@ -1293,7 +1293,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(expressionContext ctx) {
+            public void expressionEnter(expressionContext ctx) {
                 if (ctx.getChildCount() == 1 && (ctx.getChild(0) instanceof GoParserBase.operandContext)) {
                     annotations.putProperty(ctx, ATTR_TARGET, resolveTarget((GoParserBase.operandContext)ctx.getChild(0)));
                     return;
@@ -1303,7 +1303,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(selectorExprContext ctx) {
+            public void selectorExprEnter(selectorExprContext ctx) {
                 if (ctx.name == null) {
                     annotations.putProperty(ctx, ATTR_TARGET, null);
                     return;
@@ -1330,7 +1330,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(typeContext ctx) {
+            public void typeEnter(typeContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 if (ctx.name != null) {
                     result = resolveTarget(ctx.name);
@@ -1347,7 +1347,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(typeLiteralContext ctx) {
+            public void typeLiteralEnter(typeLiteralContext ctx) {
                 if (ctx.getChildCount() != 1) {
                     LOGGER.log(Level.FINE, "Unknown typeLiteral syntax.");
                     return;
@@ -1359,7 +1359,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(arrayTypeContext ctx) {
+            public void arrayTypeEnter(arrayTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.elemType != null) {
                     result.addAll(resolveTarget(ctx.elemType));
@@ -1378,12 +1378,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(structTypeContext ctx) {
+            public void structTypeEnter(structTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
-            public void enterRule(pointerTypeContext ctx) {
+            public void pointerTypeEnter(pointerTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.typ != null) {
                     result.addAll(resolveTarget(ctx.typ));
@@ -1402,7 +1402,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(baseTypeContext ctx) {
+            public void baseTypeEnter(baseTypeContext ctx) {
                 if (ctx.getChildCount() != 1) {
                     LOGGER.log(Level.FINE, "Unknown baseType syntax.");
                     return;
@@ -1414,17 +1414,17 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(functionTypeContext ctx) {
+            public void functionTypeEnter(functionTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
-            public void enterRule(interfaceTypeContext ctx) {
+            public void interfaceTypeEnter(interfaceTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
-            public void enterRule(sliceTypeContext ctx) {
+            public void sliceTypeEnter(sliceTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.elemType != null) {
                     result.addAll(resolveTarget(ctx.elemType));
@@ -1443,12 +1443,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(mapTypeContext ctx) {
+            public void mapTypeEnter(mapTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
-            public void enterRule(channelTypeContext ctx) {
+            public void channelTypeEnter(channelTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.elemType != null) {
                     result.addAll(resolveTarget(ctx.elemType));
@@ -1474,7 +1474,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(literalTypeContext ctx) {
+            public void literalTypeEnter(literalTypeContext ctx) {
                 if (ctx.getChildCount() != 1) {
                     LOGGER.log(Level.FINE, "TODO: resolve implicit array creation.");
                     return;
@@ -1486,7 +1486,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(typeNameContext ctx) {
+            public void typeNameEnter(typeNameContext ctx) {
                 if (ctx.qid == null) {
                     LOGGER.log(Level.FINE, "Unknown typeName syntax.");
                     return;
@@ -1498,7 +1498,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(baseTypeNameContext ctx) {
+            public void baseTypeNameEnter(baseTypeNameContext ctx) {
                 // must be a type in the current package
                 PackageModel currentPackage = getFileModel().getPackage();
                 Collection<? extends TypeModel> types = currentPackage.getTypes(ctx.name.getText());
@@ -1524,7 +1524,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(operandContext ctx) {
+            public void operandEnter(operandContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 if (ctx.lit != null) {
                     result = resolveTarget(ctx.lit);
@@ -1543,7 +1543,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(callExprContext ctx) {
+            public void callExprEnter(callExprContext ctx) {
                 if (ctx.e == null) {
                     return;
                 }
@@ -1562,7 +1562,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void enterRule(qualifiedIdentifierContext ctx) {
+            public void qualifiedIdentifierEnter(qualifiedIdentifierContext ctx) {
                 Map<Token, ParserRuleContext<Token>> vars = Collections.emptyMap();
                 List<CodeElementModel> contextModels = new ArrayList<CodeElementModel>();
                 List<ImportDeclarationModel> possibleImports = new ArrayList<ImportDeclarationModel>();

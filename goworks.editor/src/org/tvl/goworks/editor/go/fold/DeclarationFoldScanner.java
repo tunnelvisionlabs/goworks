@@ -20,11 +20,11 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
-import org.tvl.goworks.editor.go.parser.BlankGoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.GoParserBase.importDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.topLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 
 /**
  *
@@ -59,7 +59,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         return fold;
     }
 
-    private static class FoldListener extends BlankGoParserBaseListener {
+    private static class FoldListener extends GoParserBaseBaseListener {
         private final DocumentSnapshot snapshot;
         private final Collection<FoldInfo> folds;
 
@@ -69,7 +69,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         }
 
         @Override
-        public void enterRule(topLevelDeclContext ctx) {
+        public void topLevelDeclEnter(topLevelDeclContext ctx) {
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
                 folds.add(foldInfo);
@@ -77,7 +77,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         }
 
         @Override
-        public void enterRule(importDeclContext ctx) {
+        public void importDeclEnter(importDeclContext ctx) {
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
                 folds.add(foldInfo);

@@ -23,6 +23,6 @@ cd %SOURCE_ROOT%\goworks.editor\src\org\tvl\goworks\editor\go\highlighter
 start /B java %ANTLR4_TOOL% -Xforce-atn *.g4
 
 cd %SOURCE_ROOT%\goworks.editor\src\org\tvl\goworks\editor\go\parser
-java %ANTLR4_TOOL% -Xforce-atn *.g4
+java %ANTLR4_TOOL% -visitor -Xforce-atn *.g4
 
 cd %SOURCE_ROOT%

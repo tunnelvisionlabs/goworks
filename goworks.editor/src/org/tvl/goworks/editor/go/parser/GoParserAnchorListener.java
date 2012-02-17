@@ -28,7 +28,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.topLevelDeclContext;
  *
  * @author Sam Harwell
  */
-public class GoParserAnchorListener extends BlankGoParserBaseListener {
+public class GoParserAnchorListener extends GoParserBaseBaseListener {
     private final Stack<Integer> anchorPositions = new Stack<Integer>();
     private final List<Anchor> anchors = new ArrayList<Anchor>();
     private final DocumentSnapshot snapshot;
@@ -74,12 +74,12 @@ public class GoParserAnchorListener extends BlankGoParserBaseListener {
     }
 
     @Override
-    public void enterRule(topLevelDeclContext ctx) {
+    public void topLevelDeclEnter(topLevelDeclContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    public void exitRule(topLevelDeclContext ctx) {
+    public void topLevelDeclExit(topLevelDeclContext ctx) {
         exitAnchor(ctx, ctx.ruleIndex);
     }
 

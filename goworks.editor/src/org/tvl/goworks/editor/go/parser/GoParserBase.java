@@ -161,21 +161,35 @@ public class GoParserBase extends Parser {
 		_interp = new ParserATNSimulator<Token>(this,_ATN);
 	}
 	public static class typeContext extends ParserRuleContext<Token> {
-		public typeNameContext name;;
-		public typeLiteralContext lit;;
-		public Token lp;;
-		public typeContext t;;
-		public Token rp;;
+		public typeNameContext name;
+		public typeLiteralContext lit;
+		public Token lp;
+		public typeContext t;
+		public Token rp;
+		public typeNameContext typeName() {
+		    return (typeNameContext)getRuleContext(typeNameContext.class,0);
+		}
+		public typeLiteralContext typeLiteral() {
+		    return (typeLiteralContext)getRuleContext(typeLiteralContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public typeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -189,23 +203,23 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(222); _localctx.name = typeName();
+					setState(222); ((typeContext)_localctx).name = typeName();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(224); _localctx.lit = typeLiteral();
+					setState(224); ((typeContext)_localctx).lit = typeLiteral();
 					}
 					break;
 
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(226); _localctx.lp = match(LeftParen);
-					setState(228); _localctx.t = type();
-					setState(230); _localctx.rp = match(RightParen);
+					setState(226); ((typeContext)_localctx).lp = match(LeftParen);
+					setState(228); ((typeContext)_localctx).t = type();
+					setState(230); ((typeContext)_localctx).rp = match(RightParen);
 					}
 					break;
 			}
@@ -222,17 +236,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeNameContext extends ParserRuleContext<Token> {
-		public qualifiedIdentifierContext qid;;
+		public qualifiedIdentifierContext qid;
+		public qualifiedIdentifierContext qualifiedIdentifier() {
+		    return (qualifiedIdentifierContext)getRuleContext(qualifiedIdentifierContext.class,0);
+		}
 		public typeNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeNameEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeNameExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeNameVisit(this);
+		    else return null;
 		}
 	}
 
@@ -242,7 +264,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(234); _localctx.qid = qualifiedIdentifier();
+			setState(234); ((typeNameContext)_localctx).qid = qualifiedIdentifier();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -257,24 +279,53 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeLiteralContext extends ParserRuleContext<Token> {
-		public arrayTypeContext arrType;;
-		public structTypeContext strType;;
-		public pointerTypeContext ptrType;;
-		public functionTypeContext fnType;;
-		public interfaceTypeContext ifaceType;;
-		public sliceTypeContext slcType;;
-		public mapTypeContext maptype;;
-		public channelTypeContext chanType;;
+		public arrayTypeContext arrType;
+		public structTypeContext strType;
+		public pointerTypeContext ptrType;
+		public functionTypeContext fnType;
+		public interfaceTypeContext ifaceType;
+		public sliceTypeContext slcType;
+		public mapTypeContext maptype;
+		public channelTypeContext chanType;
+		public pointerTypeContext pointerType() {
+		    return (pointerTypeContext)getRuleContext(pointerTypeContext.class,0);
+		}
+		public channelTypeContext channelType() {
+		    return (channelTypeContext)getRuleContext(channelTypeContext.class,0);
+		}
+		public interfaceTypeContext interfaceType() {
+		    return (interfaceTypeContext)getRuleContext(interfaceTypeContext.class,0);
+		}
+		public functionTypeContext functionType() {
+		    return (functionTypeContext)getRuleContext(functionTypeContext.class,0);
+		}
+		public arrayTypeContext arrayType() {
+		    return (arrayTypeContext)getRuleContext(arrayTypeContext.class,0);
+		}
+		public structTypeContext structType() {
+		    return (structTypeContext)getRuleContext(structTypeContext.class,0);
+		}
+		public sliceTypeContext sliceType() {
+		    return (sliceTypeContext)getRuleContext(sliceTypeContext.class,0);
+		}
+		public mapTypeContext mapType() {
+		    return (mapTypeContext)getRuleContext(mapTypeContext.class,0);
+		}
 		public typeLiteralContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeLiteralEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeLiteralExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeLiteralVisit(this);
+		    else return null;
 		}
 	}
 
@@ -288,56 +339,56 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(236); _localctx.arrType = arrayType();
+					setState(236); ((typeLiteralContext)_localctx).arrType = arrayType();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(238); _localctx.strType = structType();
+					setState(238); ((typeLiteralContext)_localctx).strType = structType();
 					}
 					break;
 
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(240); _localctx.ptrType = pointerType();
+					setState(240); ((typeLiteralContext)_localctx).ptrType = pointerType();
 					}
 					break;
 
 				case 4:
 					enterOuterAlt(_localctx, 4);
 					{
-					setState(242); _localctx.fnType = functionType();
+					setState(242); ((typeLiteralContext)_localctx).fnType = functionType();
 					}
 					break;
 
 				case 5:
 					enterOuterAlt(_localctx, 5);
 					{
-					setState(244); _localctx.ifaceType = interfaceType();
+					setState(244); ((typeLiteralContext)_localctx).ifaceType = interfaceType();
 					}
 					break;
 
 				case 6:
 					enterOuterAlt(_localctx, 6);
 					{
-					setState(246); _localctx.slcType = sliceType();
+					setState(246); ((typeLiteralContext)_localctx).slcType = sliceType();
 					}
 					break;
 
 				case 7:
 					enterOuterAlt(_localctx, 7);
 					{
-					setState(248); _localctx.maptype = mapType();
+					setState(248); ((typeLiteralContext)_localctx).maptype = mapType();
 					}
 					break;
 
 				case 8:
 					enterOuterAlt(_localctx, 8);
 					{
-					setState(250); _localctx.chanType = channelType();
+					setState(250); ((typeLiteralContext)_localctx).chanType = channelType();
 					}
 					break;
 			}
@@ -354,18 +405,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class arrayTypeContext extends ParserRuleContext<Token> {
-		public arrayLengthContext len;;
-		public elementTypeContext elemType;;
+		public arrayLengthContext len;
+		public elementTypeContext elemType;
+		public arrayLengthContext arrayLength() {
+		    return (arrayLengthContext)getRuleContext(arrayLengthContext.class,0);
+		}
+		public elementTypeContext elementType() {
+		    return (elementTypeContext)getRuleContext(elementTypeContext.class,0);
+		}
 		public arrayTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).arrayTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).arrayTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).arrayTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -376,9 +438,9 @@ public class GoParserBase extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(254); match(LeftBrack);
-			setState(256); _localctx.len = arrayLength();
+			setState(256); ((arrayTypeContext)_localctx).len = arrayLength();
 			setState(258); match(RightBrack);
-			setState(260); _localctx.elemType = elementType();
+			setState(260); ((arrayTypeContext)_localctx).elemType = elementType();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -393,17 +455,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class arrayLengthContext extends ParserRuleContext<Token> {
-		public expressionContext expr;;
+		public expressionContext expr;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public arrayLengthContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).arrayLengthEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).arrayLengthExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).arrayLengthVisit(this);
+		    else return null;
 		}
 	}
 
@@ -413,7 +483,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(262); _localctx.expr = expression(0);
+			setState(262); ((arrayLengthContext)_localctx).expr = expression(0);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -428,17 +498,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class elementTypeContext extends ParserRuleContext<Token> {
-		public typeContext typ;;
+		public typeContext typ;
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public elementTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).elementTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -448,7 +526,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(264); _localctx.typ = type();
+			setState(264); ((elementTypeContext)_localctx).typ = type();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -463,17 +541,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class sliceTypeContext extends ParserRuleContext<Token> {
-		public elementTypeContext elemType;;
+		public elementTypeContext elemType;
+		public elementTypeContext elementType() {
+		    return (elementTypeContext)getRuleContext(elementTypeContext.class,0);
+		}
 		public sliceTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sliceTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sliceTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).sliceTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -485,7 +571,7 @@ public class GoParserBase extends Parser {
 			{
 			setState(266); match(LeftBrack);
 			setState(268); match(RightBrack);
-			setState(270); _localctx.elemType = elementType();
+			setState(270); ((sliceTypeContext)_localctx).elemType = elementType();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -500,18 +586,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class structTypeContext extends ParserRuleContext<Token> {
-		public fieldDeclContext fields;;
-		public List<fieldDeclContext> fields_list = new ArrayList<fieldDeclContext>();;
+		public fieldDeclContext fieldDecl;
+		public List<fieldDeclContext> fields = new ArrayList<fieldDeclContext>();
+		public fieldDeclContext fieldDecl(int i) {
+		    return (fieldDeclContext)getRuleContext(fieldDeclContext.class,i);
+		}
+		public List<? extends fieldDeclContext> fieldDecl() {
+		    return (List<fieldDeclContext>)getRuleContexts(fieldDeclContext.class);
+		}
 		public structTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).structTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).structTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).structTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -530,8 +627,8 @@ public class GoParserBase extends Parser {
 				if ( _alt187==1 ) {
 					{
 					{
-					setState(276); _localctx.fields = fieldDecl();
-					_localctx.fields_list.add(_localctx.fields);
+					setState(276); ((structTypeContext)_localctx).fieldDecl = fieldDecl();
+					((structTypeContext)_localctx).fields.add(((structTypeContext)_localctx).fieldDecl);
 					setState(278); match(Semi);
 					}
 					} 
@@ -545,8 +642,8 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 				case 1:
 					{
-					setState(285); _localctx.fields = fieldDecl();
-					_localctx.fields_list.add(_localctx.fields);
+					setState(285); ((structTypeContext)_localctx).fieldDecl = fieldDecl();
+					((structTypeContext)_localctx).fields.add(((structTypeContext)_localctx).fieldDecl);
 					}
 					break;
 			}
@@ -565,20 +662,37 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class fieldDeclContext extends ParserRuleContext<Token> {
-		public identifierListContext idList;;
-		public typeContext fieldType;;
-		public anonymousFieldContext anonField;;
-		public tagContext fieldTag;;
+		public identifierListContext idList;
+		public typeContext fieldType;
+		public anonymousFieldContext anonField;
+		public tagContext fieldTag;
+		public tagContext tag() {
+		    return (tagContext)getRuleContext(tagContext.class,0);
+		}
+		public anonymousFieldContext anonymousField() {
+		    return (anonymousFieldContext)getRuleContext(anonymousFieldContext.class,0);
+		}
+		public identifierListContext identifierList() {
+		    return (identifierListContext)getRuleContext(identifierListContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public fieldDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).fieldDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).fieldDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).fieldDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -593,14 +707,14 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 				case 1:
 					{
-					setState(291); _localctx.idList = identifierList();
-					setState(293); _localctx.fieldType = type();
+					setState(291); ((fieldDeclContext)_localctx).idList = identifierList();
+					setState(293); ((fieldDeclContext)_localctx).fieldType = type();
 					}
 					break;
 
 				case 2:
 					{
-					setState(295); _localctx.anonField = anonymousField();
+					setState(295); ((fieldDeclContext)_localctx).anonField = anonymousField();
 					}
 					break;
 			}
@@ -609,7 +723,7 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 				case 1:
 					{
-					setState(299); _localctx.fieldTag = tag();
+					setState(299); ((fieldDeclContext)_localctx).fieldTag = tag();
 					}
 					break;
 			}
@@ -627,18 +741,26 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class anonymousFieldContext extends ParserRuleContext<Token> {
-		public Token ptr;;
-		public typeNameContext fieldType;;
+		public Token ptr;
+		public typeNameContext fieldType;
+		public typeNameContext typeName() {
+		    return (typeNameContext)getRuleContext(typeNameContext.class,0);
+		}
 		public anonymousFieldContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).anonymousFieldEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).anonymousFieldExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).anonymousFieldVisit(this);
+		    else return null;
 		}
 	}
 
@@ -653,11 +775,11 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 				case 1:
 					{
-					setState(303); _localctx.ptr = match(Star);
+					setState(303); ((anonymousFieldContext)_localctx).ptr = match(Star);
 					}
 					break;
 			}
-			setState(307); _localctx.fieldType = typeName();
+			setState(307); ((anonymousFieldContext)_localctx).fieldType = typeName();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -672,16 +794,22 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class tagContext extends ParserRuleContext<Token> {
+		public Token StringLiteral() { return getToken(GoParserBase.StringLiteral, 0); }
 		public tagContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).tagEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).tagExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).tagVisit(this);
+		    else return null;
 		}
 	}
 
@@ -706,18 +834,26 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class pointerTypeContext extends ParserRuleContext<Token> {
-		public Token ptr;;
-		public baseTypeContext typ;;
+		public Token ptr;
+		public baseTypeContext typ;
+		public baseTypeContext baseType() {
+		    return (baseTypeContext)getRuleContext(baseTypeContext.class,0);
+		}
 		public pointerTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).pointerTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).pointerTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).pointerTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -727,8 +863,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(311); _localctx.ptr = match(Star);
-			setState(313); _localctx.typ = baseType();
+			setState(311); ((pointerTypeContext)_localctx).ptr = match(Star);
+			setState(313); ((pointerTypeContext)_localctx).typ = baseType();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -743,17 +879,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class baseTypeContext extends ParserRuleContext<Token> {
-		public typeContext typ;;
+		public typeContext typ;
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public baseTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).baseTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).baseTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).baseTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -763,7 +907,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(315); _localctx.typ = type();
+			setState(315); ((baseTypeContext)_localctx).typ = type();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -778,17 +922,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class functionTypeContext extends ParserRuleContext<Token> {
-		public signatureContext sig;;
+		public signatureContext sig;
+		public signatureContext signature() {
+		    return (signatureContext)getRuleContext(signatureContext.class,0);
+		}
 		public functionTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).functionTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).functionTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).functionTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -799,7 +951,7 @@ public class GoParserBase extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(317); match(Func);
-			setState(319); _localctx.sig = signature();
+			setState(319); ((functionTypeContext)_localctx).sig = signature();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -814,18 +966,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class signatureContext extends ParserRuleContext<Token> {
-		public parametersContext params;;
-		public resultContext res;;
+		public parametersContext params;
+		public resultContext res;
+		public resultContext result() {
+		    return (resultContext)getRuleContext(resultContext.class,0);
+		}
+		public parametersContext parameters() {
+		    return (parametersContext)getRuleContext(parametersContext.class,0);
+		}
 		public signatureContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).signatureEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).signatureExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).signatureVisit(this);
+		    else return null;
 		}
 	}
 
@@ -835,13 +998,13 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(321); _localctx.params = parameters();
+			setState(321); ((signatureContext)_localctx).params = parameters();
 			setState(325);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 				case 1:
 					{
-					setState(323); _localctx.res = result();
+					setState(323); ((signatureContext)_localctx).res = result();
 					}
 					break;
 			}
@@ -859,18 +1022,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class resultContext extends ParserRuleContext<Token> {
-		public parametersContext params;;
-		public typeContext t;;
+		public parametersContext params;
+		public typeContext t;
+		public parametersContext parameters() {
+		    return (parametersContext)getRuleContext(parametersContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public resultContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).resultEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).resultExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).resultVisit(this);
+		    else return null;
 		}
 	}
 
@@ -884,14 +1058,14 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(327); _localctx.params = parameters();
+					setState(327); ((resultContext)_localctx).params = parameters();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(329); _localctx.t = type();
+					setState(329); ((resultContext)_localctx).t = type();
 					}
 					break;
 			}
@@ -908,17 +1082,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class parametersContext extends ParserRuleContext<Token> {
-		public parameterListContext params;;
+		public parameterListContext params;
+		public parameterListContext parameterList() {
+		    return (parameterListContext)getRuleContext(parameterListContext.class,0);
+		}
 		public parametersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).parametersEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).parametersExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).parametersVisit(this);
+		    else return null;
 		}
 	}
 
@@ -934,7 +1116,7 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 				case 1:
 					{
-					setState(335); _localctx.params = parameterList();
+					setState(335); ((parametersContext)_localctx).params = parameterList();
 					setState(339);
 					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
@@ -962,18 +1144,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class parameterListContext extends ParserRuleContext<Token> {
-		public parameterDeclContext params;;
-		public List<parameterDeclContext> params_list = new ArrayList<parameterDeclContext>();;
+		public parameterDeclContext parameterDecl;
+		public List<parameterDeclContext> params = new ArrayList<parameterDeclContext>();
+		public List<? extends parameterDeclContext> parameterDecl() {
+		    return (List<parameterDeclContext>)getRuleContexts(parameterDeclContext.class);
+		}
+		public parameterDeclContext parameterDecl(int i) {
+		    return (parameterDeclContext)getRuleContext(parameterDeclContext.class,i);
+		}
 		public parameterListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).parameterListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).parameterListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).parameterListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -983,8 +1176,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(345); _localctx.params = parameterDecl();
-			_localctx.params_list.add(_localctx.params);
+			setState(345); ((parameterListContext)_localctx).parameterDecl = parameterDecl();
+			((parameterListContext)_localctx).params.add(((parameterListContext)_localctx).parameterDecl);
 			setState(353);
 			_errHandler.sync(this);
 			int _alt350 = getInterpreter().adaptivePredict(_input,11,_ctx);
@@ -993,8 +1186,8 @@ public class GoParserBase extends Parser {
 					{
 					{
 					setState(347); match(Comma);
-					setState(349); _localctx.params = parameterDecl();
-					_localctx.params_list.add(_localctx.params);
+					setState(349); ((parameterListContext)_localctx).parameterDecl = parameterDecl();
+					((parameterListContext)_localctx).params.add(((parameterListContext)_localctx).parameterDecl);
 					}
 					} 
 				}
@@ -1016,19 +1209,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class parameterDeclContext extends ParserRuleContext<Token> {
-		public identifierListContext idList;;
-		public Token ellip;;
-		public typeContext t;;
+		public identifierListContext idList;
+		public Token ellip;
+		public typeContext t;
+		public identifierListContext identifierList() {
+		    return (identifierListContext)getRuleContext(identifierListContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public parameterDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).parameterDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).parameterDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).parameterDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1043,7 +1247,7 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
 				case 1:
 					{
-					setState(356); _localctx.idList = identifierList();
+					setState(356); ((parameterDeclContext)_localctx).idList = identifierList();
 					}
 					break;
 			}
@@ -1052,11 +1256,11 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
 				case 1:
 					{
-					setState(360); _localctx.ellip = match(Ellipsis);
+					setState(360); ((parameterDeclContext)_localctx).ellip = match(Ellipsis);
 					}
 					break;
 			}
-			setState(364); _localctx.t = type();
+			setState(364); ((parameterDeclContext)_localctx).t = type();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1071,18 +1275,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class interfaceTypeContext extends ParserRuleContext<Token> {
-		public methodSpecContext methods;;
-		public List<methodSpecContext> methods_list = new ArrayList<methodSpecContext>();;
+		public methodSpecContext methodSpec;
+		public List<methodSpecContext> methods = new ArrayList<methodSpecContext>();
+		public methodSpecContext methodSpec(int i) {
+		    return (methodSpecContext)getRuleContext(methodSpecContext.class,i);
+		}
+		public List<? extends methodSpecContext> methodSpec() {
+		    return (List<methodSpecContext>)getRuleContexts(methodSpecContext.class);
+		}
 		public interfaceTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).interfaceTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).interfaceTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).interfaceTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1099,8 +1314,8 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 				case 1:
 					{
-					setState(370); _localctx.methods = methodSpec();
-					_localctx.methods_list.add(_localctx.methods);
+					setState(370); ((interfaceTypeContext)_localctx).methodSpec = methodSpec();
+					((interfaceTypeContext)_localctx).methods.add(((interfaceTypeContext)_localctx).methodSpec);
 					setState(378);
 					_errHandler.sync(this);
 					int _alt394 = getInterpreter().adaptivePredict(_input,14,_ctx);
@@ -1109,8 +1324,8 @@ public class GoParserBase extends Parser {
 							{
 							{
 							setState(372); match(Semi);
-							setState(374); _localctx.methods = methodSpec();
-							_localctx.methods_list.add(_localctx.methods);
+							setState(374); ((interfaceTypeContext)_localctx).methodSpec = methodSpec();
+							((interfaceTypeContext)_localctx).methods.add(((interfaceTypeContext)_localctx).methodSpec);
 							}
 							} 
 						}
@@ -1145,19 +1360,33 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class methodSpecContext extends ParserRuleContext<Token> {
-		public methodNameContext name;;
-		public signatureContext sig;;
-		public interfaceTypeNameContext ifaceName;;
+		public methodNameContext name;
+		public signatureContext sig;
+		public interfaceTypeNameContext ifaceName;
+		public methodNameContext methodName() {
+		    return (methodNameContext)getRuleContext(methodNameContext.class,0);
+		}
+		public signatureContext signature() {
+		    return (signatureContext)getRuleContext(signatureContext.class,0);
+		}
+		public interfaceTypeNameContext interfaceTypeName() {
+		    return (interfaceTypeNameContext)getRuleContext(interfaceTypeNameContext.class,0);
+		}
 		public methodSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).methodSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1171,15 +1400,15 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(389); _localctx.name = methodName();
-					setState(391); _localctx.sig = signature();
+					setState(389); ((methodSpecContext)_localctx).name = methodName();
+					setState(391); ((methodSpecContext)_localctx).sig = signature();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(393); _localctx.ifaceName = interfaceTypeName();
+					setState(393); ((methodSpecContext)_localctx).ifaceName = interfaceTypeName();
 					}
 					break;
 			}
@@ -1196,17 +1425,23 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class methodNameContext extends ParserRuleContext<Token> {
-		public Token name;;
+		public Token name;
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public methodNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodNameEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodNameExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).methodNameVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1216,7 +1451,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(397); _localctx.name = match(IDENTIFIER);
+			setState(397); ((methodNameContext)_localctx).name = match(IDENTIFIER);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1231,17 +1466,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class interfaceTypeNameContext extends ParserRuleContext<Token> {
-		public typeNameContext typName;;
+		public typeNameContext typName;
+		public typeNameContext typeName() {
+		    return (typeNameContext)getRuleContext(typeNameContext.class,0);
+		}
 		public interfaceTypeNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).interfaceTypeNameEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).interfaceTypeNameExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).interfaceTypeNameVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1251,7 +1494,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(399); _localctx.typName = typeName();
+			setState(399); ((interfaceTypeNameContext)_localctx).typName = typeName();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1266,18 +1509,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class mapTypeContext extends ParserRuleContext<Token> {
-		public keyTypeContext keyTyp;;
-		public elementTypeContext elemType;;
+		public keyTypeContext keyTyp;
+		public elementTypeContext elemType;
+		public keyTypeContext keyType() {
+		    return (keyTypeContext)getRuleContext(keyTypeContext.class,0);
+		}
+		public elementTypeContext elementType() {
+		    return (elementTypeContext)getRuleContext(elementTypeContext.class,0);
+		}
 		public mapTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).mapTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).mapTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).mapTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1289,9 +1543,9 @@ public class GoParserBase extends Parser {
 			{
 			setState(401); match(Map);
 			setState(403); match(LeftBrack);
-			setState(405); _localctx.keyTyp = keyType();
+			setState(405); ((mapTypeContext)_localctx).keyTyp = keyType();
 			setState(407); match(RightBrack);
-			setState(409); _localctx.elemType = elementType();
+			setState(409); ((mapTypeContext)_localctx).elemType = elementType();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1306,17 +1560,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class keyTypeContext extends ParserRuleContext<Token> {
-		public typeContext t;;
+		public typeContext t;
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public keyTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).keyTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).keyTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).keyTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1326,7 +1588,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(411); _localctx.t = type();
+			setState(411); ((keyTypeContext)_localctx).t = type();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1341,19 +1603,27 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class channelTypeContext extends ParserRuleContext<Token> {
-		public Token send;;
-		public Token recv;;
-		public elementTypeContext elemType;;
+		public Token send;
+		public Token recv;
+		public elementTypeContext elemType;
+		public elementTypeContext elementType() {
+		    return (elementTypeContext)getRuleContext(elementTypeContext.class,0);
+		}
 		public channelTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).channelTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).channelTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).channelTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1374,7 +1644,7 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
 						case 1:
 							{
-							setState(415); _localctx.send = match(LeftArrow);
+							setState(415); ((channelTypeContext)_localctx).send = match(LeftArrow);
 							}
 							break;
 					}
@@ -1383,12 +1653,12 @@ public class GoParserBase extends Parser {
 
 				case 2:
 					{
-					setState(419); _localctx.recv = match(LeftArrow);
+					setState(419); ((channelTypeContext)_localctx).recv = match(LeftArrow);
 					setState(421); match(Chan);
 					}
 					break;
 			}
-			setState(425); _localctx.elemType = elementType();
+			setState(425); ((channelTypeContext)_localctx).elemType = elementType();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1403,18 +1673,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class blockContext extends ParserRuleContext<Token> {
-		public statementContext statements;;
-		public List<statementContext> statements_list = new ArrayList<statementContext>();;
+		public statementContext statement;
+		public List<statementContext> statements = new ArrayList<statementContext>();
+		public List<? extends statementContext> statement() {
+		    return (List<statementContext>)getRuleContexts(statementContext.class);
+		}
+		public statementContext statement(int i) {
+		    return (statementContext)getRuleContext(statementContext.class,i);
+		}
 		public blockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).blockEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).blockExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).blockVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1430,8 +1711,8 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
 				case 1:
 					{
-					setState(429); _localctx.statements = statement();
-					_localctx.statements_list.add(_localctx.statements);
+					setState(429); ((blockContext)_localctx).statement = statement();
+					((blockContext)_localctx).statements.add(((blockContext)_localctx).statement);
 					setState(437);
 					_errHandler.sync(this);
 					int _alt522 = getInterpreter().adaptivePredict(_input,20,_ctx);
@@ -1440,8 +1721,8 @@ public class GoParserBase extends Parser {
 							{
 							{
 							setState(431); match(Semi);
-							setState(433); _localctx.statements = statement();
-							_localctx.statements_list.add(_localctx.statements);
+							setState(433); ((blockContext)_localctx).statement = statement();
+							((blockContext)_localctx).statements.add(((blockContext)_localctx).statement);
 							}
 							} 
 						}
@@ -1476,19 +1757,33 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class declarationContext extends ParserRuleContext<Token> {
-		public constDeclContext cd;;
-		public typeDeclContext td;;
-		public varDeclContext vd;;
+		public constDeclContext cd;
+		public typeDeclContext td;
+		public varDeclContext vd;
+		public constDeclContext constDecl() {
+		    return (constDeclContext)getRuleContext(constDeclContext.class,0);
+		}
+		public typeDeclContext typeDecl() {
+		    return (typeDeclContext)getRuleContext(typeDeclContext.class,0);
+		}
+		public varDeclContext varDecl() {
+		    return (varDeclContext)getRuleContext(varDeclContext.class,0);
+		}
 		public declarationContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).declarationEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).declarationExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).declarationVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1502,21 +1797,21 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(448); _localctx.cd = constDecl();
+					setState(448); ((declarationContext)_localctx).cd = constDecl();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(450); _localctx.td = typeDecl();
+					setState(450); ((declarationContext)_localctx).td = typeDecl();
 					}
 					break;
 
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(452); _localctx.vd = varDecl();
+					setState(452); ((declarationContext)_localctx).vd = varDecl();
 					}
 					break;
 			}
@@ -1533,19 +1828,33 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class topLevelDeclContext extends ParserRuleContext<Token> {
-		public declarationContext decl;;
-		public functionDeclContext fndecl;;
-		public methodDeclContext methdecl;;
+		public declarationContext decl;
+		public functionDeclContext fndecl;
+		public methodDeclContext methdecl;
+		public declarationContext declaration() {
+		    return (declarationContext)getRuleContext(declarationContext.class,0);
+		}
+		public methodDeclContext methodDecl() {
+		    return (methodDeclContext)getRuleContext(methodDeclContext.class,0);
+		}
+		public functionDeclContext functionDecl() {
+		    return (functionDeclContext)getRuleContext(functionDeclContext.class,0);
+		}
 		public topLevelDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).topLevelDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).topLevelDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).topLevelDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1559,21 +1868,21 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(456); _localctx.decl = declaration();
+					setState(456); ((topLevelDeclContext)_localctx).decl = declaration();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(458); _localctx.fndecl = functionDecl();
+					setState(458); ((topLevelDeclContext)_localctx).fndecl = functionDecl();
 					}
 					break;
 
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(460); _localctx.methdecl = methodDecl();
+					setState(460); ((topLevelDeclContext)_localctx).methdecl = methodDecl();
 					}
 					break;
 			}
@@ -1590,18 +1899,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class constDeclContext extends ParserRuleContext<Token> {
-		public constSpecContext consts;;
-		public List<constSpecContext> consts_list = new ArrayList<constSpecContext>();;
+		public constSpecContext constSpec;
+		public List<constSpecContext> consts = new ArrayList<constSpecContext>();
+		public List<? extends constSpecContext> constSpec() {
+		    return (List<constSpecContext>)getRuleContexts(constSpecContext.class);
+		}
+		public constSpecContext constSpec(int i) {
+		    return (constSpecContext)getRuleContext(constSpecContext.class,i);
+		}
 		public constDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).constDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).constDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).constDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1617,8 +1937,8 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
 				case 1:
 					{
-					setState(466); _localctx.consts = constSpec();
-					_localctx.consts_list.add(_localctx.consts);
+					setState(466); ((constDeclContext)_localctx).constSpec = constSpec();
+					((constDeclContext)_localctx).consts.add(((constDeclContext)_localctx).constSpec);
 					}
 					break;
 
@@ -1630,8 +1950,8 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,27,_ctx) ) {
 						case 1:
 							{
-							setState(470); _localctx.consts = constSpec();
-							_localctx.consts_list.add(_localctx.consts);
+							setState(470); ((constDeclContext)_localctx).constSpec = constSpec();
+							((constDeclContext)_localctx).consts.add(((constDeclContext)_localctx).constSpec);
 							setState(478);
 							_errHandler.sync(this);
 							int _alt605 = getInterpreter().adaptivePredict(_input,25,_ctx);
@@ -1640,8 +1960,8 @@ public class GoParserBase extends Parser {
 									{
 									{
 									setState(472); match(Semi);
-									setState(474); _localctx.consts = constSpec();
-									_localctx.consts_list.add(_localctx.consts);
+									setState(474); ((constDeclContext)_localctx).constSpec = constSpec();
+									((constDeclContext)_localctx).consts.add(((constDeclContext)_localctx).constSpec);
 									}
 									} 
 								}
@@ -1679,19 +1999,33 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class constSpecContext extends ParserRuleContext<Token> {
-		public identifierListContext idList;;
-		public typeContext explicitType;;
-		public expressionListContext valueList;;
+		public identifierListContext idList;
+		public typeContext explicitType;
+		public expressionListContext valueList;
+		public expressionListContext expressionList() {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,0);
+		}
+		public identifierListContext identifierList() {
+		    return (identifierListContext)getRuleContext(identifierListContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public constSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).constSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).constSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).constSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1701,7 +2035,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(491); _localctx.idList = identifierList();
+			setState(491); ((constSpecContext)_localctx).idList = identifierList();
 			setState(501);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,30,_ctx) ) {
@@ -1712,12 +2046,12 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
 						case 1:
 							{
-							setState(493); _localctx.explicitType = type();
+							setState(493); ((constSpecContext)_localctx).explicitType = type();
 							}
 							break;
 					}
 					setState(497); match(Equal);
-					setState(499); _localctx.valueList = expressionList();
+					setState(499); ((constSpecContext)_localctx).valueList = expressionList();
 					}
 					break;
 			}
@@ -1735,18 +2069,27 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class identifierListContext extends ParserRuleContext<Token> {
-		public Token ids;;
-		public List<Token> ids_list = new ArrayList<Token>();;
+		public Token IDENTIFIER;
+		public List<Token> ids = new ArrayList<Token>();
+		public Token IDENTIFIER(int i) {
+		    return getToken(GoParserBase.IDENTIFIER, i);
+		}
+		public List<? extends Token> IDENTIFIER() { return getTokens(GoParserBase.IDENTIFIER); }
 		public identifierListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).identifierListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).identifierListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).identifierListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1756,8 +2099,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(503); _localctx.ids = match(IDENTIFIER);
-			_localctx.ids_list.add(_localctx.ids);
+			setState(503); ((identifierListContext)_localctx).IDENTIFIER = match(IDENTIFIER);
+			((identifierListContext)_localctx).ids.add(((identifierListContext)_localctx).IDENTIFIER);
 			setState(511);
 			_errHandler.sync(this);
 			int _alt657 = getInterpreter().adaptivePredict(_input,31,_ctx);
@@ -1766,8 +2109,8 @@ public class GoParserBase extends Parser {
 					{
 					{
 					setState(505); match(Comma);
-					setState(507); _localctx.ids = match(IDENTIFIER);
-					_localctx.ids_list.add(_localctx.ids);
+					setState(507); ((identifierListContext)_localctx).IDENTIFIER = match(IDENTIFIER);
+					((identifierListContext)_localctx).ids.add(((identifierListContext)_localctx).IDENTIFIER);
 					}
 					} 
 				}
@@ -1789,18 +2132,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class expressionListContext extends ParserRuleContext<Token> {
-		public expressionContext expressions;;
-		public List<expressionContext> expressions_list = new ArrayList<expressionContext>();;
+		public expressionContext expression;
+		public List<expressionContext> expressions = new ArrayList<expressionContext>();
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
 		public expressionListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).expressionListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).expressionListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).expressionListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1810,8 +2164,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(514); _localctx.expressions = expression(0);
-			_localctx.expressions_list.add(_localctx.expressions);
+			setState(514); ((expressionListContext)_localctx).expression = expression(0);
+			((expressionListContext)_localctx).expressions.add(((expressionListContext)_localctx).expression);
 			setState(522);
 			_errHandler.sync(this);
 			int _alt676 = getInterpreter().adaptivePredict(_input,32,_ctx);
@@ -1820,8 +2174,8 @@ public class GoParserBase extends Parser {
 					{
 					{
 					setState(516); match(Comma);
-					setState(518); _localctx.expressions = expression(0);
-					_localctx.expressions_list.add(_localctx.expressions);
+					setState(518); ((expressionListContext)_localctx).expression = expression(0);
+					((expressionListContext)_localctx).expressions.add(((expressionListContext)_localctx).expression);
 					}
 					} 
 				}
@@ -1843,18 +2197,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeDeclContext extends ParserRuleContext<Token> {
-		public typeSpecContext types;;
-		public List<typeSpecContext> types_list = new ArrayList<typeSpecContext>();;
+		public typeSpecContext typeSpec;
+		public List<typeSpecContext> types = new ArrayList<typeSpecContext>();
+		public List<? extends typeSpecContext> typeSpec() {
+		    return (List<typeSpecContext>)getRuleContexts(typeSpecContext.class);
+		}
+		public typeSpecContext typeSpec(int i) {
+		    return (typeSpecContext)getRuleContext(typeSpecContext.class,i);
+		}
 		public typeDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1870,8 +2235,8 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,36,_ctx) ) {
 				case 1:
 					{
-					setState(527); _localctx.types = typeSpec();
-					_localctx.types_list.add(_localctx.types);
+					setState(527); ((typeDeclContext)_localctx).typeSpec = typeSpec();
+					((typeDeclContext)_localctx).types.add(((typeDeclContext)_localctx).typeSpec);
 					}
 					break;
 
@@ -1883,8 +2248,8 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
 						case 1:
 							{
-							setState(531); _localctx.types = typeSpec();
-							_localctx.types_list.add(_localctx.types);
+							setState(531); ((typeDeclContext)_localctx).typeSpec = typeSpec();
+							((typeDeclContext)_localctx).types.add(((typeDeclContext)_localctx).typeSpec);
 							setState(539);
 							_errHandler.sync(this);
 							int _alt708 = getInterpreter().adaptivePredict(_input,33,_ctx);
@@ -1893,8 +2258,8 @@ public class GoParserBase extends Parser {
 									{
 									{
 									setState(533); match(Semi);
-									setState(535); _localctx.types = typeSpec();
-									_localctx.types_list.add(_localctx.types);
+									setState(535); ((typeDeclContext)_localctx).typeSpec = typeSpec();
+									((typeDeclContext)_localctx).types.add(((typeDeclContext)_localctx).typeSpec);
 									}
 									} 
 								}
@@ -1932,18 +2297,27 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeSpecContext extends ParserRuleContext<Token> {
-		public Token name;;
-		public typeContext t;;
+		public Token name;
+		public typeContext t;
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public typeSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1953,8 +2327,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(552); _localctx.name = match(IDENTIFIER);
-			setState(554); _localctx.t = type();
+			setState(552); ((typeSpecContext)_localctx).name = match(IDENTIFIER);
+			setState(554); ((typeSpecContext)_localctx).t = type();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1969,18 +2343,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class varDeclContext extends ParserRuleContext<Token> {
-		public varSpecContext vars;;
-		public List<varSpecContext> vars_list = new ArrayList<varSpecContext>();;
+		public varSpecContext varSpec;
+		public List<varSpecContext> vars = new ArrayList<varSpecContext>();
+		public varSpecContext varSpec(int i) {
+		    return (varSpecContext)getRuleContext(varSpecContext.class,i);
+		}
+		public List<? extends varSpecContext> varSpec() {
+		    return (List<varSpecContext>)getRuleContexts(varSpecContext.class);
+		}
 		public varDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).varDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).varDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).varDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1996,8 +2381,8 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,40,_ctx) ) {
 				case 1:
 					{
-					setState(558); _localctx.vars = varSpec();
-					_localctx.vars_list.add(_localctx.vars);
+					setState(558); ((varDeclContext)_localctx).varSpec = varSpec();
+					((varDeclContext)_localctx).vars.add(((varDeclContext)_localctx).varSpec);
 					}
 					break;
 
@@ -2009,8 +2394,8 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
 						case 1:
 							{
-							setState(562); _localctx.vars = varSpec();
-							_localctx.vars_list.add(_localctx.vars);
+							setState(562); ((varDeclContext)_localctx).varSpec = varSpec();
+							((varDeclContext)_localctx).vars.add(((varDeclContext)_localctx).varSpec);
 							setState(570);
 							_errHandler.sync(this);
 							int _alt763 = getInterpreter().adaptivePredict(_input,37,_ctx);
@@ -2019,8 +2404,8 @@ public class GoParserBase extends Parser {
 									{
 									{
 									setState(564); match(Semi);
-									setState(566); _localctx.vars = varSpec();
-									_localctx.vars_list.add(_localctx.vars);
+									setState(566); ((varDeclContext)_localctx).varSpec = varSpec();
+									((varDeclContext)_localctx).vars.add(((varDeclContext)_localctx).varSpec);
 									}
 									} 
 								}
@@ -2058,19 +2443,36 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class varSpecContext extends ParserRuleContext<Token> {
-		public identifierListContext idList;;
-		public typeContext varType;;
-		public expressionListContext exprList;;
+		public identifierListContext idList;
+		public typeContext varType;
+		public expressionListContext exprList;
+		public List<? extends expressionListContext> expressionList() {
+		    return (List<expressionListContext>)getRuleContexts(expressionListContext.class);
+		}
+		public expressionListContext expressionList(int i) {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,i);
+		}
+		public identifierListContext identifierList() {
+		    return (identifierListContext)getRuleContext(identifierListContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public varSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).varSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).varSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).varSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2080,20 +2482,20 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(583); _localctx.idList = identifierList();
+			setState(583); ((varSpecContext)_localctx).idList = identifierList();
 			setState(597);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
 				case 1:
 					{
-					setState(585); _localctx.varType = type();
+					setState(585); ((varSpecContext)_localctx).varType = type();
 					setState(591);
 					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 						case 1:
 							{
 							setState(587); match(Equal);
-							setState(589); _localctx.exprList = expressionList();
+							setState(589); ((varSpecContext)_localctx).exprList = expressionList();
 							}
 							break;
 					}
@@ -2103,7 +2505,7 @@ public class GoParserBase extends Parser {
 				case 2:
 					{
 					setState(593); match(Equal);
-					setState(595); _localctx.exprList = expressionList();
+					setState(595); ((varSpecContext)_localctx).exprList = expressionList();
 					}
 					break;
 			}
@@ -2121,18 +2523,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class shortVarDeclContext extends ParserRuleContext<Token> {
-		public identifierListContext idList;;
-		public expressionListContext exprList;;
+		public identifierListContext idList;
+		public expressionListContext exprList;
+		public expressionListContext expressionList() {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,0);
+		}
+		public identifierListContext identifierList() {
+		    return (identifierListContext)getRuleContext(identifierListContext.class,0);
+		}
 		public shortVarDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).shortVarDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).shortVarDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).shortVarDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2142,9 +2555,9 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(599); _localctx.idList = identifierList();
+			setState(599); ((shortVarDeclContext)_localctx).idList = identifierList();
 			setState(601); match(ColonEqual);
-			setState(603); _localctx.exprList = expressionList();
+			setState(603); ((shortVarDeclContext)_localctx).exprList = expressionList();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2159,19 +2572,31 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class functionDeclContext extends ParserRuleContext<Token> {
-		public Token name;;
-		public signatureContext sig;;
-		public bodyContext bdy;;
+		public Token name;
+		public signatureContext sig;
+		public bodyContext bdy;
+		public bodyContext body() {
+		    return (bodyContext)getRuleContext(bodyContext.class,0);
+		}
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public signatureContext signature() {
+		    return (signatureContext)getRuleContext(signatureContext.class,0);
+		}
 		public functionDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).functionDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).functionDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).functionDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2182,14 +2607,14 @@ public class GoParserBase extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(605); match(Func);
-			setState(607); _localctx.name = match(IDENTIFIER);
-			setState(609); _localctx.sig = signature();
+			setState(607); ((functionDeclContext)_localctx).name = match(IDENTIFIER);
+			setState(609); ((functionDeclContext)_localctx).sig = signature();
 			setState(613);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,43,_ctx) ) {
 				case 1:
 					{
-					setState(611); _localctx.bdy = body();
+					setState(611); ((functionDeclContext)_localctx).bdy = body();
 					}
 					break;
 			}
@@ -2207,17 +2632,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class bodyContext extends ParserRuleContext<Token> {
-		public blockContext blk;;
+		public blockContext blk;
+		public blockContext block() {
+		    return (blockContext)getRuleContext(blockContext.class,0);
+		}
 		public bodyContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).bodyEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).bodyExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).bodyVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2227,7 +2660,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(615); _localctx.blk = block();
+			setState(615); ((bodyContext)_localctx).blk = block();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2242,20 +2675,37 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class methodDeclContext extends ParserRuleContext<Token> {
-		public receiverContext recv;;
-		public methodNameContext name;;
-		public signatureContext sig;;
-		public bodyContext bdy;;
+		public receiverContext recv;
+		public methodNameContext name;
+		public signatureContext sig;
+		public bodyContext bdy;
+		public bodyContext body() {
+		    return (bodyContext)getRuleContext(bodyContext.class,0);
+		}
+		public receiverContext receiver() {
+		    return (receiverContext)getRuleContext(receiverContext.class,0);
+		}
+		public methodNameContext methodName() {
+		    return (methodNameContext)getRuleContext(methodNameContext.class,0);
+		}
+		public signatureContext signature() {
+		    return (signatureContext)getRuleContext(signatureContext.class,0);
+		}
 		public methodDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).methodDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2266,15 +2716,15 @@ public class GoParserBase extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(617); match(Func);
-			setState(619); _localctx.recv = receiver();
-			setState(621); _localctx.name = methodName();
-			setState(623); _localctx.sig = signature();
+			setState(619); ((methodDeclContext)_localctx).recv = receiver();
+			setState(621); ((methodDeclContext)_localctx).name = methodName();
+			setState(623); ((methodDeclContext)_localctx).sig = signature();
 			setState(627);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,44,_ctx) ) {
 				case 1:
 					{
-					setState(625); _localctx.bdy = body();
+					setState(625); ((methodDeclContext)_localctx).bdy = body();
 					}
 					break;
 			}
@@ -2292,19 +2742,28 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class receiverContext extends ParserRuleContext<Token> {
-		public Token name;;
-		public Token ptr;;
-		public baseTypeNameContext typ;;
+		public Token name;
+		public Token ptr;
+		public baseTypeNameContext typ;
+		public baseTypeNameContext baseTypeName() {
+		    return (baseTypeNameContext)getRuleContext(baseTypeNameContext.class,0);
+		}
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public receiverContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).receiverEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).receiverExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).receiverVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2320,7 +2779,7 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,45,_ctx) ) {
 				case 1:
 					{
-					setState(631); _localctx.name = match(IDENTIFIER);
+					setState(631); ((receiverContext)_localctx).name = match(IDENTIFIER);
 					}
 					break;
 			}
@@ -2329,11 +2788,11 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,46,_ctx) ) {
 				case 1:
 					{
-					setState(635); _localctx.ptr = match(Star);
+					setState(635); ((receiverContext)_localctx).ptr = match(Star);
 					}
 					break;
 			}
-			setState(639); _localctx.typ = baseTypeName();
+			setState(639); ((receiverContext)_localctx).typ = baseTypeName();
 			setState(641); match(RightParen);
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2349,17 +2808,23 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class baseTypeNameContext extends ParserRuleContext<Token> {
-		public Token name;;
+		public Token name;
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public baseTypeNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).baseTypeNameEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).baseTypeNameExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).baseTypeNameVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2369,7 +2834,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(643); _localctx.name = match(IDENTIFIER);
+			setState(643); ((baseTypeNameContext)_localctx).name = match(IDENTIFIER);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2384,20 +2849,37 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class operandContext extends ParserRuleContext<Token> {
-		public literalContext lit;;
-		public qualifiedIdentifierContext qid;;
-		public methodExprContext me;;
-		public expressionContext e;;
+		public literalContext lit;
+		public qualifiedIdentifierContext qid;
+		public methodExprContext me;
+		public expressionContext e;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public qualifiedIdentifierContext qualifiedIdentifier() {
+		    return (qualifiedIdentifierContext)getRuleContext(qualifiedIdentifierContext.class,0);
+		}
+		public methodExprContext methodExpr() {
+		    return (methodExprContext)getRuleContext(methodExprContext.class,0);
+		}
+		public literalContext literal() {
+		    return (literalContext)getRuleContext(literalContext.class,0);
+		}
 		public operandContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).operandEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).operandExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).operandVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2411,21 +2893,21 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(645); _localctx.lit = literal();
+					setState(645); ((operandContext)_localctx).lit = literal();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(647); _localctx.qid = qualifiedIdentifier();
+					setState(647); ((operandContext)_localctx).qid = qualifiedIdentifier();
 					}
 					break;
 
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(649); _localctx.me = methodExpr();
+					setState(649); ((operandContext)_localctx).me = methodExpr();
 					}
 					break;
 
@@ -2433,7 +2915,7 @@ public class GoParserBase extends Parser {
 					enterOuterAlt(_localctx, 4);
 					{
 					setState(651); match(LeftParen);
-					setState(653); _localctx.e = expression(0);
+					setState(653); ((operandContext)_localctx).e = expression(0);
 					setState(655); match(RightParen);
 					}
 					break;
@@ -2451,19 +2933,33 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class literalContext extends ParserRuleContext<Token> {
-		public basicLiteralContext bl;;
-		public compositeLiteralContext cl;;
-		public functionLiteralContext fl;;
+		public basicLiteralContext bl;
+		public compositeLiteralContext cl;
+		public functionLiteralContext fl;
+		public basicLiteralContext basicLiteral() {
+		    return (basicLiteralContext)getRuleContext(basicLiteralContext.class,0);
+		}
+		public compositeLiteralContext compositeLiteral() {
+		    return (compositeLiteralContext)getRuleContext(compositeLiteralContext.class,0);
+		}
+		public functionLiteralContext functionLiteral() {
+		    return (functionLiteralContext)getRuleContext(functionLiteralContext.class,0);
+		}
 		public literalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).literalEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).literalExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).literalVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2477,21 +2973,21 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(659); _localctx.bl = basicLiteral();
+					setState(659); ((literalContext)_localctx).bl = basicLiteral();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(661); _localctx.cl = compositeLiteral();
+					setState(661); ((literalContext)_localctx).cl = compositeLiteral();
 					}
 					break;
 
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(663); _localctx.fl = functionLiteral();
+					setState(663); ((literalContext)_localctx).fl = functionLiteral();
 					}
 					break;
 			}
@@ -2508,16 +3004,26 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class basicLiteralContext extends ParserRuleContext<Token> {
+		public Token StringLiteral() { return getToken(GoParserBase.StringLiteral, 0); }
+		public Token IMAGINARY_LITERAL() { return getToken(GoParserBase.IMAGINARY_LITERAL, 0); }
+		public Token FLOAT_LITERAL() { return getToken(GoParserBase.FLOAT_LITERAL, 0); }
+		public Token INT_LITERAL() { return getToken(GoParserBase.INT_LITERAL, 0); }
+		public Token CharLiteral() { return getToken(GoParserBase.CharLiteral, 0); }
 		public basicLiteralContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).basicLiteralEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).basicLiteralExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).basicLiteralVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2576,19 +3082,28 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class qualifiedIdentifierContext extends ParserRuleContext<Token> {
-		public packageNameContext pkg;;
-		public Token dot;;
-		public Token id;;
+		public packageNameContext pkg;
+		public Token dot;
+		public Token id;
+		public packageNameContext packageName() {
+		    return (packageNameContext)getRuleContext(packageNameContext.class,0);
+		}
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public qualifiedIdentifierContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).qualifiedIdentifierEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).qualifiedIdentifierExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).qualifiedIdentifierVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2605,12 +3120,12 @@ public class GoParserBase extends Parser {
 					{
 					setState(679);
 					if (!(isPackageName(_input.LT(1)))) throw new FailedPredicateException(this, "failed predicate: {isPackageName(_input.LT(1))}?");
-					setState(681); _localctx.pkg = packageName();
-					setState(683); _localctx.dot = match(Dot);
+					setState(681); ((qualifiedIdentifierContext)_localctx).pkg = packageName();
+					setState(683); ((qualifiedIdentifierContext)_localctx).dot = match(Dot);
 					}
 					break;
 			}
-			setState(687); _localctx.id = match(IDENTIFIER);
+			setState(687); ((qualifiedIdentifierContext)_localctx).id = match(IDENTIFIER);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2625,19 +3140,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class methodExprContext extends ParserRuleContext<Token> {
-		public receiverTypeContext recvType;;
-		public Token dot;;
-		public methodNameContext name;;
+		public receiverTypeContext recvType;
+		public Token dot;
+		public methodNameContext name;
+		public receiverTypeContext receiverType() {
+		    return (receiverTypeContext)getRuleContext(receiverTypeContext.class,0);
+		}
+		public methodNameContext methodName() {
+		    return (methodNameContext)getRuleContext(methodNameContext.class,0);
+		}
 		public methodExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).methodExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).methodExprVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2647,9 +3173,9 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(689); _localctx.recvType = receiverType();
-			setState(691); _localctx.dot = match(Dot);
-			setState(693); _localctx.name = methodName();
+			setState(689); ((methodExprContext)_localctx).recvType = receiverType();
+			setState(691); ((methodExprContext)_localctx).dot = match(Dot);
+			setState(693); ((methodExprContext)_localctx).name = methodName();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2664,18 +3190,26 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class receiverTypeContext extends ParserRuleContext<Token> {
-		public typeNameContext t;;
-		public Token ptr;;
+		public typeNameContext t;
+		public Token ptr;
+		public typeNameContext typeName() {
+		    return (typeNameContext)getRuleContext(typeNameContext.class,0);
+		}
 		public receiverTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).receiverTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).receiverTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).receiverTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2689,7 +3223,7 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(695); _localctx.t = typeName();
+					setState(695); ((receiverTypeContext)_localctx).t = typeName();
 					}
 					break;
 
@@ -2697,8 +3231,8 @@ public class GoParserBase extends Parser {
 					enterOuterAlt(_localctx, 2);
 					{
 					setState(697); match(LeftParen);
-					setState(699); _localctx.ptr = match(Star);
-					setState(701); _localctx.t = typeName();
+					setState(699); ((receiverTypeContext)_localctx).ptr = match(Star);
+					setState(701); ((receiverTypeContext)_localctx).t = typeName();
 					setState(703); match(RightParen);
 					}
 					break;
@@ -2716,18 +3250,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class compositeLiteralContext extends ParserRuleContext<Token> {
-		public literalTypeContext litTyp;;
-		public literalValueContext litVal;;
+		public literalTypeContext litTyp;
+		public literalValueContext litVal;
+		public literalTypeContext literalType() {
+		    return (literalTypeContext)getRuleContext(literalTypeContext.class,0);
+		}
+		public literalValueContext literalValue() {
+		    return (literalValueContext)getRuleContext(literalValueContext.class,0);
+		}
 		public compositeLiteralContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).compositeLiteralEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).compositeLiteralExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).compositeLiteralVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2737,8 +3282,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(707); _localctx.litTyp = literalType();
-			setState(709); _localctx.litVal = literalValue();
+			setState(707); ((compositeLiteralContext)_localctx).litTyp = literalType();
+			setState(709); ((compositeLiteralContext)_localctx).litVal = literalValue();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2753,16 +3298,39 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class literalTypeContext extends ParserRuleContext<Token> {
+		public typeNameContext typeName() {
+		    return (typeNameContext)getRuleContext(typeNameContext.class,0);
+		}
+		public arrayTypeContext arrayType() {
+		    return (arrayTypeContext)getRuleContext(arrayTypeContext.class,0);
+		}
+		public structTypeContext structType() {
+		    return (structTypeContext)getRuleContext(structTypeContext.class,0);
+		}
+		public sliceTypeContext sliceType() {
+		    return (sliceTypeContext)getRuleContext(sliceTypeContext.class,0);
+		}
+		public elementTypeContext elementType() {
+		    return (elementTypeContext)getRuleContext(elementTypeContext.class,0);
+		}
+		public mapTypeContext mapType() {
+		    return (mapTypeContext)getRuleContext(mapTypeContext.class,0);
+		}
 		public literalTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).literalTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).literalTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).literalTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2831,17 +3399,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class literalValueContext extends ParserRuleContext<Token> {
-		public elementListContext elements;;
+		public elementListContext elements;
+		public elementListContext elementList() {
+		    return (elementListContext)getRuleContext(elementListContext.class,0);
+		}
 		public literalValueContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).literalValueEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).literalValueExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).literalValueVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2857,7 +3433,7 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,54,_ctx) ) {
 				case 1:
 					{
-					setState(733); _localctx.elements = elementList();
+					setState(733); ((literalValueContext)_localctx).elements = elementList();
 					setState(737);
 					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,53,_ctx) ) {
@@ -2885,18 +3461,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class elementListContext extends ParserRuleContext<Token> {
-		public elementContext elements;;
-		public List<elementContext> elements_list = new ArrayList<elementContext>();;
+		public elementContext element;
+		public List<elementContext> elements = new ArrayList<elementContext>();
+		public List<? extends elementContext> element() {
+		    return (List<elementContext>)getRuleContexts(elementContext.class);
+		}
+		public elementContext element(int i) {
+		    return (elementContext)getRuleContext(elementContext.class,i);
+		}
 		public elementListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).elementListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2906,8 +3493,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(743); _localctx.elements = element();
-			_localctx.elements_list.add(_localctx.elements);
+			setState(743); ((elementListContext)_localctx).element = element();
+			((elementListContext)_localctx).elements.add(((elementListContext)_localctx).element);
 			setState(751);
 			_errHandler.sync(this);
 			int _alt1143 = getInterpreter().adaptivePredict(_input,55,_ctx);
@@ -2916,8 +3503,8 @@ public class GoParserBase extends Parser {
 					{
 					{
 					setState(745); match(Comma);
-					setState(747); _localctx.elements = element();
-					_localctx.elements_list.add(_localctx.elements);
+					setState(747); ((elementListContext)_localctx).element = element();
+					((elementListContext)_localctx).elements.add(((elementListContext)_localctx).element);
 					}
 					} 
 				}
@@ -2939,18 +3526,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class elementContext extends ParserRuleContext<Token> {
-		public keyContext k;;
-		public valueContext v;;
+		public keyContext k;
+		public valueContext v;
+		public valueContext value() {
+		    return (valueContext)getRuleContext(valueContext.class,0);
+		}
+		public keyContext key() {
+		    return (keyContext)getRuleContext(keyContext.class,0);
+		}
 		public elementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).elementVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2965,12 +3563,12 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,56,_ctx) ) {
 				case 1:
 					{
-					setState(754); _localctx.k = key();
+					setState(754); ((elementContext)_localctx).k = key();
 					setState(756); match(Colon);
 					}
 					break;
 			}
-			setState(760); _localctx.v = value();
+			setState(760); ((elementContext)_localctx).v = value();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2985,18 +3583,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class keyContext extends ParserRuleContext<Token> {
-		public fieldNameContext field;;
-		public elementIndexContext index;;
+		public fieldNameContext field;
+		public elementIndexContext index;
+		public elementIndexContext elementIndex() {
+		    return (elementIndexContext)getRuleContext(elementIndexContext.class,0);
+		}
+		public fieldNameContext fieldName() {
+		    return (fieldNameContext)getRuleContext(fieldNameContext.class,0);
+		}
 		public keyContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).keyEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).keyExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).keyVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3010,14 +3619,14 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(762); _localctx.field = fieldName();
+					setState(762); ((keyContext)_localctx).field = fieldName();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(764); _localctx.index = elementIndex();
+					setState(764); ((keyContext)_localctx).index = elementIndex();
 					}
 					break;
 			}
@@ -3034,17 +3643,23 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class fieldNameContext extends ParserRuleContext<Token> {
-		public Token field;;
+		public Token field;
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public fieldNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).fieldNameEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).fieldNameExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).fieldNameVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3054,7 +3669,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(768); _localctx.field = match(IDENTIFIER);
+			setState(768); ((fieldNameContext)_localctx).field = match(IDENTIFIER);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -3069,17 +3684,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class elementIndexContext extends ParserRuleContext<Token> {
-		public expressionContext index;;
+		public expressionContext index;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public elementIndexContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementIndexEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).elementIndexExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).elementIndexVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3089,7 +3712,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(770); _localctx.index = expression(0);
+			setState(770); ((elementIndexContext)_localctx).index = expression(0);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -3104,18 +3727,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class valueContext extends ParserRuleContext<Token> {
-		public expressionContext expr;;
-		public literalValueContext lit;;
+		public expressionContext expr;
+		public literalValueContext lit;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public literalValueContext literalValue() {
+		    return (literalValueContext)getRuleContext(literalValueContext.class,0);
+		}
 		public valueContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).valueEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).valueExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).valueVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3129,14 +3763,14 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(772); _localctx.expr = expression(0);
+					setState(772); ((valueContext)_localctx).expr = expression(0);
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(774); _localctx.lit = literalValue();
+					setState(774); ((valueContext)_localctx).lit = literalValue();
 					}
 					break;
 			}
@@ -3153,18 +3787,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class functionLiteralContext extends ParserRuleContext<Token> {
-		public functionTypeContext typ;;
-		public bodyContext bdy;;
+		public functionTypeContext typ;
+		public bodyContext bdy;
+		public bodyContext body() {
+		    return (bodyContext)getRuleContext(bodyContext.class,0);
+		}
+		public functionTypeContext functionType() {
+		    return (functionTypeContext)getRuleContext(functionTypeContext.class,0);
+		}
 		public functionLiteralContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).functionLiteralEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).functionLiteralExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).functionLiteralVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3174,8 +3819,8 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(778); _localctx.typ = functionType();
-			setState(780); _localctx.bdy = body();
+			setState(778); ((functionLiteralContext)_localctx).typ = functionType();
+			setState(780); ((functionLiteralContext)_localctx).bdy = body();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -3191,16 +3836,6 @@ public class GoParserBase extends Parser {
 
 	public static class expressionContext extends ParserRuleContext<Token> {
 		public int _p;
-		public expressionContext e;;
-		public conversionContext conv;;
-		public expressionContext right;;
-		public typeContext t;;
-		public argumentListContext args;;
-		public Token op;;
-		public Token dot;;
-		public Token name;;
-		public Token lp;;
-		public Token rp;;
 		public expressionContext(ParserRuleContext<Token> parent, int state) { super(parent, state); }
 		public expressionContext(ParserRuleContext<Token> parent, int state, int _p) {
 			super(parent, state);
@@ -3211,156 +3846,338 @@ public class GoParserBase extends Parser {
 		public void copyFrom(expressionContext ctx) {
 			super.copyFrom(ctx);
 			this._p = ctx._p;
-			this.e = ctx.e;
-			this.conv = ctx.conv;
-			this.right = ctx.right;
-			this.t = ctx.t;
-			this.args = ctx.args;
-			this.op = ctx.op;
-			this.dot = ctx.dot;
-			this.name = ctx.name;
-			this.lp = ctx.lp;
-			this.rp = ctx.rp;
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).expressionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).expressionExit(this);
 		}
 	}
 	public static class multExprContext extends expressionContext {
+		public expressionContext e;
+		public Token op;
+		public expressionContext right;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
 		public multExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).multExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).multExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).multExprVisit(this);
+		    else return null;
 		}
 	}
 	public static class andExprContext extends expressionContext {
+		public expressionContext e;
+		public expressionContext right;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
 		public andExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).andExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
-		}
-	}
-	public static class selectorExprContext extends expressionContext {
-		public selectorExprContext(expressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).andExprExit(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
-		}
-	}
-	public static class sliceExprContext extends expressionContext {
-		public sliceExprContext(expressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
-		}
-	}
-	public static class unaryExprContext extends expressionContext {
-		public unaryExprContext(expressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).andExprVisit(this);
+		    else return null;
 		}
 	}
 	public static class conversionOrCallExprContext extends expressionContext {
+		public conversionContext conv;
+		public conversionContext conversion() {
+		    return (conversionContext)getRuleContext(conversionContext.class,0);
+		}
 		public conversionOrCallExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).conversionOrCallExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
-		}
-	}
-	public static class addExprContext extends expressionContext {
-		public addExprContext(expressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).conversionOrCallExprExit(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).conversionOrCallExprVisit(this);
+		    else return null;
 		}
 	}
 	public static class callExprContext extends expressionContext {
+		public expressionContext e;
+		public Token lp;
+		public argumentListContext args;
+		public Token rp;
+		public argumentListContext argumentList(int i) {
+		    return (argumentListContext)getRuleContext(argumentListContext.class,i);
+		}
+		public List<? extends argumentListContext> argumentList() {
+		    return (List<argumentListContext>)getRuleContexts(argumentListContext.class);
+		}
 		public callExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).callExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).callExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).callExprVisit(this);
+		    else return null;
 		}
 	}
 	public static class typeAssertionExprContext extends expressionContext {
+		public expressionContext e;
+		public Token dot;
+		public Token lp;
+		public typeContext t;
+		public Token rp;
+		public typeContext type(int i) {
+		    return (typeContext)getRuleContext(typeContext.class,i);
+		}
+		public List<? extends typeContext> type() {
+		    return (List<typeContext>)getRuleContexts(typeContext.class);
+		}
 		public typeAssertionExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeAssertionExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
-		}
-	}
-	public static class indexExprContext extends expressionContext {
-		public indexExprContext(expressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeAssertionExprExit(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeAssertionExprVisit(this);
+		    else return null;
 		}
 	}
 	public static class compareExprContext extends expressionContext {
+		public expressionContext e;
+		public Token op;
+		public expressionContext right;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
 		public compareExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).compareExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).compareExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).compareExprVisit(this);
+		    else return null;
 		}
 	}
 	public static class orExprContext extends expressionContext {
+		public expressionContext e;
+		public expressionContext right;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
 		public orExprContext(expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).orExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).orExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).orExprVisit(this);
+		    else return null;
+		}
+	}
+	public static class selectorExprContext extends expressionContext {
+		public expressionContext e;
+		public Token dot;
+		public Token name;
+		public Token IDENTIFIER(int i) {
+		    return getToken(GoParserBase.IDENTIFIER, i);
+		}
+		public List<? extends Token> IDENTIFIER() { return getTokens(GoParserBase.IDENTIFIER); }
+		public selectorExprContext(expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).selectorExprEnter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).selectorExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).selectorExprVisit(this);
+		    else return null;
+		}
+	}
+	public static class sliceExprContext extends expressionContext {
+		public expressionContext e;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
+		public sliceExprContext(expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sliceExprEnter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sliceExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).sliceExprVisit(this);
+		    else return null;
+		}
+	}
+	public static class unaryExprContext extends expressionContext {
+		public Token op;
+		public expressionContext e;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public unaryExprContext(expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).unaryExprEnter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).unaryExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).unaryExprVisit(this);
+		    else return null;
+		}
+	}
+	public static class operandExprContext extends expressionContext {
+		public operandContext operand() {
+		    return (operandContext)getRuleContext(operandContext.class,0);
+		}
+		public operandExprContext(expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).operandExprEnter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).operandExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).operandExprVisit(this);
+		    else return null;
+		}
+	}
+	public static class addExprContext extends expressionContext {
+		public expressionContext e;
+		public Token op;
+		public expressionContext right;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
+		public addExprContext(expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).addExprEnter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).addExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).addExprVisit(this);
+		    else return null;
+		}
+	}
+	public static class builtinCallExprContext extends expressionContext {
+		public builtinCallContext builtinCall() {
+		    return (builtinCallContext)getRuleContext(builtinCallContext.class,0);
+		}
+		public builtinCallExprContext(expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).builtinCallExprEnter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).builtinCallExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).builtinCallExprVisit(this);
+		    else return null;
+		}
+	}
+	public static class indexExprContext extends expressionContext {
+		public expressionContext e;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
+		public indexExprContext(expressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).indexExprEnter(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener<Token> listener) {
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).indexExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).indexExprVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3386,52 +4203,55 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
 						case 1:
 							{
-							setState(782); _localctx.op = match(Plus);
+							setState(782); ((unaryExprContext)_localctx).op = match(Plus);
 							}
 							break;
 
 						case 2:
 							{
-							setState(784); _localctx.op = match(Minus);
+							setState(784); ((unaryExprContext)_localctx).op = match(Minus);
 							}
 							break;
 
 						case 3:
 							{
-							setState(786); _localctx.op = match(Bang);
+							setState(786); ((unaryExprContext)_localctx).op = match(Bang);
 							}
 							break;
 
 						case 4:
 							{
-							setState(788); _localctx.op = match(Caret);
+							setState(788); ((unaryExprContext)_localctx).op = match(Caret);
 							}
 							break;
 
 						case 5:
 							{
-							setState(790); _localctx.op = match(Star);
+							setState(790); ((unaryExprContext)_localctx).op = match(Star);
 							}
 							break;
 
 						case 6:
 							{
-							setState(792); _localctx.op = match(Amp);
+							setState(792); ((unaryExprContext)_localctx).op = match(Amp);
 							}
 							break;
 
 						case 7:
 							{
-							setState(794); _localctx.op = match(LeftArrow);
+							setState(794); ((unaryExprContext)_localctx).op = match(LeftArrow);
 							}
 							break;
 					}
-					setState(798); _localctx.e = expression(6);
+					setState(798); ((unaryExprContext)_localctx).e = expression(6);
 					}
 					break;
 
 				case 2:
 					{
+					_localctx = new operandExprContext(_localctx);
+					_ctx = _localctx;
+					_prevctx = _localctx;
 					setState(800); operand();
 					}
 					break;
@@ -3441,12 +4261,15 @@ public class GoParserBase extends Parser {
 					_localctx = new conversionOrCallExprContext(_localctx);
 					_ctx = _localctx;
 					_prevctx = _localctx;
-					setState(802); _localctx.conv = conversion();
+					setState(802); ((conversionOrCallExprContext)_localctx).conv = conversion();
 					}
 					break;
 
 				case 4:
 					{
+					_localctx = new builtinCallExprContext(_localctx);
+					_ctx = _localctx;
+					_prevctx = _localctx;
 					setState(804); builtinCall();
 					}
 					break;
@@ -3468,7 +4291,7 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new multExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((multExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(808);
@@ -3478,47 +4301,47 @@ public class GoParserBase extends Parser {
 							switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
 								case 1:
 									{
-									setState(810); _localctx.op = match(Star);
+									setState(810); ((multExprContext)_localctx).op = match(Star);
 									}
 									break;
 
 								case 2:
 									{
-									setState(812); _localctx.op = match(Slash);
+									setState(812); ((multExprContext)_localctx).op = match(Slash);
 									}
 									break;
 
 								case 3:
 									{
-									setState(814); _localctx.op = match(Percent);
+									setState(814); ((multExprContext)_localctx).op = match(Percent);
 									}
 									break;
 
 								case 4:
 									{
-									setState(816); _localctx.op = match(LeftShift);
+									setState(816); ((multExprContext)_localctx).op = match(LeftShift);
 									}
 									break;
 
 								case 5:
 									{
-									setState(818); _localctx.op = match(RightShift);
+									setState(818); ((multExprContext)_localctx).op = match(RightShift);
 									}
 									break;
 
 								case 6:
 									{
-									setState(820); _localctx.op = match(Amp);
+									setState(820); ((multExprContext)_localctx).op = match(Amp);
 									}
 									break;
 
 								case 7:
 									{
-									setState(822); _localctx.op = match(AmpCaret);
+									setState(822); ((multExprContext)_localctx).op = match(AmpCaret);
 									}
 									break;
 							}
-							setState(826); _localctx.right = expression(6);
+							setState(826); ((multExprContext)_localctx).right = expression(6);
 							}
 							break;
 
@@ -3526,7 +4349,7 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new addExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((addExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(828);
@@ -3536,29 +4359,29 @@ public class GoParserBase extends Parser {
 							switch ( getInterpreter().adaptivePredict(_input,62,_ctx) ) {
 								case 1:
 									{
-									setState(830); _localctx.op = match(Plus);
+									setState(830); ((addExprContext)_localctx).op = match(Plus);
 									}
 									break;
 
 								case 2:
 									{
-									setState(832); _localctx.op = match(Minus);
+									setState(832); ((addExprContext)_localctx).op = match(Minus);
 									}
 									break;
 
 								case 3:
 									{
-									setState(834); _localctx.op = match(Pipe);
+									setState(834); ((addExprContext)_localctx).op = match(Pipe);
 									}
 									break;
 
 								case 4:
 									{
-									setState(836); _localctx.op = match(Caret);
+									setState(836); ((addExprContext)_localctx).op = match(Caret);
 									}
 									break;
 							}
-							setState(840); _localctx.right = expression(5);
+							setState(840); ((addExprContext)_localctx).right = expression(5);
 							}
 							break;
 
@@ -3566,7 +4389,7 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new compareExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((compareExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(842);
@@ -3576,41 +4399,41 @@ public class GoParserBase extends Parser {
 							switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
 								case 1:
 									{
-									setState(844); _localctx.op = match(EqualEqual);
+									setState(844); ((compareExprContext)_localctx).op = match(EqualEqual);
 									}
 									break;
 
 								case 2:
 									{
-									setState(846); _localctx.op = match(BangEqual);
+									setState(846); ((compareExprContext)_localctx).op = match(BangEqual);
 									}
 									break;
 
 								case 3:
 									{
-									setState(848); _localctx.op = match(LessThan);
+									setState(848); ((compareExprContext)_localctx).op = match(LessThan);
 									}
 									break;
 
 								case 4:
 									{
-									setState(850); _localctx.op = match(LessEqual);
+									setState(850); ((compareExprContext)_localctx).op = match(LessEqual);
 									}
 									break;
 
 								case 5:
 									{
-									setState(852); _localctx.op = match(GreaterThan);
+									setState(852); ((compareExprContext)_localctx).op = match(GreaterThan);
 									}
 									break;
 
 								case 6:
 									{
-									setState(854); _localctx.op = match(GreaterEqual);
+									setState(854); ((compareExprContext)_localctx).op = match(GreaterEqual);
 									}
 									break;
 							}
-							setState(858); _localctx.right = expression(4);
+							setState(858); ((compareExprContext)_localctx).right = expression(4);
 							}
 							break;
 
@@ -3618,13 +4441,13 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new andExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((andExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(860);
 							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {2 >= $_p}?");
 							setState(862); match(And);
-							setState(864); _localctx.right = expression(3);
+							setState(864); ((andExprContext)_localctx).right = expression(3);
 							}
 							break;
 
@@ -3632,13 +4455,13 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new orExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((orExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(866);
 							if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {1 >= $_p}?");
 							setState(868); match(Or);
-							setState(870); _localctx.right = expression(2);
+							setState(870); ((orExprContext)_localctx).right = expression(2);
 							}
 							break;
 
@@ -3646,13 +4469,13 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new selectorExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((selectorExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(872);
 							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {11 >= $_p}?");
-							setState(874); _localctx.dot = match(Dot);
-							setState(876); _localctx.name = match(IDENTIFIER);
+							setState(874); ((selectorExprContext)_localctx).dot = match(Dot);
+							setState(876); ((selectorExprContext)_localctx).name = match(IDENTIFIER);
 							}
 							break;
 
@@ -3660,7 +4483,7 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new indexExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((indexExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(878);
@@ -3675,7 +4498,7 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new sliceExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((sliceExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(886);
@@ -3708,15 +4531,15 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new typeAssertionExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((typeAssertionExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(902);
 							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {8 >= $_p}?");
-							setState(904); _localctx.dot = match(Dot);
-							setState(906); _localctx.lp = match(LeftParen);
-							setState(908); _localctx.t = type();
-							setState(910); _localctx.rp = match(RightParen);
+							setState(904); ((typeAssertionExprContext)_localctx).dot = match(Dot);
+							setState(906); ((typeAssertionExprContext)_localctx).lp = match(LeftParen);
+							setState(908); ((typeAssertionExprContext)_localctx).t = type();
+							setState(910); ((typeAssertionExprContext)_localctx).rp = match(RightParen);
 							}
 							break;
 
@@ -3724,18 +4547,18 @@ public class GoParserBase extends Parser {
 							{
 							_localctx = new callExprContext(new expressionContext(_parentctx, _startState, _p));
 							_localctx.addChild(_prevctx);
-							_localctx.e = _prevctx;
+							((callExprContext)_localctx).e = _prevctx;
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(912);
 							if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {7 >= $_p}?");
-							setState(914); _localctx.lp = match(LeftParen);
+							setState(914); ((callExprContext)_localctx).lp = match(LeftParen);
 							setState(922);
 							//_errHandler.sync(this);
 							switch ( getInterpreter().adaptivePredict(_input,67,_ctx) ) {
 								case 1:
 									{
-									setState(916); _localctx.args = argumentList();
+									setState(916); ((callExprContext)_localctx).args = argumentList();
 									setState(920);
 									//_errHandler.sync(this);
 									switch ( getInterpreter().adaptivePredict(_input,66,_ctx) ) {
@@ -3748,7 +4571,7 @@ public class GoParserBase extends Parser {
 									}
 									break;
 							}
-							setState(924); _localctx.rp = match(RightParen);
+							setState(924); ((callExprContext)_localctx).rp = match(RightParen);
 							}
 							break;
 					}
@@ -3772,18 +4595,26 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class argumentListContext extends ParserRuleContext<Token> {
-		public expressionListContext exprs;;
-		public Token ellip;;
+		public expressionListContext exprs;
+		public Token ellip;
+		public expressionListContext expressionList() {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,0);
+		}
 		public argumentListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).argumentListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).argumentListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).argumentListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3793,13 +4624,13 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(931); _localctx.exprs = expressionList();
+			setState(931); ((argumentListContext)_localctx).exprs = expressionList();
 			setState(935);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,70,_ctx) ) {
 				case 1:
 					{
-					setState(933); _localctx.ellip = match(Ellipsis);
+					setState(933); ((argumentListContext)_localctx).ellip = match(Ellipsis);
 					}
 					break;
 			}
@@ -3817,18 +4648,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class conversionContext extends ParserRuleContext<Token> {
-		public typeContext t;;
-		public expressionContext e;;
+		public typeContext t;
+		public expressionContext e;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public conversionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).conversionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).conversionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).conversionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3838,9 +4680,9 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(937); _localctx.t = type();
+			setState(937); ((conversionContext)_localctx).t = type();
 			setState(939); match(LeftParen);
-			setState(941); _localctx.e = expression(0);
+			setState(941); ((conversionContext)_localctx).e = expression(0);
 			setState(943); match(RightParen);
 			}
 			_localctx.stop = _input.LT(-1);
@@ -3856,16 +4698,66 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class statementContext extends ParserRuleContext<Token> {
+		public gotoStmtContext gotoStmt() {
+		    return (gotoStmtContext)getRuleContext(gotoStmtContext.class,0);
+		}
+		public declarationContext declaration() {
+		    return (declarationContext)getRuleContext(declarationContext.class,0);
+		}
+		public forStmtContext forStmt() {
+		    return (forStmtContext)getRuleContext(forStmtContext.class,0);
+		}
+		public simpleStmtContext simpleStmt() {
+		    return (simpleStmtContext)getRuleContext(simpleStmtContext.class,0);
+		}
+		public returnStmtContext returnStmt() {
+		    return (returnStmtContext)getRuleContext(returnStmtContext.class,0);
+		}
+		public blockContext block() {
+		    return (blockContext)getRuleContext(blockContext.class,0);
+		}
+		public selectStmtContext selectStmt() {
+		    return (selectStmtContext)getRuleContext(selectStmtContext.class,0);
+		}
+		public breakStmtContext breakStmt() {
+		    return (breakStmtContext)getRuleContext(breakStmtContext.class,0);
+		}
+		public fallthroughStmtContext fallthroughStmt() {
+		    return (fallthroughStmtContext)getRuleContext(fallthroughStmtContext.class,0);
+		}
+		public continueStmtContext continueStmt() {
+		    return (continueStmtContext)getRuleContext(continueStmtContext.class,0);
+		}
+		public labeledStmtContext labeledStmt() {
+		    return (labeledStmtContext)getRuleContext(labeledStmtContext.class,0);
+		}
+		public deferStmtContext deferStmt() {
+		    return (deferStmtContext)getRuleContext(deferStmtContext.class,0);
+		}
+		public ifStmtContext ifStmt() {
+		    return (ifStmtContext)getRuleContext(ifStmtContext.class,0);
+		}
+		public goStmtContext goStmt() {
+		    return (goStmtContext)getRuleContext(goStmtContext.class,0);
+		}
+		public switchStmtContext switchStmt() {
+		    return (switchStmtContext)getRuleContext(switchStmtContext.class,0);
+		}
 		public statementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).statementEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).statementExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).statementVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3994,16 +4886,39 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class simpleStmtContext extends ParserRuleContext<Token> {
+		public shortVarDeclContext shortVarDecl() {
+		    return (shortVarDeclContext)getRuleContext(shortVarDeclContext.class,0);
+		}
+		public assignmentContext assignment() {
+		    return (assignmentContext)getRuleContext(assignmentContext.class,0);
+		}
+		public expressionStmtContext expressionStmt() {
+		    return (expressionStmtContext)getRuleContext(expressionStmtContext.class,0);
+		}
+		public sendStmtContext sendStmt() {
+		    return (sendStmtContext)getRuleContext(sendStmtContext.class,0);
+		}
+		public incDecStmtContext incDecStmt() {
+		    return (incDecStmtContext)getRuleContext(incDecStmtContext.class,0);
+		}
+		public emptyStmtContext emptyStmt() {
+		    return (emptyStmtContext)getRuleContext(emptyStmtContext.class,0);
+		}
 		public simpleStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).simpleStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).simpleStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).simpleStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4074,11 +4989,16 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).emptyStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).emptyStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).emptyStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4101,18 +5021,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class labeledStmtContext extends ParserRuleContext<Token> {
-		public labelContext lbl;;
-		public statementContext stmt;;
+		public labelContext lbl;
+		public statementContext stmt;
+		public statementContext statement() {
+		    return (statementContext)getRuleContext(statementContext.class,0);
+		}
+		public labelContext label() {
+		    return (labelContext)getRuleContext(labelContext.class,0);
+		}
 		public labeledStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).labeledStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).labeledStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).labeledStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4122,9 +5053,9 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(993); _localctx.lbl = label();
+			setState(993); ((labeledStmtContext)_localctx).lbl = label();
 			setState(995); match(Colon);
-			setState(997); _localctx.stmt = statement();
+			setState(997); ((labeledStmtContext)_localctx).stmt = statement();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -4139,17 +5070,23 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class labelContext extends ParserRuleContext<Token> {
-		public Token name;;
+		public Token name;
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public labelContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).labelEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).labelExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).labelVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4159,7 +5096,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(999); _localctx.name = match(IDENTIFIER);
+			setState(999); ((labelContext)_localctx).name = match(IDENTIFIER);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -4174,16 +5111,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class expressionStmtContext extends ParserRuleContext<Token> {
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public expressionStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).expressionStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).expressionStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).expressionStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4208,18 +5153,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class sendStmtContext extends ParserRuleContext<Token> {
-		public channelContext chan;;
-		public expressionContext e;;
+		public channelContext chan;
+		public expressionContext e;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public channelContext channel() {
+		    return (channelContext)getRuleContext(channelContext.class,0);
+		}
 		public sendStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sendStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sendStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).sendStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4229,9 +5185,9 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1003); _localctx.chan = channel();
+			setState(1003); ((sendStmtContext)_localctx).chan = channel();
 			setState(1005); match(LeftArrow);
-			setState(1007); _localctx.e = expression(0);
+			setState(1007); ((sendStmtContext)_localctx).e = expression(0);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -4246,17 +5202,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class channelContext extends ParserRuleContext<Token> {
-		public expressionContext e;;
+		public expressionContext e;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public channelContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).channelEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).channelExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).channelVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4266,7 +5230,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1009); _localctx.e = expression(0);
+			setState(1009); ((channelContext)_localctx).e = expression(0);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -4281,18 +5245,26 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class incDecStmtContext extends ParserRuleContext<Token> {
-		public expressionContext e;;
-		public Token op;;
+		public expressionContext e;
+		public Token op;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public incDecStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).incDecStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).incDecStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).incDecStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4303,12 +5275,12 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1011); _localctx.e = expression(0);
+			setState(1011); ((incDecStmtContext)_localctx).e = expression(0);
 			setState(1013);
-			_localctx.op = _input.LT(1);
+			((incDecStmtContext)_localctx).op = _input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==Inc || _la==Dec) ) {
-				_localctx.op = (Token)_errHandler.recoverInline(this);
+				((incDecStmtContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 			}
 			consume();
 			}
@@ -4325,19 +5297,33 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class assignmentContext extends ParserRuleContext<Token> {
-		public expressionListContext targets;;
-		public assignOpContext op;;
-		public expressionListContext values;;
+		public expressionListContext targets;
+		public assignOpContext op;
+		public expressionListContext values;
+		public assignOpContext assignOp() {
+		    return (assignOpContext)getRuleContext(assignOpContext.class,0);
+		}
+		public List<? extends expressionListContext> expressionList() {
+		    return (List<expressionListContext>)getRuleContexts(expressionListContext.class);
+		}
+		public expressionListContext expressionList(int i) {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,i);
+		}
 		public assignmentContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).assignmentEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).assignmentExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).assignmentVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4347,9 +5333,9 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1015); _localctx.targets = expressionList();
-			setState(1017); _localctx.op = assignOp();
-			setState(1019); _localctx.values = expressionList();
+			setState(1015); ((assignmentContext)_localctx).targets = expressionList();
+			setState(1017); ((assignmentContext)_localctx).op = assignOp();
+			setState(1019); ((assignmentContext)_localctx).values = expressionList();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -4364,16 +5350,27 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class assignOpContext extends ParserRuleContext<Token> {
+		public addAssignOpContext addAssignOp() {
+		    return (addAssignOpContext)getRuleContext(addAssignOpContext.class,0);
+		}
+		public mulAssignOpContext mulAssignOp() {
+		    return (mulAssignOpContext)getRuleContext(mulAssignOpContext.class,0);
+		}
 		public assignOpContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).assignOpEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).assignOpExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).assignOpVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4423,11 +5420,16 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).addAssignOpEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).addAssignOpExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).addAssignOpVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4484,11 +5486,16 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).mulAssignOpEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).mulAssignOpExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).mulAssignOpVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4561,16 +5568,36 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class ifStmtContext extends ParserRuleContext<Token> {
+		public blockContext block(int i) {
+		    return (blockContext)getRuleContext(blockContext.class,i);
+		}
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public simpleStmtContext simpleStmt() {
+		    return (simpleStmtContext)getRuleContext(simpleStmtContext.class,0);
+		}
+		public List<? extends blockContext> block() {
+		    return (List<blockContext>)getRuleContexts(blockContext.class);
+		}
+		public ifStmtContext ifStmt() {
+		    return (ifStmtContext)getRuleContext(ifStmtContext.class,0);
+		}
 		public ifStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).ifStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).ifStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).ifStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4631,16 +5658,27 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class switchStmtContext extends ParserRuleContext<Token> {
+		public typeSwitchStmtContext typeSwitchStmt() {
+		    return (typeSwitchStmtContext)getRuleContext(typeSwitchStmtContext.class,0);
+		}
+		public exprSwitchStmtContext exprSwitchStmt() {
+		    return (exprSwitchStmtContext)getRuleContext(exprSwitchStmtContext.class,0);
+		}
 		public switchStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).switchStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).switchStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).switchStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4678,16 +5716,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class exprSwitchStmtContext extends ParserRuleContext<Token> {
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public simpleStmtContext simpleStmt() {
+		    return (simpleStmtContext)getRuleContext(simpleStmtContext.class,0);
+		}
+		public exprCaseClauseContext exprCaseClause() {
+		    return (exprCaseClauseContext)getRuleContext(exprCaseClauseContext.class,0);
+		}
 		public exprSwitchStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exprSwitchStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exprSwitchStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).exprSwitchStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4720,9 +5772,9 @@ public class GoParserBase extends Parser {
 			setState(1095); match(LeftBrace);
 			setState(1101);
 			_errHandler.sync(this);
-			int _alt1972 = getInterpreter().adaptivePredict(_input,82,_ctx);
-			while ( _alt1972!=2 && _alt1972!=-1 ) {
-				if ( _alt1972==1 ) {
+			int _alt1980 = getInterpreter().adaptivePredict(_input,82,_ctx);
+			while ( _alt1980!=2 && _alt1980!=-1 ) {
+				if ( _alt1980==1 ) {
 					{
 					{
 					setState(1097); exprCaseClause();
@@ -4731,7 +5783,7 @@ public class GoParserBase extends Parser {
 				}
 				setState(1103);
 				_errHandler.sync(this);
-				_alt1972 = getInterpreter().adaptivePredict(_input,82,_ctx);
+				_alt1980 = getInterpreter().adaptivePredict(_input,82,_ctx);
 			}
 			setState(1104); match(RightBrace);
 			}
@@ -4748,16 +5800,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class exprCaseClauseContext extends ParserRuleContext<Token> {
+		public List<? extends statementContext> statement() {
+		    return (List<statementContext>)getRuleContexts(statementContext.class);
+		}
+		public exprSwitchCaseContext exprSwitchCase() {
+		    return (exprSwitchCaseContext)getRuleContext(exprSwitchCaseContext.class,0);
+		}
+		public statementContext statement(int i) {
+		    return (statementContext)getRuleContext(statementContext.class,i);
+		}
 		public exprCaseClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exprCaseClauseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exprCaseClauseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).exprCaseClauseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4777,9 +5843,9 @@ public class GoParserBase extends Parser {
 					setState(1110); statement();
 					setState(1118);
 					_errHandler.sync(this);
-					int _alt1994 = getInterpreter().adaptivePredict(_input,83,_ctx);
-					while ( _alt1994!=2 && _alt1994!=-1 ) {
-						if ( _alt1994==1 ) {
+					int _alt2002 = getInterpreter().adaptivePredict(_input,83,_ctx);
+					while ( _alt2002!=2 && _alt2002!=-1 ) {
+						if ( _alt2002==1 ) {
 							{
 							{
 							setState(1112); match(Semi);
@@ -4789,7 +5855,7 @@ public class GoParserBase extends Parser {
 						}
 						setState(1120);
 						_errHandler.sync(this);
-						_alt1994 = getInterpreter().adaptivePredict(_input,83,_ctx);
+						_alt2002 = getInterpreter().adaptivePredict(_input,83,_ctx);
 					}
 					setState(1123);
 					//_errHandler.sync(this);
@@ -4817,16 +5883,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class exprSwitchCaseContext extends ParserRuleContext<Token> {
+		public expressionListContext expressionList() {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,0);
+		}
 		public exprSwitchCaseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exprSwitchCaseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exprSwitchCaseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).exprSwitchCaseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4865,16 +5939,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeSwitchStmtContext extends ParserRuleContext<Token> {
+		public typeCaseClauseContext typeCaseClause() {
+		    return (typeCaseClauseContext)getRuleContext(typeCaseClauseContext.class,0);
+		}
+		public simpleStmtContext simpleStmt() {
+		    return (simpleStmtContext)getRuleContext(simpleStmtContext.class,0);
+		}
+		public typeSwitchGuardContext typeSwitchGuard() {
+		    return (typeSwitchGuardContext)getRuleContext(typeSwitchGuardContext.class,0);
+		}
 		public typeSwitchStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSwitchStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSwitchStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeSwitchStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4899,9 +5987,9 @@ public class GoParserBase extends Parser {
 			setState(1145); match(LeftBrace);
 			setState(1151);
 			_errHandler.sync(this);
-			int _alt2035 = getInterpreter().adaptivePredict(_input,88,_ctx);
-			while ( _alt2035!=2 && _alt2035!=-1 ) {
-				if ( _alt2035==1 ) {
+			int _alt2043 = getInterpreter().adaptivePredict(_input,88,_ctx);
+			while ( _alt2043!=2 && _alt2043!=-1 ) {
+				if ( _alt2043==1 ) {
 					{
 					{
 					setState(1147); typeCaseClause();
@@ -4910,7 +5998,7 @@ public class GoParserBase extends Parser {
 				}
 				setState(1153);
 				_errHandler.sync(this);
-				_alt2035 = getInterpreter().adaptivePredict(_input,88,_ctx);
+				_alt2043 = getInterpreter().adaptivePredict(_input,88,_ctx);
 			}
 			setState(1154); match(RightBrace);
 			}
@@ -4927,20 +6015,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeSwitchGuardContext extends ParserRuleContext<Token> {
-		public Token id;;
-		public Token defeq;;
-		public expressionContext e;;
-		public Token dot;;
+		public Token id;
+		public Token defeq;
+		public expressionContext e;
+		public Token dot;
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public typeSwitchGuardContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSwitchGuardEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSwitchGuardExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeSwitchGuardVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4955,13 +6052,13 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,89,_ctx) ) {
 				case 1:
 					{
-					setState(1156); _localctx.id = match(IDENTIFIER);
-					setState(1158); _localctx.defeq = match(ColonEqual);
+					setState(1156); ((typeSwitchGuardContext)_localctx).id = match(IDENTIFIER);
+					setState(1158); ((typeSwitchGuardContext)_localctx).defeq = match(ColonEqual);
 					}
 					break;
 			}
-			setState(1162); _localctx.e = expression(0);
-			setState(1164); _localctx.dot = match(Dot);
+			setState(1162); ((typeSwitchGuardContext)_localctx).e = expression(0);
+			setState(1164); ((typeSwitchGuardContext)_localctx).dot = match(Dot);
 			setState(1166); match(LeftParen);
 			setState(1168); match(Type);
 			setState(1170); match(RightParen);
@@ -4979,16 +6076,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeCaseClauseContext extends ParserRuleContext<Token> {
+		public List<? extends statementContext> statement() {
+		    return (List<statementContext>)getRuleContexts(statementContext.class);
+		}
+		public statementContext statement(int i) {
+		    return (statementContext)getRuleContext(statementContext.class,i);
+		}
+		public typeSwitchCaseContext typeSwitchCase() {
+		    return (typeSwitchCaseContext)getRuleContext(typeSwitchCaseContext.class,0);
+		}
 		public typeCaseClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeCaseClauseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeCaseClauseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeCaseClauseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5008,9 +6119,9 @@ public class GoParserBase extends Parser {
 					setState(1176); statement();
 					setState(1184);
 					_errHandler.sync(this);
-					int _alt2090 = getInterpreter().adaptivePredict(_input,90,_ctx);
-					while ( _alt2090!=2 && _alt2090!=-1 ) {
-						if ( _alt2090==1 ) {
+					int _alt2098 = getInterpreter().adaptivePredict(_input,90,_ctx);
+					while ( _alt2098!=2 && _alt2098!=-1 ) {
+						if ( _alt2098==1 ) {
 							{
 							{
 							setState(1178); match(Semi);
@@ -5020,7 +6131,7 @@ public class GoParserBase extends Parser {
 						}
 						setState(1186);
 						_errHandler.sync(this);
-						_alt2090 = getInterpreter().adaptivePredict(_input,90,_ctx);
+						_alt2098 = getInterpreter().adaptivePredict(_input,90,_ctx);
 					}
 					setState(1189);
 					//_errHandler.sync(this);
@@ -5048,16 +6159,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeSwitchCaseContext extends ParserRuleContext<Token> {
+		public typeListContext typeList() {
+		    return (typeListContext)getRuleContext(typeListContext.class,0);
+		}
 		public typeSwitchCaseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSwitchCaseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeSwitchCaseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeSwitchCaseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5096,18 +6215,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class typeListContext extends ParserRuleContext<Token> {
-		public typeContext types;;
-		public List<typeContext> types_list = new ArrayList<typeContext>();;
+		public typeContext type;
+		public List<typeContext> types = new ArrayList<typeContext>();
+		public typeContext type(int i) {
+		    return (typeContext)getRuleContext(typeContext.class,i);
+		}
+		public List<? extends typeContext> type() {
+		    return (List<typeContext>)getRuleContexts(typeContext.class);
+		}
 		public typeListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).typeListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).typeListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5117,24 +6247,24 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1201); _localctx.types = type();
-			_localctx.types_list.add(_localctx.types);
+			setState(1201); ((typeListContext)_localctx).type = type();
+			((typeListContext)_localctx).types.add(((typeListContext)_localctx).type);
 			setState(1209);
 			_errHandler.sync(this);
-			int _alt2128 = getInterpreter().adaptivePredict(_input,94,_ctx);
-			while ( _alt2128!=2 && _alt2128!=-1 ) {
-				if ( _alt2128==1 ) {
+			int _alt2136 = getInterpreter().adaptivePredict(_input,94,_ctx);
+			while ( _alt2136!=2 && _alt2136!=-1 ) {
+				if ( _alt2136==1 ) {
 					{
 					{
 					setState(1203); match(Comma);
-					setState(1205); _localctx.types = type();
-					_localctx.types_list.add(_localctx.types);
+					setState(1205); ((typeListContext)_localctx).type = type();
+					((typeListContext)_localctx).types.add(((typeListContext)_localctx).type);
 					}
 					} 
 				}
 				setState(1211);
 				_errHandler.sync(this);
-				_alt2128 = getInterpreter().adaptivePredict(_input,94,_ctx);
+				_alt2136 = getInterpreter().adaptivePredict(_input,94,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -5150,16 +6280,33 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class forStmtContext extends ParserRuleContext<Token> {
+		public conditionContext condition() {
+		    return (conditionContext)getRuleContext(conditionContext.class,0);
+		}
+		public blockContext block() {
+		    return (blockContext)getRuleContext(blockContext.class,0);
+		}
+		public rangeClauseContext rangeClause() {
+		    return (rangeClauseContext)getRuleContext(rangeClauseContext.class,0);
+		}
+		public forClauseContext forClause() {
+		    return (forClauseContext)getRuleContext(forClauseContext.class,0);
+		}
 		public forStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).forStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).forStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).forStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5206,16 +6353,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class conditionContext extends ParserRuleContext<Token> {
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public conditionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).conditionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).conditionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).conditionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5240,16 +6395,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class forClauseContext extends ParserRuleContext<Token> {
+		public postStmtContext postStmt() {
+		    return (postStmtContext)getRuleContext(postStmtContext.class,0);
+		}
+		public conditionContext condition() {
+		    return (conditionContext)getRuleContext(conditionContext.class,0);
+		}
+		public initStmtContext initStmt() {
+		    return (initStmtContext)getRuleContext(initStmtContext.class,0);
+		}
 		public forClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).forClauseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).forClauseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).forClauseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5302,16 +6471,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class initStmtContext extends ParserRuleContext<Token> {
+		public simpleStmtContext simpleStmt() {
+		    return (simpleStmtContext)getRuleContext(simpleStmtContext.class,0);
+		}
 		public initStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).initStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).initStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).initStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5336,16 +6513,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class postStmtContext extends ParserRuleContext<Token> {
+		public simpleStmtContext simpleStmt() {
+		    return (simpleStmtContext)getRuleContext(simpleStmtContext.class,0);
+		}
 		public postStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).postStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).postStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).postStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5370,21 +6555,32 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class rangeClauseContext extends ParserRuleContext<Token> {
-		public expressionContext e1;;
-		public expressionContext e2;;
-		public Token eq;;
-		public Token defeq;;
-		public expressionContext e;;
+		public expressionContext e1;
+		public expressionContext e2;
+		public Token eq;
+		public Token defeq;
+		public expressionContext e;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
 		public rangeClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).rangeClauseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).rangeClauseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).rangeClauseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5394,14 +6590,14 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1246); _localctx.e1 = expression(0);
+			setState(1246); ((rangeClauseContext)_localctx).e1 = expression(0);
 			setState(1252);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,99,_ctx) ) {
 				case 1:
 					{
 					setState(1248); match(Comma);
-					setState(1250); _localctx.e2 = expression(0);
+					setState(1250); ((rangeClauseContext)_localctx).e2 = expression(0);
 					}
 					break;
 			}
@@ -5410,18 +6606,18 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,100,_ctx) ) {
 				case 1:
 					{
-					setState(1254); _localctx.eq = match(Equal);
+					setState(1254); ((rangeClauseContext)_localctx).eq = match(Equal);
 					}
 					break;
 
 				case 2:
 					{
-					setState(1256); _localctx.defeq = match(ColonEqual);
+					setState(1256); ((rangeClauseContext)_localctx).defeq = match(ColonEqual);
 					}
 					break;
 			}
 			setState(1260); match(Range);
-			setState(1262); _localctx.e = expression(0);
+			setState(1262); ((rangeClauseContext)_localctx).e = expression(0);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -5436,16 +6632,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class goStmtContext extends ParserRuleContext<Token> {
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public goStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).goStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).goStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).goStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5471,16 +6675,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class selectStmtContext extends ParserRuleContext<Token> {
+		public commClauseContext commClause() {
+		    return (commClauseContext)getRuleContext(commClauseContext.class,0);
+		}
 		public selectStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).selectStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).selectStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).selectStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5494,9 +6706,9 @@ public class GoParserBase extends Parser {
 			setState(1270); match(LeftBrace);
 			setState(1276);
 			_errHandler.sync(this);
-			int _alt2254 = getInterpreter().adaptivePredict(_input,101,_ctx);
-			while ( _alt2254!=2 && _alt2254!=-1 ) {
-				if ( _alt2254==1 ) {
+			int _alt2262 = getInterpreter().adaptivePredict(_input,101,_ctx);
+			while ( _alt2262!=2 && _alt2262!=-1 ) {
+				if ( _alt2262==1 ) {
 					{
 					{
 					setState(1272); commClause();
@@ -5505,7 +6717,7 @@ public class GoParserBase extends Parser {
 				}
 				setState(1278);
 				_errHandler.sync(this);
-				_alt2254 = getInterpreter().adaptivePredict(_input,101,_ctx);
+				_alt2262 = getInterpreter().adaptivePredict(_input,101,_ctx);
 			}
 			setState(1279); match(RightBrace);
 			}
@@ -5522,16 +6734,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class commClauseContext extends ParserRuleContext<Token> {
+		public List<? extends statementContext> statement() {
+		    return (List<statementContext>)getRuleContexts(statementContext.class);
+		}
+		public statementContext statement(int i) {
+		    return (statementContext)getRuleContext(statementContext.class,i);
+		}
+		public commCaseContext commCase() {
+		    return (commCaseContext)getRuleContext(commCaseContext.class,0);
+		}
 		public commClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).commClauseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).commClauseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).commClauseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5551,9 +6777,9 @@ public class GoParserBase extends Parser {
 					setState(1285); statement();
 					setState(1293);
 					_errHandler.sync(this);
-					int _alt2276 = getInterpreter().adaptivePredict(_input,102,_ctx);
-					while ( _alt2276!=2 && _alt2276!=-1 ) {
-						if ( _alt2276==1 ) {
+					int _alt2284 = getInterpreter().adaptivePredict(_input,102,_ctx);
+					while ( _alt2284!=2 && _alt2284!=-1 ) {
+						if ( _alt2284==1 ) {
 							{
 							{
 							setState(1287); match(Semi);
@@ -5563,7 +6789,7 @@ public class GoParserBase extends Parser {
 						}
 						setState(1295);
 						_errHandler.sync(this);
-						_alt2276 = getInterpreter().adaptivePredict(_input,102,_ctx);
+						_alt2284 = getInterpreter().adaptivePredict(_input,102,_ctx);
 					}
 					setState(1298);
 					//_errHandler.sync(this);
@@ -5591,16 +6817,27 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class commCaseContext extends ParserRuleContext<Token> {
+		public recvStmtContext recvStmt() {
+		    return (recvStmtContext)getRuleContext(recvStmtContext.class,0);
+		}
+		public sendStmtContext sendStmt() {
+		    return (sendStmtContext)getRuleContext(sendStmtContext.class,0);
+		}
 		public commCaseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).commCaseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).commCaseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).commCaseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5653,20 +6890,34 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class recvStmtContext extends ParserRuleContext<Token> {
-		public expressionContext e1;;
-		public expressionContext e2;;
-		public Token eq;;
-		public Token defeq;;
+		public expressionContext e1;
+		public expressionContext e2;
+		public Token eq;
+		public Token defeq;
+		public List<? extends expressionContext> expression() {
+		    return (List<expressionContext>)getRuleContexts(expressionContext.class);
+		}
+		public recvExprContext recvExpr() {
+		    return (recvExprContext)getRuleContext(recvExprContext.class,0);
+		}
+		public expressionContext expression(int i) {
+		    return (expressionContext)getRuleContext(expressionContext.class,i);
+		}
 		public recvStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).recvStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).recvStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).recvStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5681,14 +6932,14 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,109,_ctx) ) {
 				case 1:
 					{
-					setState(1314); _localctx.e1 = expression(0);
+					setState(1314); ((recvStmtContext)_localctx).e1 = expression(0);
 					setState(1320);
 					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,107,_ctx) ) {
 						case 1:
 							{
 							setState(1316); match(Comma);
-							setState(1318); _localctx.e2 = expression(0);
+							setState(1318); ((recvStmtContext)_localctx).e2 = expression(0);
 							}
 							break;
 					}
@@ -5697,13 +6948,13 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,108,_ctx) ) {
 						case 1:
 							{
-							setState(1322); _localctx.eq = match(Equal);
+							setState(1322); ((recvStmtContext)_localctx).eq = match(Equal);
 							}
 							break;
 
 						case 2:
 							{
-							setState(1324); _localctx.defeq = match(ColonEqual);
+							setState(1324); ((recvStmtContext)_localctx).defeq = match(ColonEqual);
 							}
 							break;
 					}
@@ -5725,16 +6976,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class recvExprContext extends ParserRuleContext<Token> {
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public recvExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).recvExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).recvExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).recvExprVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5759,16 +7018,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class returnStmtContext extends ParserRuleContext<Token> {
+		public expressionListContext expressionList() {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,0);
+		}
 		public returnStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).returnStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).returnStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).returnStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5802,16 +7069,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class breakStmtContext extends ParserRuleContext<Token> {
+		public labelContext label() {
+		    return (labelContext)getRuleContext(labelContext.class,0);
+		}
 		public breakStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).breakStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).breakStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).breakStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5845,16 +7120,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class continueStmtContext extends ParserRuleContext<Token> {
+		public labelContext label() {
+		    return (labelContext)getRuleContext(labelContext.class,0);
+		}
 		public continueStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).continueStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).continueStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).continueStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5888,16 +7171,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class gotoStmtContext extends ParserRuleContext<Token> {
+		public labelContext label() {
+		    return (labelContext)getRuleContext(labelContext.class,0);
+		}
 		public gotoStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).gotoStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).gotoStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).gotoStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5928,11 +7219,16 @@ public class GoParserBase extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).fallthroughStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).fallthroughStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).fallthroughStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5957,16 +7253,24 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class deferStmtContext extends ParserRuleContext<Token> {
+		public expressionContext expression() {
+		    return (expressionContext)getRuleContext(expressionContext.class,0);
+		}
 		public deferStmtContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).deferStmtEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).deferStmtExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).deferStmtVisit(this);
+		    else return null;
 		}
 	}
 
@@ -5992,18 +7296,27 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class builtinCallContext extends ParserRuleContext<Token> {
-		public Token name;;
-		public builtinArgsContext args;;
+		public Token name;
+		public builtinArgsContext args;
+		public builtinArgsContext builtinArgs() {
+		    return (builtinArgsContext)getRuleContext(builtinArgsContext.class,0);
+		}
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public builtinCallContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).builtinCallEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).builtinCallExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).builtinCallVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6013,14 +7326,14 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1362); _localctx.name = match(IDENTIFIER);
+			setState(1362); ((builtinCallContext)_localctx).name = match(IDENTIFIER);
 			setState(1364); match(LeftParen);
 			setState(1372);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,114,_ctx) ) {
 				case 1:
 					{
-					setState(1366); _localctx.args = builtinArgs();
+					setState(1366); ((builtinCallContext)_localctx).args = builtinArgs();
 					setState(1370);
 					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,113,_ctx) ) {
@@ -6048,18 +7361,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class builtinArgsContext extends ParserRuleContext<Token> {
-		public typeContext typeArg;;
-		public expressionListContext args;;
+		public typeContext typeArg;
+		public expressionListContext args;
+		public expressionListContext expressionList() {
+		    return (expressionListContext)getRuleContext(expressionListContext.class,0);
+		}
+		public typeContext type() {
+		    return (typeContext)getRuleContext(typeContext.class,0);
+		}
 		public builtinArgsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).builtinArgsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).builtinArgsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).builtinArgsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6073,14 +7397,14 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(1376); _localctx.typeArg = type();
+					setState(1376); ((builtinArgsContext)_localctx).typeArg = type();
 					setState(1382);
 					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,115,_ctx) ) {
 						case 1:
 							{
 							setState(1378); match(Comma);
-							setState(1380); _localctx.args = expressionList();
+							setState(1380); ((builtinArgsContext)_localctx).args = expressionList();
 							}
 							break;
 					}
@@ -6090,7 +7414,7 @@ public class GoParserBase extends Parser {
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(1384); _localctx.args = expressionList();
+					setState(1384); ((builtinArgsContext)_localctx).args = expressionList();
 					}
 					break;
 			}
@@ -6107,21 +7431,35 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class sourceFileContext extends ParserRuleContext<Token> {
-		public packageClauseContext pkg;;
-		public importDeclContext importDecls;;
-		public List<importDeclContext> importDecls_list = new ArrayList<importDeclContext>();;
-		public topLevelDeclContext decls;;
-		public List<topLevelDeclContext> decls_list = new ArrayList<topLevelDeclContext>();;
+		public packageClauseContext pkg;
+		public importDeclContext importDecl;
+		public List<importDeclContext> importDecls = new ArrayList<importDeclContext>();
+		public topLevelDeclContext topLevelDecl;
+		public List<topLevelDeclContext> decls = new ArrayList<topLevelDeclContext>();
+		public importDeclContext importDecl() {
+		    return (importDeclContext)getRuleContext(importDeclContext.class,0);
+		}
+		public topLevelDeclContext topLevelDecl() {
+		    return (topLevelDeclContext)getRuleContext(topLevelDeclContext.class,0);
+		}
+		public packageClauseContext packageClause() {
+		    return (packageClauseContext)getRuleContext(packageClauseContext.class,0);
+		}
 		public sourceFileContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sourceFileEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).sourceFileExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).sourceFileVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6136,44 +7474,44 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,117,_ctx) ) {
 				case 1:
 					{
-					setState(1388); _localctx.pkg = packageClause();
+					setState(1388); ((sourceFileContext)_localctx).pkg = packageClause();
 					setState(1390); match(Semi);
 					}
 					break;
 			}
 			setState(1400);
 			_errHandler.sync(this);
-			int _alt2479 = getInterpreter().adaptivePredict(_input,118,_ctx);
-			while ( _alt2479!=2 && _alt2479!=-1 ) {
-				if ( _alt2479==1 ) {
+			int _alt2487 = getInterpreter().adaptivePredict(_input,118,_ctx);
+			while ( _alt2487!=2 && _alt2487!=-1 ) {
+				if ( _alt2487==1 ) {
 					{
 					{
-					setState(1394); _localctx.importDecls = importDecl();
-					_localctx.importDecls_list.add(_localctx.importDecls);
+					setState(1394); ((sourceFileContext)_localctx).importDecl = importDecl();
+					((sourceFileContext)_localctx).importDecls.add(((sourceFileContext)_localctx).importDecl);
 					setState(1396); match(Semi);
 					}
 					} 
 				}
 				setState(1402);
 				_errHandler.sync(this);
-				_alt2479 = getInterpreter().adaptivePredict(_input,118,_ctx);
+				_alt2487 = getInterpreter().adaptivePredict(_input,118,_ctx);
 			}
 			setState(1409);
 			_errHandler.sync(this);
-			int _alt2488 = getInterpreter().adaptivePredict(_input,119,_ctx);
-			while ( _alt2488!=2 && _alt2488!=-1 ) {
-				if ( _alt2488==1 ) {
+			int _alt2496 = getInterpreter().adaptivePredict(_input,119,_ctx);
+			while ( _alt2496!=2 && _alt2496!=-1 ) {
+				if ( _alt2496==1 ) {
 					{
 					{
-					setState(1403); _localctx.decls = topLevelDecl();
-					_localctx.decls_list.add(_localctx.decls);
+					setState(1403); ((sourceFileContext)_localctx).topLevelDecl = topLevelDecl();
+					((sourceFileContext)_localctx).decls.add(((sourceFileContext)_localctx).topLevelDecl);
 					setState(1405); match(Semi);
 					}
 					} 
 				}
 				setState(1411);
 				_errHandler.sync(this);
-				_alt2488 = getInterpreter().adaptivePredict(_input,119,_ctx);
+				_alt2496 = getInterpreter().adaptivePredict(_input,119,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -6189,17 +7527,25 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class packageClauseContext extends ParserRuleContext<Token> {
-		public packageNameContext name;;
+		public packageNameContext name;
+		public packageNameContext packageName() {
+		    return (packageNameContext)getRuleContext(packageNameContext.class,0);
+		}
 		public packageClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).packageClauseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).packageClauseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).packageClauseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6210,8 +7556,8 @@ public class GoParserBase extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1412); match(Package);
-			setState(1414); _localctx.name = packageName();
-			addPackageName((_localctx.name!=null?(_localctx.name.start):null));
+			setState(1414); ((packageClauseContext)_localctx).name = packageName();
+			addPackageName((((packageClauseContext)_localctx).name!=null?(((packageClauseContext)_localctx).name.start):null));
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -6226,17 +7572,23 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class packageNameContext extends ParserRuleContext<Token> {
-		public Token name;;
+		public Token name;
+		public Token IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public packageNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).packageNameEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).packageNameExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).packageNameVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6246,7 +7598,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1418); _localctx.name = match(IDENTIFIER);
+			setState(1418); ((packageNameContext)_localctx).name = match(IDENTIFIER);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -6261,18 +7613,29 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class importDeclContext extends ParserRuleContext<Token> {
-		public importSpecContext importSpecs;;
-		public List<importSpecContext> importSpecs_list = new ArrayList<importSpecContext>();;
+		public importSpecContext importSpec;
+		public List<importSpecContext> importSpecs = new ArrayList<importSpecContext>();
+		public List<? extends importSpecContext> importSpec() {
+		    return (List<importSpecContext>)getRuleContexts(importSpecContext.class);
+		}
+		public importSpecContext importSpec(int i) {
+		    return (importSpecContext)getRuleContext(importSpecContext.class,i);
+		}
 		public importDeclContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).importDeclEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).importDeclExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).importDeclVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6288,8 +7651,8 @@ public class GoParserBase extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,123,_ctx) ) {
 				case 1:
 					{
-					setState(1422); _localctx.importSpecs = importSpec();
-					_localctx.importSpecs_list.add(_localctx.importSpecs);
+					setState(1422); ((importDeclContext)_localctx).importSpec = importSpec();
+					((importDeclContext)_localctx).importSpecs.add(((importDeclContext)_localctx).importSpec);
 					}
 					break;
 
@@ -6301,24 +7664,24 @@ public class GoParserBase extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,122,_ctx) ) {
 						case 1:
 							{
-							setState(1426); _localctx.importSpecs = importSpec();
-							_localctx.importSpecs_list.add(_localctx.importSpecs);
+							setState(1426); ((importDeclContext)_localctx).importSpec = importSpec();
+							((importDeclContext)_localctx).importSpecs.add(((importDeclContext)_localctx).importSpec);
 							setState(1434);
 							_errHandler.sync(this);
-							int _alt2543 = getInterpreter().adaptivePredict(_input,120,_ctx);
-							while ( _alt2543!=2 && _alt2543!=-1 ) {
-								if ( _alt2543==1 ) {
+							int _alt2551 = getInterpreter().adaptivePredict(_input,120,_ctx);
+							while ( _alt2551!=2 && _alt2551!=-1 ) {
+								if ( _alt2551==1 ) {
 									{
 									{
 									setState(1428); match(Semi);
-									setState(1430); _localctx.importSpecs = importSpec();
-									_localctx.importSpecs_list.add(_localctx.importSpecs);
+									setState(1430); ((importDeclContext)_localctx).importSpec = importSpec();
+									((importDeclContext)_localctx).importSpecs.add(((importDeclContext)_localctx).importSpec);
 									}
 									} 
 								}
 								setState(1436);
 								_errHandler.sync(this);
-								_alt2543 = getInterpreter().adaptivePredict(_input,120,_ctx);
+								_alt2551 = getInterpreter().adaptivePredict(_input,120,_ctx);
 							}
 							setState(1439);
 							//_errHandler.sync(this);
@@ -6350,19 +7713,30 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class importSpecContext extends ParserRuleContext<Token> {
-		public Token dot;;
-		public importPathContext path;;
-		public packageNameContext name;;
+		public Token dot;
+		public importPathContext path;
+		public packageNameContext name;
+		public packageNameContext packageName() {
+		    return (packageNameContext)getRuleContext(packageNameContext.class,0);
+		}
+		public importPathContext importPath() {
+		    return (importPathContext)getRuleContext(importPathContext.class,0);
+		}
 		public importSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).importSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).importSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).importSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6376,25 +7750,25 @@ public class GoParserBase extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(1447); _localctx.dot = match(Dot);
-					setState(1449); _localctx.path = importPath();
+					setState(1447); ((importSpecContext)_localctx).dot = match(Dot);
+					setState(1449); ((importSpecContext)_localctx).path = importPath();
 					}
 					break;
 
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(1451); _localctx.name = packageName();
-					setState(1453); _localctx.path = importPath();
-					addPackageName((_localctx.name!=null?(_localctx.name.start):null));
+					setState(1451); ((importSpecContext)_localctx).name = packageName();
+					setState(1453); ((importSpecContext)_localctx).path = importPath();
+					addPackageName((((importSpecContext)_localctx).name!=null?(((importSpecContext)_localctx).name.start):null));
 					}
 					break;
 
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(1457); _localctx.path = importPath();
-					addPackageName((_localctx.path!=null?(_localctx.path.start):null));
+					setState(1457); ((importSpecContext)_localctx).path = importPath();
+					addPackageName((((importSpecContext)_localctx).path!=null?(((importSpecContext)_localctx).path.start):null));
 					}
 					break;
 			}
@@ -6411,17 +7785,23 @@ public class GoParserBase extends Parser {
 	}
 
 	public static class importPathContext extends ParserRuleContext<Token> {
-		public Token path;;
+		public Token path;
+		public Token StringLiteral() { return getToken(GoParserBase.StringLiteral, 0); }
 		public importPathContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).importPathEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRule(this);
+			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).importPathExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GoParserBaseVisitor ) return ((GoParserBaseVisitor<T>)visitor).importPathVisit(this);
+		    else return null;
 		}
 	}
 
@@ -6431,7 +7811,7 @@ public class GoParserBase extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1463); _localctx.path = match(StringLiteral);
+			setState(1463); ((importPathContext)_localctx).path = match(StringLiteral);
 			}
 			_localctx.stop = _input.LT(-1);
 		}

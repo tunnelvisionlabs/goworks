@@ -19,6 +19,7 @@ import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.atn.RuleTransition;
 import org.antlr.v4.runtime.atn.SimulatorState;
 import org.antlr.v4.runtime.atn.Transition;
@@ -83,14 +84,14 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     }
 
     @Override
-    protected DFAState addDFAEdge(DFA dfa, ATNConfigSet p, int t, List<Integer> contextTransitions, ATNConfigSet q) {
+    protected DFAState addDFAEdge(DFA dfa, ATNConfigSet p, int t, List<Integer> contextTransitions, ATNConfigSet q, PredictionContextCache contextCache) {
         if (!getSuppressedSet(startIndex).isNil()) {
             DFAState from = addDFAState(dfa, p);
             DFAState to = addDFAState(dfa, q);
             return to;
         }
 
-        return super.addDFAEdge(dfa, p, t, contextTransitions, q);
+        return super.addDFAEdge(dfa, p, t, contextTransitions, q, contextCache);
     }
 
     @Override
