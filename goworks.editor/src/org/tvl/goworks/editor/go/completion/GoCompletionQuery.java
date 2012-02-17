@@ -100,6 +100,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.arrayTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.baseTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.baseTypeNameContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.builtinCallExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.callExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.channelTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.constSpecContext;
@@ -110,6 +111,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBase.labeledStmtContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.literalTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.mapTypeContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.operandContext;
+import org.tvl.goworks.editor.go.parser.GoParserBase.operandExprContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.packageNameContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.parameterDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.pointerTypeContext;
@@ -1293,12 +1295,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            public void expressionEnter(expressionContext ctx) {
+            public void operandExprEnter(operandExprContext ctx) {
                 if (ctx.getChildCount() == 1 && (ctx.getChild(0) instanceof GoParserBase.operandContext)) {
                     annotations.putProperty(ctx, ATTR_TARGET, resolveTarget((GoParserBase.operandContext)ctx.getChild(0)));
-                    return;
+                } else {
+                    LOGGER.log(Level.FINE, "TODO: handle other expressions.");
                 }
+            }
 
+            @Override
+            public void builtinCallExprEnter(builtinCallExprContext ctx) {
                 LOGGER.log(Level.FINE, "TODO: handle other expressions.");
             }
 
