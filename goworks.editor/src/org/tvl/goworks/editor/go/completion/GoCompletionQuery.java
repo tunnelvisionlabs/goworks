@@ -590,7 +590,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         GoParserBase.TypeSwitchGuardContext context = (GoParserBase.TypeSwitchGuardContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
-                                            selectorTarget = context.e;
+                                            selectorTarget = context.expression();
                                             break;
                                         }
                                     } else if (tree instanceof GoParserBase.TypeAssertionExprContext) {
@@ -604,14 +604,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         GoParserBase.MethodExprContext context = (GoParserBase.MethodExprContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
-                                            selectorTarget = context.recvType;
+                                            selectorTarget = context.receiverType();
                                             break;
                                         }
                                     } else if (tree instanceof GoParserBase.QualifiedIdentifierContext) {
                                         GoParserBase.QualifiedIdentifierContext context = (GoParserBase.QualifiedIdentifierContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
-                                            selectorTarget = context.pkg;
+                                            selectorTarget = context.packageName();
                                             break;
                                         }
                                     }
@@ -754,7 +754,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                     RuleContext<Token> compositeLiteralRuleContext = getTopContext(parser, finalContext, IntervalSet.of(GoParserBase.RULE_compositeLiteral));
                                     GoParserBase.CompositeLiteralContext compositeLiteralContext = (GoParserBase.CompositeLiteralContext)compositeLiteralRuleContext;
                                     if (finalContext instanceof GoParserBase.FieldNameContext) {
-                                        assert compositeLiteralContext != null && compositeLiteralContext.litTyp != null;
+                                        assert compositeLiteralContext != null && compositeLiteralContext.literalType() != null;
 
                                         List<GoParserBase.LiteralValueContext> literalValueContexts = new ArrayList<GoParserBase.LiteralValueContext>();
                                         for (RuleContext<Token> context = finalContext; context != null; context = context.parent) {
@@ -767,7 +767,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         }
 
                                         // first resolve the type of the containing compositeLiteral
-                                        Collection<? extends CodeElementModel> models = targetAnalyzer.resolveTarget(compositeLiteralContext.litTyp);
+                                        Collection<? extends CodeElementModel> models = targetAnalyzer.resolveTarget(compositeLiteralContext.literalType());
                                         if (literalValueContexts.size() > 1) {
                                             LOGGER.log(Level.FINE, "TODO: resolve nested values - need type of the innermost value.");
                                             models = Collections.emptyList();
@@ -792,11 +792,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         }
                                     } else if (finalContext instanceof GoParserBase.QualifiedIdentifierContext) {
                                         GoParserBase.QualifiedIdentifierContext context = (GoParserBase.QualifiedIdentifierContext)finalContext;
-                                        if (context.pkg != null) {
+                                        if (context.packageName() != null) {
                                             continue;
                                         }
 
-                                        if (compositeLiteralContext != null && compositeLiteralContext.litVal != null) {
+                                        if (compositeLiteralContext != null && compositeLiteralContext.literalValue() != null) {
                                             LOGGER.log(Level.FINE, "TODO: is there any other work to do for this case?");
                                         }
 
@@ -952,8 +952,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                             @Override
                                             public void enterLabeledStmt(LabeledStmtContext ctx) {
-                                                if (ctx.lbl != null && ctx.lbl.name != null) {
-                                                    labels.add(ctx.lbl.name);
+                                                if (ctx.label() != null && ctx.label().IDENTIFIER() != null) {
+                                                    labels.add(ctx.label().IDENTIFIER());
                                                 }
                                             }
 
@@ -1182,8 +1182,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 public void enterTypeSwitchGuard(TypeSwitchGuardContext ctx) {
-                    if (ctx.id != null) {
-                        locals.put(ctx.id, null);
+                    if (ctx.IDENTIFIER() != null) {
+                        locals.put(ctx.IDENTIFIER(), null);
                     }
                 }
 
@@ -1203,16 +1203,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @Override
                 public void enterReceiver(ReceiverContext ctx) {
                     if (ctx.name != null) {
-                        receiverParameters.put(ctx.name, ctx.typ);
+                        receiverParameters.put(ctx.name, ctx.baseTypeName());
                     }
                 }
 
                 @Override
                 public void enterParameterDecl(ParameterDeclContext ctx) {
-                    if (ctx.idList != null) {
+                    if (ctx.identifierList() != null) {
                         GoParserBase.ParametersContext parametersContext = (GoParserBase.ParametersContext)getTopContext(parser, ctx, IntervalSet.of(GoParserBase.RULE_parameters));
                         Map<Token, ParserRuleContext<Token>> map = parametersContext.parent instanceof GoParserBase.ResultContext ? returnParameters : parameters;
-                        addVars(map, ctx.idList, ctx.t, null);
+                        addVars(map, ctx.identifierList(), ctx.type(), null);
                     }
                 }
 
@@ -1226,13 +1226,13 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                      @NullAllowed GoParserBase.TypeContext explicitType,
                                      @NullAllowed GoParserBase.ExpressionListContext exprList) {
 
-                    if (idList == null || idList.ids == null) {
+                    if (idList == null || idList.IDENTIFIER() == null) {
                         return;
                     }
 
-                    List<GoParserBase.ExpressionContext> expressions = exprList != null ? exprList.expressions : null;
-                    for (int i = 0; i < idList.ids.size(); i++) {
-                        Token name = idList.ids.get(i);
+                    List<? extends GoParserBase.ExpressionContext> expressions = exprList != null ? exprList.expression() : null;
+                    for (int i = 0; i < idList.IDENTIFIER().size(); i++) {
+                        Token name = idList.IDENTIFIER(i);
                         ParserRuleContext<Token> type = explicitType;
                         if (type == null && expressions != null && i < expressions.size()) {
                             type = expressions.get(i);
@@ -1334,12 +1334,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterType(TypeContext ctx) {
                 Collection<? extends CodeElementModel> result;
-                if (ctx.name != null) {
-                    result = resolveTarget(ctx.name);
-                } else if (ctx.lit != null) {
-                    result = resolveTarget(ctx.lit);
-                } else if (ctx.t != null) {
-                    result = resolveTarget(ctx.t);
+                if (ctx.typeName() != null) {
+                    result = resolveTarget(ctx.typeName());
+                } else if (ctx.typeLiteral() != null) {
+                    result = resolveTarget(ctx.typeLiteral());
+                } else if (ctx.type() != null) {
+                    result = resolveTarget(ctx.type());
                 } else {
                     LOGGER.log(Level.FINE, "Unknown type syntax.");
                     result = null;
@@ -1362,8 +1362,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterArrayType(ArrayTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
-                if (ctx.elemType != null) {
-                    result.addAll(resolveTarget(ctx.elemType));
+                if (ctx.elementType() != null) {
+                    result.addAll(resolveTarget(ctx.elementType()));
                 }
 
                 for (int i = result.size() - 1; i >= 0; i--) {
@@ -1386,8 +1386,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterPointerType(PointerTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
-                if (ctx.typ != null) {
-                    result.addAll(resolveTarget(ctx.typ));
+                if (ctx.baseType() != null) {
+                    result.addAll(resolveTarget(ctx.baseType()));
                 }
 
                 for (int i = result.size() - 1; i >= 0; i--) {
@@ -1409,7 +1409,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return;
                 }
 
-                Collection<? extends CodeElementModel> result = resolveTarget(ctx.typ);
+                Collection<? extends CodeElementModel> result = resolveTarget(ctx.type());
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
 
@@ -1426,8 +1426,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterSliceType(SliceTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
-                if (ctx.elemType != null) {
-                    result.addAll(resolveTarget(ctx.elemType));
+                if (ctx.elementType() != null) {
+                    result.addAll(resolveTarget(ctx.elementType()));
                 }
 
                 for (int i = result.size() - 1; i >= 0; i--) {
@@ -1450,8 +1450,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterChannelType(ChannelTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
-                if (ctx.elemType != null) {
-                    result.addAll(resolveTarget(ctx.elemType));
+                if (ctx.elementType() != null) {
+                    result.addAll(resolveTarget(ctx.elementType()));
                 }
 
                 ChannelKind channelKind = ChannelKind.SendReceive;
@@ -1486,7 +1486,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             public void enterTypeName(TypeNameContext ctx) {
-                if (ctx.qid == null) {
+                if (ctx.qualifiedIdentifier() == null) {
                     LOGGER.log(Level.FINE, "Unknown typeName syntax.");
                     return;
                 }
@@ -1499,7 +1499,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             public void enterBaseTypeName(BaseTypeNameContext ctx) {
                 // must be a type in the current package
                 PackageModel currentPackage = getFileModel().getPackage();
-                Collection<? extends TypeModel> types = currentPackage.getTypes(ctx.name.getText());
+                Collection<? extends TypeModel> types = currentPackage.getTypes(ctx.IDENTIFIER().getText());
 
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 ReceiverContext receiverContext = (ReceiverContext)ctx.parent;
@@ -1524,14 +1524,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterOperand(OperandContext ctx) {
                 Collection<? extends CodeElementModel> result;
-                if (ctx.lit != null) {
-                    result = resolveTarget(ctx.lit);
-                } else if (ctx.qid != null) {
-                    result = resolveTarget(ctx.qid);
-                } else if (ctx.me != null) {
-                    result = resolveTarget(ctx.me);
-                } else if (ctx.e != null) {
-                    result = resolveTarget(ctx.e);
+                if (ctx.literal() != null) {
+                    result = resolveTarget(ctx.literal());
+                } else if (ctx.qualifiedIdentifier() != null) {
+                    result = resolveTarget(ctx.qualifiedIdentifier());
+                } else if (ctx.methodExpr() != null) {
+                    result = resolveTarget(ctx.methodExpr());
+                } else if (ctx.expression() != null) {
+                    result = resolveTarget(ctx.expression());
                 } else {
                     LOGGER.log(Level.FINE, "TODO: unknown typeName syntax.");
                     result = null;
@@ -1564,7 +1564,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 Map<Token, ParserRuleContext<Token>> vars = Collections.emptyMap();
                 List<CodeElementModel> contextModels = new ArrayList<CodeElementModel>();
                 List<ImportDeclarationModel> possibleImports = new ArrayList<ImportDeclarationModel>();
-                if (ctx.pkg == null) {
+                if (ctx.packageName() == null) {
                     contextModels.add(getFileModel().getPackage());
                     for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
                         if (importDeclarationModel.isMergeWithLocal()) {
@@ -1582,7 +1582,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         vars.putAll(localsAnalyzer.getLocals(functionContext));
                     }
                 } else {
-                    String pkgName = ctx.pkg.name.getText();
+                    String pkgName = ctx.packageName().name.getText();
                     for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
                         if (!importDeclarationModel.isMergeWithLocal() && pkgName.equals(importDeclarationModel.getName())) {
                             possibleImports.add(importDeclarationModel);
@@ -1597,7 +1597,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                String name = ctx.id.getText();
+                String name = ctx.IDENTIFIER().getText();
                 Set<CodeElementModel> members = new HashSet<CodeElementModel>();
                 for (CodeElementModel model : contextModels) {
                     members.addAll(model.getMembers(name));

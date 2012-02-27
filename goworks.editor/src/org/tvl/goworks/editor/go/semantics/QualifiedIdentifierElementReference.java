@@ -35,13 +35,13 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
 
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
-        if (context.pkg != null) {
-            if (context.id == null) {
+        if (context.packageName() != null) {
+            if (context.IDENTIFIER() == null) {
                 return Collections.emptyList();
             }
 
-            String memberName = context.id.getText();
-            Collection<PackageModel> packages = resolvedPackages.get(context.pkg.name.getText());
+            String memberName = context.IDENTIFIER().getText();
+            Collection<PackageModel> packages = resolvedPackages.get(context.packageName().name.getText());
             if (packages == null || packages.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -52,13 +52,13 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
             }
 
             return results;
-        } else if (context.id != null) {
-            Collection<? extends CodeElementModel> result = annotatedParseTree.getTokenDecorator().getProperty(context.id, GoAnnotations.MODELS);
+        } else if (context.IDENTIFIER() != null) {
+            Collection<? extends CodeElementModel> result = annotatedParseTree.getTokenDecorator().getProperty(context.IDENTIFIER(), GoAnnotations.MODELS);
             if (result != null) {
                 return result;
             }
 
-            Token decl = annotatedParseTree.getTokenDecorator().getProperty(context.id, GoAnnotations.LOCAL_TARGET);
+            Token decl = annotatedParseTree.getTokenDecorator().getProperty(context.IDENTIFIER(), GoAnnotations.LOCAL_TARGET);
             if (decl != null) {
                 result = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.MODELS);
                 if (result != null) {
@@ -67,12 +67,12 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
             }
 
             if (decl == null || annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.NODE_TYPE) == NodeType.TYPE_DECL) {
-                result = currentPackage.getMembers(context.id.getText());
+                result = currentPackage.getMembers(context.IDENTIFIER().getText());
                 Collection<PackageModel> mergePackages = resolvedPackages.get("");
                 if (mergePackages != null && !mergePackages.isEmpty()) {
                     List<CodeElementModel> combinedResults = new ArrayList<CodeElementModel>(result);
                     for (PackageModel otherPackage : mergePackages) {
-                        combinedResults.addAll(otherPackage.getMembers(context.id.getText()));
+                        combinedResults.addAll(otherPackage.getMembers(context.IDENTIFIER().getText()));
                     }
 
                     result = combinedResults;
@@ -83,7 +83,7 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
                 }
             }
 
-            NodeType nodeType = annotatedParseTree.getNodeType(context.id);
+            NodeType nodeType = annotatedParseTree.getNodeType(context.IDENTIFIER());
             switch (nodeType) {
             case VAR_REF:
             {
@@ -138,11 +138,11 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
             case FUNC_REF:
             {
                 ArrayList<CodeElementModel> resolved = new ArrayList<CodeElementModel>();
-                resolved.addAll(currentPackage.getFunctions(context.id.getText()));
+                resolved.addAll(currentPackage.getFunctions(context.IDENTIFIER().getText()));
                 Collection<? extends PackageModel> mergedImports = resolvedPackages.get("");
                 if (mergedImports != null) {
                     for (PackageModel model : mergedImports) {
-                        resolved.addAll(model.getFunctions(context.id.getText()));
+                        resolved.addAll(model.getFunctions(context.IDENTIFIER().getText()));
                     }
                 }
 

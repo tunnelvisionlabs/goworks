@@ -590,7 +590,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
         @Override
         public void exitArrayType(ArrayTypeContext ctx) {
-            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
+            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elementType(), GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
                     treeDecorator.putProperty(ctx, GoAnnotations.MODELS, Collections.<CodeElementModel>emptyList());
@@ -614,7 +614,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
         @Override
         public void exitPointerType(PointerTypeContext ctx) {
-            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.typ, GoAnnotations.MODELS);
+            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.baseType(), GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
                     treeDecorator.putProperty(ctx, GoAnnotations.MODELS, Collections.<CodeElementModel>emptyList());
@@ -638,7 +638,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
         @Override
         public void exitSliceType(SliceTypeContext ctx) {
-            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
+            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elementType(), GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
                     treeDecorator.putProperty(ctx, GoAnnotations.MODELS, Collections.<CodeElementModel>emptyList());
@@ -662,8 +662,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
         @Override
         public void exitMapType(MapTypeContext ctx) {
-            Collection<? extends CodeElementModel> keyTypes = treeDecorator.getProperty(ctx.keyTyp, GoAnnotations.MODELS);
-            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
+            Collection<? extends CodeElementModel> keyTypes = treeDecorator.getProperty(ctx.keyType(), GoAnnotations.MODELS);
+            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elementType(), GoAnnotations.MODELS);
             if (keyTypes != null && elementTypes != null) {
                 if (keyTypes == null || elementTypes.isEmpty()) {
                     treeDecorator.putProperty(ctx, GoAnnotations.MODELS, Collections.<CodeElementModel>emptyList());
@@ -694,7 +694,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
         @Override
         public void exitChannelType(ChannelTypeContext ctx) {
-            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elemType, GoAnnotations.MODELS);
+            Collection<? extends CodeElementModel> elementTypes = treeDecorator.getProperty(ctx.elementType(), GoAnnotations.MODELS);
             if (elementTypes != null) {
                 if (elementTypes.isEmpty()) {
                     treeDecorator.putProperty(ctx, GoAnnotations.MODELS, Collections.<CodeElementModel>emptyList());
@@ -747,7 +747,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitChannelType(ChannelTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
-        if (ctx.elemType != null) {
+        if (ctx.elementType() != null) {
             ChannelKind kind = ChannelKind.SendReceive;
             if (ctx.send != null) {
                 kind = ChannelKind.Send;
@@ -755,7 +755,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                 kind = ChannelKind.Receive;
             }
 
-            codeClass = new ChannelTypeReference(treeDecorator.getProperty(ctx.elemType, GoAnnotations.CODE_CLASS), kind);
+            codeClass = new ChannelTypeReference(treeDecorator.getProperty(ctx.elementType(), GoAnnotations.CODE_CLASS), kind);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
@@ -800,12 +800,12 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         if (ctx.name != null) {
             tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             tokenDecorator.putProperty(ctx.name, GoAnnotations.VAR_TYPE, VarKind.RECEIVER);
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.EXPLICIT_TYPE, ctx.typ);
+            tokenDecorator.putProperty(ctx.name, GoAnnotations.EXPLICIT_TYPE, ctx.baseTypeName());
             visibleLocals.peek().put(ctx.name.getText(), ctx.name);
         }
 
-        if (ctx.ptr != null && ctx.typ != null) {
-            treeDecorator.putProperty(ctx.typ, GoAnnotations.POINTER_RECEIVER, true);
+        if (ctx.ptr != null && ctx.baseTypeName() != null) {
+            treeDecorator.putProperty(ctx.baseTypeName(), GoAnnotations.POINTER_RECEIVER, true);
         }
     }
 
@@ -820,8 +820,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitArrayType(ArrayTypeContext ctx) {
         CodeElementReference elemClass = CodeElementReference.UNKNOWN;
-        if (ctx.elemType != null) {
-            elemClass = treeDecorator.getProperty(ctx.elemType, GoAnnotations.CODE_CLASS);
+        if (ctx.elementType() != null) {
+            elemClass = treeDecorator.getProperty(ctx.elementType(), GoAnnotations.CODE_CLASS);
         }
 
         CodeElementReference arrayClass = new ArrayTypeReference(elemClass);
@@ -916,8 +916,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterMethodName(MethodNameContext ctx) {
-        if (ctx.name != null) {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.METHOD_DECL);
+        if (ctx.IDENTIFIER() != null) {
+            tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.METHOD_DECL);
         }
     }
 
@@ -940,13 +940,13 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitMapType(MapTypeContext ctx) {
         CodeElementReference keyType = CodeElementReference.UNKNOWN;
-        if (ctx.keyTyp != null) {
-            keyType = treeDecorator.getProperty(ctx.keyTyp, GoAnnotations.CODE_CLASS);
+        if (ctx.keyType() != null) {
+            keyType = treeDecorator.getProperty(ctx.keyType(), GoAnnotations.CODE_CLASS);
         }
 
         CodeElementReference valueType = CodeElementReference.UNKNOWN;
-        if (ctx.elemType != null) {
-            valueType = treeDecorator.getProperty(ctx.elemType, GoAnnotations.CODE_CLASS);
+        if (ctx.elementType() != null) {
+            valueType = treeDecorator.getProperty(ctx.elementType(), GoAnnotations.CODE_CLASS);
         }
 
         CodeElementReference codeClass = new MapTypeReference(keyType, valueType);
@@ -982,11 +982,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                 CodeElementReference typeArgument = CodeElementReference.UNKNOWN;
                 ArgumentListContext args = ctx.args;
                 if (args != null) {
-                    ExpressionListContext exprs = args.exprs;
-                    if (exprs != null && exprs.expressions != null && !exprs.expressions.isEmpty()) {
-                        typeArgument = treeDecorator.getProperty(exprs.expressions.get(0), GoAnnotations.CODE_CLASS);
+                    ExpressionListContext exprs = args.expressionList();
+                    if (exprs != null && !exprs.expression().isEmpty()) {
+                        typeArgument = treeDecorator.getProperty(exprs.expression(0), GoAnnotations.CODE_CLASS);
                         if (typeArgument == null) {
-                            typeArgument = treeDecorator.getProperty(exprs.expressions.get(0), GoAnnotations.EXPR_TYPE);
+                            typeArgument = treeDecorator.getProperty(exprs.expression(0), GoAnnotations.EXPR_TYPE);
                         }
                     }
                 }
@@ -1102,15 +1102,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitCompositeLiteral(CompositeLiteralContext ctx) {
         CodeElementReference exprType;
-        if (ctx.litTyp != null) {
-            exprType = treeDecorator.getProperty(ctx.litTyp, GoAnnotations.CODE_CLASS);
+        if (ctx.literalType() != null) {
+            exprType = treeDecorator.getProperty(ctx.literalType(), GoAnnotations.CODE_CLASS);
         } else {
             exprType = CodeElementReference.UNKNOWN;
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
-        if (ctx.litVal != null) {
-            treeDecorator.putProperty(ctx.litVal, GoAnnotations.EXPR_TYPE, exprType);
+        if (ctx.literalValue() != null) {
+            treeDecorator.putProperty(ctx.literalValue(), GoAnnotations.EXPR_TYPE, exprType);
         }
     }
 
@@ -1128,18 +1128,18 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
             if (ctx.exprList != null) {
-                int varCount = ctx.idList.ids != null ? ctx.idList.ids.size() : 0;
-                int exprCount = ctx.exprList.expressions != null ? ctx.exprList.expressions.size() : 0;
+                int varCount = ctx.idList.IDENTIFIER().size();
+                int exprCount = ctx.exprList.expression().size();
                 if (varCount > 1 && exprCount == 1) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(0));
-                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(0));
+                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 } else if (varCount == exprCount) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(i));
+                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(i));
                         if (varCount > 1) {
-                            tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                            tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_INDEX, i);
                         }
                     }
                 }
@@ -1166,8 +1166,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitArrayLength(ArrayLengthContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.expr != null) {
-            exprType = treeDecorator.getProperty(ctx.expr, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression() != null) {
+            exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -1193,8 +1193,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitConversion(ConversionContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.t != null) {
-            exprType = treeDecorator.getProperty(ctx.t, GoAnnotations.CODE_CLASS);
+        if (ctx.type() != null) {
+            exprType = treeDecorator.getProperty(ctx.type(), GoAnnotations.CODE_CLASS);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -1253,8 +1253,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitBaseType(BaseTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
-        if (ctx.typ != null) {
-            codeClass = treeDecorator.getProperty(ctx.typ, GoAnnotations.CODE_CLASS);
+        if (ctx.type() != null) {
+            codeClass = treeDecorator.getProperty(ctx.type(), GoAnnotations.CODE_CLASS);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
@@ -1262,10 +1262,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterFieldDecl(FieldDeclContext ctx) {
-        if (ctx.idList != null) {
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.FIELD);
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.EXPLICIT_TYPE, ctx.fieldType);
+        if (ctx.identifierList() != null) {
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VAR_TYPE, VarKind.FIELD);
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.EXPLICIT_TYPE, ctx.type());
         }
     }
 
@@ -1293,19 +1293,20 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterParameterDecl(ParameterDeclContext ctx) {
-        if (ctx.idList != null) {
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+        if (ctx.identifierList() != null) {
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             if (ctx.ellip != null) {
-                treeDecorator.putProperty(ctx.idList, GoAnnotations.VARIADIC, true);
-            }
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.EXPLICIT_TYPE, ctx.t);
-            if (ParseTrees.isInContexts(ctx, false, GoParser.RULE_parameterDecl, GoParser.RULE_parameterList, GoParser.RULE_parameters, GoParser.RULE_result)) {
-                treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.RETURN);
-            } else {
-                treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.PARAMETER);
+                treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VARIADIC, true);
             }
 
-            for (Token id : ParseTrees.emptyIfNull(ctx.idList.ids)) {
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.EXPLICIT_TYPE, ctx.type());
+            if (ParseTrees.isInContexts(ctx, false, GoParser.RULE_parameterDecl, GoParser.RULE_parameterList, GoParser.RULE_parameters, GoParser.RULE_result)) {
+                treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VAR_TYPE, VarKind.RETURN);
+            } else {
+                treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VAR_TYPE, VarKind.PARAMETER);
+            }
+
+            for (Token id : ctx.identifierList().IDENTIFIER()) {
                 visibleLocals.peek().put(id.getText(), id);
             }
         }
@@ -1360,8 +1361,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         String name = null;
         String path = null;
         Token target = null;
-        if (ctx.path != null && ctx.path.path != null) {
-            target = ctx.path.path;
+        if (ctx.importPath() != null && ctx.importPath().StringLiteral() != null) {
+            target = ctx.importPath().StringLiteral();
             path = target.getText();
             if (path.startsWith("\"")) {
                 path = path.substring(1);
@@ -1374,9 +1375,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         if (ctx.dot != null) {
             name = "";
             target = null;
-        } else if (ctx.name != null) {
-            if (ctx.name.name != null) {
-                target = ctx.name.name;
+        } else if (ctx.packageName != null) {
+            if (ctx.packageName.name != null) {
+                target = ctx.packageName.name;
                 name = target.getText();
             }
         } else {
@@ -1412,20 +1413,20 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitTypeName(TypeNameContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
-        if (ctx.qid != null) {
-            codeClass = new QualifiedIdentifierElementReference(ctx.qid);
+        if (ctx.qualifiedIdentifier() != null) {
+            codeClass = new QualifiedIdentifierElementReference(ctx.qualifiedIdentifier());
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
 
-        if (ctx.qid == null) {
+        if (ctx.qualifiedIdentifier() == null) {
             return;
         }
 
-        if (treeDecorator.getProperty(ctx.qid, GoAnnotations.QUALIFIED_EXPR)) {
+        if (treeDecorator.getProperty(ctx.qualifiedIdentifier(), GoAnnotations.QUALIFIED_EXPR)) {
             treeDecorator.putProperty(ctx, GoAnnotations.QUALIFIED_EXPR, true);
         } else {
-            treeDecorator.putProperty(ctx, GoAnnotations.UNQUALIFIED_LINK, treeDecorator.getProperty(ctx.qid, GoAnnotations.UNQUALIFIED_LINK));
+            treeDecorator.putProperty(ctx, GoAnnotations.UNQUALIFIED_LINK, treeDecorator.getProperty(ctx.qualifiedIdentifier(), GoAnnotations.UNQUALIFIED_LINK));
         }
     }
 
@@ -1484,9 +1485,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterTypeSpec(TypeSpecContext ctx) {
-        if (ctx.name != null) {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.TYPE_DECL);
-            visibleTypes.peek().put(ctx.name.getText(), ctx.name);
+        if (ctx.IDENTIFIER() != null) {
+            tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.TYPE_DECL);
+            visibleTypes.peek().put(ctx.IDENTIFIER().getText(), ctx.IDENTIFIER());
         }
     }
 
@@ -1539,17 +1540,17 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             if (ctx.varType != null) {
                 treeDecorator.putProperty(ctx.idList, GoAnnotations.EXPLICIT_TYPE, ctx.varType);
             } else if (ctx.exprList != null) {
-                int varCount = ctx.idList.ids!= null ? ctx.idList.ids.size() : 0;
-                int exprCount = ctx.exprList.expressions!= null ? ctx.exprList.expressions.size() : 0;
+                int varCount = ctx.idList.IDENTIFIER().size();
+                int exprCount = ctx.exprList.expression().size();
                 if (varCount > 1 && exprCount == 1) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(0));
-                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(0));
+                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 } else if (varCount == exprCount) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expressions.get(i));
-                        tokenDecorator.putProperty(ctx.idList.ids.get(i), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(i));
+                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 }
             }
@@ -1630,17 +1631,17 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterQualifiedIdentifier(QualifiedIdentifierContext ctx) {
-        if (ctx.pkg != null) {
-            if (ctx.id != null) {
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.QUALIFIED_EXPR, true);
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.QUALIFIER, ctx.pkg);
-                TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.id);
+        if (ctx.packageName() != null) {
+            if (ctx.IDENTIFIER() != null) {
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.QUALIFIED_EXPR, true);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.QUALIFIER, ctx.packageName());
+                TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.IDENTIFIER());
                 unresolvedQualifiedIdentifiers.add(node);
             }
 
             // check known imports
-            if (ctx.pkg.name != null) {
-                List<? extends Token> imports = ParseTrees.emptyIfNull(importedPackages.get(ctx.pkg.name.getText()));
+            if (ctx.packageName().name != null) {
+                List<? extends Token> imports = ParseTrees.emptyIfNull(importedPackages.get(ctx.packageName().name.getText()));
                 Token bestImport = null;
                 boolean resolvedImport = false;
                 for (Token importToken : imports) {
@@ -1652,39 +1653,39 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                 }
 
                 if (bestImport != null) {
-                    treeDecorator.putProperty(ctx.pkg, GoAnnotations.LOCAL_TARGET, bestImport);
+                    treeDecorator.putProperty(ctx.packageName(), GoAnnotations.LOCAL_TARGET, bestImport);
                     if (resolvedImport) {
-                        treeDecorator.putProperty(ctx.pkg, GoAnnotations.RESOLVED, true);
+                        treeDecorator.putProperty(ctx.packageName(), GoAnnotations.RESOLVED, true);
                     }
                 }
             }
-        } else if (ctx.id != null) {
-            assert ctx.pkg == null;
-            Token local = getVisibleLocal(ctx.id);
+        } else if (ctx.IDENTIFIER() != null) {
+            assert ctx.packageName() == null;
+            Token local = getVisibleLocal(ctx.IDENTIFIER());
             if (local != null) {
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.NODE_TYPE, NodeType.VAR_REF);
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.LOCAL_TARGET, local);
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.RESOLVED, true);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.VAR_REF);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, local);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
                 VarKind varType = tokenDecorator.getProperty(local, GoAnnotations.VAR_TYPE);
                 if (varType != VarKind.UNDEFINED) {
-                    tokenDecorator.putProperty(ctx.id, GoAnnotations.VAR_TYPE, varType);
+                    tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.VAR_TYPE, varType);
                 }
                 return;
             }
 
             // check built-ins
-            if (SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.id.getText())) {
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.NODE_TYPE, NodeType.FUNC_REF);
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.BUILTIN, true);
-            } else if (SemanticHighlighter.PREDEFINED_TYPES.contains(ctx.id.getText())) {
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.NODE_TYPE, NodeType.TYPE_REF);
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.TYPE_KIND, TypeKind.INTRINSIC);
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.BUILTIN, true);
-            } else if (SemanticHighlighter.PREDEFINED_CONSTANTS.contains(ctx.id.getText())) {
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
-                tokenDecorator.putProperty(ctx.id, GoAnnotations.BUILTIN, true);
+            if (SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.IDENTIFIER().getText())) {
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.FUNC_REF);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.BUILTIN, true);
+            } else if (SemanticHighlighter.PREDEFINED_TYPES.contains(ctx.IDENTIFIER().getText())) {
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.TYPE_REF);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.TYPE_KIND, TypeKind.INTRINSIC);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.BUILTIN, true);
+            } else if (SemanticHighlighter.PREDEFINED_CONSTANTS.contains(ctx.IDENTIFIER().getText())) {
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.BUILTIN, true);
             } else {
-                TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.id);
+                TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.IDENTIFIER());
                 unresolvedIdentifiers.add(node);
             }
         }
@@ -1692,10 +1693,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void exitQualifiedIdentifier(QualifiedIdentifierContext ctx) {
-        if (ctx.pkg != null) {
+        if (ctx.packageName() != null) {
             treeDecorator.putProperty(ctx, GoAnnotations.QUALIFIED_EXPR, true);
-        } else if (ctx.id != null) {
-            treeDecorator.putProperty(ctx, GoAnnotations.UNQUALIFIED_LINK, ctx.id);
+        } else if (ctx.IDENTIFIER() != null) {
+            treeDecorator.putProperty(ctx, GoAnnotations.UNQUALIFIED_LINK, ctx.IDENTIFIER());
         }
     }
 
@@ -1736,12 +1737,12 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitType(TypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
-        if (ctx.name != null) {
-            codeClass = treeDecorator.getProperty(ctx.name, GoAnnotations.CODE_CLASS);
-        } else if (ctx.lit != null) {
-            codeClass = treeDecorator.getProperty(ctx.lit, GoAnnotations.CODE_CLASS);
-        } else if (ctx.t != null) {
-            codeClass = treeDecorator.getProperty(ctx.t, GoAnnotations.CODE_CLASS);
+        if (ctx.typeName() != null) {
+            codeClass = treeDecorator.getProperty(ctx.typeName(), GoAnnotations.CODE_CLASS);
+        } else if (ctx.typeLiteral() != null) {
+            codeClass = treeDecorator.getProperty(ctx.typeLiteral(), GoAnnotations.CODE_CLASS);
+        } else if (ctx.type() != null) {
+            codeClass = treeDecorator.getProperty(ctx.type(), GoAnnotations.CODE_CLASS);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
@@ -1770,10 +1771,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitValue(ValueContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.expr != null) {
-            exprType = treeDecorator.getProperty(ctx.expr, GoAnnotations.EXPR_TYPE);
-        } else if (ctx.lit != null) {
-            exprType = treeDecorator.getProperty(ctx.lit, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression() != null) {
+            exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
+        } else if (ctx.literalValue() != null) {
+            exprType = treeDecorator.getProperty(ctx.literalValue(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -1878,17 +1879,17 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterLabel(LabelContext ctx) {
-        if (ctx.name == null) {
+        if (ctx.IDENTIFIER() == null) {
             return;
         }
 
         boolean definition = ParseTrees.isInContexts(ctx, false, GoParser.RULE_label, GoParser.RULE_labeledStmt);
         if (definition) {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.LABEL_DECL);
-            visibleLabels.peek().put(ctx.name.getText(), ctx.name);
+            tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.LABEL_DECL);
+            visibleLabels.peek().put(ctx.IDENTIFIER().getText(), ctx.IDENTIFIER());
         } else {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.LABEL_REF);
-            unresolvedLabels.peek().add(ctx.name);
+            tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.LABEL_REF);
+            unresolvedLabels.peek().add(ctx.IDENTIFIER());
         }
     }
 
@@ -1903,8 +1904,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitElementType(ElementTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
-        if (ctx.typ != null) {
-            codeClass = treeDecorator.getProperty(ctx.typ, GoAnnotations.CODE_CLASS);
+        if (ctx.type() != null) {
+            codeClass = treeDecorator.getProperty(ctx.type(), GoAnnotations.CODE_CLASS);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
@@ -1940,8 +1941,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitPointerType(PointerTypeContext ctx) {
         CodeElementReference elemClass = CodeElementReference.UNKNOWN;
-        if (ctx.typ != null) {
-            elemClass = treeDecorator.getProperty(ctx.typ, GoAnnotations.CODE_CLASS);
+        if (ctx.baseType() != null) {
+            elemClass = treeDecorator.getProperty(ctx.baseType(), GoAnnotations.CODE_CLASS);
         }
 
         CodeElementReference codeClass = new PointerTypeReference(elemClass);
@@ -1983,8 +1984,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterBaseTypeName(BaseTypeNameContext ctx) {
-        if (ctx.name != null) {
-            TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.name);
+        if (ctx.IDENTIFIER() != null) {
+            TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.IDENTIFIER());
             unresolvedIdentifiers.add(node);
         }
     }
@@ -1992,8 +1993,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitBaseTypeName(BaseTypeNameContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
-        if (ctx.name != null) {
-            codeClass = new ReceiverTypeReference(ctx.name, treeDecorator.getProperty(ctx, GoAnnotations.POINTER_RECEIVER));
+        if (ctx.IDENTIFIER() != null) {
+            codeClass = new ReceiverTypeReference(ctx.IDENTIFIER(), treeDecorator.getProperty(ctx, GoAnnotations.POINTER_RECEIVER));
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
@@ -2017,8 +2018,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitElementIndex(ElementIndexContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.index != null) {
-            exprType = treeDecorator.getProperty(ctx.index, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression() != null) {
+            exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -2042,12 +2043,12 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterBuiltinCall(BuiltinCallContext ctx) {
-        if (ctx.name != null) {
-            if (SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.name.getText())) {
-                tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.FUNC_REF);
-                tokenDecorator.putProperty(ctx.name, GoAnnotations.BUILTIN, true);
+        if (ctx.IDENTIFIER() != null) {
+            if (SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.IDENTIFIER().getText())) {
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.FUNC_REF);
+                tokenDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.BUILTIN, true);
             } else {
-                TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.name);
+                TerminalNode<Token> node = ParseTrees.findTerminalNode(ctx.children, ctx.IDENTIFIER());
                 unresolvedIdentifiers.add(node);
             }
         }
@@ -2056,14 +2057,14 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitBuiltinCall(BuiltinCallContext ctx) {
         CodeElementReference typeArgument = CodeElementReference.UNKNOWN;
-        BuiltinArgsContext args = ctx.args;
+        BuiltinArgsContext args = ctx.builtinArgs();
         if (args != null) {
-            if (args.typeArg != null) {
-                typeArgument = treeDecorator.getProperty(args.typeArg, GoAnnotations.CODE_CLASS);
+            if (args.type() != null) {
+                typeArgument = treeDecorator.getProperty(args.type(), GoAnnotations.CODE_CLASS);
             } else {
-                ExpressionListContext exprList = args.args;
+                ExpressionListContext exprList = args.expressionList();
                 if (exprList != null) {
-                    List<ExpressionContext> exprs = exprList.expressions;
+                    List<? extends ExpressionContext> exprs = exprList.expression();
                     if (exprs != null && !exprs.isEmpty()) {
                         typeArgument = treeDecorator.getProperty(exprs.get(0), GoAnnotations.EXPR_TYPE);
                         if (typeArgument == null) {
@@ -2074,7 +2075,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             }
         }
 
-        treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new BuiltinCallResultReference(ctx.name, typeArgument));
+        treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new BuiltinCallResultReference(ctx.IDENTIFIER(), typeArgument));
     }
 
     @Override
@@ -2151,7 +2152,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             return;
         }
 
-        for (Token token : ParseTrees.emptyIfNull(ctx.ids)) {
+        for (Token token : ctx.IDENTIFIER()) {
             if (nodeType == NodeType.VAR_DECL) {
                 if (varType != VarKind.FIELD) {
                     visibleLocals.peek().put(token.getText(), token);
@@ -2192,8 +2193,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitSliceType(SliceTypeContext ctx) {
         CodeElementReference elemClass = CodeElementReference.UNKNOWN;
-        if (ctx.elemType != null) {
-            elemClass = treeDecorator.getProperty(ctx.elemType, GoAnnotations.CODE_CLASS);
+        if (ctx.elementType() != null) {
+            elemClass = treeDecorator.getProperty(ctx.elementType(), GoAnnotations.CODE_CLASS);
         }
 
         CodeElementReference codeClass = new SliceTypeReference(elemClass);
@@ -2235,8 +2236,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitKeyType(KeyTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
-        if (ctx.t != null) {
-            codeClass = treeDecorator.getProperty(ctx.t, GoAnnotations.CODE_CLASS);
+        if (ctx.type() != null) {
+            codeClass = treeDecorator.getProperty(ctx.type(), GoAnnotations.CODE_CLASS);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
@@ -2366,20 +2367,20 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitOperand(OperandContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.lit != null) {
-            exprType = treeDecorator.getProperty(ctx.lit, GoAnnotations.EXPR_TYPE);
-        } else if (ctx.qid != null) {
-            exprType = new QualifiedIdentifierElementReference(ctx.qid);
-        } else if (ctx.me != null) {
-            exprType = treeDecorator.getProperty(ctx.me, GoAnnotations.EXPR_TYPE);
-        } else if (ctx.e != null) {
-            exprType = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
+        if (ctx.literal() != null) {
+            exprType = treeDecorator.getProperty(ctx.literal(), GoAnnotations.EXPR_TYPE);
+        } else if (ctx.qualifiedIdentifier() != null) {
+            exprType = new QualifiedIdentifierElementReference(ctx.qualifiedIdentifier());
+        } else if (ctx.methodExpr() != null) {
+            exprType = treeDecorator.getProperty(ctx.methodExpr(), GoAnnotations.EXPR_TYPE);
+        } else if (ctx.expression() != null) {
+            exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
 
-        if (ctx.qid != null) {
-            treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.qid));
+        if (ctx.qualifiedIdentifier() != null) {
+            treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.qualifiedIdentifier()));
         } else {
             LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParserBase(null)));
         }
@@ -2431,8 +2432,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitChannel(ChannelContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.e != null) {
-            exprType = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression() != null) {
+            exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -2445,12 +2446,12 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitLiteral(LiteralContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.bl != null) {
-            exprType = treeDecorator.getProperty(ctx.bl, GoAnnotations.EXPR_TYPE);
-        } else if (ctx.cl != null) {
-            exprType = treeDecorator.getProperty(ctx.cl, GoAnnotations.EXPR_TYPE);
-        } else if (ctx.fl != null) {
-            exprType = treeDecorator.getProperty(ctx.fl, GoAnnotations.EXPR_TYPE);
+        if (ctx.basicLiteral() != null) {
+            exprType = treeDecorator.getProperty(ctx.basicLiteral(), GoAnnotations.EXPR_TYPE);
+        } else if (ctx.compositeLiteral() != null) {
+            exprType = treeDecorator.getProperty(ctx.compositeLiteral(), GoAnnotations.EXPR_TYPE);
+        } else if (ctx.functionLiteral() != null) {
+            exprType = treeDecorator.getProperty(ctx.functionLiteral(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -2521,6 +2522,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         }};
 
     @Override
+    @SuppressWarnings("element-type-mismatch")
     public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
         if (EXPR_TYPE_CONTEXTS.contains(ctx.getClass())) {
             if (treeDecorator.getProperty(ctx, GoAnnotations.EXPR_TYPE) == null) {

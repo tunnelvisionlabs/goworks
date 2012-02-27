@@ -77,52 +77,52 @@ public void setCheckPackageNames(boolean checkPackageNames) {
 }
 
 type
-    :   name=typeName
-    |   lit=typeLiteral
-    |   lp='(' t=type rp=')'
+    :   typeName
+    |   typeLiteral
+    |   '(' type ')'
     ;
 
 typeName
-    :   qid=qualifiedIdentifier
+    :   qualifiedIdentifier
     ;
 
 typeLiteral
-    :   arrType=arrayType
-    |   strType=structType
-    |   ptrType=pointerType
-    |   fnType=functionType
-    |   ifaceType=interfaceType
-    |   slcType=sliceType
-    |   maptype=mapType
-    |   chanType=channelType
+    :   arrayType
+    |   structType
+    |   pointerType
+    |   functionType
+    |   interfaceType
+    |   sliceType
+    |   mapType
+    |   channelType
     ;
 
 arrayType
-    :   '[' len=arrayLength ']' elemType=elementType
+    :   '[' arrayLength ']' elementType
     ;
 
 arrayLength
-    :   expr=expression
+    :   expression
     ;
 
 elementType
-    :   typ=type
+    :   type
     ;
 
 sliceType
-    :   '[' ']' elemType=elementType
+    :   '[' ']' elementType
     ;
 
 structType
-    :   'struct' '{' (fields+=fieldDecl ';')* fields+=fieldDecl? '}'
+    :   'struct' '{' (fieldDecl ';')* fieldDecl? '}'
     ;
 
 fieldDecl
-    :   (idList=identifierList fieldType=type | anonField=anonymousField) fieldTag=tag?
+    :   (identifierList type | anonymousField) tag?
     ;
 
 anonymousField
-    :   ptr='*'? fieldType=typeName
+    :   ptr='*'? typeName
     ;
 
 tag
@@ -130,90 +130,90 @@ tag
     ;
 
 pointerType
-    :   ptr='*' typ=baseType
+    :   ptr='*' baseType
     ;
 
 baseType
-    :   typ=type
+    :   type
     ;
 
 functionType
-    :   'func' sig=signature
+    :   'func' signature
     ;
 
 signature
-    :   params=parameters res=result?
+    :   parameters result?
     ;
 
 result
-    :   params=parameters
-    |   t=type
+    :   parameters
+    |   type
     ;
 
 parameters
-    :   '(' (params=parameterList ','?)? ')'
+    :   '(' (parameterList ','?)? ')'
     ;
 
 parameterList
-    :   params+=parameterDecl (',' params+=parameterDecl)*
+    :   parameterDecl (',' parameterDecl)*
     ;
 
 parameterDecl
-    :   idList=identifierList? ellip='...'? t=type
+    :   identifierList? ellip='...'? type
     ;
 
 interfaceType
-    :   'interface' '{' (methods+=methodSpec (';' methods+=methodSpec)* ';'?)? '}'
+    :   'interface' '{' (methodSpec (';' methodSpec)* ';'?)? '}'
     ;
 
 methodSpec
-    :   name=methodName sig=signature
-    |   ifaceName=interfaceTypeName
+    :   methodName signature
+    |   interfaceTypeName
     ;
 
 methodName
-    :   name=IDENTIFIER
+    :   IDENTIFIER
     ;
 
 interfaceTypeName
-    :   typName=typeName
+    :   typeName
     ;
 
 mapType
-    :   'map' '[' keyTyp=keyType ']' elemType=elementType
+    :   'map' '[' keyType ']' elementType
     ;
 
 keyType
-    :   t=type
+    :   type
     ;
 
 channelType
     :   (   'chan' send='<-'?
         |   recv='<-' 'chan'
         )
-        elemType=elementType
+        elementType
     ;
 
 block
-    :   '{' (statements+=statement (';' statements+=statement)* ';'?)? '}'
+    :   '{' (statement (';' statement)* ';'?)? '}'
     ;
 
 declaration
-    :   cd=constDecl
-    |   td=typeDecl
-    |   vd=varDecl
+    :   constDecl
+    |   typeDecl
+    |   varDecl
     ;
 
 topLevelDecl
-    :   decl=declaration
-    |   fndecl=functionDecl
-    |   methdecl=methodDecl
+    :   declaration
+    |   functionDecl
+    |   methodDecl
     ;
 
 constDecl
     :   'const'
-        (   consts+=constSpec
-        |   '(' (consts+=constSpec (';' consts+=constSpec)* ';'?)? ')'
+        (   constSpec
+        |   '(' (constSpec (';' constSpec)* ';'?)? ')'
         )
     ;
 
@@ -222,28 +222,28 @@ constSpec
     ;
 
 identifierList
-    :   ids+=IDENTIFIER (',' ids+=IDENTIFIER)*
+    :   IDENTIFIER (',' IDENTIFIER)*
     ;
 
 expressionList
-    :   expressions+=expression (',' expressions+=expression)*
+    :   expression (',' expression)*
     ;
 
 typeDecl
     :   'type'
-        (   types+=typeSpec
-        |   '(' (types+=typeSpec (';' types+=typeSpec)* ';'?)? ')'
+        (   typeSpec
+        |   '(' (typeSpec (';' typeSpec)* ';'?)? ')'
         )
     ;
 
 typeSpec
-    :   name=IDENTIFIER t=type
+    :   IDENTIFIER type
     ;
 
 varDecl
     :   'var'
-        (   vars+=varSpec
-        |   '(' (vars+=varSpec (';' vars+=varSpec)* ';'?)? ')'
+        (   varSpec
+        |   '(' (varSpec (';' varSpec)* ';'?)? ')'
         )
     ;
 
@@ -259,7 +259,7 @@ shortVarDecl
     ;
 
 functionDecl
-    :   'func' name=IDENTIFIER sig=signature bdy=body?
+    :   'func' name=IDENTIFIER signature body?
     ;
 
 body
@@ -267,28 +267,28 @@ body
     ;
 
 methodDecl
-    :   'func' recv=receiver name=methodName sig=signature bdy=body?
+    :   'func' receiver methodName signature body?
     ;
 
 receiver
-    :   '(' name=IDENTIFIER? ptr='*'? typ=baseTypeName ')'
+    :   '(' name=IDENTIFIER? ptr='*'? baseTypeName ')'
     ;
 
 baseTypeName
-    :   name=IDENTIFIER
+    :   IDENTIFIER
     ;
 
 operand
-    :   lit=literal
-    |   qid=qualifiedIdentifier
-    |   me=methodExpr
-    |   '(' e=expression ')'
+    :   literal
+    |   qualifiedIdentifier
+    |   methodExpr
+    |   '(' expression ')'
     ;
 
 literal
-    :   bl=basicLiteral
-    |   cl=compositeLiteral
-    |   fl=functionLiteral
+    :   basicLiteral
+    |   compositeLiteral
+    |   functionLiteral
     ;
 
 basicLiteral
@@ -300,20 +300,20 @@ basicLiteral
     ;
 
 qualifiedIdentifier
-    :   ({isPackageName(_input.LT(1))}? pkg=packageName dot='.')? id=IDENTIFIER
+    :   ({isPackageName(_input.LT(1))}? packageName dot='.')? IDENTIFIER
     ;
 
 methodExpr
-    :   recvType=receiverType dot='.' name=methodName
+    :   receiverType dot='.' methodName
     ;
 
 receiverType
-    :   t=typeName
-    |   '(' ptr='*' t=typeName ')'
+    :   typeName
+    |   '(' ptr='*' typeName ')'
     ;
 
 compositeLiteral
-    :   litTyp=literalType litVal=literalValue
+    :   literalType literalValue
     ;
 
 literalType
@@ -326,37 +326,37 @@ literalType
     ;
 
 literalValue
-    :   '{' (elements=elementList ','?)? '}'
+    :   '{' (elementList ','?)? '}'
     ;
 
 elementList
-    :   elements+=element (',' elements+=element)*
+    :   element (',' element)*
     ;
 
 element
-    :   (k=key ':')? v=value
+    :   (key ':')? value
     ;
 
 key
-    :   field=fieldName
-    |   index=elementIndex
+    :   fieldName
+    |   elementIndex
     ;
 
 fieldName
-    :   field=IDENTIFIER
+    :   IDENTIFIER
     ;
 
 elementIndex
-    :   index=expression
+    :   expression
     ;
 
 value
-    :   expr=expression
-    |   lit=literalValue
+    :   expression
+    |   literalValue
     ;
 
 functionLiteral
-    :   typ=functionType bdy=body
+    :   functionType body
     ;
 
 expression
@@ -404,11 +404,11 @@ expression
 //    ;
 
 argumentList
-    :   exprs=expressionList ellip='...'?
+    :   expressionList ellip='...'?
     ;
 
 conversion
-    :   t=type '(' e=expression ')'
+    :   type '(' expression ')'
     ;
 
 statement
@@ -443,11 +443,11 @@ emptyStmt
     ;
 
 labeledStmt
-    :   lbl=label ':' stmt=statement
+    :   label ':' statement
     ;
 
 label
-    :   name=IDENTIFIER
+    :   IDENTIFIER
     ;
 
 expressionStmt
@@ -455,19 +455,19 @@ expressionStmt
     ;
 
 sendStmt
-    :   chan=channel '<-' e=expression
+    :   channel '<-' expression
     ;
 
 channel
-    :   e=expression
+    :   expression
     ;
 
 incDecStmt
-    :   e=expression op=('++' | '--')
+    :   expression op=('++' | '--')
     ;
 
 assignment
-    :   targets=expressionList op=assignOp values=expressionList
+    :   targets=expressionList assignOp values=expressionList
     ;
 
 assignOp
@@ -512,7 +512,7 @@ typeSwitchStmt
 
 // this should reference primaryExpr, but the ".(type)" extension is unambig
 typeSwitchGuard
-    :   (id=IDENTIFIER defeq=':=')? e=expression dot='.' '(' 'type' ')'
+    :   (IDENTIFIER defeq=':=')? expression dot='.' '(' 'type' ')'
     ;
 
 typeCaseClause
@@ -525,7 +525,7 @@ typeSwitchCase
     ;
 
 typeList
-    :   types+=type (',' types+=type)*
+    :   type (',' type)*
     ;
 
 forStmt
@@ -602,20 +602,20 @@ deferStmt
     ;
 
 builtinCall
-    :   name=IDENTIFIER '(' (args=builtinArgs ','?)? ')'
+    :   IDENTIFIER '(' (builtinArgs ','?)? ')'
     ;
 
 builtinArgs
-    :   typeArg=type (',' args=expressionList)?
-    |   args=expressionList
+    :   type (',' expressionList)?
+    |   expressionList
     ;
 
 sourceFile
-    :   (pkg=packageClause ';')? (importDecls+=importDecl ';')* (decls+=topLevelDecl ';')*
+    :   (packageClause ';')? (importDecl ';')* (topLevelDecl ';')*
     ;
 
 packageClause
-    :   'package' name=packageName              {addPackageName($name.start);}
+    :   'package' packageName                   {addPackageName($packageName.start);}
     ;
 
 packageName
@@ -623,15 +623,15 @@ packageName
     ;
 
 importDecl
-    :   'import' (importSpecs+=importSpec | '(' (importSpecs+=importSpec (';' importSpecs+=importSpec)* ';'?)? ')')
+    :   'import' (importSpec | '(' (importSpec (';' importSpec)* ';'?)? ')')
     ;
 
 importSpec
-    :   dot='.' path=importPath
-    |   name=packageName path=importPath        {addPackageName($name.start);}
-    |   path=importPath                         {addPackageName($path.start);}
+    :   dot='.' importPath
+    |   packageName importPath              {addPackageName($packageName.start);}
+    |   importPath                          {addPackageName($importPath.start);}
     ;
 
 importPath
-    :   path=StringLiteral
+    :   StringLiteral
     ;

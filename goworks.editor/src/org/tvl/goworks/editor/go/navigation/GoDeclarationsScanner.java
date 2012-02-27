@@ -114,7 +114,7 @@ public class GoDeclarationsScanner {
         @Override
         public void enterConstSpec(ConstSpecContext ctx) {
             IdentifierListContext idListContext = ctx.idList;
-            List<Token> identifiers = idListContext.ids;
+            List<? extends Token> identifiers = idListContext.IDENTIFIER();
             for (Token identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
@@ -134,7 +134,7 @@ public class GoDeclarationsScanner {
             }
 
             IdentifierListContext idListContext = ctx.idList;
-            List<Token> identifiers = idListContext.ids;
+            List<? extends Token> identifiers = idListContext.IDENTIFIER();
             for (Token identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
@@ -154,7 +154,7 @@ public class GoDeclarationsScanner {
             }
 
             IdentifierListContext idListContext = ctx.idList;
-            List<Token> identifiers = idListContext.ids;
+            List<? extends Token> identifiers = idListContext.IDENTIFIER();
             for (Token identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String signature = String.format("%s", identifier.getText());
@@ -168,9 +168,9 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterFieldDecl(FieldDeclContext ctx) {
-            IdentifierListContext idListContext = ctx.idList;
+            IdentifierListContext idListContext = ctx.identifierList();
             if (idListContext != null) {
-                List<Token> identifiers = idListContext.ids;
+                List<? extends Token> identifiers = idListContext.IDENTIFIER();
                 for (Token identifier : identifiers) {
                     Interval sourceInterval = new Interval(identifier.getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                     String signature = String.format("%s", identifier.getText());
@@ -222,7 +222,7 @@ public class GoDeclarationsScanner {
         @Override
         public void enterMethodDecl(MethodDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
-            String name = ctx.name != null && ctx.name.name != null ? ctx.name.name.getText() : "?";
+            String name = ctx.methodName() != null && ctx.methodName().IDENTIFIER() != null ? ctx.methodName().IDENTIFIER().getText() : "?";
             String signature = String.format("%s", name);
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
@@ -240,7 +240,7 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterTypeSpec(TypeSpecContext ctx) {
-            typeNameStack.push(ctx.name.getText());
+            typeNameStack.push(ctx.IDENTIFIER().getText());
         }
 
         @Override
