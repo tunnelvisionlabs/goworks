@@ -406,10 +406,17 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void enterResult(ResultContext ctx) {
         parameterContainerStack.pop();
-        parameterContainerStack.push((Collection<ParameterModelImpl>)functionModelStack.peek().getReturnValues());
+        FunctionModel functionModel = functionModelStack.peek();
+        Collection<ParameterModelImpl> returnValues;
+        if (functionModel instanceof FunctionModelImpl) {
+            returnValues = ((FunctionModelImpl)functionModel).getReturnValues();
+        } else {
+            returnValues = ((TypeFunctionModelImpl)functionModel).getReturnValues();
+        }
+
+        parameterContainerStack.push(returnValues);
     }
 
     @Override

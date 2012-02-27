@@ -875,7 +875,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             Map<Token, ParserRuleContext<Token>> vars = Collections.emptyMap();
                                             Map<Token, ParserRuleContext<Token>> constants = Collections.emptyMap();
 
-                                            @SuppressWarnings("unchecked")
                                             ParserRuleContext<Token> functionContext = (ParserRuleContext<Token>)getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
                                             if (functionContext != null) {
                                                 vars = new IdentityHashMap<Token, ParserRuleContext<Token>>();
@@ -1117,7 +1116,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 //                return labels;
 //            }
 
-            @SuppressWarnings("unchecked")
             private Map<Token, ParserRuleContext<Token>> getLocalsProperty(ParserRuleContext<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property) {
                 Map<Token, ParserRuleContext<Token>> result = annotations.getProperty(context, property);
                 if (result != null) {
@@ -1357,7 +1355,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return;
                 }
 
-                @SuppressWarnings("unchecked")
                 Collection<? extends CodeElementModel> result = resolveTarget((ParserRuleContext<Token>)ctx.getChild(0));
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
@@ -1412,7 +1409,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return;
                 }
 
-                @SuppressWarnings("unchecked")
                 Collection<? extends CodeElementModel> result = resolveTarget(ctx.typ);
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
@@ -1484,7 +1480,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return;
                 }
 
-                @SuppressWarnings("unchecked")
                 Collection<? extends CodeElementModel> result = resolveTarget((ParserRuleContext<Token>)ctx.getChild(0));
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
@@ -1496,7 +1491,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return;
                 }
 
-                @SuppressWarnings("unchecked")
                 Collection<? extends CodeElementModel> result = resolveTarget((ParserRuleContext<Token>)ctx.getChild(0));
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
@@ -1578,7 +1572,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         }
                     }
 
-                    @SuppressWarnings("unchecked")
                     ParserRuleContext<Token> functionContext = (ParserRuleContext<Token>)getTopContext(parser, ctx, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
                     if (functionContext != null) {
                         vars = new IdentityHashMap<Token, ParserRuleContext<Token>>();
@@ -1630,14 +1623,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 annotations.putProperty(ctx, ATTR_TARGET, members);
             }
 
-            @SuppressWarnings("unchecked")
             private Collection<? extends CodeElementModel> getTargetProperty(ParserRuleContext<Token> context) {
-                Object result = annotations.getProperty(context, ATTR_TARGET);
-                if (result instanceof Collection<?>) {
-                    return (Collection<? extends CodeElementModel>)result;
-                }
-
-                return null;
+                return annotations.getProperty(context, ATTR_TARGET);
             }
 
             private void setTargetProperty(ParserRuleContext<Token> context, @NonNull Collection<? extends CodeElementModel> models) {
@@ -1750,7 +1737,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         private Map<RuleContext<Token>, GoAnnotatedParseTree> analyzeParseTrees(VersionedDocument document, Map<? extends RuleContext<Token>, ? extends CaretReachedException> parseTrees) {
             Map<RuleContext<Token>, GoAnnotatedParseTree> result = new IdentityHashMap<RuleContext<Token>, GoAnnotatedParseTree>();
             for (Map.Entry<? extends RuleContext<Token>, ? extends CaretReachedException> entry : parseTrees.entrySet()) {
-                @SuppressWarnings("unchecked")
                 ParserRuleContext<Token> context = (ParserRuleContext<Token>)entry.getKey();
                 GoAnnotatedParseTree annotatedTree = SemanticAnalyzer.analyze(document, context);
                 result.put(context, annotatedTree);
