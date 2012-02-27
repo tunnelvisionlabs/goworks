@@ -455,7 +455,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
         }
 
         IdentifierListContext idList = ctx.identifierList();
-        List<? extends Token> ids = idList.IDENTIFIER();
+        List<? extends Token> ids = idList != null ? idList.IDENTIFIER() : null;
         if (ids == null && ctx.anonymousField() != null) {
             Token name = ctx.anonymousField().typeName().qualifiedIdentifier().IDENTIFIER();
             if (name != null) {

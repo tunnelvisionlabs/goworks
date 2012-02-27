@@ -196,6 +196,10 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             Exceptions.printStackTrace(ex);
         }
 
+        if (fileModel == null || annotatedParseTree == null) {
+            return null;
+        }
+
         return new SemanticAnalyzerListener(fileModel, annotatedParseTree);
     }
 
