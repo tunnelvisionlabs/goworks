@@ -362,33 +362,33 @@ functionLiteral
 expression
     :   operand
         -> operandExpr
-    |   conv=conversion
+    |   conversion
         -> conversionOrCallExpr
     |   builtinCall
         -> builtinCallExpr
-    |   e=expression dot='.' name=IDENTIFIER
+    |   expression dot='.' IDENTIFIER
         -> selectorExpr
-    |   e=expression '[' expression ']'
+    |   expression '[' expression ']'
         -> indexExpr
-    |   e=expression '[' expression? ':' expression? ']'
+    |   expression '[' from=expression? ':' to=expression? ']'
         -> sliceExpr
-    |   e=expression dot='.' lp='(' t=type rp=')'
+    |   expression dot='.' lp='(' type rp=')'
         -> typeAssertionExpr
-    |   e=expression lp='(' (args=argumentList ','?)? rp=')'
+    |   expression lp='(' (argumentList ','?)? rp=')'
         -> callExpr
 
-    |   (op='+' | op='-' | op='!' | op='^' | op='*' | op='&' | op='<-') e=expression
+    |   (op='+' | op='-' | op='!' | op='^' | op='*' | op='&' | op='<-') expression
         -> unaryExpr
 
-    |   e=expression (op='*' | op='/' | op='%' | op='<<' | op='>>' | op='&' | op='&^') right=expression
+    |   expression (op='*' | op='/' | op='%' | op='<<' | op='>>' | op='&' | op='&^') expression
         -> multExpr
-    |   e=expression (op='+' | op='-' | op='|' | op='^') right=expression
+    |   expression (op='+' | op='-' | op='|' | op='^') expression
         -> addExpr
-    |   e=expression (op='==' | op='!=' | op='<' | op='<=' | op='>' | op='>=') right=expression
+    |   expression (op='==' | op='!=' | op='<' | op='<=' | op='>' | op='>=') expression
         -> compareExpr
-    |   e=expression '&&' right=expression
+    |   expression '&&' expression
         -> andExpr
-    |   e=expression '||' right=expression
+    |   expression '||' expression
         -> orExpr
     ;
 

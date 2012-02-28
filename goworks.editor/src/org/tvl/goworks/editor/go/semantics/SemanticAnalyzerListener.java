@@ -731,9 +731,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitMultExpr(MultExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.e != null && ctx.op != null && ctx.right == null) {
-            CodeElementReference left = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
-            CodeElementReference right = treeDecorator.getProperty(ctx.right, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) == null) {
+            CodeElementReference left = treeDecorator.getProperty(ctx.expression(0), GoAnnotations.EXPR_TYPE);
+            CodeElementReference right = treeDecorator.getProperty(ctx.expression(1), GoAnnotations.EXPR_TYPE);
             exprType = new BinaryExpressionTypeReference(left, ctx.op, right);
         }
 
@@ -857,10 +857,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterSelectorExpr(SelectorExprContext ctx) {
-        if (ctx.name != null) {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.QUALIFIED_EXPR, true);
-            if (ctx.e != null) {
-                tokenDecorator.putProperty(ctx.name, GoAnnotations.QUALIFIER, ctx.e);
+        if (ctx.IDENTIFIER() != null) {
+            tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.QUALIFIED_EXPR, true);
+            if (ctx.expression() != null) {
+                tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.QUALIFIER, ctx.expression());
             }
         }
     }
@@ -870,13 +870,13 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         TerminalNode<Token> node = ctx.IDENTIFIER();
         if (node != null) {
-            assert ctx.e != null;
-            exprType = new SelectedElementReference(treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE), node.getSymbol());
+            assert ctx.expression() != null;
+            exprType = new SelectedElementReference(treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE), node.getSymbol());
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
 
-        if (ctx.name != null) {
+        if (node != null) {
             unresolvedQualifiedIdentifiers.add(node);
         }
     }
@@ -972,16 +972,16 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitCallExpr(CallExprContext ctx) {
         CodeElementReference returnType = CodeElementReference.UNKNOWN;
-        if (ctx.e != null) {
+        if (ctx.expression() != null) {
             boolean builtin = false;
-            if (ctx.e.start != null && ctx.e.start == ctx.e.stop) {
-                String methodName = ctx.e.start.getText();
+            if (ctx.expression().start != null && ctx.expression().start == ctx.expression().stop) {
+                String methodName = ctx.expression().start.getText();
                 builtin = SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(methodName);
             }
 
             if (builtin) {
                 CodeElementReference typeArgument = CodeElementReference.UNKNOWN;
-                ArgumentListContext args = ctx.args;
+                ArgumentListContext args = ctx.argumentList();
                 if (args != null) {
                     ExpressionListContext exprs = args.expressionList();
                     if (exprs != null && !exprs.expression().isEmpty()) {
@@ -992,9 +992,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                     }
                 }
 
-                returnType = new BuiltinCallResultReference(ctx.e.start, typeArgument);
+                returnType = new BuiltinCallResultReference(ctx.expression().start, typeArgument);
             } else {
-                returnType = new CallResultReference(treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE));
+                returnType = new CallResultReference(treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE));
             }
         }
 
@@ -1520,8 +1520,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitIndexExpr(IndexExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.e != null) {
-            CodeElementReference arrayType = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression(0) != null) {
+            CodeElementReference arrayType = treeDecorator.getProperty(ctx.expression(0), GoAnnotations.EXPR_TYPE);
             exprType = new ArrayElementTypeReference(arrayType);
         }
 
@@ -1722,8 +1722,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitTypeAssertionExpr(TypeAssertionExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.t != null) {
-            exprType = treeDecorator.getProperty(ctx.t, GoAnnotations.CODE_CLASS);
+        if (ctx.type() != null) {
+            exprType = treeDecorator.getProperty(ctx.type(), GoAnnotations.CODE_CLASS);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new TypeAssertionResultReference(exprType));
@@ -1869,8 +1869,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.conv != null) {
-            exprType = new ConversionOrCallResultReference(treeDecorator.getProperty(ctx.conv, GoAnnotations.EXPR_TYPE));
+        if (ctx.conversion() != null) {
+            exprType = new ConversionOrCallResultReference(treeDecorator.getProperty(ctx.conversion(), GoAnnotations.EXPR_TYPE));
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -1974,8 +1974,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitSliceExpr(SliceExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.e != null) {
-            exprType = new SliceExpressionTypeReference(treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE));
+        if (ctx.expression(0) != null) {
+            exprType = new SliceExpressionTypeReference(treeDecorator.getProperty(ctx.expression(0), GoAnnotations.EXPR_TYPE));
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -2264,9 +2264,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitAddExpr(AddExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.e != null && ctx.op != null && ctx.right == null) {
-            CodeElementReference left = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
-            CodeElementReference right = treeDecorator.getProperty(ctx.right, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) == null) {
+            CodeElementReference left = treeDecorator.getProperty(ctx.expression(0), GoAnnotations.EXPR_TYPE);
+            CodeElementReference right = treeDecorator.getProperty(ctx.expression(1), GoAnnotations.EXPR_TYPE);
             exprType = new BinaryExpressionTypeReference(left, ctx.op, right);
         }
 
@@ -2415,8 +2415,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
     @Override
     public void exitUnaryExpr(UnaryExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.e != null && ctx.op != null) {
-            CodeElementReference e = treeDecorator.getProperty(ctx.e, GoAnnotations.EXPR_TYPE);
+        if (ctx.expression() != null && ctx.op != null) {
+            CodeElementReference e = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
             exprType = new UnaryExpressionTypeReference(e, ctx.op);
         }
 

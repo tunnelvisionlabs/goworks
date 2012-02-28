@@ -583,7 +583,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         GoParserBase.SelectorExprContext context = (GoParserBase.SelectorExprContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
-                                            selectorTarget = context.e;
+                                            selectorTarget = context.expression();
                                             break;
                                         }
                                     } else if (tree instanceof GoParserBase.TypeSwitchGuardContext) {
@@ -597,7 +597,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         GoParserBase.TypeAssertionExprContext context = (GoParserBase.TypeAssertionExprContext)tree;
                                         if (context.dot != null && context.lp == null) {
                                             selectorExpressionRoot = tree;
-                                            selectorTarget = context.e;
+                                            selectorTarget = context.expression();
                                             break;
                                         }
                                     } else if (tree instanceof GoParserBase.MethodExprContext) {
@@ -1306,18 +1306,18 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             public void enterSelectorExpr(SelectorExprContext ctx) {
-                if (ctx.name == null) {
+                if (ctx.IDENTIFIER() == null) {
                     annotations.putProperty(ctx, ATTR_TARGET, null);
                     return;
                 }
 
-                String name = ctx.name.getText();
+                String name = ctx.IDENTIFIER().getSymbol().getText();
                 if (name == null || name.isEmpty()) {
                     annotations.putProperty(ctx, ATTR_TARGET, null);
                     return;
                 }
 
-                Collection<? extends CodeElementModel> targets = resolveTarget(ctx.e);
+                Collection<? extends CodeElementModel> targets = resolveTarget(ctx.expression());
                 if (targets == null) {
                     annotations.putProperty(ctx, ATTR_TARGET, null);
                     return;
@@ -1542,11 +1542,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             public void enterCallExpr(CallExprContext ctx) {
-                if (ctx.e == null) {
+                if (ctx.expression() == null) {
                     return;
                 }
 
-                Collection<? extends CodeElementModel> methodResults = resolveTarget(ctx.e);
+                Collection<? extends CodeElementModel> methodResults = resolveTarget(ctx.expression());
                 List<CodeElementModel> results = new ArrayList<CodeElementModel>();
                 for (CodeElementModel model : methodResults) {
                     if (!(model instanceof FunctionModel)) {

@@ -474,7 +474,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     public void exitTypeAssertionExpr(TypeAssertionExprContext ctx) {
-        if (ctx.t != null) {
+        if (ctx.type() != null) {
             typeModelStack.pop();
         }
     }
