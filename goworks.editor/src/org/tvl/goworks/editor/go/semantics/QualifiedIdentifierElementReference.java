@@ -41,7 +41,7 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
             }
 
             String memberName = context.IDENTIFIER().getSymbol().getText();
-            Collection<PackageModel> packages = resolvedPackages.get(context.packageName().name.getText());
+            Collection<PackageModel> packages = resolvedPackages.get(context.packageName().IDENTIFIER().getSymbol().getText());
             if (packages == null || packages.isEmpty()) {
                 return Collections.emptyList();
             }

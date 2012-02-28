@@ -619,7 +619,7 @@ packageClause
     ;
 
 packageName
-    :   name=IDENTIFIER
+    :   IDENTIFIER
     ;
 
 importDecl

@@ -1269,7 +1269,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             public void enterPackageName(PackageNameContext ctx) {
                 FileModel fileModel = getFileModel();
-                if (ctx.name == null || fileModel == null) {
+                if (ctx.IDENTIFIER() == null || fileModel == null) {
                     return;
                 }
 
@@ -1582,7 +1582,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         vars.putAll(localsAnalyzer.getLocals(functionContext));
                     }
                 } else {
-                    String pkgName = ctx.packageName().name.getText();
+                    String pkgName = ctx.packageName().IDENTIFIER().getSymbol().getText();
                     for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
                         if (!importDeclarationModel.isMergeWithLocal() && pkgName.equals(importDeclarationModel.getName())) {
                             possibleImports.add(importDeclarationModel);
@@ -1694,7 +1694,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     //return resolveQualifierType(qualifier, currentPackage, resolvedPackages);
                 } else if (qualifierNodeType == NodeType.PACKAGE_REF) {
                     assert qualifier instanceof PackageNameContext;
-                    String packageName = ((PackageNameContext)qualifier).name.getText();
+                    String packageName = ((PackageNameContext)qualifier).IDENTIFIER().getSymbol().getText();
                     resolvedQualifier = resolvedPackages.get(packageName);
                     if (resolvedQualifier == null) {
                         resolvedQualifier = Collections.emptyList();

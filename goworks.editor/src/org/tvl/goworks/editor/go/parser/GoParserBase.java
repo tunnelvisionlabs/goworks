@@ -7394,7 +7394,6 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class PackageNameContext extends ParserRuleContext<Token> {
-		public Token name;
 		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
 		public PackageNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
@@ -7420,7 +7419,7 @@ public class GoParserBase extends Parser<Token> {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(1418); _localctx.name = match(IDENTIFIER);
+			setState(1418); match(IDENTIFIER);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -7486,9 +7485,9 @@ public class GoParserBase extends Parser<Token> {
 							setState(1426); importSpec();
 							setState(1434);
 							_errHandler.sync(this);
-							int _alt2245 = getInterpreter().adaptivePredict(_input,120,_ctx);
-							while ( _alt2245!=2 && _alt2245!=-1 ) {
-								if ( _alt2245==1 ) {
+							int _alt2243 = getInterpreter().adaptivePredict(_input,120,_ctx);
+							while ( _alt2243!=2 && _alt2243!=-1 ) {
+								if ( _alt2243==1 ) {
 									{
 									{
 									setState(1428); match(Semi);
@@ -7498,7 +7497,7 @@ public class GoParserBase extends Parser<Token> {
 								}
 								setState(1436);
 								_errHandler.sync(this);
-								_alt2245 = getInterpreter().adaptivePredict(_input,120,_ctx);
+								_alt2243 = getInterpreter().adaptivePredict(_input,120,_ctx);
 							}
 							setState(1439);
 							//_errHandler.sync(this);

@@ -490,7 +490,7 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
                 return resolveQualifierType(qualifier, currentPackage, resolvedPackages);
             } else if (qualifierNodeType == NodeType.PACKAGE_REF) {
                 assert qualifier instanceof PackageNameContext;
-                String packageName = ((PackageNameContext)qualifier).name.getText();
+                String packageName = ((PackageNameContext)qualifier).IDENTIFIER().getSymbol().getText();
                 resolvedQualifier = resolvedPackages.get(packageName);
                 if (resolvedQualifier == null) {
                     resolvedQualifier = Collections.emptyList();
@@ -777,15 +777,15 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
         int invokingRule = ParseTrees.getInvokingRule(GoParserBase._ATN, ctx);
         NodeType nodeType = invokingRule == GoParser.RULE_packageClause ? NodeType.PACKAGE_DECL : NodeType.PACKAGE_REF;
         treeDecorator.putProperty(ctx, GoAnnotations.NODE_TYPE, nodeType);
-        if (ctx.name != null) {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, nodeType);
+        if (ctx.IDENTIFIER() != null) {
+            tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.NODE_TYPE, nodeType);
             if (treeDecorator.getProperty(ctx, GoAnnotations.RESOLVED)) {
-                tokenDecorator.putProperty(ctx.name, GoAnnotations.RESOLVED, true);
+                tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.RESOLVED, true);
             }
 
             Token localTarget = treeDecorator.getProperty(ctx, GoAnnotations.LOCAL_TARGET);
             if (localTarget != null) {
-                tokenDecorator.putProperty(ctx.name, GoAnnotations.LOCAL_TARGET, localTarget);
+                tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.LOCAL_TARGET, localTarget);
             }
         }
     }
@@ -1377,8 +1377,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             name = "";
             target = null;
         } else if (ctx.packageName != null) {
-            if (ctx.packageName.name != null) {
-                target = ctx.packageName.name;
+            if (ctx.packageName.IDENTIFIER() != null) {
+                target = ctx.packageName.IDENTIFIER().getSymbol();
                 name = target.getText();
             }
         } else {
@@ -1640,8 +1640,8 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             }
 
             // check known imports
-            if (ctx.packageName().name != null) {
-                List<? extends Token> imports = ParseTrees.emptyIfNull(importedPackages.get(ctx.packageName().name.getText()));
+            if (ctx.packageName().IDENTIFIER() != null) {
+                List<? extends Token> imports = ParseTrees.emptyIfNull(importedPackages.get(ctx.packageName().IDENTIFIER().getSymbol().getText()));
                 Token bestImport = null;
                 boolean resolvedImport = false;
                 for (Token importToken : imports) {

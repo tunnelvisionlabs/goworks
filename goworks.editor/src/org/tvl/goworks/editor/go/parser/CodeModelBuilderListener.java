@@ -150,8 +150,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     @Override
     public void exitPackageClause(PackageClauseContext ctx) {
         PackageNameContext nameContext = ctx.packageName();
-        if (nameContext != null && nameContext.name != null) {
-            String name = nameContext.name.getText();
+        if (nameContext != null && nameContext.IDENTIFIER() != null) {
+            String name = nameContext.IDENTIFIER().getSymbol().getText();
             PackageDeclarationModelImpl model = new PackageDeclarationModelImpl(name, project);
             fileModel.getPackageDeclarations().add(model);
         }
@@ -169,8 +169,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
         String alias;
         if (ctx.dot != null) {
             alias = ".";
-        } else if (ctx.packageName() != null && ctx.packageName().name != null) {
-            alias = ctx.packageName().name.getText();
+        } else if (ctx.packageName() != null && ctx.packageName().IDENTIFIER() != null) {
+            alias = ctx.packageName().IDENTIFIER().getSymbol().getText();
         } else {
             alias = GoParserBase.getPackageName(ctx.importPath().StringLiteral().getSymbol());
         }
@@ -187,7 +187,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     public void exitTypeName(TypeNameContext ctx) {
-        String pkgName = ctx.qualifiedIdentifier().packageName() != null ? ctx.qualifiedIdentifier().packageName().name.getText() : null;
+        String pkgName = ctx.qualifiedIdentifier().packageName() != null ? ctx.qualifiedIdentifier().packageName().IDENTIFIER().getSymbol().getText() : null;
         String typeName = ctx.qualifiedIdentifier().IDENTIFIER().getSymbol().getText();
         typeModelStack.push(new TypeReferenceModelImpl(pkgName, typeName, fileModel));
         assert !typeModelStack.isEmpty();
