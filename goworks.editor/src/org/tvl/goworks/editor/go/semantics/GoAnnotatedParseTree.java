@@ -8,8 +8,8 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.netbeans.api.annotations.common.NonNull;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
@@ -20,12 +20,12 @@ import org.tvl.goworks.editor.go.codemodel.VarKind;
  */
 public class GoAnnotatedParseTree extends AnnotatedParseTree {
 
-    public GoAnnotatedParseTree(@NonNull ParserRuleContext<Token> parseTree) {
+    public GoAnnotatedParseTree(@NonNull ParseTree<Token> parseTree) {
         super(parseTree);
     }
 
     @NonNull
-    public CodeElementReference getTarget(ParserRuleContext<Token> parseTree) {
+    public CodeElementReference getTarget(ParseTree<Token> parseTree) {
         return getTreeDecorator().getProperty(parseTree, GoAnnotations.PROP_ELEMENT_REFERENCE);
     }
 

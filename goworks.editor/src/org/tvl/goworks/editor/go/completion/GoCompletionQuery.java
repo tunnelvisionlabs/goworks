@@ -282,7 +282,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             // Add context items (labels, etc). Use anchor points to optimize information gathering.
 
             Map<RuleContext<Token>, CaretReachedException> parseTrees;
-            Map<RuleContext<Token>, GoAnnotatedParseTree> annotatedParseTrees;
+            Map<ParseTree<Token>, GoAnnotatedParseTree> annotatedParseTrees;
             CaretToken caretToken = null;
 
             List<Anchor> anchors;
@@ -875,7 +875,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             Map<Token, ParserRuleContext<Token>> vars = Collections.emptyMap();
                                             Map<Token, ParserRuleContext<Token>> constants = Collections.emptyMap();
 
-                                            ParserRuleContext<Token> functionContext = (ParserRuleContext<Token>)getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
+                                            ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
                                             if (functionContext != null) {
                                                 vars = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                                                 vars.putAll(localsAnalyzer.getReceiverParameters(functionContext));
@@ -1065,32 +1065,32 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
 //            private final List<Token> labels = new ArrayList<Token>();
 
-            public Map<Token, ParserRuleContext<Token>> getLocals(@NonNull ParserRuleContext<Token> context) {
+            public Map<Token, ParserRuleContext<Token>> getLocals(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_LOCALS);
             }
 
-            public Map<Token, ParserRuleContext<Token>> getConstants(@NonNull ParserRuleContext<Token> context) {
+            public Map<Token, ParserRuleContext<Token>> getConstants(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_CONSTANTS);
             }
 
-            public Map<Token, ParserRuleContext<Token>> getReceiverParameters(@NonNull ParserRuleContext<Token> context) {
+            public Map<Token, ParserRuleContext<Token>> getReceiverParameters(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_RECEIVER_PARAMETER);
             }
 
-            public Map<Token, ParserRuleContext<Token>> getParameters(@NonNull ParserRuleContext<Token> context) {
+            public Map<Token, ParserRuleContext<Token>> getParameters(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_PARAMETER);
             }
 
-            public Map<Token, ParserRuleContext<Token>> getReturnParameters(@NonNull ParserRuleContext<Token> context) {
+            public Map<Token, ParserRuleContext<Token>> getReturnParameters(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_RETURN_PARAMETER);
             }
 
-            private Map<Token, ParserRuleContext<Token>> getLocals(ParserRuleContext<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property) {
+            private Map<Token, ParserRuleContext<Token>> getLocals(ParseTree<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property) {
                 Map<Token, ParserRuleContext<Token>> result = getLocalsProperty(context, property);
                 if (result != null) {
                     return result;
@@ -1116,7 +1116,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 //                return labels;
 //            }
 
-            private Map<Token, ParserRuleContext<Token>> getLocalsProperty(ParserRuleContext<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property) {
+            private Map<Token, ParserRuleContext<Token>> getLocalsProperty(ParseTree<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property) {
                 Map<Token, ParserRuleContext<Token>> result = annotations.getProperty(context, property);
                 if (result != null) {
                     return result;
@@ -1125,7 +1125,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 return null;
             }
 
-            private void setLocalsProperty(ParserRuleContext<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property, @NonNull Map<Token, ParserRuleContext<Token>> locals) {
+            private void setLocalsProperty(ParseTree<Token> context, ObjectProperty<Map<Token, ParserRuleContext<Token>>> property, @NonNull Map<Token, ParserRuleContext<Token>> locals) {
                 Parameters.notNull("locals", locals);
                 annotations.putProperty(context, property, locals);
             }
@@ -1247,7 +1247,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         private class TargetAnalyzer extends GoParserBaseBaseListener {
 
             @NonNull
-            public Collection<? extends CodeElementModel> resolveTarget(@NullAllowed ParserRuleContext<Token> context) {
+            public Collection<? extends CodeElementModel> resolveTarget(@NullAllowed ParseTree<Token> context) {
                 if (context == null) {
                     return Collections.emptyList();
                 }
@@ -1292,8 +1292,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             public void enterOperandExpr(OperandExprContext ctx) {
-                if (ctx.getChildCount() == 1 && (ctx.getChild(0) instanceof GoParserBase.OperandContext)) {
-                    annotations.putProperty(ctx, ATTR_TARGET, resolveTarget((GoParserBase.OperandContext)ctx.getChild(0)));
+                OperandContext operandContext = ctx.operand();
+                if (operandContext != null) {
+                    annotations.putProperty(ctx, ATTR_TARGET, resolveTarget(operandContext));
                 } else {
                     LOGGER.log(Level.FINE, "TODO: handle other expressions.");
                 }
@@ -1350,12 +1351,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             public void enterTypeLiteral(TypeLiteralContext ctx) {
-                if (ctx.getChildCount() != 1) {
-                    LOGGER.log(Level.FINE, "Unknown typeLiteral syntax.");
-                    return;
-                }
-
-                Collection<? extends CodeElementModel> result = resolveTarget((ParserRuleContext<Token>)ctx.getChild(0));
+                assert ctx.getChildCount() <= 1 : "Unknown typeLiteral syntax.";
+                Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
 
@@ -1475,23 +1472,20 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             public void enterLiteralType(LiteralTypeContext ctx) {
-                if (ctx.getChildCount() != 1) {
+                if (ctx.elementType() != null) {
                     LOGGER.log(Level.FINE, "TODO: resolve implicit array creation.");
                     return;
                 }
 
-                Collection<? extends CodeElementModel> result = resolveTarget((ParserRuleContext<Token>)ctx.getChild(0));
+                assert ctx.getChildCount() <= 1 : "Unknown literalType syntax.";
+                Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
 
             @Override
             public void enterTypeName(TypeNameContext ctx) {
-                if (ctx.qualifiedIdentifier() == null) {
-                    LOGGER.log(Level.FINE, "Unknown typeName syntax.");
-                    return;
-                }
-
-                Collection<? extends CodeElementModel> result = resolveTarget((ParserRuleContext<Token>)ctx.getChild(0));
+                assert ctx.getChildCount() <= 1 : "Unknown typeName syntax.";
+                Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
                 annotations.putProperty(ctx, ATTR_TARGET, result);
             }
 
@@ -1572,7 +1566,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         }
                     }
 
-                    ParserRuleContext<Token> functionContext = (ParserRuleContext<Token>)getTopContext(parser, ctx, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
+                    ParseTree<Token> functionContext = getTopContext(parser, ctx, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
                     if (functionContext != null) {
                         vars = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                         vars.putAll(localsAnalyzer.getReceiverParameters(functionContext));
@@ -1623,11 +1617,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 annotations.putProperty(ctx, ATTR_TARGET, members);
             }
 
-            private Collection<? extends CodeElementModel> getTargetProperty(ParserRuleContext<Token> context) {
+            private Collection<? extends CodeElementModel> getTargetProperty(ParseTree<Token> context) {
                 return annotations.getProperty(context, ATTR_TARGET);
             }
 
-            private void setTargetProperty(ParserRuleContext<Token> context, @NonNull Collection<? extends CodeElementModel> models) {
+            private void setTargetProperty(ParseTree<Token> context, @NonNull Collection<? extends CodeElementModel> models) {
                 Parameters.notNull("models", models);
 
                 annotations.putProperty(context, ATTR_TARGET, models);
@@ -1734,10 +1728,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             //return qualifiedModels;
         }
 
-        private Map<RuleContext<Token>, GoAnnotatedParseTree> analyzeParseTrees(VersionedDocument document, Map<? extends RuleContext<Token>, ? extends CaretReachedException> parseTrees) {
-            Map<RuleContext<Token>, GoAnnotatedParseTree> result = new IdentityHashMap<RuleContext<Token>, GoAnnotatedParseTree>();
-            for (Map.Entry<? extends RuleContext<Token>, ? extends CaretReachedException> entry : parseTrees.entrySet()) {
-                ParserRuleContext<Token> context = (ParserRuleContext<Token>)entry.getKey();
+        private Map<ParseTree<Token>, GoAnnotatedParseTree> analyzeParseTrees(VersionedDocument document, Map<? extends ParseTree<Token>, ? extends CaretReachedException> parseTrees) {
+            Map<ParseTree<Token>, GoAnnotatedParseTree> result = new IdentityHashMap<ParseTree<Token>, GoAnnotatedParseTree>();
+            for (Map.Entry<? extends ParseTree<Token>, ? extends CaretReachedException> entry : parseTrees.entrySet()) {
+                ParseTree<Token> context = entry.getKey();
                 GoAnnotatedParseTree annotatedTree = SemanticAnalyzer.analyze(document, context);
                 result.put(context, annotatedTree);
             }

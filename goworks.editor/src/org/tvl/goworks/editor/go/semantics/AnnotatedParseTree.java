@@ -29,16 +29,16 @@ public class AnnotatedParseTree {
 
     private final ObjectDecorator<Tree> treeAnnotations = new ObjectDecorator<Tree>(new IdentityHashMap<Tree, Map<ObjectProperty<?>, Object>>());
     private final ObjectDecorator<Token> tokenAnnotations = new ObjectDecorator<Token>();
-    private ParserRuleContext<Token> parseTree;
+    private ParseTree<Token> parseTree;
 
-    public AnnotatedParseTree(@NonNull ParserRuleContext<Token> parseTree) {
+    public AnnotatedParseTree(@NonNull ParseTree<Token> parseTree) {
         Parameters.notNull("parseTree", parseTree);
 
         this.parseTree = parseTree;
     }
 
     @NonNull
-    public ParserRuleContext<Token> getParseTree() {
+    public ParseTree<Token> getParseTree() {
         return parseTree;
     }
 
@@ -50,11 +50,11 @@ public class AnnotatedParseTree {
         return tokenAnnotations;
     }
 
-    public final void setParseTree(@NonNull ParserRuleContext<Token> parseTree) {
+    public final void setParseTree(@NonNull ParseTree<Token> parseTree) {
         setParseTree(parseTree, true);
     }
 
-    public void setParseTree(@NonNull ParserRuleContext<Token> parseTree, boolean compactAnnotations) {
+    public void setParseTree(@NonNull ParseTree<Token> parseTree, boolean compactAnnotations) {
         Parameters.notNull("parseTree", parseTree);
 
         if (this.parseTree != parseTree && compactAnnotations) {

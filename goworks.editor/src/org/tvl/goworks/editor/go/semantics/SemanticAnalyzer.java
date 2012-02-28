@@ -16,8 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.antlr.netbeans.editor.text.VersionedDocument;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.FieldModel;
 import org.tvl.goworks.editor.go.codemodel.InterfaceModel;
@@ -36,7 +36,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
  */
 public final class SemanticAnalyzer {
 
-    public static GoAnnotatedParseTree analyze(VersionedDocument document, ParserRuleContext<Token> parseTree) {
+    public static GoAnnotatedParseTree analyze(VersionedDocument document, ParseTree<Token> parseTree) {
         GoAnnotatedParseTree annotatedParseTree = new GoAnnotatedParseTree(parseTree);
         SemanticAnalyzerListener listener = new SemanticAnalyzerListener(document, annotatedParseTree);
         boolean background = document.getDocument() == null;
