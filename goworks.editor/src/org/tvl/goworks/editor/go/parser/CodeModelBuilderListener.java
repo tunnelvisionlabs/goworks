@@ -304,7 +304,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     public void exitConstSpec(ConstSpecContext ctx) {
-        IdentifierListContext idList = ctx.idList;
+        IdentifierListContext idList = ctx.identifierList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
         if (ids != null) {
             for (TerminalNode<Token> id : ids) {
@@ -313,15 +313,15 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
             }
         }
 
-        if (ctx.explicitType != null) {
+        if (ctx.type() != null) {
             typeModelStack.pop();
         }
     }
 
     @Override
     public void exitVarSpec(VarSpecContext ctx) {
-        TypeModelImpl varType = ctx.varType != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
-        IdentifierListContext idList = ctx.idList;
+        TypeModelImpl varType = ctx.type() != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
+        IdentifierListContext idList = ctx.identifierList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
         if (ids != null && !ids.isEmpty()) {
             boolean isGlobal = varContainerStack.peek() == fileModel.getVars();
@@ -377,8 +377,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     @Override
     public void exitReceiver(ReceiverContext ctx) {
         String name = "_";
-        if (ctx.name != null) {
-            name = ctx.name.getText();
+        if (ctx.IDENTIFIER() != null) {
+            name = ctx.IDENTIFIER().getSymbol().getText();
         }
 
         if (ctx.baseTypeName() != null) {
@@ -394,7 +394,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     public void enterFunctionDecl(FunctionDeclContext ctx) {
-        FunctionModelImpl model = new FunctionModelImpl(ctx.name.getText(), fileModel);
+        FunctionModelImpl model = new FunctionModelImpl(ctx.IDENTIFIER().getSymbol().getText(), fileModel);
         functionContainerStack.peek().add(model);
         functionModelStack.push(model);
         parameterContainerStack.push(model.getParameters());

@@ -1159,12 +1159,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 public void enterVarSpec(VarSpecContext ctx) {
-                    addVars(locals, ctx.idList, ctx.varType, ctx.exprList);
+                    addVars(locals, ctx.identifierList(), ctx.type(), ctx.expressionList(0));
                 }
 
                 @Override
                 public void enterShortVarDecl(ShortVarDeclContext ctx) {
-                    addVars(locals, ctx.idList, null, ctx.exprList);
+                    addVars(locals, ctx.identifierList(), null, ctx.expressionList());
                 }
 
                 @Override
@@ -1202,8 +1202,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 public void enterReceiver(ReceiverContext ctx) {
-                    if (ctx.name != null) {
-                        receiverParameters.put(ctx.name, ctx.baseTypeName());
+                    if (ctx.IDENTIFIER() != null) {
+                        receiverParameters.put(ctx.IDENTIFIER().getSymbol(), ctx.baseTypeName());
                     }
                 }
 
@@ -1218,7 +1218,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 public void enterConstSpec(ConstSpecContext ctx) {
-                    addVars(constants, ctx.idList, ctx.explicitType, ctx.valueList);
+                    addVars(constants, ctx.identifierList(), ctx.type(), ctx.expressionList());
                 }
 
                 private void addVars(@NonNull Map<Token, ParserRuleContext<Token>> map,

@@ -114,7 +114,7 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterConstSpec(ConstSpecContext ctx) {
-            IdentifierListContext idListContext = ctx.idList;
+            IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             for (TerminalNode<Token> identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
@@ -134,7 +134,7 @@ public class GoDeclarationsScanner {
                 return;
             }
 
-            IdentifierListContext idListContext = ctx.idList;
+            IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             for (TerminalNode<Token> identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
@@ -154,7 +154,7 @@ public class GoDeclarationsScanner {
                 return;
             }
 
-            IdentifierListContext idListContext = ctx.idList;
+            IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             for (TerminalNode<Token> identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
@@ -205,7 +205,7 @@ public class GoDeclarationsScanner {
         @Override
         public void enterFunctionDecl(FunctionDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
-            String signature = String.format("%s", ctx.name.getText());
+            String signature = String.format("%s", ctx.IDENTIFIER().getSymbol().getText());
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FUNCTION);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);

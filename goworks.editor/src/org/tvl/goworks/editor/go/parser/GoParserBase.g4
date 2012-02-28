@@ -218,7 +218,7 @@ constDecl
     ;
 
 constSpec
-    :   idList=identifierList (explicitType=type? '=' valueList=expressionList)?
+    :   identifierList (type? '=' expressionList)?
     ;
 
 identifierList
@@ -248,22 +248,22 @@ varDecl
     ;
 
 varSpec
-    :   idList=identifierList
-        (   varType=type ('=' exprList=expressionList)?
-        |   '=' exprList=expressionList
+    :   identifierList
+        (   type ('=' expressionList)?
+        |   '=' expressionList
         )
     ;
 
 shortVarDecl
-    :   idList=identifierList ':=' exprList=expressionList
+    :   identifierList ':=' expressionList
     ;
 
 functionDecl
-    :   'func' name=IDENTIFIER signature body?
+    :   'func' IDENTIFIER signature body?
     ;
 
 body
-    :   blk=block
+    :   block
     ;
 
 methodDecl
@@ -271,7 +271,7 @@ methodDecl
     ;
 
 receiver
-    :   '(' name=IDENTIFIER? ptr='*'? baseTypeName ')'
+    :   '(' IDENTIFIER? ptr='*'? baseTypeName ')'
     ;
 
 baseTypeName

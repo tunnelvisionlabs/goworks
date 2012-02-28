@@ -1941,9 +1941,6 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class ConstSpecContext extends ParserRuleContext<Token> {
-		public IdentifierListContext idList;
-		public TypeContext explicitType;
-		public ExpressionListContext valueList;
 		public ExpressionListContext expressionList() {
 		    return getRuleContext(ExpressionListContext.class,0);
 		}
@@ -1977,7 +1974,7 @@ public class GoParserBase extends Parser<Token> {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(491); _localctx.idList = identifierList();
+			setState(491); identifierList();
 			setState(501);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,30,_ctx) ) {
@@ -1988,12 +1985,12 @@ public class GoParserBase extends Parser<Token> {
 					switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
 						case 1:
 							{
-							setState(493); _localctx.explicitType = type();
+							setState(493); type();
 							}
 							break;
 					}
 					setState(497); match(Equal);
-					setState(499); _localctx.valueList = expressionList();
+					setState(499); expressionList();
 					}
 					break;
 			}
@@ -2042,9 +2039,9 @@ public class GoParserBase extends Parser<Token> {
 			setState(503); match(IDENTIFIER);
 			setState(511);
 			_errHandler.sync(this);
-			int _alt533 = getInterpreter().adaptivePredict(_input,31,_ctx);
-			while ( _alt533!=2 && _alt533!=-1 ) {
-				if ( _alt533==1 ) {
+			int _alt527 = getInterpreter().adaptivePredict(_input,31,_ctx);
+			while ( _alt527!=2 && _alt527!=-1 ) {
+				if ( _alt527==1 ) {
 					{
 					{
 					setState(505); match(Comma);
@@ -2054,7 +2051,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(513);
 				_errHandler.sync(this);
-				_alt533 = getInterpreter().adaptivePredict(_input,31,_ctx);
+				_alt527 = getInterpreter().adaptivePredict(_input,31,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2103,9 +2100,9 @@ public class GoParserBase extends Parser<Token> {
 			setState(514); expression(0);
 			setState(522);
 			_errHandler.sync(this);
-			int _alt548 = getInterpreter().adaptivePredict(_input,32,_ctx);
-			while ( _alt548!=2 && _alt548!=-1 ) {
-				if ( _alt548==1 ) {
+			int _alt542 = getInterpreter().adaptivePredict(_input,32,_ctx);
+			while ( _alt542!=2 && _alt542!=-1 ) {
+				if ( _alt542==1 ) {
 					{
 					{
 					setState(516); match(Comma);
@@ -2115,7 +2112,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(524);
 				_errHandler.sync(this);
-				_alt548 = getInterpreter().adaptivePredict(_input,32,_ctx);
+				_alt542 = getInterpreter().adaptivePredict(_input,32,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2182,9 +2179,9 @@ public class GoParserBase extends Parser<Token> {
 							setState(531); typeSpec();
 							setState(539);
 							_errHandler.sync(this);
-							int _alt574 = getInterpreter().adaptivePredict(_input,33,_ctx);
-							while ( _alt574!=2 && _alt574!=-1 ) {
-								if ( _alt574==1 ) {
+							int _alt568 = getInterpreter().adaptivePredict(_input,33,_ctx);
+							while ( _alt568!=2 && _alt568!=-1 ) {
+								if ( _alt568==1 ) {
 									{
 									{
 									setState(533); match(Semi);
@@ -2194,7 +2191,7 @@ public class GoParserBase extends Parser<Token> {
 								}
 								setState(541);
 								_errHandler.sync(this);
-								_alt574 = getInterpreter().adaptivePredict(_input,33,_ctx);
+								_alt568 = getInterpreter().adaptivePredict(_input,33,_ctx);
 							}
 							setState(544);
 							//_errHandler.sync(this);
@@ -2321,9 +2318,9 @@ public class GoParserBase extends Parser<Token> {
 							setState(562); varSpec();
 							setState(570);
 							_errHandler.sync(this);
-							int _alt619 = getInterpreter().adaptivePredict(_input,37,_ctx);
-							while ( _alt619!=2 && _alt619!=-1 ) {
-								if ( _alt619==1 ) {
+							int _alt613 = getInterpreter().adaptivePredict(_input,37,_ctx);
+							while ( _alt613!=2 && _alt613!=-1 ) {
+								if ( _alt613==1 ) {
 									{
 									{
 									setState(564); match(Semi);
@@ -2333,7 +2330,7 @@ public class GoParserBase extends Parser<Token> {
 								}
 								setState(572);
 								_errHandler.sync(this);
-								_alt619 = getInterpreter().adaptivePredict(_input,37,_ctx);
+								_alt613 = getInterpreter().adaptivePredict(_input,37,_ctx);
 							}
 							setState(575);
 							//_errHandler.sync(this);
@@ -2365,9 +2362,6 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class VarSpecContext extends ParserRuleContext<Token> {
-		public IdentifierListContext idList;
-		public TypeContext varType;
-		public ExpressionListContext exprList;
 		public List<? extends ExpressionListContext> expressionList() {
 		    return getRuleContexts(ExpressionListContext.class);
 		}
@@ -2404,20 +2398,20 @@ public class GoParserBase extends Parser<Token> {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(583); _localctx.idList = identifierList();
+			setState(583); identifierList();
 			setState(597);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
 				case 1:
 					{
-					setState(585); _localctx.varType = type();
+					setState(585); type();
 					setState(591);
 					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 						case 1:
 							{
 							setState(587); match(Equal);
-							setState(589); _localctx.exprList = expressionList();
+							setState(589); expressionList();
 							}
 							break;
 					}
@@ -2427,7 +2421,7 @@ public class GoParserBase extends Parser<Token> {
 				case 2:
 					{
 					setState(593); match(Equal);
-					setState(595); _localctx.exprList = expressionList();
+					setState(595); expressionList();
 					}
 					break;
 			}
@@ -2445,8 +2439,6 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class ShortVarDeclContext extends ParserRuleContext<Token> {
-		public IdentifierListContext idList;
-		public ExpressionListContext exprList;
 		public ExpressionListContext expressionList() {
 		    return getRuleContext(ExpressionListContext.class,0);
 		}
@@ -2477,9 +2469,9 @@ public class GoParserBase extends Parser<Token> {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(599); _localctx.idList = identifierList();
+			setState(599); identifierList();
 			setState(601); match(ColonEqual);
-			setState(603); _localctx.exprList = expressionList();
+			setState(603); expressionList();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2494,7 +2486,6 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class FunctionDeclContext extends ParserRuleContext<Token> {
-		public Token name;
 		public BodyContext body() {
 		    return getRuleContext(BodyContext.class,0);
 		}
@@ -2527,7 +2518,7 @@ public class GoParserBase extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(605); match(Func);
-			setState(607); _localctx.name = match(IDENTIFIER);
+			setState(607); match(IDENTIFIER);
 			setState(609); signature();
 			setState(613);
 			//_errHandler.sync(this);
@@ -2552,7 +2543,6 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class BodyContext extends ParserRuleContext<Token> {
-		public BlockContext blk;
 		public BlockContext block() {
 		    return getRuleContext(BlockContext.class,0);
 		}
@@ -2580,7 +2570,7 @@ public class GoParserBase extends Parser<Token> {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(615); _localctx.blk = block();
+			setState(615); block();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2658,7 +2648,6 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class ReceiverContext extends ParserRuleContext<Token> {
-		public Token name;
 		public Token ptr;
 		public BaseTypeNameContext baseTypeName() {
 		    return getRuleContext(BaseTypeNameContext.class,0);
@@ -2694,7 +2683,7 @@ public class GoParserBase extends Parser<Token> {
 			switch ( getInterpreter().adaptivePredict(_input,45,_ctx) ) {
 				case 1:
 					{
-					setState(631); _localctx.name = match(IDENTIFIER);
+					setState(631); match(IDENTIFIER);
 					}
 					break;
 			}
@@ -3393,9 +3382,9 @@ public class GoParserBase extends Parser<Token> {
 			setState(743); element();
 			setState(751);
 			_errHandler.sync(this);
-			int _alt947 = getInterpreter().adaptivePredict(_input,55,_ctx);
-			while ( _alt947!=2 && _alt947!=-1 ) {
-				if ( _alt947==1 ) {
+			int _alt923 = getInterpreter().adaptivePredict(_input,55,_ctx);
+			while ( _alt923!=2 && _alt923!=-1 ) {
+				if ( _alt923==1 ) {
 					{
 					{
 					setState(745); match(Comma);
@@ -3405,7 +3394,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(753);
 				_errHandler.sync(this);
-				_alt947 = getInterpreter().adaptivePredict(_input,55,_ctx);
+				_alt923 = getInterpreter().adaptivePredict(_input,55,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -5611,9 +5600,9 @@ public class GoParserBase extends Parser<Token> {
 			setState(1095); match(LeftBrace);
 			setState(1101);
 			_errHandler.sync(this);
-			int _alt1706 = getInterpreter().adaptivePredict(_input,82,_ctx);
-			while ( _alt1706!=2 && _alt1706!=-1 ) {
-				if ( _alt1706==1 ) {
+			int _alt1682 = getInterpreter().adaptivePredict(_input,82,_ctx);
+			while ( _alt1682!=2 && _alt1682!=-1 ) {
+				if ( _alt1682==1 ) {
 					{
 					{
 					setState(1097); exprCaseClause();
@@ -5622,7 +5611,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(1103);
 				_errHandler.sync(this);
-				_alt1706 = getInterpreter().adaptivePredict(_input,82,_ctx);
+				_alt1682 = getInterpreter().adaptivePredict(_input,82,_ctx);
 			}
 			setState(1104); match(RightBrace);
 			}
@@ -5682,9 +5671,9 @@ public class GoParserBase extends Parser<Token> {
 					setState(1110); statement();
 					setState(1118);
 					_errHandler.sync(this);
-					int _alt1728 = getInterpreter().adaptivePredict(_input,83,_ctx);
-					while ( _alt1728!=2 && _alt1728!=-1 ) {
-						if ( _alt1728==1 ) {
+					int _alt1704 = getInterpreter().adaptivePredict(_input,83,_ctx);
+					while ( _alt1704!=2 && _alt1704!=-1 ) {
+						if ( _alt1704==1 ) {
 							{
 							{
 							setState(1112); match(Semi);
@@ -5694,7 +5683,7 @@ public class GoParserBase extends Parser<Token> {
 						}
 						setState(1120);
 						_errHandler.sync(this);
-						_alt1728 = getInterpreter().adaptivePredict(_input,83,_ctx);
+						_alt1704 = getInterpreter().adaptivePredict(_input,83,_ctx);
 					}
 					setState(1123);
 					//_errHandler.sync(this);
@@ -5826,9 +5815,9 @@ public class GoParserBase extends Parser<Token> {
 			setState(1145); match(LeftBrace);
 			setState(1151);
 			_errHandler.sync(this);
-			int _alt1769 = getInterpreter().adaptivePredict(_input,88,_ctx);
-			while ( _alt1769!=2 && _alt1769!=-1 ) {
-				if ( _alt1769==1 ) {
+			int _alt1745 = getInterpreter().adaptivePredict(_input,88,_ctx);
+			while ( _alt1745!=2 && _alt1745!=-1 ) {
+				if ( _alt1745==1 ) {
 					{
 					{
 					setState(1147); typeCaseClause();
@@ -5837,7 +5826,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(1153);
 				_errHandler.sync(this);
-				_alt1769 = getInterpreter().adaptivePredict(_input,88,_ctx);
+				_alt1745 = getInterpreter().adaptivePredict(_input,88,_ctx);
 			}
 			setState(1154); match(RightBrace);
 			}
@@ -5956,9 +5945,9 @@ public class GoParserBase extends Parser<Token> {
 					setState(1176); statement();
 					setState(1184);
 					_errHandler.sync(this);
-					int _alt1820 = getInterpreter().adaptivePredict(_input,90,_ctx);
-					while ( _alt1820!=2 && _alt1820!=-1 ) {
-						if ( _alt1820==1 ) {
+					int _alt1796 = getInterpreter().adaptivePredict(_input,90,_ctx);
+					while ( _alt1796!=2 && _alt1796!=-1 ) {
+						if ( _alt1796==1 ) {
 							{
 							{
 							setState(1178); match(Semi);
@@ -5968,7 +5957,7 @@ public class GoParserBase extends Parser<Token> {
 						}
 						setState(1186);
 						_errHandler.sync(this);
-						_alt1820 = getInterpreter().adaptivePredict(_input,90,_ctx);
+						_alt1796 = getInterpreter().adaptivePredict(_input,90,_ctx);
 					}
 					setState(1189);
 					//_errHandler.sync(this);
@@ -6085,9 +6074,9 @@ public class GoParserBase extends Parser<Token> {
 			setState(1201); type();
 			setState(1209);
 			_errHandler.sync(this);
-			int _alt1854 = getInterpreter().adaptivePredict(_input,94,_ctx);
-			while ( _alt1854!=2 && _alt1854!=-1 ) {
-				if ( _alt1854==1 ) {
+			int _alt1830 = getInterpreter().adaptivePredict(_input,94,_ctx);
+			while ( _alt1830!=2 && _alt1830!=-1 ) {
+				if ( _alt1830==1 ) {
 					{
 					{
 					setState(1203); match(Comma);
@@ -6097,7 +6086,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(1211);
 				_errHandler.sync(this);
-				_alt1854 = getInterpreter().adaptivePredict(_input,94,_ctx);
+				_alt1830 = getInterpreter().adaptivePredict(_input,94,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -6539,9 +6528,9 @@ public class GoParserBase extends Parser<Token> {
 			setState(1270); match(LeftBrace);
 			setState(1276);
 			_errHandler.sync(this);
-			int _alt1980 = getInterpreter().adaptivePredict(_input,101,_ctx);
-			while ( _alt1980!=2 && _alt1980!=-1 ) {
-				if ( _alt1980==1 ) {
+			int _alt1956 = getInterpreter().adaptivePredict(_input,101,_ctx);
+			while ( _alt1956!=2 && _alt1956!=-1 ) {
+				if ( _alt1956==1 ) {
 					{
 					{
 					setState(1272); commClause();
@@ -6550,7 +6539,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(1278);
 				_errHandler.sync(this);
-				_alt1980 = getInterpreter().adaptivePredict(_input,101,_ctx);
+				_alt1956 = getInterpreter().adaptivePredict(_input,101,_ctx);
 			}
 			setState(1279); match(RightBrace);
 			}
@@ -6610,9 +6599,9 @@ public class GoParserBase extends Parser<Token> {
 					setState(1285); statement();
 					setState(1293);
 					_errHandler.sync(this);
-					int _alt2002 = getInterpreter().adaptivePredict(_input,102,_ctx);
-					while ( _alt2002!=2 && _alt2002!=-1 ) {
-						if ( _alt2002==1 ) {
+					int _alt1978 = getInterpreter().adaptivePredict(_input,102,_ctx);
+					while ( _alt1978!=2 && _alt1978!=-1 ) {
+						if ( _alt1978==1 ) {
 							{
 							{
 							setState(1287); match(Semi);
@@ -6622,7 +6611,7 @@ public class GoParserBase extends Parser<Token> {
 						}
 						setState(1295);
 						_errHandler.sync(this);
-						_alt2002 = getInterpreter().adaptivePredict(_input,102,_ctx);
+						_alt1978 = getInterpreter().adaptivePredict(_input,102,_ctx);
 					}
 					setState(1298);
 					//_errHandler.sync(this);
@@ -7305,9 +7294,9 @@ public class GoParserBase extends Parser<Token> {
 			}
 			setState(1400);
 			_errHandler.sync(this);
-			int _alt2191 = getInterpreter().adaptivePredict(_input,118,_ctx);
-			while ( _alt2191!=2 && _alt2191!=-1 ) {
-				if ( _alt2191==1 ) {
+			int _alt2167 = getInterpreter().adaptivePredict(_input,118,_ctx);
+			while ( _alt2167!=2 && _alt2167!=-1 ) {
+				if ( _alt2167==1 ) {
 					{
 					{
 					setState(1394); importDecl();
@@ -7317,13 +7306,13 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(1402);
 				_errHandler.sync(this);
-				_alt2191 = getInterpreter().adaptivePredict(_input,118,_ctx);
+				_alt2167 = getInterpreter().adaptivePredict(_input,118,_ctx);
 			}
 			setState(1409);
 			_errHandler.sync(this);
-			int _alt2198 = getInterpreter().adaptivePredict(_input,119,_ctx);
-			while ( _alt2198!=2 && _alt2198!=-1 ) {
-				if ( _alt2198==1 ) {
+			int _alt2174 = getInterpreter().adaptivePredict(_input,119,_ctx);
+			while ( _alt2174!=2 && _alt2174!=-1 ) {
+				if ( _alt2174==1 ) {
 					{
 					{
 					setState(1403); topLevelDecl();
@@ -7333,7 +7322,7 @@ public class GoParserBase extends Parser<Token> {
 				}
 				setState(1411);
 				_errHandler.sync(this);
-				_alt2198 = getInterpreter().adaptivePredict(_input,119,_ctx);
+				_alt2174 = getInterpreter().adaptivePredict(_input,119,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -7485,9 +7474,9 @@ public class GoParserBase extends Parser<Token> {
 							setState(1426); importSpec();
 							setState(1434);
 							_errHandler.sync(this);
-							int _alt2243 = getInterpreter().adaptivePredict(_input,120,_ctx);
-							while ( _alt2243!=2 && _alt2243!=-1 ) {
-								if ( _alt2243==1 ) {
+							int _alt2219 = getInterpreter().adaptivePredict(_input,120,_ctx);
+							while ( _alt2219!=2 && _alt2219!=-1 ) {
+								if ( _alt2219==1 ) {
 									{
 									{
 									setState(1428); match(Semi);
@@ -7497,7 +7486,7 @@ public class GoParserBase extends Parser<Token> {
 								}
 								setState(1436);
 								_errHandler.sync(this);
-								_alt2243 = getInterpreter().adaptivePredict(_input,120,_ctx);
+								_alt2219 = getInterpreter().adaptivePredict(_input,120,_ctx);
 							}
 							setState(1439);
 							//_errHandler.sync(this);

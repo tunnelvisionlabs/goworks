@@ -797,11 +797,11 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterReceiver(ReceiverContext ctx) {
-        if (ctx.name != null) {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.VAR_TYPE, VarKind.RECEIVER);
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.EXPLICIT_TYPE, ctx.baseTypeName());
-            visibleLocals.peek().put(ctx.name.getText(), ctx.name);
+        if (ctx.IDENTIFIER() != null) {
+            tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+            tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.VAR_TYPE, VarKind.RECEIVER);
+            tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.EXPLICIT_TYPE, ctx.baseTypeName());
+            visibleLocals.peek().put(ctx.IDENTIFIER().getSymbol().getText(), ctx.IDENTIFIER().getSymbol());
         }
 
         if (ctx.ptr != null && ctx.baseTypeName() != null) {
@@ -1085,10 +1085,10 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterConstSpec(ConstSpecContext ctx) {
-        if (ctx.idList != null) {
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.CONST_DECL);
+        if (ctx.identifierList() != null) {
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.NODE_TYPE, NodeType.CONST_DECL);
             boolean global = ParseTrees.isInContexts(ctx, false, GoParser.RULE_constSpec, GoParser.RULE_constDecl, GoParser.RULE_declaration, GoParser.RULE_topLevelDecl);
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.GLOBAL, global);
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.GLOBAL, global);
         }
     }
 
@@ -1125,22 +1125,22 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterShortVarDecl(ShortVarDeclContext ctx) {
-        if (ctx.idList != null) {
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
-            if (ctx.exprList != null) {
-                int varCount = ctx.idList.IDENTIFIER().size();
-                int exprCount = ctx.exprList.expression().size();
+        if (ctx.identifierList() != null) {
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VAR_TYPE, VarKind.LOCAL);
+            if (ctx.expressionList() != null) {
+                int varCount = ctx.identifierList().IDENTIFIER().size();
+                int exprCount = ctx.expressionList().expression().size();
                 if (varCount > 1 && exprCount == 1) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(0));
-                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList().expression(0));
+                        tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 } else if (varCount == exprCount) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(i));
+                        tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList().expression(i));
                         if (varCount > 1) {
-                            tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
+                            tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
                         }
                     }
                 }
@@ -1530,28 +1530,28 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterVarSpec(VarSpecContext ctx) {
-        if (ctx.idList != null) {
-            treeDecorator.putProperty(ctx.idList, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+        if (ctx.identifierList() != null) {
+            treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             if (ParseTrees.isInContexts(ctx, false, GoParser.RULE_varSpec, GoParser.RULE_varDecl, GoParser.RULE_declaration, GoParser.RULE_topLevelDecl)) {
-                treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.GLOBAL);
+                treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VAR_TYPE, VarKind.GLOBAL);
             } else {
-                treeDecorator.putProperty(ctx.idList, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
+                treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VAR_TYPE, VarKind.LOCAL);
             }
             
-            if (ctx.varType != null) {
-                treeDecorator.putProperty(ctx.idList, GoAnnotations.EXPLICIT_TYPE, ctx.varType);
-            } else if (ctx.exprList != null) {
-                int varCount = ctx.idList.IDENTIFIER().size();
-                int exprCount = ctx.exprList.expression().size();
+            if (ctx.type() != null) {
+                treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.EXPLICIT_TYPE, ctx.type());
+            } else if (ctx.expressionList(0) != null) {
+                int varCount = ctx.identifierList().IDENTIFIER().size();
+                int exprCount = ctx.expressionList(0).expression().size();
                 if (varCount > 1 && exprCount == 1) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(0));
-                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList(0).expression(0));
+                        tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 } else if (varCount == exprCount) {
                     for (int i = 0; i < varCount; i++) {
-                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.exprList.expression(i));
-                        tokenDecorator.putProperty(ctx.idList.IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
+                        tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList(0).expression(i));
+                        tokenDecorator.putProperty(ctx.identifierList().IDENTIFIER(i).getSymbol(), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 }
             }
@@ -1912,9 +1912,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
 
     @Override
     public void enterFunctionDecl(FunctionDeclContext ctx) {
-        if (ctx.name != null) {
-            tokenDecorator.putProperty(ctx.name, GoAnnotations.NODE_TYPE, NodeType.FUNC_DECL);
-            visibleFunctions.peek().put(ctx.name.getText(), ctx.name);
+        if (ctx.IDENTIFIER() != null) {
+            tokenDecorator.putProperty(ctx.IDENTIFIER().getSymbol(), GoAnnotations.NODE_TYPE, NodeType.FUNC_DECL);
+            visibleFunctions.peek().put(ctx.IDENTIFIER().getSymbol().getText(), ctx.IDENTIFIER().getSymbol());
         }
 
         pushVarScope();
