@@ -219,6 +219,7 @@ public class GoCompletionProvider extends AbstractCompletionProvider {
             return allowInStrings;
 
         case GoLexerBase.WS:
+        case GoLexerBase.NEWLINE:
             return true;
 
         default:
