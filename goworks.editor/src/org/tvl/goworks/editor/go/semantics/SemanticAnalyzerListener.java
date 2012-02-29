@@ -2072,7 +2072,9 @@ public class SemanticAnalyzerListener implements GoParserBaseListener {
             }
         }
 
-        treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new BuiltinCallResultReference(ctx.IDENTIFIER().getSymbol(), typeArgument));
+        if (ctx.IDENTIFIER() != null) {
+            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new BuiltinCallResultReference(ctx.IDENTIFIER().getSymbol(), typeArgument));
+        }
     }
 
     @Override
