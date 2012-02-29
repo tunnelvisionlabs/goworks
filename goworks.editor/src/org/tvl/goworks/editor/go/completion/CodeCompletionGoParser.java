@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.completion;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 import org.tvl.goworks.editor.go.parser.GoParser;
 
@@ -27,6 +28,11 @@ public class CodeCompletionGoParser extends GoParser implements CodeCompletionPa
     @Override
     public CompletionParserATNSimulator getInterpreter() {
         return (CompletionParserATNSimulator)super.getInterpreter();
+    }
+
+    @Override
+    protected boolean isPackageName(Token token) {
+        return token instanceof CaretToken || super.isPackageName(token);
     }
 
 }
