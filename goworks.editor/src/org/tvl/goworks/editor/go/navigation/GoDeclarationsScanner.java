@@ -26,6 +26,7 @@ import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
+import org.tvl.goworks.editor.go.parser.GoParser;
 import org.tvl.goworks.editor.go.parser.GoParserBase.BlockContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.FieldDeclContext;
@@ -114,6 +115,8 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterConstSpec(ConstSpecContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             for (TerminalNode<Token> identifier : identifiers) {
@@ -129,6 +132,8 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterVarSpec(VarSpecContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             // no locals in navigator
             if (blockLevel > 0) {
                 return;
@@ -149,6 +154,8 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterShortVarDecl(ShortVarDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             // no locals in navigator
             if (blockLevel > 0) {
                 return;
@@ -169,6 +176,8 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterFieldDecl(FieldDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             IdentifierListContext idListContext = ctx.identifierList();
             if (idListContext != null) {
                 List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
@@ -186,6 +195,8 @@ public class GoDeclarationsScanner {
 
         @Override
         public void enterStructType(StructTypeContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
 
@@ -199,11 +210,15 @@ public class GoDeclarationsScanner {
 
         @Override
         public void exitStructType(StructTypeContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             descriptionStack.pop();
         }
 
         @Override
         public void enterFunctionDecl(FunctionDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = String.format("%s", ctx.IDENTIFIER().getSymbol().getText());
 
@@ -217,11 +232,15 @@ public class GoDeclarationsScanner {
 
         @Override
         public void exitFunctionDecl(FunctionDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             descriptionStack.pop();
         }
 
         @Override
         public void enterMethodDecl(MethodDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String name = ctx.methodName() != null && ctx.methodName().IDENTIFIER() != null ? ctx.methodName().IDENTIFIER().getSymbol().getText() : "?";
             String signature = String.format("%s", name);
@@ -236,36 +255,50 @@ public class GoDeclarationsScanner {
 
         @Override
         public void exitMethodDecl(MethodDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             descriptionStack.pop();
         }
 
         @Override
         public void enterTypeSpec(TypeSpecContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             typeNameStack.push(ctx.IDENTIFIER().getSymbol().getText());
         }
 
         @Override
         public void exitTypeSpec(TypeSpecContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             typeNameStack.pop();
         }
 
         @Override
         public void enterResult(ResultContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             resultLevel++;
         }
 
         @Override
         public void exitResult(ResultContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             resultLevel--;
         }
 
         @Override
         public void enterBlock(BlockContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             blockLevel++;
         }
 
         @Override
         public void exitBlock(BlockContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             blockLevel--;
         }
 

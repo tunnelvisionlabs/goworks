@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
+import org.tvl.goworks.editor.go.parser.GoParser;
 import org.tvl.goworks.editor.go.parser.GoParserBase.ImportDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.TopLevelDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
@@ -70,6 +71,8 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
 
         @Override
         public void enterTopLevelDecl(TopLevelDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
                 folds.add(foldInfo);
@@ -78,6 +81,8 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
 
         @Override
         public void enterImportDecl(ImportDeclContext ctx) {
+            assert GoParser.getRuleVersion(ctx) == 0;
+
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
                 folds.add(foldInfo);

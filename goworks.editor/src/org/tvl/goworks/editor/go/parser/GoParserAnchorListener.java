@@ -75,11 +75,15 @@ public class GoParserAnchorListener extends GoParserBaseBaseListener {
 
     @Override
     public void enterTopLevelDecl(TopLevelDeclContext ctx) {
+        assert GoParser.getRuleVersion(ctx) == 0;
+
         enterAnchor(ctx);
     }
 
     @Override
     public void exitTopLevelDecl(TopLevelDeclContext ctx) {
+        assert GoParser.getRuleVersion(ctx) == 0;
+
         exitAnchor(ctx, ctx.ruleIndex);
     }
 
