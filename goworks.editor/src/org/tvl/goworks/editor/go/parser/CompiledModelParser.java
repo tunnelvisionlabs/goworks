@@ -87,20 +87,21 @@ public class CompiledModelParser {
                 TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
                 CommonTokenStream tokenStream = new CommonTokenStream(tokenSource);
                 GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);
+                boolean fullContext = false;
                 try {
                     SourceFileContext sourceFileContext;
                     try {
                         parser.setBuildParseTree(true);
                         parser.setErrorHandler(new BailErrorStrategy<Token>());
-                        parser.getInterpreter().disable_global_context = true;
                         sourceFileContext = parser.sourceFile();
                     } catch (RuntimeException ex) {
+                        GoParserCache.DEFAULT.putParser(parser);
+                        fullContext = true;
                         if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
                             // retry with default error handler
                             tokenStream.reset();
-                            parser.setTokenStream(tokenStream);
-                            parser.setErrorHandler(new DefaultErrorStrategy<Token>());
-                            parser.getInterpreter().disable_global_context = false;
+                            parser = GoFullContextParserCache.DEFAULT.getParser(tokenStream);
+                            parser.setBuildParseTree(true);
                             sourceFileContext = parser.sourceFile();
                         } else {
                             throw ex;
@@ -123,7 +124,11 @@ public class CompiledModelParser {
                     lastException = null;
                     return null;
                 } finally {
-                    GoParserCache.DEFAULT.putParser(parser);
+                    if (!fullContext) {
+                        GoParserCache.DEFAULT.putParser(parser);
+                    } else {
+                        GoFullContextParserCache.DEFAULT.putParser(parser);
+                    }
                 }
             } catch (Exception ex) {
                 lastSnapshot = snapshot;

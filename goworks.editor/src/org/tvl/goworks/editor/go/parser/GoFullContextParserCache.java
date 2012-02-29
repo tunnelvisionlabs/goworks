@@ -28,8 +28,9 @@ import org.antlr.works.editor.antlr4.completion.CaretToken;
  *
  * @author Sam Harwell
  */
-public class GoParserCache extends AbstractParserCache<Token, GoParser> {
-    public static final GoParserCache DEFAULT = new GoParserCache();
+public class GoFullContextParserCache extends AbstractParserCache<Token, GoParser> {
+
+    public static final GoFullContextParserCache DEFAULT = new GoFullContextParserCache();
 
     @Override
     protected GoParser createParser(TokenStream<? extends Token> input) {
@@ -42,9 +43,9 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
         GoParser result = super.getParser(input);
         result.setBuildParseTree(false);
         result.setErrorHandler(new DefaultErrorStrategy<Token>());
-        result.getInterpreter().disable_global_context = true;
-        result.getInterpreter().always_try_local_context = true;
-        result.getInterpreter().force_global_context = false;
+        result.getInterpreter().disable_global_context = false;
+        result.getInterpreter().always_try_local_context = false;
+        result.getInterpreter().force_global_context = true;
         return result;
     }
 
@@ -72,7 +73,7 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
 
         @Override
         public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
-            assert disable_global_context : "Should use GoFullContextParserCache for full-context parsing.";
+            assert !disable_global_context && force_global_context;
 
             if (decision == QID_DECISION && QID_DECISION >= 0) {
                 if (input.LA(1) == GoParser.IDENTIFIER) {
