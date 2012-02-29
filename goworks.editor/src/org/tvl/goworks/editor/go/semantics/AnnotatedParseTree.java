@@ -15,11 +15,12 @@ import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.Tree;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
-import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
 
 /**
  *
@@ -71,7 +72,7 @@ public class AnnotatedParseTree {
     public void compactAnnotations() {
         final Map<Tree, Tree> map = new IdentityHashMap<Tree, Tree>();
 
-        GoParserBaseBaseListener listener = new GoParserBaseBaseListener() {
+        ParseTreeListener<Token> listener = new ParseTreeListener<Token>() {
 
             @Override
             public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
@@ -81,6 +82,15 @@ public class AnnotatedParseTree {
             @Override
             public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
                 map.put(node, node);
+            }
+
+            @Override
+            public void visitErrorNode(ErrorNode<? extends Token> node) {
+                map.put(node, node);
+            }
+
+            @Override
+            public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
             }
 
         };
