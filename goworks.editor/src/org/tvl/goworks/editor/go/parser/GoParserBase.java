@@ -219,6 +219,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeContext type() throws RecognitionException {
 		TypeContext _localctx = new TypeContext(_ctx, 0);
 		enterRule(_localctx, RULE_type);
@@ -283,6 +284,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeNameContext typeName() throws RecognitionException {
 		TypeNameContext _localctx = new TypeNameContext(_ctx, 2);
 		enterRule(_localctx, RULE_typeName);
@@ -346,6 +348,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeLiteralContext typeLiteral() throws RecognitionException {
 		TypeLiteralContext _localctx = new TypeLiteralContext(_ctx, 4);
 		enterRule(_localctx, RULE_typeLiteral);
@@ -446,6 +449,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ArrayTypeContext arrayType() throws RecognitionException {
 		ArrayTypeContext _localctx = new ArrayTypeContext(_ctx, 6);
 		enterRule(_localctx, RULE_arrayType);
@@ -491,6 +495,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ArrayLengthContext arrayLength() throws RecognitionException {
 		ArrayLengthContext _localctx = new ArrayLengthContext(_ctx, 8);
 		enterRule(_localctx, RULE_arrayLength);
@@ -533,6 +538,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ElementTypeContext elementType() throws RecognitionException {
 		ElementTypeContext _localctx = new ElementTypeContext(_ctx, 10);
 		enterRule(_localctx, RULE_elementType);
@@ -575,6 +581,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SliceTypeContext sliceType() throws RecognitionException {
 		SliceTypeContext _localctx = new SliceTypeContext(_ctx, 12);
 		enterRule(_localctx, RULE_sliceType);
@@ -622,6 +629,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final StructTypeContext structType() throws RecognitionException {
 		StructTypeContext _localctx = new StructTypeContext(_ctx, 14);
 		enterRule(_localctx, RULE_structType);
@@ -701,6 +709,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FieldDeclContext fieldDecl() throws RecognitionException {
 		FieldDeclContext _localctx = new FieldDeclContext(_ctx, 16);
 		enterRule(_localctx, RULE_fieldDecl);
@@ -768,6 +777,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final AnonymousFieldContext anonymousField() throws RecognitionException {
 		AnonymousFieldContext _localctx = new AnonymousFieldContext(_ctx, 18);
 		enterRule(_localctx, RULE_anonymousField);
@@ -817,6 +827,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TagContext tag() throws RecognitionException {
 		TagContext _localctx = new TagContext(_ctx, 20);
 		enterRule(_localctx, RULE_tag);
@@ -860,6 +871,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final PointerTypeContext pointerType() throws RecognitionException {
 		PointerTypeContext _localctx = new PointerTypeContext(_ctx, 22);
 		enterRule(_localctx, RULE_pointerType);
@@ -903,6 +915,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BaseTypeContext baseType() throws RecognitionException {
 		BaseTypeContext _localctx = new BaseTypeContext(_ctx, 24);
 		enterRule(_localctx, RULE_baseType);
@@ -945,6 +958,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FunctionTypeContext functionType() throws RecognitionException {
 		FunctionTypeContext _localctx = new FunctionTypeContext(_ctx, 26);
 		enterRule(_localctx, RULE_functionType);
@@ -991,6 +1005,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SignatureContext signature() throws RecognitionException {
 		SignatureContext _localctx = new SignatureContext(_ctx, 28);
 		enterRule(_localctx, RULE_signature);
@@ -1045,6 +1060,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ResultContext result() throws RecognitionException {
 		ResultContext _localctx = new ResultContext(_ctx, 30);
 		enterRule(_localctx, RULE_result);
@@ -1100,6 +1116,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ParametersContext parameters() throws RecognitionException {
 		ParametersContext _localctx = new ParametersContext(_ctx, 32);
 		enterRule(_localctx, RULE_parameters);
@@ -1164,6 +1181,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ParameterListContext parameterList() throws RecognitionException {
 		ParameterListContext _localctx = new ParameterListContext(_ctx, 34);
 		enterRule(_localctx, RULE_parameterList);
@@ -1227,6 +1245,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ParameterDeclContext parameterDecl() throws RecognitionException {
 		ParameterDeclContext _localctx = new ParameterDeclContext(_ctx, 36);
 		enterRule(_localctx, RULE_parameterDecl);
@@ -1290,6 +1309,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final InterfaceTypeContext interfaceType() throws RecognitionException {
 		InterfaceTypeContext _localctx = new InterfaceTypeContext(_ctx, 38);
 		enterRule(_localctx, RULE_interfaceType);
@@ -1375,6 +1395,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MethodSpecContext methodSpec() throws RecognitionException {
 		MethodSpecContext _localctx = new MethodSpecContext(_ctx, 40);
 		enterRule(_localctx, RULE_methodSpec);
@@ -1429,6 +1450,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MethodNameContext methodName() throws RecognitionException {
 		MethodNameContext _localctx = new MethodNameContext(_ctx, 42);
 		enterRule(_localctx, RULE_methodName);
@@ -1471,6 +1493,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final InterfaceTypeNameContext interfaceTypeName() throws RecognitionException {
 		InterfaceTypeNameContext _localctx = new InterfaceTypeNameContext(_ctx, 44);
 		enterRule(_localctx, RULE_interfaceTypeName);
@@ -1516,6 +1539,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MapTypeContext mapType() throws RecognitionException {
 		MapTypeContext _localctx = new MapTypeContext(_ctx, 46);
 		enterRule(_localctx, RULE_mapType);
@@ -1562,6 +1586,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final KeyTypeContext keyType() throws RecognitionException {
 		KeyTypeContext _localctx = new KeyTypeContext(_ctx, 48);
 		enterRule(_localctx, RULE_keyType);
@@ -1606,6 +1631,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ChannelTypeContext channelType() throws RecognitionException {
 		ChannelTypeContext _localctx = new ChannelTypeContext(_ctx, 50);
 		enterRule(_localctx, RULE_channelType);
@@ -1676,6 +1702,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BlockContext block() throws RecognitionException {
 		BlockContext _localctx = new BlockContext(_ctx, 52);
 		enterRule(_localctx, RULE_block);
@@ -1760,6 +1787,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DeclarationContext declaration() throws RecognitionException {
 		DeclarationContext _localctx = new DeclarationContext(_ctx, 54);
 		enterRule(_localctx, RULE_declaration);
@@ -1828,6 +1856,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TopLevelDeclContext topLevelDecl() throws RecognitionException {
 		TopLevelDeclContext _localctx = new TopLevelDeclContext(_ctx, 56);
 		enterRule(_localctx, RULE_topLevelDecl);
@@ -1893,6 +1922,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ConstDeclContext constDecl() throws RecognitionException {
 		ConstDeclContext _localctx = new ConstDeclContext(_ctx, 58);
 		enterRule(_localctx, RULE_constDecl);
@@ -1992,6 +2022,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ConstSpecContext constSpec() throws RecognitionException {
 		ConstSpecContext _localctx = new ConstSpecContext(_ctx, 60);
 		enterRule(_localctx, RULE_constSpec);
@@ -2054,6 +2085,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final IdentifierListContext identifierList() throws RecognitionException {
 		IdentifierListContext _localctx = new IdentifierListContext(_ctx, 62);
 		enterRule(_localctx, RULE_identifierList);
@@ -2116,6 +2148,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExpressionListContext expressionList() throws RecognitionException {
 		ExpressionListContext _localctx = new ExpressionListContext(_ctx, 64);
 		enterRule(_localctx, RULE_expressionList);
@@ -2178,6 +2211,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeDeclContext typeDecl() throws RecognitionException {
 		TypeDeclContext _localctx = new TypeDeclContext(_ctx, 66);
 		enterRule(_localctx, RULE_typeDecl);
@@ -2272,6 +2306,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeSpecContext typeSpec() throws RecognitionException {
 		TypeSpecContext _localctx = new TypeSpecContext(_ctx, 68);
 		enterRule(_localctx, RULE_typeSpec);
@@ -2318,6 +2353,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final VarDeclContext varDecl() throws RecognitionException {
 		VarDeclContext _localctx = new VarDeclContext(_ctx, 70);
 		enterRule(_localctx, RULE_varDecl);
@@ -2420,6 +2456,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final VarSpecContext varSpec() throws RecognitionException {
 		VarSpecContext _localctx = new VarSpecContext(_ctx, 72);
 		enterRule(_localctx, RULE_varSpec);
@@ -2491,6 +2528,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ShortVarDeclContext shortVarDecl() throws RecognitionException {
 		ShortVarDeclContext _localctx = new ShortVarDeclContext(_ctx, 74);
 		enterRule(_localctx, RULE_shortVarDecl);
@@ -2539,6 +2577,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FunctionDeclContext functionDecl() throws RecognitionException {
 		FunctionDeclContext _localctx = new FunctionDeclContext(_ctx, 76);
 		enterRule(_localctx, RULE_functionDecl);
@@ -2592,6 +2631,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BodyContext body() throws RecognitionException {
 		BodyContext _localctx = new BodyContext(_ctx, 78);
 		enterRule(_localctx, RULE_body);
@@ -2643,6 +2683,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MethodDeclContext methodDecl() throws RecognitionException {
 		MethodDeclContext _localctx = new MethodDeclContext(_ctx, 80);
 		enterRule(_localctx, RULE_methodDecl);
@@ -2699,6 +2740,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ReceiverContext receiver() throws RecognitionException {
 		ReceiverContext _localctx = new ReceiverContext(_ctx, 82);
 		enterRule(_localctx, RULE_receiver);
@@ -2759,6 +2801,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BaseTypeNameContext baseTypeName() throws RecognitionException {
 		BaseTypeNameContext _localctx = new BaseTypeNameContext(_ctx, 84);
 		enterRule(_localctx, RULE_baseTypeName);
@@ -2810,6 +2853,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final OperandContext operand() throws RecognitionException {
 		OperandContext _localctx = new OperandContext(_ctx, 86);
 		enterRule(_localctx, RULE_operand);
@@ -2887,6 +2931,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final LiteralContext literal() throws RecognitionException {
 		LiteralContext _localctx = new LiteralContext(_ctx, 88);
 		enterRule(_localctx, RULE_literal);
@@ -2951,6 +2996,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BasicLiteralContext basicLiteral() throws RecognitionException {
 		BasicLiteralContext _localctx = new BasicLiteralContext(_ctx, 90);
 		enterRule(_localctx, RULE_basicLiteral);
@@ -3029,6 +3075,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final QualifiedIdentifierContext qualifiedIdentifier() throws RecognitionException {
 		QualifiedIdentifierContext _localctx = new QualifiedIdentifierContext(_ctx, 92);
 		enterRule(_localctx, RULE_qualifiedIdentifier);
@@ -3041,7 +3088,7 @@ public class GoParserBase extends Parser<Token> {
 				case 1:
 					{
 					setState(679);
-					if (!(isPackageName(_input.LT(1)))) throw new FailedPredicateException(this, "failed predicate: {isPackageName(_input.LT(1))}?");
+					if (!(isPackageName(_input.LT(1)))) throw new FailedPredicateException(this, "isPackageName(_input.LT(1))");
 					setState(681); packageName();
 					setState(683); _localctx.dot = match(Dot);
 					}
@@ -3087,6 +3134,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MethodExprContext methodExpr() throws RecognitionException {
 		MethodExprContext _localctx = new MethodExprContext(_ctx, 94);
 		enterRule(_localctx, RULE_methodExpr);
@@ -3132,6 +3180,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ReceiverTypeContext receiverType() throws RecognitionException {
 		ReceiverTypeContext _localctx = new ReceiverTypeContext(_ctx, 96);
 		enterRule(_localctx, RULE_receiverType);
@@ -3193,6 +3242,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final CompositeLiteralContext compositeLiteral() throws RecognitionException {
 		CompositeLiteralContext _localctx = new CompositeLiteralContext(_ctx, 98);
 		enterRule(_localctx, RULE_compositeLiteral);
@@ -3251,6 +3301,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final LiteralTypeContext literalType() throws RecognitionException {
 		LiteralTypeContext _localctx = new LiteralTypeContext(_ctx, 100);
 		enterRule(_localctx, RULE_literalType);
@@ -3337,6 +3388,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final LiteralValueContext literalValue() throws RecognitionException {
 		LiteralValueContext _localctx = new LiteralValueContext(_ctx, 102);
 		enterRule(_localctx, RULE_literalValue);
@@ -3401,6 +3453,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ElementListContext elementList() throws RecognitionException {
 		ElementListContext _localctx = new ElementListContext(_ctx, 104);
 		enterRule(_localctx, RULE_elementList);
@@ -3463,6 +3516,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ElementContext element() throws RecognitionException {
 		ElementContext _localctx = new ElementContext(_ctx, 106);
 		enterRule(_localctx, RULE_element);
@@ -3518,6 +3572,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final KeyContext key() throws RecognitionException {
 		KeyContext _localctx = new KeyContext(_ctx, 108);
 		enterRule(_localctx, RULE_key);
@@ -3571,6 +3626,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FieldNameContext fieldName() throws RecognitionException {
 		FieldNameContext _localctx = new FieldNameContext(_ctx, 110);
 		enterRule(_localctx, RULE_fieldName);
@@ -3613,6 +3669,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ElementIndexContext elementIndex() throws RecognitionException {
 		ElementIndexContext _localctx = new ElementIndexContext(_ctx, 112);
 		enterRule(_localctx, RULE_elementIndex);
@@ -3658,6 +3715,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ValueContext value() throws RecognitionException {
 		ValueContext _localctx = new ValueContext(_ctx, 114);
 		enterRule(_localctx, RULE_value);
@@ -3716,6 +3774,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FunctionLiteralContext functionLiteral() throws RecognitionException {
 		FunctionLiteralContext _localctx = new FunctionLiteralContext(_ctx, 116);
 		enterRule(_localctx, RULE_functionLiteral);
@@ -4058,6 +4117,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExpressionContext expression(int _p) throws RecognitionException {
 		ParserRuleContext<Token> _parentctx = _ctx;
 		ExpressionContext _localctx = new ExpressionContext(_ctx, 118, _p);
@@ -4172,7 +4232,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(808);
-							if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {5 >= $_p}?");
+							if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
 							setState(824);
 							//_errHandler.sync(this);
 							switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
@@ -4229,7 +4289,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(828);
-							if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {4 >= $_p}?");
+							if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
 							setState(838);
 							//_errHandler.sync(this);
 							switch ( getInterpreter().adaptivePredict(_input,62,_ctx) ) {
@@ -4268,7 +4328,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(842);
-							if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {3 >= $_p}?");
+							if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
 							setState(856);
 							//_errHandler.sync(this);
 							switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
@@ -4319,7 +4379,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(860);
-							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {2 >= $_p}?");
+							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
 							setState(862); match(And);
 							setState(864); expression(3);
 							}
@@ -4332,7 +4392,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(866);
-							if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {1 >= $_p}?");
+							if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "1 >= $_p");
 							setState(868); match(Or);
 							setState(870); expression(2);
 							}
@@ -4345,7 +4405,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(872);
-							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {11 >= $_p}?");
+							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
 							setState(874); ((SelectorExprContext)_localctx).dot = match(Dot);
 							setState(876); match(IDENTIFIER);
 							}
@@ -4358,7 +4418,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(878);
-							if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {10 >= $_p}?");
+							if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
 							setState(880); match(LeftBrack);
 							setState(882); expression(0);
 							setState(884); match(RightBrack);
@@ -4372,7 +4432,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(886);
-							if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {9 >= $_p}?");
+							if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
 							setState(888); match(LeftBrack);
 							setState(892);
 							//_errHandler.sync(this);
@@ -4404,7 +4464,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(902);
-							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {8 >= $_p}?");
+							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
 							setState(904); ((TypeAssertionExprContext)_localctx).dot = match(Dot);
 							setState(906); ((TypeAssertionExprContext)_localctx).lp = match(LeftParen);
 							setState(908); type();
@@ -4419,7 +4479,7 @@ public class GoParserBase extends Parser<Token> {
 							pushNewRecursionContext(_localctx, RULE_expression);
 							_localctx.start = _prevctx.start;
 							setState(912);
-							if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "failed predicate: {7 >= $_p}?");
+							if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "7 >= $_p");
 							setState(914); ((CallExprContext)_localctx).lp = match(LeftParen);
 							setState(922);
 							//_errHandler.sync(this);
@@ -4485,6 +4545,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ArgumentListContext argumentList() throws RecognitionException {
 		ArgumentListContext _localctx = new ArgumentListContext(_ctx, 120);
 		enterRule(_localctx, RULE_argumentList);
@@ -4539,6 +4600,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ConversionContext conversion() throws RecognitionException {
 		ConversionContext _localctx = new ConversionContext(_ctx, 122);
 		enterRule(_localctx, RULE_conversion);
@@ -4626,6 +4688,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final StatementContext statement() throws RecognitionException {
 		StatementContext _localctx = new StatementContext(_ctx, 124);
 		enterRule(_localctx, RULE_statement);
@@ -4787,6 +4850,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SimpleStmtContext simpleStmt() throws RecognitionException {
 		SimpleStmtContext _localctx = new SimpleStmtContext(_ctx, 126);
 		enterRule(_localctx, RULE_simpleStmt);
@@ -4867,6 +4931,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final EmptyStmtContext emptyStmt() throws RecognitionException {
 		EmptyStmtContext _localctx = new EmptyStmtContext(_ctx, 128);
 		enterRule(_localctx, RULE_emptyStmt);
@@ -4911,6 +4976,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final LabeledStmtContext labeledStmt() throws RecognitionException {
 		LabeledStmtContext _localctx = new LabeledStmtContext(_ctx, 130);
 		enterRule(_localctx, RULE_labeledStmt);
@@ -4953,6 +5019,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final LabelContext label() throws RecognitionException {
 		LabelContext _localctx = new LabelContext(_ctx, 132);
 		enterRule(_localctx, RULE_label);
@@ -4995,6 +5062,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExpressionStmtContext expressionStmt() throws RecognitionException {
 		ExpressionStmtContext _localctx = new ExpressionStmtContext(_ctx, 134);
 		enterRule(_localctx, RULE_expressionStmt);
@@ -5040,6 +5108,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SendStmtContext sendStmt() throws RecognitionException {
 		SendStmtContext _localctx = new SendStmtContext(_ctx, 136);
 		enterRule(_localctx, RULE_sendStmt);
@@ -5084,6 +5153,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ChannelContext channel() throws RecognitionException {
 		ChannelContext _localctx = new ChannelContext(_ctx, 138);
 		enterRule(_localctx, RULE_channel);
@@ -5127,6 +5197,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final IncDecStmtContext incDecStmt() throws RecognitionException {
 		IncDecStmtContext _localctx = new IncDecStmtContext(_ctx, 140);
 		enterRule(_localctx, RULE_incDecStmt);
@@ -5185,6 +5256,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final AssignmentContext assignment() throws RecognitionException {
 		AssignmentContext _localctx = new AssignmentContext(_ctx, 142);
 		enterRule(_localctx, RULE_assignment);
@@ -5232,6 +5304,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final AssignOpContext assignOp() throws RecognitionException {
 		AssignOpContext _localctx = new AssignOpContext(_ctx, 144);
 		enterRule(_localctx, RULE_assignOp);
@@ -5291,6 +5364,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final AddAssignOpContext addAssignOp() throws RecognitionException {
 		AddAssignOpContext _localctx = new AddAssignOpContext(_ctx, 146);
 		enterRule(_localctx, RULE_addAssignOp);
@@ -5357,6 +5431,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MulAssignOpContext mulAssignOp() throws RecognitionException {
 		MulAssignOpContext _localctx = new MulAssignOpContext(_ctx, 148);
 		enterRule(_localctx, RULE_mulAssignOp);
@@ -5459,6 +5534,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final IfStmtContext ifStmt() throws RecognitionException {
 		IfStmtContext _localctx = new IfStmtContext(_ctx, 150);
 		enterRule(_localctx, RULE_ifStmt);
@@ -5540,6 +5616,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SwitchStmtContext switchStmt() throws RecognitionException {
 		SwitchStmtContext _localctx = new SwitchStmtContext(_ctx, 152);
 		enterRule(_localctx, RULE_switchStmt);
@@ -5601,6 +5678,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExprSwitchStmtContext exprSwitchStmt() throws RecognitionException {
 		ExprSwitchStmtContext _localctx = new ExprSwitchStmtContext(_ctx, 154);
 		enterRule(_localctx, RULE_exprSwitchStmt);
@@ -5686,6 +5764,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExprCaseClauseContext exprCaseClause() throws RecognitionException {
 		ExprCaseClauseContext _localctx = new ExprCaseClauseContext(_ctx, 156);
 		enterRule(_localctx, RULE_exprCaseClause);
@@ -5764,6 +5843,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExprSwitchCaseContext exprSwitchCase() throws RecognitionException {
 		ExprSwitchCaseContext _localctx = new ExprSwitchCaseContext(_ctx, 158);
 		enterRule(_localctx, RULE_exprSwitchCase);
@@ -5826,6 +5906,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeSwitchStmtContext typeSwitchStmt() throws RecognitionException {
 		TypeSwitchStmtContext _localctx = new TypeSwitchStmtContext(_ctx, 160);
 		enterRule(_localctx, RULE_typeSwitchStmt);
@@ -5900,6 +5981,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeSwitchGuardContext typeSwitchGuard() throws RecognitionException {
 		TypeSwitchGuardContext _localctx = new TypeSwitchGuardContext(_ctx, 162);
 		enterRule(_localctx, RULE_typeSwitchGuard);
@@ -5962,6 +6044,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeCaseClauseContext typeCaseClause() throws RecognitionException {
 		TypeCaseClauseContext _localctx = new TypeCaseClauseContext(_ctx, 164);
 		enterRule(_localctx, RULE_typeCaseClause);
@@ -6040,6 +6123,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeSwitchCaseContext typeSwitchCase() throws RecognitionException {
 		TypeSwitchCaseContext _localctx = new TypeSwitchCaseContext(_ctx, 166);
 		enterRule(_localctx, RULE_typeSwitchCase);
@@ -6099,6 +6183,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TypeListContext typeList() throws RecognitionException {
 		TypeListContext _localctx = new TypeListContext(_ctx, 168);
 		enterRule(_localctx, RULE_typeList);
@@ -6167,6 +6252,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ForStmtContext forStmt() throws RecognitionException {
 		ForStmtContext _localctx = new ForStmtContext(_ctx, 170);
 		enterRule(_localctx, RULE_forStmt);
@@ -6231,6 +6317,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ConditionContext condition() throws RecognitionException {
 		ConditionContext _localctx = new ConditionContext(_ctx, 172);
 		enterRule(_localctx, RULE_condition);
@@ -6279,6 +6366,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ForClauseContext forClause() throws RecognitionException {
 		ForClauseContext _localctx = new ForClauseContext(_ctx, 174);
 		enterRule(_localctx, RULE_forClause);
@@ -6349,6 +6437,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final InitStmtContext initStmt() throws RecognitionException {
 		InitStmtContext _localctx = new InitStmtContext(_ctx, 176);
 		enterRule(_localctx, RULE_initStmt);
@@ -6391,6 +6480,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final PostStmtContext postStmt() throws RecognitionException {
 		PostStmtContext _localctx = new PostStmtContext(_ctx, 178);
 		enterRule(_localctx, RULE_postStmt);
@@ -6441,6 +6531,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final RangeClauseContext rangeClause() throws RecognitionException {
 		RangeClauseContext _localctx = new RangeClauseContext(_ctx, 180);
 		enterRule(_localctx, RULE_rangeClause);
@@ -6510,6 +6601,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final GoStmtContext goStmt() throws RecognitionException {
 		GoStmtContext _localctx = new GoStmtContext(_ctx, 182);
 		enterRule(_localctx, RULE_goStmt);
@@ -6553,6 +6645,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SelectStmtContext selectStmt() throws RecognitionException {
 		SelectStmtContext _localctx = new SelectStmtContext(_ctx, 184);
 		enterRule(_localctx, RULE_selectStmt);
@@ -6619,6 +6712,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final CommClauseContext commClause() throws RecognitionException {
 		CommClauseContext _localctx = new CommClauseContext(_ctx, 186);
 		enterRule(_localctx, RULE_commClause);
@@ -6700,6 +6794,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final CommCaseContext commCase() throws RecognitionException {
 		CommCaseContext _localctx = new CommCaseContext(_ctx, 188);
 		enterRule(_localctx, RULE_commCase);
@@ -6780,6 +6875,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final RecvStmtContext recvStmt() throws RecognitionException {
 		RecvStmtContext _localctx = new RecvStmtContext(_ctx, 190);
 		enterRule(_localctx, RULE_recvStmt);
@@ -6856,6 +6952,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final RecvExprContext recvExpr() throws RecognitionException {
 		RecvExprContext _localctx = new RecvExprContext(_ctx, 192);
 		enterRule(_localctx, RULE_recvExpr);
@@ -6898,6 +6995,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ReturnStmtContext returnStmt() throws RecognitionException {
 		ReturnStmtContext _localctx = new ReturnStmtContext(_ctx, 194);
 		enterRule(_localctx, RULE_returnStmt);
@@ -6949,6 +7047,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BreakStmtContext breakStmt() throws RecognitionException {
 		BreakStmtContext _localctx = new BreakStmtContext(_ctx, 196);
 		enterRule(_localctx, RULE_breakStmt);
@@ -7000,6 +7099,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ContinueStmtContext continueStmt() throws RecognitionException {
 		ContinueStmtContext _localctx = new ContinueStmtContext(_ctx, 198);
 		enterRule(_localctx, RULE_continueStmt);
@@ -7051,6 +7151,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final GotoStmtContext gotoStmt() throws RecognitionException {
 		GotoStmtContext _localctx = new GotoStmtContext(_ctx, 200);
 		enterRule(_localctx, RULE_gotoStmt);
@@ -7091,6 +7192,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FallthroughStmtContext fallthroughStmt() throws RecognitionException {
 		FallthroughStmtContext _localctx = new FallthroughStmtContext(_ctx, 202);
 		enterRule(_localctx, RULE_fallthroughStmt);
@@ -7133,6 +7235,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DeferStmtContext deferStmt() throws RecognitionException {
 		DeferStmtContext _localctx = new DeferStmtContext(_ctx, 204);
 		enterRule(_localctx, RULE_deferStmt);
@@ -7177,6 +7280,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BuiltinCallContext builtinCall() throws RecognitionException {
 		BuiltinCallContext _localctx = new BuiltinCallContext(_ctx, 206);
 		enterRule(_localctx, RULE_builtinCall);
@@ -7242,6 +7346,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BuiltinArgsContext builtinArgs() throws RecognitionException {
 		BuiltinArgsContext _localctx = new BuiltinArgsContext(_ctx, 208);
 		enterRule(_localctx, RULE_builtinArgs);
@@ -7313,6 +7418,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SourceFileContext sourceFile() throws RecognitionException {
 		SourceFileContext _localctx = new SourceFileContext(_ctx, 210);
 		enterRule(_localctx, RULE_sourceFile);
@@ -7398,6 +7504,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final PackageClauseContext packageClause() throws RecognitionException {
 		PackageClauseContext _localctx = new PackageClauseContext(_ctx, 212);
 		enterRule(_localctx, RULE_packageClause);
@@ -7440,6 +7547,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final PackageNameContext packageName() throws RecognitionException {
 		PackageNameContext _localctx = new PackageNameContext(_ctx, 214);
 		enterRule(_localctx, RULE_packageName);
@@ -7485,6 +7593,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ImportDeclContext importDecl() throws RecognitionException {
 		ImportDeclContext _localctx = new ImportDeclContext(_ctx, 216);
 		enterRule(_localctx, RULE_importDecl);
@@ -7584,6 +7693,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ImportSpecContext importSpec() throws RecognitionException {
 		ImportSpecContext _localctx = new ImportSpecContext(_ctx, 218);
 		enterRule(_localctx, RULE_importSpec);
@@ -7648,6 +7758,7 @@ public class GoParserBase extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ImportPathContext importPath() throws RecognitionException {
 		ImportPathContext _localctx = new ImportPathContext(_ctx, 220);
 		enterRule(_localctx, RULE_importPath);

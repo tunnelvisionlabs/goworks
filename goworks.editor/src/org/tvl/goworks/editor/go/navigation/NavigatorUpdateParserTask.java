@@ -62,6 +62,11 @@ public class NavigatorUpdateParserTask implements ParserTask {
         }
 
         synchronized (lock) {
+            GoDeclarationsPanel panel = GoDeclarationsPanel.getInstance();
+            if (panel == null) {
+                return;
+            }
+
             JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
             if (currentComponent == null) {
                 return;
@@ -88,7 +93,12 @@ public class NavigatorUpdateParserTask implements ParserTask {
             }
 
             String selectedRule = context != null ? context.getMemberName() : null;
-            GoDeclarationsPanelUI ui = GoDeclarationsPanel.findDeclarationsPanelUI();
+
+            GoDeclarationsPanelUI ui = panel != null ? panel.getComponent() : null;
+            if (ui == null) {
+                return;
+            }
+
             ui.refresh(root, selectedRule);
         }
     }

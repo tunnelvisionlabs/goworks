@@ -49,7 +49,8 @@ public class GoDeclarationsScanner {
     private static final Logger LOGGER = Logger.getLogger(GoDeclarationsScanner.class.getName());
 
     public Description scan(CompiledModel model) {
-        GoDeclarationsPanelUI ui = GoDeclarationsPanel.findDeclarationsPanelUI();
+        GoDeclarationsPanel panel = GoDeclarationsPanel.getInstance();
+        GoDeclarationsPanelUI ui = panel != null ? panel.getComponent() : null;
         if (ui == null) {
             return null;
         }
