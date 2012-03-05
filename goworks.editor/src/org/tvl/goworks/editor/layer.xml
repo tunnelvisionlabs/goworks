@@ -120,13 +120,6 @@
                         <attr name="position" intvalue="1200"/>
                     </file>
                 </folder>
-                <folder name="Factories">
-                    <file name="GoDataLoader.instance">
-                        <attr name="dataObjectClass" stringvalue="org.tvl.goworks.editor.go.GoDataObject"/>
-                        <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
-                        <attr name="mimeType" stringvalue="text/x-go"/>
-                    </file>
-                </folder>
             </folder>
         </folder>
     </folder>
@@ -135,14 +128,6 @@
             <folder name="text">
                 <file name="x-go" url="go/GoTemplate.go"/>
             </folder>
-        </folder>
-    </folder>
-    <folder name="Services">
-        <folder name="MIMEResolver">
-            <file name="GoResolver.xml" url="go/GoResolver.xml">
-                <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#Services/MIMEResolver/GoResolver.xml"/>
-                <attr name="position" intvalue="100"/>
-            </file>
         </folder>
     </folder>
     <folder name="Templates">
