@@ -39,6 +39,10 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
         return files.values();
     }
 
+    public void updateFile(FileModelImpl fileModel) {
+        files.put(fileModel.getName(), fileModel);
+    }
+
     @Override
     public Collection<AbstractCodeElementModel> getMembers() {
         List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
@@ -79,10 +83,6 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
         }
 
         return types;
-    }
-
-    public void updateFile(FileModelImpl fileModel) {
-        files.put(fileModel.getName(), fileModel);
     }
 
     @Override
