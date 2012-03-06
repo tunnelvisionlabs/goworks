@@ -114,6 +114,7 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
         constants.freeze();
         vars.freeze();
         functions.freeze();
+        super.freezeImpl();
     }
 
 }
