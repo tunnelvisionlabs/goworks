@@ -8,14 +8,13 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
-import org.tvl.goworks.editor.go.codemodel.VarKind;
 import java.util.Collection;
-import java.util.Collections;
 import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
+import org.tvl.goworks.editor.go.codemodel.VarKind;
 
 /**
  *

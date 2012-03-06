@@ -23,7 +23,6 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.netbeans.api.annotations.common.NonNull;

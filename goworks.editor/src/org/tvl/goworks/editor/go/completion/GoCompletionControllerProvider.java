@@ -9,7 +9,6 @@
 package org.tvl.goworks.editor.go.completion;
 
 import javax.swing.text.JTextComponent;
-import org.antlr.works.editor.antlr4.completion.BaseCompletionController;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionController;
 import org.netbeans.spi.editor.completion.CompletionControllerProvider;

@@ -15,7 +15,6 @@ import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
-import org.tvl.goworks.editor.go.codemodel.PackageModel;
 
 /**
  *

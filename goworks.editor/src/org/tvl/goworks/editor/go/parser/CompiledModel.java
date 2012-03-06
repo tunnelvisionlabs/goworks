@@ -8,7 +8,6 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
-import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.openide.util.Parameters;
 

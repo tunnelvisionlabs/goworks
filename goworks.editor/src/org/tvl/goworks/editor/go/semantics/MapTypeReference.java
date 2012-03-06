@@ -16,7 +16,6 @@ import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeMapModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
-import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 
 /**
  *
