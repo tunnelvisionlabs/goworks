@@ -122,25 +122,6 @@ public class GoParserBase extends Parser<Token> {
 
 	private final Set<String> packageNames = new HashSet<String>();
 	private boolean checkPackageNames = true;
-	private static int[] ruleVersions;
-
-	{
-	if (ruleVersions == null) {
-	    ruleVersions = new int[_ATN.ruleToStartState.length];
-	}
-	}
-
-	public static int getRuleVersion(int rule) {
-	    return ruleVersions[rule];
-	}
-
-	public static int getRuleVersion(ParserRuleContext<?> context) {
-	    return ruleVersions[context.ruleIndex];
-	}
-
-	private static void setRuleVersion(ParserRuleContext<?> context, int version) {
-	    ruleVersions[context.ruleIndex] = version;
-	}
 
 	public static String getPackageName(Token token) {
 	    if (token == null) {

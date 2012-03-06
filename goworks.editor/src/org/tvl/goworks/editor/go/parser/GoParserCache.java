@@ -25,6 +25,9 @@ import org.antlr.v4.runtime.misc.RuleDependencyChecker;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
+import org.tvl.goworks.editor.go.fold.DeclarationFoldScanner;
+import org.tvl.goworks.editor.go.navigation.GoDeclarationsScanner;
+import org.tvl.goworks.editor.go.semantics.SemanticAnalyzerListener;
 
 /**
  *
@@ -117,9 +120,14 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
     }
 
     private static void checkDependencies() {
+        RuleDependencyChecker.checkDependencies(CodeModelBuilderListener.class);
         RuleDependencyChecker.checkDependencies(CurrentDeclarationContextData.class);
         RuleDependencyChecker.checkDependencies(CurrentMemberContextParserTask.class);
+        RuleDependencyChecker.checkDependencies(DeclarationFoldScanner.class);
         RuleDependencyChecker.checkDependencies(GoCompletionQuery.class);
+        RuleDependencyChecker.checkDependencies(GoDeclarationsScanner.class);
+        RuleDependencyChecker.checkDependencies(GoParserAnchorListener.class);
+        RuleDependencyChecker.checkDependencies(SemanticAnalyzerListener.class);
         dependenciesChecked = true;
     }
 }

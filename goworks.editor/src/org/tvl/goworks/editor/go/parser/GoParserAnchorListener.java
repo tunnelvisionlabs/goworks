@@ -19,6 +19,7 @@ import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -74,24 +75,22 @@ public class GoParserAnchorListener extends GoParserBaseBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
     public void enterTopLevelDecl(TopLevelDeclContext ctx) {
-        assert GoParser.getRuleVersion(ctx) == 0;
-
-        enterAnchor(ctx);
+        handleEnterAnchor(ctx);
     }
 
     @Override
+    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
     public void exitTopLevelDecl(TopLevelDeclContext ctx) {
-        assert GoParser.getRuleVersion(ctx) == 0;
-
-        exitAnchor(ctx, ctx.ruleIndex);
+        handleExitAnchor(ctx, ctx.ruleIndex);
     }
 
-    private void enterAnchor(ParserRuleContext<Token> ctx) {
+    private void handleEnterAnchor(ParserRuleContext<Token> ctx) {
         anchorPositions.push(ctx.getStart().getStartIndex());
     }
 
-    private void exitAnchor(ParserRuleContext<Token> ctx, int anchorId) {
+    private void handleExitAnchor(ParserRuleContext<Token> ctx, int anchorId) {
         int start = anchorPositions.pop();
         int stop = ctx.getStop() != null ? ctx.getStop().getStopIndex() + 1 : snapshot.length();
         TrackingPositionRegion.Bias trackingMode = ctx.getStop() != null ? TrackingPositionRegion.Bias.Exclusive : TrackingPositionRegion.Bias.Forward;

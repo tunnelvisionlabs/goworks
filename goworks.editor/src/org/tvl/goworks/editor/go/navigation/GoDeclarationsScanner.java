@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
@@ -26,7 +28,7 @@ import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
-import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.BlockContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.FieldDeclContext;
@@ -115,9 +117,11 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_constSpec, version=0),
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+        })
         public void enterConstSpec(ConstSpecContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             for (TerminalNode<Token> identifier : identifiers) {
@@ -132,9 +136,11 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_varSpec, version=0),
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+        })
         public void enterVarSpec(VarSpecContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             // no locals in navigator
             if (blockLevel > 0) {
                 return;
@@ -154,9 +160,11 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_shortVarDecl, version=0),
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+        })
         public void enterShortVarDecl(ShortVarDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             // no locals in navigator
             if (blockLevel > 0) {
                 return;
@@ -176,9 +184,11 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_fieldDecl, version=0),
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+        })
         public void enterFieldDecl(FieldDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             IdentifierListContext idListContext = ctx.identifierList();
             if (idListContext != null) {
                 List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
@@ -195,9 +205,8 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_structType, version=0)
         public void enterStructType(StructTypeContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
 
@@ -210,16 +219,14 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_structType, version=0)
         public void exitStructType(StructTypeContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             descriptionStack.pop();
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0)
         public void enterFunctionDecl(FunctionDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = String.format("%s", ctx.IDENTIFIER().getSymbol().getText());
 
@@ -232,16 +239,17 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0)
         public void exitFunctionDecl(FunctionDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             descriptionStack.pop();
         }
 
         @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodDecl, version=0),
+            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodName, version=0),
+        })
         public void enterMethodDecl(MethodDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String name = ctx.methodName() != null && ctx.methodName().IDENTIFIER() != null ? ctx.methodName().IDENTIFIER().getSymbol().getText() : "?";
             String signature = String.format("%s", name);
@@ -255,51 +263,44 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodDecl, version=0)
         public void exitMethodDecl(MethodDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             descriptionStack.pop();
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSpec, version=0)
         public void enterTypeSpec(TypeSpecContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             typeNameStack.push(ctx.IDENTIFIER().getSymbol().getText());
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSpec, version=0)
         public void exitTypeSpec(TypeSpecContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             typeNameStack.pop();
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_result, version=0)
         public void enterResult(ResultContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             resultLevel++;
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_result, version=0)
         public void exitResult(ResultContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             resultLevel--;
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_block, version=0)
         public void enterBlock(BlockContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             blockLevel++;
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_block, version=0)
         public void exitBlock(BlockContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             blockLevel--;
         }
 

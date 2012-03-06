@@ -17,12 +17,13 @@ import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
-import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBase;
 import org.tvl.goworks.editor.go.parser.GoParserBase.ImportDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBase.TopLevelDeclContext;
 import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
@@ -70,9 +71,8 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
         public void enterTopLevelDecl(TopLevelDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
                 folds.add(foldInfo);
@@ -80,9 +80,8 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_importDecl, version=0)
         public void enterImportDecl(ImportDeclContext ctx) {
-            assert GoParser.getRuleVersion(ctx) == 0;
-
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
                 folds.add(foldInfo);
