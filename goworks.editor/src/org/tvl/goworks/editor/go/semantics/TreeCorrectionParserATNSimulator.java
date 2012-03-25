@@ -16,6 +16,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
@@ -95,7 +96,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     }
 
     @Override
-    public ATNState getReachableTarget(Transition trans, int ttype) {
+    public ATNState getReachableTarget(ATNConfig source, Transition trans, int ttype) {
         if (trans instanceof RuleTransition) {
             IntervalSet suppressed = getSuppressedSet(startIndex);
             if (suppressed.contains(((RuleTransition)trans).ruleIndex)) {
@@ -103,7 +104,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
             }
         }
 
-        return super.getReachableTarget(trans, ttype);
+        return super.getReachableTarget(source, trans, ttype);
     }
 
     private IntervalSet getSuppressedSet(int startIndex) {
