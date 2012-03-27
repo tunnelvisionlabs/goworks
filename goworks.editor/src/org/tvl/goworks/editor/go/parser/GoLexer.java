@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.Token;
  *
  * @author Sam Harwell
  */
-public class GoLexer extends GoLexerBase {
+public class GoLexer extends AbstractGoLexer {
     private boolean insertSemicolonAtEol;
     private Token deferredEol;
 

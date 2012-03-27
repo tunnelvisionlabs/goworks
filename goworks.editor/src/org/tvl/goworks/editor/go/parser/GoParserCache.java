@@ -27,7 +27,10 @@ import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
 import org.tvl.goworks.editor.go.fold.DeclarationFoldScanner;
 import org.tvl.goworks.editor.go.navigation.GoDeclarationsScanner;
+import org.tvl.goworks.editor.go.semantics.QualifiedIdentifierElementReference;
 import org.tvl.goworks.editor.go.semantics.SemanticAnalyzerListener;
+import org.tvl.goworks.editor.go.semantics.SemanticAnalyzerParseTreeWalker;
+import org.tvl.goworks.editor.go.semantics.SemanticCorrections;
 
 /**
  *
@@ -73,7 +76,7 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
 
         public GoParserATNSimulator(Parser<Token> parser, ATN atn) {
             super(parser, atn);
-            ATNState decisionState = atn.ruleToStartState[GoParserBase.RULE_qualifiedIdentifier].transition(0).target;
+            ATNState decisionState = atn.ruleToStartState[GoParser.RULE_qualifiedIdentifier].transition(0).target;
             if (decisionState instanceof DecisionState) {
                 QID_DECISION = ((DecisionState)decisionState).decision;
             } else {
@@ -89,7 +92,7 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
                 if (input.LA(1) == GoParser.IDENTIFIER) {
                     if (input.LA(2) == GoParser.Dot) {
                         if (input.LA(3) == GoParser.IDENTIFIER) {
-                            return parser.sempred(outerContext, GoParserBase.RULE_qualifiedIdentifier, 0) ? 1 : 2;
+                            return parser.sempred(outerContext, GoParser.RULE_qualifiedIdentifier, 0) ? 1 : 2;
                         } else if (input.LA(3) != CaretToken.CARET_TOKEN_TYPE) {
                             return 2;
                         }
@@ -128,6 +131,9 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
         RuleDependencyChecker.checkDependencies(GoDeclarationsScanner.class);
         RuleDependencyChecker.checkDependencies(GoParserAnchorListener.class);
         RuleDependencyChecker.checkDependencies(SemanticAnalyzerListener.class);
+        RuleDependencyChecker.checkDependencies(QualifiedIdentifierElementReference.class);
+        RuleDependencyChecker.checkDependencies(SemanticAnalyzerParseTreeWalker.class);
+        RuleDependencyChecker.checkDependencies(SemanticCorrections.class);
         dependenciesChecked = true;
     }
 }

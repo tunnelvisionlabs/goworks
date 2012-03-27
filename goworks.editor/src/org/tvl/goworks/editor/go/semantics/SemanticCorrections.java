@@ -12,13 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.annotations.common.NonNull;
-import org.tvl.goworks.editor.go.parser.GoParserBase;
-import org.tvl.goworks.editor.go.parser.GoParserBase.BuiltinCallContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ConversionOrCallExprContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.PackageNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionOrCallExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
+import org.tvl.goworks.editor.go.parser.GoParser;
 
 /**
  *
@@ -41,16 +42,19 @@ public class SemanticCorrections {
         this.correctionSimulator = correctionParser.getInterpreter();
     }
 
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0)
     public void notConversion(ConversionOrCallExprContext context) {
-        correctionSimulator.suppressRule(context.start.getTokenIndex(), GoParserBase.RULE_conversion);
+        correctionSimulator.suppressRule(context.start.getTokenIndex(), GoParser.RULE_conversion);
     }
 
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0)
     public void notBuiltin(BuiltinCallContext context) {
-        correctionSimulator.suppressRule(context.start.getTokenIndex(), GoParserBase.RULE_builtinCall);
+        correctionSimulator.suppressRule(context.start.getTokenIndex(), GoParser.RULE_builtinCall);
     }
 
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0)
     public void notPackageName(PackageNameContext context) {
-        correctionSimulator.suppressRule(context.start.getTokenIndex(), GoParserBase.RULE_packageName);
+        correctionSimulator.suppressRule(context.start.getTokenIndex(), GoParser.RULE_packageName);
     }
 
     public void apply() {

@@ -21,12 +21,12 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
-import org.tvl.goworks.editor.go.parser.GoParserBase;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ImportDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TopLevelDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
+import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
 
 /**
  *
@@ -61,7 +61,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         return fold;
     }
 
-    private static class FoldListener extends GoParserBaseBaseListener {
+    private static class FoldListener extends GoParserBaseListener {
         private final DocumentSnapshot snapshot;
         private final Collection<FoldInfo> folds;
 
@@ -71,7 +71,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0)
         public void enterTopLevelDecl(TopLevelDeclContext ctx) {
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {
@@ -80,7 +80,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_importDecl, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_importDecl, version=0)
         public void enterImportDecl(ImportDeclContext ctx) {
             FoldInfo foldInfo = createFold(ctx, "...", snapshot);
             if (foldInfo != null) {

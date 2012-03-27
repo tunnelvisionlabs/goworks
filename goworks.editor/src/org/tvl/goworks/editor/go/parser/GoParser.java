@@ -29,7 +29,7 @@ import org.netbeans.spi.editor.hints.Severity;
  *
  * @author Sam Harwell
  */
-public class GoParser extends GoParserBase {
+public class GoParser extends AbstractGoParser {
     private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
 	private final Set<String> packageNames = new HashSet<String>();
     private DocumentSnapshot snapshot;

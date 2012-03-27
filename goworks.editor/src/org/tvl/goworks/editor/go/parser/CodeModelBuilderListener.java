@@ -49,47 +49,47 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ArrayTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.BaseTypeNameContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.BuiltinArgsContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ChannelTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.CompositeLiteralContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ConstSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ConversionContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.FieldDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.FunctionDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.FunctionLiteralContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.FunctionTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.IdentifierListContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ImportSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.InterfaceTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.InterfaceTypeNameContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.MapTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.MethodDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.MethodExprContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.MethodSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.PackageClauseContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.PackageNameContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ParameterDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.PointerTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ReceiverContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ResultContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.SliceTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.SourceFileContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.StructTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeAssertionExprContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeListContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeLiteralContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeNameContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.VarSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinArgsContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionLiteralContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.IdentifierListContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageClauseContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PointerTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ReceiverContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeAssertionExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeListContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 
 /**
  *
  * @author Sam Harwell
  */
-public class CodeModelBuilderListener extends GoParserBaseBaseListener {
+public class CodeModelBuilderListener extends GoParserBaseListener {
     // -J-Dorg.tvl.goworks.editor.go.parser.CodeModelBuilderListener.level=FINE
     private static final Logger LOGGER = Logger.getLogger(CodeModelBuilderListener.class.getName());
 
@@ -121,7 +121,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_sourceFile, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=0)
     public void enterSourceFile(SourceFileContext ctx) {
         FileObject packageFolder = snapshot.getVersionedDocument().getFileObject().getParent();
         FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
@@ -142,7 +142,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_sourceFile, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=0)
     public void exitSourceFile(SourceFileContext ctx) {
         this.fileModel.freeze();
         this.typeContainerStack.pop();
@@ -153,8 +153,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageClause, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageClause, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
     })
     public void exitPackageClause(PackageClauseContext ctx) {
         PackageNameContext nameContext = ctx.packageName();
@@ -167,9 +167,9 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_importSpec, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_importPath, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_importSpec, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_importPath, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
     })
     public void exitImportSpec(ImportSpecContext ctx) {
         if (ctx.importPath() == null && ctx.importPath().StringLiteral() == null) {
@@ -185,7 +185,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
         } else if (ctx.packageName() != null && ctx.packageName().IDENTIFIER() != null) {
             alias = ctx.packageName().IDENTIFIER().getSymbol().getText();
         } else {
-            alias = GoParserBase.getPackageName(ctx.importPath().StringLiteral().getSymbol());
+            alias = GoParser.getPackageName(ctx.importPath().StringLiteral().getSymbol());
         }
 
         ImportDeclarationModelImpl model = new ImportDeclarationModelImpl(path, alias, ctx.dot != null, fileModel);
@@ -193,7 +193,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0)
     public void exitType(TypeContext ctx) {
         // handled by child contexts
         assert !typeModelStack.isEmpty();
@@ -201,9 +201,9 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeName, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_qualifiedIdentifier, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
     })
     public void exitTypeName(TypeNameContext ctx) {
         String pkgName = ctx.qualifiedIdentifier().packageName() != null ? ctx.qualifiedIdentifier().packageName().IDENTIFIER().getSymbol().getText() : null;
@@ -213,21 +213,21 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeLiteral, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0)
     public void exitTypeLiteral(TypeLiteralContext ctx) {
         // handled by child contexts
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_interfaceTypeName, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0)
     public void exitInterfaceTypeName(InterfaceTypeNameContext ctx) {
         // handled by child contexts
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_arrayType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0)
     public void exitArrayType(ArrayTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         typeModelStack.push(new TypeArrayModelImpl(elementType));
@@ -235,21 +235,21 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_structType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
     public void enterStructType(StructTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
         structModelStack.push(new TypeStructModelImpl(typeName, fileModel));
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_structType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
     public void exitStructType(StructTypeContext ctx) {
         typeModelStack.push(structModelStack.pop());
         assert !typeModelStack.isEmpty();
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_pointerType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0)
     public void exitPointerType(PointerTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         typeModelStack.push(new TypePointerModelImpl(elementType));
@@ -257,7 +257,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0)
     public void enterFunctionType(FunctionTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
         functionModelStack.push(new TypeFunctionModelImpl(typeName, fileModel));
@@ -265,7 +265,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0)
     public void exitFunctionType(FunctionTypeContext ctx) {
         parameterContainerStack.pop();
         typeModelStack.push((TypeFunctionModelImpl)functionModelStack.pop());
@@ -273,7 +273,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_interfaceType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
     public void enterInterfaceType(InterfaceTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
         interfaceModelStack.push(new TypeInterfaceModelImpl(typeName, fileModel));
@@ -282,7 +282,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_interfaceType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
     public void exitInterfaceType(InterfaceTypeContext ctx) {
         typeModelStack.push(interfaceModelStack.pop());
         implementedTypesContainerStack.pop();
@@ -291,7 +291,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_sliceType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0)
     public void exitSliceType(SliceTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         typeModelStack.push(new TypeSliceModelImpl(elementType));
@@ -299,7 +299,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_mapType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0)
     public void exitMapType(MapTypeContext ctx) {
         TypeModelImpl valueType = typeModelStack.pop();
         TypeModelImpl keyType = typeModelStack.pop();
@@ -308,7 +308,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_channelType, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0)
     public void exitChannelType(ChannelTypeContext ctx) {
         TypeModelImpl elementType = typeModelStack.pop();
         ChannelKind channelKind = ChannelKind.SendReceive;
@@ -323,7 +323,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSpec, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0)
     public void exitTypeSpec(TypeSpecContext ctx) {
         String name = "?";
         if (ctx.IDENTIFIER() != null) {
@@ -337,9 +337,9 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_constSpec, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitConstSpec(ConstSpecContext ctx) {
         IdentifierListContext idList = ctx.identifierList();
@@ -358,9 +358,9 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_varSpec, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
     })
     public void exitVarSpec(VarSpecContext ctx) {
         TypeModelImpl varType = ctx.type() != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
@@ -377,8 +377,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodDecl, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
     })
     public void enterMethodDecl(MethodDeclContext ctx) {
         String name = ctx.methodName() != null && ctx.methodName().IDENTIFIER() != null ? ctx.methodName().IDENTIFIER().getSymbol().getText() : createAnonymousTypeName(ctx);
@@ -389,7 +389,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0)
     public void exitMethodDecl(MethodDeclContext ctx) {
         functionModelStack.pop();
         parameterContainerStack.pop();
@@ -397,8 +397,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodSpec, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
     })
     public void enterMethodSpec(MethodSpecContext ctx) {
         if (ctx.methodName() != null) {
@@ -411,9 +411,9 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodSpec, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodName, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_interfaceTypeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0),
     })
     public void exitMethodSpec(MethodSpecContext ctx) {
         if (ctx.methodName() != null) {
@@ -425,7 +425,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_baseTypeName, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0)
     public void exitBaseTypeName(BaseTypeNameContext ctx) {
         String pkgName = null;
         String typeName = ctx.IDENTIFIER().getSymbol().getText();
@@ -434,8 +434,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_receiver, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_baseTypeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
     })
     public void exitReceiver(ReceiverContext ctx) {
         String name = "_";
@@ -455,7 +455,7 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0)
     public void enterFunctionDecl(FunctionDeclContext ctx) {
         FunctionModelImpl model = new FunctionModelImpl(ctx.IDENTIFIER().getSymbol().getText(), fileModel);
         functionContainerStack.peek().add(model);
@@ -464,14 +464,14 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0)
     public void exitFunctionDecl(FunctionDeclContext ctx) {
         functionModelStack.pop();
         parameterContainerStack.pop();
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_result, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0)
     public void enterResult(ResultContext ctx) {
         parameterContainerStack.pop();
         FunctionModel functionModel = functionModelStack.peek();
@@ -487,8 +487,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_result, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitResult(ResultContext ctx) {
         if (ctx.type() != null) {
@@ -498,9 +498,9 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_parameterDecl, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitParameterDecl(ParameterDeclContext ctx) {
         if (ctx.identifierList() == null && ctx.type() == null) {
@@ -524,12 +524,12 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_fieldDecl, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_anonymousField, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeName, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_qualifiedIdentifier, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_anonymousField, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
     })
     public void exitFieldDecl(FieldDeclContext ctx) {
         TypeModelImpl fieldType = null;
@@ -556,8 +556,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitTypeAssertionExpr(TypeAssertionExprContext ctx) {
         if (ctx.type() != null) {
@@ -567,8 +567,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodExpr, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_receiverType, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiverType, version=0),
     })
     public void exitMethodExpr(MethodExprContext ctx) {
         if (ctx.receiverType() != null) {
@@ -578,8 +578,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_conversion, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitConversion(ConversionContext ctx) {
         if (ctx.type() != null) {
@@ -589,8 +589,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_builtinArgs, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitBuiltinArgs(BuiltinArgsContext ctx) {
         if (ctx.type() != null) {
@@ -600,8 +600,8 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeList, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitTypeList(TypeListContext ctx) {
         int typeCount = ctx.type().size();
@@ -611,18 +611,18 @@ public class CodeModelBuilderListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionLiteral, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0)
     public void exitFunctionLiteral(FunctionLiteralContext ctx) {
         typeModelStack.pop();
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_compositeLiteral, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0)
     public void exitCompositeLiteral(CompositeLiteralContext ctx) {
         typeModelStack.pop();
     }
 
     private static String createAnonymousTypeName(ParserRuleContext<Token> context) {
-        return String.format("$%s_%d", GoParserBase.ruleNames[context.getRuleIndex()], context.getStart().getStartIndex());
+        return String.format("$%s_%d", GoParser.ruleNames[context.getRuleIndex()], context.getStart().getStartIndex());
     }
 }

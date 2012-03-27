@@ -14,12 +14,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
-import org.tvl.goworks.editor.go.parser.GoParserBase.QualifiedIdentifierContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.QualifiedIdentifierContext;
+import org.tvl.goworks.editor.go.parser.GoParser;
 
 /**
  *
@@ -34,6 +37,10 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
+    })
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         if (context.packageName() != null) {
             if (context.IDENTIFIER() == null) {

@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> GoParserBase.java generatedTimestamp>
+// $ANTLR ANTLRVersion> AbstractGoParser.java generatedTimestamp>
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-public class GoParserBase extends Parser<Token> {
+public abstract class AbstractGoParser extends Parser<Token> {
 	public static final int
 		Switch=25, Pipe=34, PipeEqual=45, LessThan=56, GreaterEqual=62, Goto=15, 
 		Go=14, LessEqual=61, AmpEqual=44, Fallthrough=11, BangEqual=60, Case=4, 
@@ -108,7 +108,7 @@ public class GoParserBase extends Parser<Token> {
 	};
 
 	@Override
-	public String getGrammarFileName() { return "GoParserBase.g4"; }
+	public String getGrammarFileName() { return "GoParser.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }
@@ -168,7 +168,7 @@ public class GoParserBase extends Parser<Token> {
 	    this.checkPackageNames = checkPackageNames;
 	}
 
-	public GoParserBase(TokenStream<? extends Token> input) {
+	public AbstractGoParser(TokenStream<? extends Token> input) {
 		super(input);
 		_interp = new ParserATNSimulator<Token>(this,_ATN);
 	}
@@ -188,15 +188,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_type; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitType(this);
 			else return null;
 		}
 	}
@@ -254,15 +254,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeName(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeName(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeName(this);
 			else return null;
 		}
 	}
@@ -319,15 +319,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeLiteral; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeLiteral(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeLiteral(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeLiteral(this);
 			else return null;
 		}
 	}
@@ -421,15 +421,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_arrayType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterArrayType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterArrayType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitArrayType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitArrayType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitArrayType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitArrayType(this);
 			else return null;
 		}
 	}
@@ -468,15 +468,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_arrayLength; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterArrayLength(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterArrayLength(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitArrayLength(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitArrayLength(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitArrayLength(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitArrayLength(this);
 			else return null;
 		}
 	}
@@ -512,15 +512,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_elementType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterElementType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterElementType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitElementType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitElementType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitElementType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElementType(this);
 			else return null;
 		}
 	}
@@ -556,15 +556,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_sliceType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSliceType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSliceType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSliceType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSliceType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSliceType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSliceType(this);
 			else return null;
 		}
 	}
@@ -605,15 +605,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_structType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterStructType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterStructType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitStructType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitStructType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitStructType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitStructType(this);
 			else return null;
 		}
 	}
@@ -686,15 +686,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_fieldDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterFieldDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterFieldDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitFieldDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitFieldDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitFieldDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFieldDecl(this);
 			else return null;
 		}
 	}
@@ -755,15 +755,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_anonymousField; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterAnonymousField(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterAnonymousField(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitAnonymousField(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitAnonymousField(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitAnonymousField(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAnonymousField(this);
 			else return null;
 		}
 	}
@@ -799,22 +799,22 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class TagContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> StringLiteral() { return getToken(GoParserBase.StringLiteral, 0); }
+		public TerminalNode<Token> StringLiteral() { return getToken(AbstractGoParser.StringLiteral, 0); }
 		public TagContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tag; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTag(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTag(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTag(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTag(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTag(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTag(this);
 			else return null;
 		}
 	}
@@ -851,15 +851,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_pointerType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterPointerType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterPointerType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitPointerType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitPointerType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitPointerType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPointerType(this);
 			else return null;
 		}
 	}
@@ -896,15 +896,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_baseType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBaseType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBaseType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBaseType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBaseType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBaseType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBaseType(this);
 			else return null;
 		}
 	}
@@ -940,15 +940,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_functionType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterFunctionType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterFunctionType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitFunctionType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitFunctionType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitFunctionType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFunctionType(this);
 			else return null;
 		}
 	}
@@ -988,15 +988,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_signature; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSignature(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSignature(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSignature(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSignature(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSignature(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSignature(this);
 			else return null;
 		}
 	}
@@ -1044,15 +1044,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_result; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterResult(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterResult(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitResult(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitResult(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitResult(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitResult(this);
 			else return null;
 		}
 	}
@@ -1101,15 +1101,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_parameters; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterParameters(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterParameters(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitParameters(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitParameters(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitParameters(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitParameters(this);
 			else return null;
 		}
 	}
@@ -1167,15 +1167,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_parameterList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterParameterList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterParameterList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitParameterList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitParameterList(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitParameterList(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitParameterList(this);
 			else return null;
 		}
 	}
@@ -1232,15 +1232,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_parameterDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterParameterDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterParameterDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitParameterDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitParameterDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitParameterDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitParameterDecl(this);
 			else return null;
 		}
 	}
@@ -1297,15 +1297,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_interfaceType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterInterfaceType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterInterfaceType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitInterfaceType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitInterfaceType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitInterfaceType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitInterfaceType(this);
 			else return null;
 		}
 	}
@@ -1384,15 +1384,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_methodSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterMethodSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterMethodSpec(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitMethodSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitMethodSpec(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitMethodSpec(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodSpec(this);
 			else return null;
 		}
 	}
@@ -1433,22 +1433,22 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class MethodNameContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public MethodNameContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_methodName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterMethodName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterMethodName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitMethodName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitMethodName(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitMethodName(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodName(this);
 			else return null;
 		}
 	}
@@ -1484,15 +1484,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_interfaceTypeName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterInterfaceTypeName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterInterfaceTypeName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitInterfaceTypeName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitInterfaceTypeName(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitInterfaceTypeName(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitInterfaceTypeName(this);
 			else return null;
 		}
 	}
@@ -1531,15 +1531,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_mapType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterMapType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterMapType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitMapType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitMapType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitMapType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMapType(this);
 			else return null;
 		}
 	}
@@ -1579,15 +1579,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_keyType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterKeyType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterKeyType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitKeyType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitKeyType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitKeyType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitKeyType(this);
 			else return null;
 		}
 	}
@@ -1625,15 +1625,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_channelType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterChannelType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterChannelType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitChannelType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitChannelType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitChannelType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitChannelType(this);
 			else return null;
 		}
 	}
@@ -1697,15 +1697,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_block; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBlock(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBlock(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBlock(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBlock(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBlock(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBlock(this);
 			else return null;
 		}
 	}
@@ -1783,15 +1783,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_declaration; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterDeclaration(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitDeclaration(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitDeclaration(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitDeclaration(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitDeclaration(this);
 			else return null;
 		}
 	}
@@ -1853,15 +1853,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_topLevelDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTopLevelDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTopLevelDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTopLevelDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTopLevelDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTopLevelDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTopLevelDecl(this);
 			else return null;
 		}
 	}
@@ -1920,15 +1920,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_constDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterConstDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterConstDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitConstDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitConstDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitConstDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConstDecl(this);
 			else return null;
 		}
 	}
@@ -2021,15 +2021,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_constSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterConstSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterConstSpec(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitConstSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitConstSpec(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitConstSpec(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConstSpec(this);
 			else return null;
 		}
 	}
@@ -2076,24 +2076,24 @@ public class GoParserBase extends Parser<Token> {
 
 	public static class IdentifierListContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> IDENTIFIER(int i) {
-		    return getToken(GoParserBase.IDENTIFIER, i);
+		    return getToken(AbstractGoParser.IDENTIFIER, i);
 		}
-		public List<? extends TerminalNode<Token>> IDENTIFIER() { return getTokens(GoParserBase.IDENTIFIER); }
+		public List<? extends TerminalNode<Token>> IDENTIFIER() { return getTokens(AbstractGoParser.IDENTIFIER); }
 		public IdentifierListContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifierList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterIdentifierList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterIdentifierList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitIdentifierList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitIdentifierList(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitIdentifierList(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIdentifierList(this);
 			else return null;
 		}
 	}
@@ -2149,15 +2149,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_expressionList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterExpressionList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterExpressionList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitExpressionList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitExpressionList(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitExpressionList(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExpressionList(this);
 			else return null;
 		}
 	}
@@ -2213,15 +2213,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeDecl(this);
 			else return null;
 		}
 	}
@@ -2299,7 +2299,7 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class TypeSpecContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public TypeContext type() {
 		    return getRuleContext(TypeContext.class,0);
 		}
@@ -2309,15 +2309,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeSpec(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeSpec(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeSpec(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSpec(this);
 			else return null;
 		}
 	}
@@ -2357,15 +2357,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_varDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterVarDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterVarDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitVarDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitVarDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitVarDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitVarDecl(this);
 			else return null;
 		}
 	}
@@ -2461,15 +2461,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_varSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterVarSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterVarSpec(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitVarSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitVarSpec(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitVarSpec(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitVarSpec(this);
 			else return null;
 		}
 	}
@@ -2534,15 +2534,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_shortVarDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterShortVarDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterShortVarDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitShortVarDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitShortVarDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitShortVarDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitShortVarDecl(this);
 			else return null;
 		}
 	}
@@ -2574,7 +2574,7 @@ public class GoParserBase extends Parser<Token> {
 		public BodyContext body() {
 		    return getRuleContext(BodyContext.class,0);
 		}
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public SignatureContext signature() {
 		    return getRuleContext(SignatureContext.class,0);
 		}
@@ -2584,15 +2584,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_functionDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterFunctionDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterFunctionDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitFunctionDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitFunctionDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitFunctionDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFunctionDecl(this);
 			else return null;
 		}
 	}
@@ -2639,15 +2639,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_body; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBody(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBody(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBody(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBody(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBody(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBody(this);
 			else return null;
 		}
 	}
@@ -2692,15 +2692,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_methodDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterMethodDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterMethodDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitMethodDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitMethodDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitMethodDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodDecl(this);
 			else return null;
 		}
 	}
@@ -2743,22 +2743,22 @@ public class GoParserBase extends Parser<Token> {
 		public BaseTypeNameContext baseTypeName() {
 		    return getRuleContext(BaseTypeNameContext.class,0);
 		}
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public ReceiverContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_receiver; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterReceiver(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterReceiver(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitReceiver(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitReceiver(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitReceiver(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitReceiver(this);
 			else return null;
 		}
 	}
@@ -2805,22 +2805,22 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class BaseTypeNameContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public BaseTypeNameContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_baseTypeName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBaseTypeName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBaseTypeName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBaseTypeName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBaseTypeName(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBaseTypeName(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBaseTypeName(this);
 			else return null;
 		}
 	}
@@ -2865,15 +2865,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_operand; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterOperand(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterOperand(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitOperand(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitOperand(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitOperand(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitOperand(this);
 			else return null;
 		}
 	}
@@ -2944,15 +2944,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_literal; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitLiteral(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitLiteral(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLiteral(this);
 			else return null;
 		}
 	}
@@ -2999,26 +2999,26 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class BasicLiteralContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> StringLiteral() { return getToken(GoParserBase.StringLiteral, 0); }
-		public TerminalNode<Token> IMAGINARY_LITERAL() { return getToken(GoParserBase.IMAGINARY_LITERAL, 0); }
-		public TerminalNode<Token> FLOAT_LITERAL() { return getToken(GoParserBase.FLOAT_LITERAL, 0); }
-		public TerminalNode<Token> INT_LITERAL() { return getToken(GoParserBase.INT_LITERAL, 0); }
-		public TerminalNode<Token> CharLiteral() { return getToken(GoParserBase.CharLiteral, 0); }
+		public TerminalNode<Token> StringLiteral() { return getToken(AbstractGoParser.StringLiteral, 0); }
+		public TerminalNode<Token> IMAGINARY_LITERAL() { return getToken(AbstractGoParser.IMAGINARY_LITERAL, 0); }
+		public TerminalNode<Token> FLOAT_LITERAL() { return getToken(AbstractGoParser.FLOAT_LITERAL, 0); }
+		public TerminalNode<Token> INT_LITERAL() { return getToken(AbstractGoParser.INT_LITERAL, 0); }
+		public TerminalNode<Token> CharLiteral() { return getToken(AbstractGoParser.CharLiteral, 0); }
 		public BasicLiteralContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_basicLiteral; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBasicLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBasicLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBasicLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBasicLiteral(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBasicLiteral(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBasicLiteral(this);
 			else return null;
 		}
 	}
@@ -3083,22 +3083,22 @@ public class GoParserBase extends Parser<Token> {
 		public PackageNameContext packageName() {
 		    return getRuleContext(PackageNameContext.class,0);
 		}
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public QualifiedIdentifierContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qualifiedIdentifier; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterQualifiedIdentifier(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterQualifiedIdentifier(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitQualifiedIdentifier(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitQualifiedIdentifier(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitQualifiedIdentifier(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitQualifiedIdentifier(this);
 			else return null;
 		}
 	}
@@ -3150,15 +3150,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_methodExpr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterMethodExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterMethodExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitMethodExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitMethodExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitMethodExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodExpr(this);
 			else return null;
 		}
 	}
@@ -3197,15 +3197,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_receiverType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterReceiverType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterReceiverType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitReceiverType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitReceiverType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitReceiverType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitReceiverType(this);
 			else return null;
 		}
 	}
@@ -3260,15 +3260,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_compositeLiteral; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterCompositeLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterCompositeLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitCompositeLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitCompositeLiteral(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitCompositeLiteral(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCompositeLiteral(this);
 			else return null;
 		}
 	}
@@ -3320,15 +3320,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_literalType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterLiteralType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterLiteralType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitLiteralType(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitLiteralType(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitLiteralType(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLiteralType(this);
 			else return null;
 		}
 	}
@@ -3408,15 +3408,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_literalValue; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterLiteralValue(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterLiteralValue(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitLiteralValue(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitLiteralValue(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitLiteralValue(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLiteralValue(this);
 			else return null;
 		}
 	}
@@ -3474,15 +3474,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_elementList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterElementList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterElementList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitElementList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitElementList(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitElementList(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElementList(this);
 			else return null;
 		}
 	}
@@ -3538,15 +3538,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_element; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterElement(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterElement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitElement(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitElement(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitElement(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElement(this);
 			else return null;
 		}
 	}
@@ -3595,15 +3595,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_key; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterKey(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterKey(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitKey(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitKey(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitKey(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitKey(this);
 			else return null;
 		}
 	}
@@ -3643,22 +3643,22 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class FieldNameContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public FieldNameContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_fieldName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterFieldName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterFieldName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitFieldName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitFieldName(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitFieldName(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFieldName(this);
 			else return null;
 		}
 	}
@@ -3694,15 +3694,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_elementIndex; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterElementIndex(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterElementIndex(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitElementIndex(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitElementIndex(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitElementIndex(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElementIndex(this);
 			else return null;
 		}
 	}
@@ -3741,15 +3741,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_value; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterValue(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterValue(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitValue(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitValue(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitValue(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitValue(this);
 			else return null;
 		}
 	}
@@ -3801,15 +3801,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_functionLiteral; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterFunctionLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterFunctionLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitFunctionLiteral(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitFunctionLiteral(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitFunctionLiteral(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFunctionLiteral(this);
 			else return null;
 		}
 	}
@@ -3862,15 +3862,15 @@ public class GoParserBase extends Parser<Token> {
 		public MultExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterMultExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterMultExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitMultExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitMultExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitMultExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMultExpr(this);
 			else return null;
 		}
 	}
@@ -3884,15 +3884,15 @@ public class GoParserBase extends Parser<Token> {
 		public AndExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterAndExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterAndExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitAndExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitAndExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitAndExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAndExpr(this);
 			else return null;
 		}
 	}
@@ -3903,15 +3903,15 @@ public class GoParserBase extends Parser<Token> {
 		public ConversionOrCallExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterConversionOrCallExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterConversionOrCallExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitConversionOrCallExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitConversionOrCallExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitConversionOrCallExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConversionOrCallExpr(this);
 			else return null;
 		}
 	}
@@ -3927,15 +3927,15 @@ public class GoParserBase extends Parser<Token> {
 		public CallExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterCallExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterCallExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitCallExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitCallExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitCallExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCallExpr(this);
 			else return null;
 		}
 	}
@@ -3952,15 +3952,15 @@ public class GoParserBase extends Parser<Token> {
 		public TypeAssertionExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeAssertionExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeAssertionExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeAssertionExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeAssertionExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeAssertionExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeAssertionExpr(this);
 			else return null;
 		}
 	}
@@ -3975,15 +3975,15 @@ public class GoParserBase extends Parser<Token> {
 		public CompareExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterCompareExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterCompareExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitCompareExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitCompareExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitCompareExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCompareExpr(this);
 			else return null;
 		}
 	}
@@ -3997,15 +3997,15 @@ public class GoParserBase extends Parser<Token> {
 		public OrExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterOrExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterOrExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitOrExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitOrExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitOrExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitOrExpr(this);
 			else return null;
 		}
 	}
@@ -4014,19 +4014,19 @@ public class GoParserBase extends Parser<Token> {
 		public ExpressionContext expression() {
 		    return getRuleContext(ExpressionContext.class,0);
 		}
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public SelectorExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSelectorExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSelectorExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSelectorExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSelectorExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSelectorExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSelectorExpr(this);
 			else return null;
 		}
 	}
@@ -4042,15 +4042,15 @@ public class GoParserBase extends Parser<Token> {
 		public SliceExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSliceExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSliceExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSliceExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSliceExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSliceExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSliceExpr(this);
 			else return null;
 		}
 	}
@@ -4062,15 +4062,15 @@ public class GoParserBase extends Parser<Token> {
 		public UnaryExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterUnaryExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterUnaryExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitUnaryExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitUnaryExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitUnaryExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitUnaryExpr(this);
 			else return null;
 		}
 	}
@@ -4081,15 +4081,15 @@ public class GoParserBase extends Parser<Token> {
 		public OperandExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterOperandExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterOperandExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitOperandExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitOperandExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitOperandExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitOperandExpr(this);
 			else return null;
 		}
 	}
@@ -4104,15 +4104,15 @@ public class GoParserBase extends Parser<Token> {
 		public AddExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterAddExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterAddExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitAddExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitAddExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitAddExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAddExpr(this);
 			else return null;
 		}
 	}
@@ -4123,15 +4123,15 @@ public class GoParserBase extends Parser<Token> {
 		public BuiltinCallExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBuiltinCallExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBuiltinCallExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBuiltinCallExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBuiltinCallExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBuiltinCallExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBuiltinCallExpr(this);
 			else return null;
 		}
 	}
@@ -4145,15 +4145,15 @@ public class GoParserBase extends Parser<Token> {
 		public IndexExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterIndexExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterIndexExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitIndexExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitIndexExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitIndexExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIndexExpr(this);
 			else return null;
 		}
 	}
@@ -4575,15 +4575,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_argumentList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterArgumentList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterArgumentList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitArgumentList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitArgumentList(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitArgumentList(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitArgumentList(this);
 			else return null;
 		}
 	}
@@ -4631,15 +4631,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_conversion; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterConversion(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterConversion(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitConversion(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitConversion(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitConversion(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConversion(this);
 			else return null;
 		}
 	}
@@ -4720,15 +4720,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_statement; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterStatement(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitStatement(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitStatement(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitStatement(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitStatement(this);
 			else return null;
 		}
 	}
@@ -4883,15 +4883,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_simpleStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSimpleStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSimpleStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSimpleStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSimpleStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSimpleStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSimpleStmt(this);
 			else return null;
 		}
 	}
@@ -4965,15 +4965,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_emptyStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterEmptyStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterEmptyStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitEmptyStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitEmptyStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitEmptyStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitEmptyStmt(this);
 			else return null;
 		}
 	}
@@ -5011,15 +5011,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_labeledStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterLabeledStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterLabeledStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitLabeledStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitLabeledStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitLabeledStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLabeledStmt(this);
 			else return null;
 		}
 	}
@@ -5048,22 +5048,22 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class LabelContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public LabelContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_label; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterLabel(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterLabel(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitLabel(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitLabel(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitLabel(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLabel(this);
 			else return null;
 		}
 	}
@@ -5099,15 +5099,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_expressionStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterExpressionStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterExpressionStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitExpressionStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitExpressionStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitExpressionStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExpressionStmt(this);
 			else return null;
 		}
 	}
@@ -5146,15 +5146,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_sendStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSendStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSendStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSendStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSendStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSendStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSendStmt(this);
 			else return null;
 		}
 	}
@@ -5192,15 +5192,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_channel; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterChannel(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterChannel(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitChannel(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitChannel(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitChannel(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitChannel(this);
 			else return null;
 		}
 	}
@@ -5237,15 +5237,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_incDecStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterIncDecStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterIncDecStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitIncDecStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitIncDecStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitIncDecStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIncDecStmt(this);
 			else return null;
 		}
 	}
@@ -5297,15 +5297,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assignment; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterAssignment(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterAssignment(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitAssignment(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitAssignment(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitAssignment(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAssignment(this);
 			else return null;
 		}
 	}
@@ -5346,15 +5346,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_assignOp; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterAssignOp(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterAssignOp(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitAssignOp(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitAssignOp(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitAssignOp(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAssignOp(this);
 			else return null;
 		}
 	}
@@ -5407,15 +5407,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_addAssignOp; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterAddAssignOp(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterAddAssignOp(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitAddAssignOp(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitAddAssignOp(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitAddAssignOp(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAddAssignOp(this);
 			else return null;
 		}
 	}
@@ -5475,15 +5475,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_mulAssignOp; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterMulAssignOp(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterMulAssignOp(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitMulAssignOp(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitMulAssignOp(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitMulAssignOp(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMulAssignOp(this);
 			else return null;
 		}
 	}
@@ -5579,15 +5579,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_ifStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterIfStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterIfStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitIfStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitIfStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitIfStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIfStmt(this);
 			else return null;
 		}
 	}
@@ -5662,15 +5662,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_switchStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSwitchStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSwitchStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSwitchStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSwitchStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSwitchStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSwitchStmt(this);
 			else return null;
 		}
 	}
@@ -5725,15 +5725,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_exprSwitchStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterExprSwitchStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterExprSwitchStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitExprSwitchStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitExprSwitchStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitExprSwitchStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExprSwitchStmt(this);
 			else return null;
 		}
 	}
@@ -5812,15 +5812,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_exprCaseClause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterExprCaseClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterExprCaseClause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitExprCaseClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitExprCaseClause(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitExprCaseClause(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExprCaseClause(this);
 			else return null;
 		}
 	}
@@ -5892,15 +5892,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_exprSwitchCase; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterExprSwitchCase(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterExprSwitchCase(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitExprSwitchCase(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitExprSwitchCase(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitExprSwitchCase(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExprSwitchCase(this);
 			else return null;
 		}
 	}
@@ -5956,15 +5956,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeSwitchStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeSwitchStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeSwitchStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeSwitchStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeSwitchStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchStmt(this);
 			else return null;
 		}
 	}
@@ -6025,22 +6025,22 @@ public class GoParserBase extends Parser<Token> {
 		public ExpressionContext expression() {
 		    return getRuleContext(ExpressionContext.class,0);
 		}
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public TypeSwitchGuardContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_typeSwitchGuard; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeSwitchGuard(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeSwitchGuard(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeSwitchGuard(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeSwitchGuard(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchGuard(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchGuard(this);
 			else return null;
 		}
 	}
@@ -6096,15 +6096,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeCaseClause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeCaseClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeCaseClause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeCaseClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeCaseClause(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeCaseClause(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeCaseClause(this);
 			else return null;
 		}
 	}
@@ -6176,15 +6176,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeSwitchCase; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeSwitchCase(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeSwitchCase(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeSwitchCase(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeSwitchCase(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchCase(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchCase(this);
 			else return null;
 		}
 	}
@@ -6237,15 +6237,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_typeList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterTypeList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterTypeList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitTypeList(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitTypeList(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitTypeList(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeList(this);
 			else return null;
 		}
 	}
@@ -6307,15 +6307,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_forStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterForStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterForStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitForStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitForStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitForStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitForStmt(this);
 			else return null;
 		}
 	}
@@ -6373,15 +6373,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_condition; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterCondition(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterCondition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitCondition(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitCondition(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitCondition(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCondition(this);
 			else return null;
 		}
 	}
@@ -6423,15 +6423,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_forClause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterForClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterForClause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitForClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitForClause(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitForClause(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitForClause(this);
 			else return null;
 		}
 	}
@@ -6495,15 +6495,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_initStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterInitStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterInitStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitInitStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitInitStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitInitStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitInitStmt(this);
 			else return null;
 		}
 	}
@@ -6539,15 +6539,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_postStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterPostStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterPostStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitPostStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitPostStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitPostStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPostStmt(this);
 			else return null;
 		}
 	}
@@ -6591,15 +6591,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_rangeClause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRangeClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterRangeClause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRangeClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitRangeClause(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitRangeClause(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitRangeClause(this);
 			else return null;
 		}
 	}
@@ -6662,15 +6662,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_goStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterGoStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterGoStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitGoStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitGoStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitGoStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitGoStmt(this);
 			else return null;
 		}
 	}
@@ -6707,15 +6707,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_selectStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSelectStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSelectStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSelectStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSelectStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSelectStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSelectStmt(this);
 			else return null;
 		}
 	}
@@ -6775,15 +6775,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_commClause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterCommClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterCommClause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitCommClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitCommClause(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitCommClause(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCommClause(this);
 			else return null;
 		}
 	}
@@ -6858,15 +6858,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_commCase; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterCommCase(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterCommCase(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitCommCase(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitCommCase(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitCommCase(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCommCase(this);
 			else return null;
 		}
 	}
@@ -6940,15 +6940,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_recvStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRecvStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterRecvStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRecvStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitRecvStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitRecvStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitRecvStmt(this);
 			else return null;
 		}
 	}
@@ -7018,15 +7018,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_recvExpr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterRecvExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterRecvExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitRecvExpr(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitRecvExpr(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitRecvExpr(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitRecvExpr(this);
 			else return null;
 		}
 	}
@@ -7062,15 +7062,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_returnStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterReturnStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterReturnStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitReturnStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitReturnStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitReturnStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitReturnStmt(this);
 			else return null;
 		}
 	}
@@ -7115,15 +7115,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_breakStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBreakStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBreakStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBreakStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBreakStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBreakStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBreakStmt(this);
 			else return null;
 		}
 	}
@@ -7168,15 +7168,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_continueStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterContinueStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterContinueStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitContinueStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitContinueStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitContinueStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitContinueStmt(this);
 			else return null;
 		}
 	}
@@ -7221,15 +7221,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_gotoStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterGotoStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterGotoStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitGotoStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitGotoStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitGotoStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitGotoStmt(this);
 			else return null;
 		}
 	}
@@ -7263,15 +7263,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_fallthroughStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterFallthroughStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterFallthroughStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitFallthroughStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitFallthroughStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitFallthroughStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFallthroughStmt(this);
 			else return null;
 		}
 	}
@@ -7307,15 +7307,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_deferStmt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterDeferStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterDeferStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitDeferStmt(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitDeferStmt(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitDeferStmt(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitDeferStmt(this);
 			else return null;
 		}
 	}
@@ -7346,22 +7346,22 @@ public class GoParserBase extends Parser<Token> {
 		public BuiltinArgsContext builtinArgs() {
 		    return getRuleContext(BuiltinArgsContext.class,0);
 		}
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public BuiltinCallContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_builtinCall; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBuiltinCall(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBuiltinCall(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBuiltinCall(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBuiltinCall(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBuiltinCall(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBuiltinCall(this);
 			else return null;
 		}
 	}
@@ -7420,15 +7420,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_builtinArgs; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterBuiltinArgs(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterBuiltinArgs(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitBuiltinArgs(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitBuiltinArgs(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitBuiltinArgs(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBuiltinArgs(this);
 			else return null;
 		}
 	}
@@ -7493,15 +7493,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_sourceFile; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterSourceFile(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterSourceFile(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitSourceFile(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitSourceFile(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitSourceFile(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSourceFile(this);
 			else return null;
 		}
 	}
@@ -7580,15 +7580,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_packageClause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterPackageClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterPackageClause(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitPackageClause(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitPackageClause(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitPackageClause(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPackageClause(this);
 			else return null;
 		}
 	}
@@ -7617,22 +7617,22 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class PackageNameContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> IDENTIFIER() { return getToken(GoParserBase.IDENTIFIER, 0); }
+		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public PackageNameContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_packageName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterPackageName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterPackageName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitPackageName(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitPackageName(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitPackageName(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPackageName(this);
 			else return null;
 		}
 	}
@@ -7671,15 +7671,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_importDecl; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterImportDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterImportDecl(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitImportDecl(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitImportDecl(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitImportDecl(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitImportDecl(this);
 			else return null;
 		}
 	}
@@ -7772,15 +7772,15 @@ public class GoParserBase extends Parser<Token> {
 		@Override public int getRuleIndex() { return RULE_importSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterImportSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterImportSpec(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitImportSpec(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitImportSpec(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitImportSpec(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitImportSpec(this);
 			else return null;
 		}
 	}
@@ -7831,22 +7831,22 @@ public class GoParserBase extends Parser<Token> {
 	}
 
 	public static class ImportPathContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> StringLiteral() { return getToken(GoParserBase.StringLiteral, 0); }
+		public TerminalNode<Token> StringLiteral() { return getToken(AbstractGoParser.StringLiteral, 0); }
 		public ImportPathContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_importPath; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).enterImportPath(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).enterImportPath(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<? super Token> listener) {
-			if ( listener instanceof GoParserBaseListener ) ((GoParserBaseListener)listener).exitImportPath(this);
+			if ( listener instanceof GoParserListener ) ((GoParserListener)listener).exitImportPath(this);
 		}
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
-			if ( visitor instanceof GoParserBaseVisitor<?, ?> ) return ((GoParserBaseVisitor<? super Token, ? extends Result>)visitor).visitImportPath(this);
+			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitImportPath(this);
 			else return null;
 		}
 	}

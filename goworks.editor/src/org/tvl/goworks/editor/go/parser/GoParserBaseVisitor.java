@@ -13,253 +13,254 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public interface GoParserBaseVisitor<Symbol extends Token, Result> extends ParseTreeVisitor<Symbol, Result> {
-	Result visitMultExpr(GoParserBase.MultExprContext ctx);
+public class GoParserBaseVisitor<Result> extends AbstractParseTreeVisitor<Token, Result> implements GoParserVisitor<Token, Result> {
+	@Override public Result visitMultExpr(AbstractGoParser.MultExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitChannelType(GoParserBase.ChannelTypeContext ctx);
+	@Override public Result visitChannelType(AbstractGoParser.ChannelTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitMulAssignOp(GoParserBase.MulAssignOpContext ctx);
+	@Override public Result visitMulAssignOp(AbstractGoParser.MulAssignOpContext ctx) { return visitChildren(ctx); }
 
-	Result visitPackageName(GoParserBase.PackageNameContext ctx);
+	@Override public Result visitPackageName(AbstractGoParser.PackageNameContext ctx) { return visitChildren(ctx); }
 
-	Result visitReceiver(GoParserBase.ReceiverContext ctx);
+	@Override public Result visitReceiver(AbstractGoParser.ReceiverContext ctx) { return visitChildren(ctx); }
 
-	Result visitArrayType(GoParserBase.ArrayTypeContext ctx);
+	@Override public Result visitArrayType(AbstractGoParser.ArrayTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitExpressionList(GoParserBase.ExpressionListContext ctx);
+	@Override public Result visitExpressionList(AbstractGoParser.ExpressionListContext ctx) { return visitChildren(ctx); }
 
-	Result visitTag(GoParserBase.TagContext ctx);
+	@Override public Result visitTag(AbstractGoParser.TagContext ctx) { return visitChildren(ctx); }
 
-	Result visitFallthroughStmt(GoParserBase.FallthroughStmtContext ctx);
+	@Override public Result visitFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitSelectorExpr(GoParserBase.SelectorExprContext ctx);
+	@Override public Result visitSelectorExpr(AbstractGoParser.SelectorExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitParameterList(GoParserBase.ParameterListContext ctx);
+	@Override public Result visitParameterList(AbstractGoParser.ParameterListContext ctx) { return visitChildren(ctx); }
 
-	Result visitReceiverType(GoParserBase.ReceiverTypeContext ctx);
+	@Override public Result visitReceiverType(AbstractGoParser.ReceiverTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitFieldName(GoParserBase.FieldNameContext ctx);
+	@Override public Result visitFieldName(AbstractGoParser.FieldNameContext ctx) { return visitChildren(ctx); }
 
-	Result visitIfStmt(GoParserBase.IfStmtContext ctx);
+	@Override public Result visitIfStmt(AbstractGoParser.IfStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitMethodName(GoParserBase.MethodNameContext ctx);
+	@Override public Result visitMethodName(AbstractGoParser.MethodNameContext ctx) { return visitChildren(ctx); }
 
-	Result visitSignature(GoParserBase.SignatureContext ctx);
+	@Override public Result visitSignature(AbstractGoParser.SignatureContext ctx) { return visitChildren(ctx); }
 
-	Result visitMapType(GoParserBase.MapTypeContext ctx);
+	@Override public Result visitMapType(AbstractGoParser.MapTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitElement(GoParserBase.ElementContext ctx);
+	@Override public Result visitElement(AbstractGoParser.ElementContext ctx) { return visitChildren(ctx); }
 
-	Result visitCallExpr(GoParserBase.CallExprContext ctx);
+	@Override public Result visitCallExpr(AbstractGoParser.CallExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeCaseClause(GoParserBase.TypeCaseClauseContext ctx);
+	@Override public Result visitTypeCaseClause(AbstractGoParser.TypeCaseClauseContext ctx) { return visitChildren(ctx); }
 
-	Result visitExprCaseClause(GoParserBase.ExprCaseClauseContext ctx);
+	@Override public Result visitExprCaseClause(AbstractGoParser.ExprCaseClauseContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeSwitchGuard(GoParserBase.TypeSwitchGuardContext ctx);
+	@Override public Result visitTypeSwitchGuard(AbstractGoParser.TypeSwitchGuardContext ctx) { return visitChildren(ctx); }
 
-	Result visitFunctionLiteral(GoParserBase.FunctionLiteralContext ctx);
+	@Override public Result visitFunctionLiteral(AbstractGoParser.FunctionLiteralContext ctx) { return visitChildren(ctx); }
 
-	Result visitOrExpr(GoParserBase.OrExprContext ctx);
+	@Override public Result visitOrExpr(AbstractGoParser.OrExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitRecvExpr(GoParserBase.RecvExprContext ctx);
+	@Override public Result visitRecvExpr(AbstractGoParser.RecvExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitTopLevelDecl(GoParserBase.TopLevelDeclContext ctx);
+	@Override public Result visitTopLevelDecl(AbstractGoParser.TopLevelDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitMethodSpec(GoParserBase.MethodSpecContext ctx);
+	@Override public Result visitMethodSpec(AbstractGoParser.MethodSpecContext ctx) { return visitChildren(ctx); }
 
-	Result visitConstSpec(GoParserBase.ConstSpecContext ctx);
+	@Override public Result visitConstSpec(AbstractGoParser.ConstSpecContext ctx) { return visitChildren(ctx); }
 
-	Result visitCompositeLiteral(GoParserBase.CompositeLiteralContext ctx);
+	@Override public Result visitCompositeLiteral(AbstractGoParser.CompositeLiteralContext ctx) { return visitChildren(ctx); }
 
-	Result visitForClause(GoParserBase.ForClauseContext ctx);
+	@Override public Result visitForClause(AbstractGoParser.ForClauseContext ctx) { return visitChildren(ctx); }
 
-	Result visitShortVarDecl(GoParserBase.ShortVarDeclContext ctx);
+	@Override public Result visitShortVarDecl(AbstractGoParser.ShortVarDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitGotoStmt(GoParserBase.GotoStmtContext ctx);
+	@Override public Result visitGotoStmt(AbstractGoParser.GotoStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitArrayLength(GoParserBase.ArrayLengthContext ctx);
+	@Override public Result visitArrayLength(AbstractGoParser.ArrayLengthContext ctx) { return visitChildren(ctx); }
 
-	Result visitInterfaceType(GoParserBase.InterfaceTypeContext ctx);
+	@Override public Result visitInterfaceType(AbstractGoParser.InterfaceTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitConversion(GoParserBase.ConversionContext ctx);
+	@Override public Result visitConversion(AbstractGoParser.ConversionContext ctx) { return visitChildren(ctx); }
 
-	Result visitBlock(GoParserBase.BlockContext ctx);
+	@Override public Result visitBlock(AbstractGoParser.BlockContext ctx) { return visitChildren(ctx); }
 
-	Result visitBreakStmt(GoParserBase.BreakStmtContext ctx);
+	@Override public Result visitBreakStmt(AbstractGoParser.BreakStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitEmptyStmt(GoParserBase.EmptyStmtContext ctx);
+	@Override public Result visitEmptyStmt(AbstractGoParser.EmptyStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitFunctionType(GoParserBase.FunctionTypeContext ctx);
+	@Override public Result visitFunctionType(AbstractGoParser.FunctionTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitBaseType(GoParserBase.BaseTypeContext ctx);
+	@Override public Result visitBaseType(AbstractGoParser.BaseTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitOperandExpr(GoParserBase.OperandExprContext ctx);
+	@Override public Result visitOperandExpr(AbstractGoParser.OperandExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitFieldDecl(GoParserBase.FieldDeclContext ctx);
+	@Override public Result visitFieldDecl(AbstractGoParser.FieldDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitExprSwitchStmt(GoParserBase.ExprSwitchStmtContext ctx);
+	@Override public Result visitExprSwitchStmt(AbstractGoParser.ExprSwitchStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitGoStmt(GoParserBase.GoStmtContext ctx);
+	@Override public Result visitGoStmt(AbstractGoParser.GoStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitParameterDecl(GoParserBase.ParameterDeclContext ctx);
+	@Override public Result visitParameterDecl(AbstractGoParser.ParameterDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitBasicLiteral(GoParserBase.BasicLiteralContext ctx);
+	@Override public Result visitBasicLiteral(AbstractGoParser.BasicLiteralContext ctx) { return visitChildren(ctx); }
 
-	Result visitExprSwitchCase(GoParserBase.ExprSwitchCaseContext ctx);
+	@Override public Result visitExprSwitchCase(AbstractGoParser.ExprSwitchCaseContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeLiteral(GoParserBase.TypeLiteralContext ctx);
+	@Override public Result visitTypeLiteral(AbstractGoParser.TypeLiteralContext ctx) { return visitChildren(ctx); }
 
-	Result visitSelectStmt(GoParserBase.SelectStmtContext ctx);
+	@Override public Result visitSelectStmt(AbstractGoParser.SelectStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitImportSpec(GoParserBase.ImportSpecContext ctx);
+	@Override public Result visitImportSpec(AbstractGoParser.ImportSpecContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeName(GoParserBase.TypeNameContext ctx);
+	@Override public Result visitTypeName(AbstractGoParser.TypeNameContext ctx) { return visitChildren(ctx); }
 
-	Result visitLiteralType(GoParserBase.LiteralTypeContext ctx);
+	@Override public Result visitLiteralType(AbstractGoParser.LiteralTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitAssignment(GoParserBase.AssignmentContext ctx);
+	@Override public Result visitAssignment(AbstractGoParser.AssignmentContext ctx) { return visitChildren(ctx); }
 
-	Result visitAssignOp(GoParserBase.AssignOpContext ctx);
+	@Override public Result visitAssignOp(AbstractGoParser.AssignOpContext ctx) { return visitChildren(ctx); }
 
-	Result visitRecvStmt(GoParserBase.RecvStmtContext ctx);
+	@Override public Result visitRecvStmt(AbstractGoParser.RecvStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeSpec(GoParserBase.TypeSpecContext ctx);
+	@Override public Result visitTypeSpec(AbstractGoParser.TypeSpecContext ctx) { return visitChildren(ctx); }
 
-	Result visitPackageClause(GoParserBase.PackageClauseContext ctx);
+	@Override public Result visitPackageClause(AbstractGoParser.PackageClauseContext ctx) { return visitChildren(ctx); }
 
-	Result visitBuiltinCallExpr(GoParserBase.BuiltinCallExprContext ctx);
+	@Override public Result visitBuiltinCallExpr(AbstractGoParser.BuiltinCallExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitLiteralValue(GoParserBase.LiteralValueContext ctx);
+	@Override public Result visitLiteralValue(AbstractGoParser.LiteralValueContext ctx) { return visitChildren(ctx); }
 
-	Result visitIndexExpr(GoParserBase.IndexExprContext ctx);
+	@Override public Result visitIndexExpr(AbstractGoParser.IndexExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitVarSpec(GoParserBase.VarSpecContext ctx);
+	@Override public Result visitVarSpec(AbstractGoParser.VarSpecContext ctx) { return visitChildren(ctx); }
 
-	Result visitBody(GoParserBase.BodyContext ctx);
+	@Override public Result visitBody(AbstractGoParser.BodyContext ctx) { return visitChildren(ctx); }
 
-	Result visitCommClause(GoParserBase.CommClauseContext ctx);
+	@Override public Result visitCommClause(AbstractGoParser.CommClauseContext ctx) { return visitChildren(ctx); }
 
-	Result visitQualifiedIdentifier(GoParserBase.QualifiedIdentifierContext ctx);
+	@Override public Result visitQualifiedIdentifier(AbstractGoParser.QualifiedIdentifierContext ctx) { return visitChildren(ctx); }
 
-	Result visitReturnStmt(GoParserBase.ReturnStmtContext ctx);
+	@Override public Result visitReturnStmt(AbstractGoParser.ReturnStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitSimpleStmt(GoParserBase.SimpleStmtContext ctx);
+	@Override public Result visitSimpleStmt(AbstractGoParser.SimpleStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeAssertionExpr(GoParserBase.TypeAssertionExprContext ctx);
+	@Override public Result visitTypeAssertionExpr(AbstractGoParser.TypeAssertionExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitType(GoParserBase.TypeContext ctx);
+	@Override public Result visitType(AbstractGoParser.TypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitInterfaceTypeName(GoParserBase.InterfaceTypeNameContext ctx);
+	@Override public Result visitInterfaceTypeName(AbstractGoParser.InterfaceTypeNameContext ctx) { return visitChildren(ctx); }
 
-	Result visitContinueStmt(GoParserBase.ContinueStmtContext ctx);
+	@Override public Result visitContinueStmt(AbstractGoParser.ContinueStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitValue(GoParserBase.ValueContext ctx);
+	@Override public Result visitValue(AbstractGoParser.ValueContext ctx) { return visitChildren(ctx); }
 
-	Result visitMethodDecl(GoParserBase.MethodDeclContext ctx);
+	@Override public Result visitMethodDecl(AbstractGoParser.MethodDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitLabeledStmt(GoParserBase.LabeledStmtContext ctx);
+	@Override public Result visitLabeledStmt(AbstractGoParser.LabeledStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitParameters(GoParserBase.ParametersContext ctx);
+	@Override public Result visitParameters(AbstractGoParser.ParametersContext ctx) { return visitChildren(ctx); }
 
-	Result visitDeferStmt(GoParserBase.DeferStmtContext ctx);
+	@Override public Result visitDeferStmt(AbstractGoParser.DeferStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitKey(GoParserBase.KeyContext ctx);
+	@Override public Result visitKey(AbstractGoParser.KeyContext ctx) { return visitChildren(ctx); }
 
-	Result visitDeclaration(GoParserBase.DeclarationContext ctx);
+	@Override public Result visitDeclaration(AbstractGoParser.DeclarationContext ctx) { return visitChildren(ctx); }
 
-	Result visitCommCase(GoParserBase.CommCaseContext ctx);
+	@Override public Result visitCommCase(AbstractGoParser.CommCaseContext ctx) { return visitChildren(ctx); }
 
-	Result visitBuiltinArgs(GoParserBase.BuiltinArgsContext ctx);
+	@Override public Result visitBuiltinArgs(AbstractGoParser.BuiltinArgsContext ctx) { return visitChildren(ctx); }
 
-	Result visitCondition(GoParserBase.ConditionContext ctx);
+	@Override public Result visitCondition(AbstractGoParser.ConditionContext ctx) { return visitChildren(ctx); }
 
-	Result visitConversionOrCallExpr(GoParserBase.ConversionOrCallExprContext ctx);
+	@Override public Result visitConversionOrCallExpr(AbstractGoParser.ConversionOrCallExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitLabel(GoParserBase.LabelContext ctx);
+	@Override public Result visitLabel(AbstractGoParser.LabelContext ctx) { return visitChildren(ctx); }
 
-	Result visitElementType(GoParserBase.ElementTypeContext ctx);
+	@Override public Result visitElementType(AbstractGoParser.ElementTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitFunctionDecl(GoParserBase.FunctionDeclContext ctx);
+	@Override public Result visitFunctionDecl(AbstractGoParser.FunctionDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitStatement(GoParserBase.StatementContext ctx);
+	@Override public Result visitStatement(AbstractGoParser.StatementContext ctx) { return visitChildren(ctx); }
 
-	Result visitPointerType(GoParserBase.PointerTypeContext ctx);
+	@Override public Result visitPointerType(AbstractGoParser.PointerTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitAddAssignOp(GoParserBase.AddAssignOpContext ctx);
+	@Override public Result visitAddAssignOp(AbstractGoParser.AddAssignOpContext ctx) { return visitChildren(ctx); }
 
-	Result visitSourceFile(GoParserBase.SourceFileContext ctx);
+	@Override public Result visitSourceFile(AbstractGoParser.SourceFileContext ctx) { return visitChildren(ctx); }
 
-	Result visitSliceExpr(GoParserBase.SliceExprContext ctx);
+	@Override public Result visitSliceExpr(AbstractGoParser.SliceExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitBaseTypeName(GoParserBase.BaseTypeNameContext ctx);
+	@Override public Result visitBaseTypeName(AbstractGoParser.BaseTypeNameContext ctx) { return visitChildren(ctx); }
 
-	Result visitMethodExpr(GoParserBase.MethodExprContext ctx);
+	@Override public Result visitMethodExpr(AbstractGoParser.MethodExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitElementIndex(GoParserBase.ElementIndexContext ctx);
+	@Override public Result visitElementIndex(AbstractGoParser.ElementIndexContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeList(GoParserBase.TypeListContext ctx);
+	@Override public Result visitTypeList(AbstractGoParser.TypeListContext ctx) { return visitChildren(ctx); }
 
-	Result visitIncDecStmt(GoParserBase.IncDecStmtContext ctx);
+	@Override public Result visitIncDecStmt(AbstractGoParser.IncDecStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitBuiltinCall(GoParserBase.BuiltinCallContext ctx);
+	@Override public Result visitBuiltinCall(AbstractGoParser.BuiltinCallContext ctx) { return visitChildren(ctx); }
 
-	Result visitConstDecl(GoParserBase.ConstDeclContext ctx);
+	@Override public Result visitConstDecl(AbstractGoParser.ConstDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitResult(GoParserBase.ResultContext ctx);
+	@Override public Result visitResult(AbstractGoParser.ResultContext ctx) { return visitChildren(ctx); }
 
-	Result visitAndExpr(GoParserBase.AndExprContext ctx);
+	@Override public Result visitAndExpr(AbstractGoParser.AndExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitStructType(GoParserBase.StructTypeContext ctx);
+	@Override public Result visitStructType(AbstractGoParser.StructTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitVarDecl(GoParserBase.VarDeclContext ctx);
+	@Override public Result visitVarDecl(AbstractGoParser.VarDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitInitStmt(GoParserBase.InitStmtContext ctx);
+	@Override public Result visitInitStmt(AbstractGoParser.InitStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitIdentifierList(GoParserBase.IdentifierListContext ctx);
+	@Override public Result visitIdentifierList(AbstractGoParser.IdentifierListContext ctx) { return visitChildren(ctx); }
 
-	Result visitSliceType(GoParserBase.SliceTypeContext ctx);
+	@Override public Result visitSliceType(AbstractGoParser.SliceTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitCompareExpr(GoParserBase.CompareExprContext ctx);
+	@Override public Result visitCompareExpr(AbstractGoParser.CompareExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitImportDecl(GoParserBase.ImportDeclContext ctx);
+	@Override public Result visitImportDecl(AbstractGoParser.ImportDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitElementList(GoParserBase.ElementListContext ctx);
+	@Override public Result visitElementList(AbstractGoParser.ElementListContext ctx) { return visitChildren(ctx); }
 
-	Result visitKeyType(GoParserBase.KeyTypeContext ctx);
+	@Override public Result visitKeyType(AbstractGoParser.KeyTypeContext ctx) { return visitChildren(ctx); }
 
-	Result visitImportPath(GoParserBase.ImportPathContext ctx);
+	@Override public Result visitImportPath(AbstractGoParser.ImportPathContext ctx) { return visitChildren(ctx); }
 
-	Result visitAnonymousField(GoParserBase.AnonymousFieldContext ctx);
+	@Override public Result visitAnonymousField(AbstractGoParser.AnonymousFieldContext ctx) { return visitChildren(ctx); }
 
-	Result visitAddExpr(GoParserBase.AddExprContext ctx);
+	@Override public Result visitAddExpr(AbstractGoParser.AddExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitExpressionStmt(GoParserBase.ExpressionStmtContext ctx);
+	@Override public Result visitExpressionStmt(AbstractGoParser.ExpressionStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitSendStmt(GoParserBase.SendStmtContext ctx);
+	@Override public Result visitSendStmt(AbstractGoParser.SendStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitSwitchStmt(GoParserBase.SwitchStmtContext ctx);
+	@Override public Result visitSwitchStmt(AbstractGoParser.SwitchStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitPostStmt(GoParserBase.PostStmtContext ctx);
+	@Override public Result visitPostStmt(AbstractGoParser.PostStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitForStmt(GoParserBase.ForStmtContext ctx);
+	@Override public Result visitForStmt(AbstractGoParser.ForStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeSwitchCase(GoParserBase.TypeSwitchCaseContext ctx);
+	@Override public Result visitTypeSwitchCase(AbstractGoParser.TypeSwitchCaseContext ctx) { return visitChildren(ctx); }
 
-	Result visitRangeClause(GoParserBase.RangeClauseContext ctx);
+	@Override public Result visitRangeClause(AbstractGoParser.RangeClauseContext ctx) { return visitChildren(ctx); }
 
-	Result visitOperand(GoParserBase.OperandContext ctx);
+	@Override public Result visitOperand(AbstractGoParser.OperandContext ctx) { return visitChildren(ctx); }
 
-	Result visitArgumentList(GoParserBase.ArgumentListContext ctx);
+	@Override public Result visitArgumentList(AbstractGoParser.ArgumentListContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeSwitchStmt(GoParserBase.TypeSwitchStmtContext ctx);
+	@Override public Result visitTypeSwitchStmt(AbstractGoParser.TypeSwitchStmtContext ctx) { return visitChildren(ctx); }
 
-	Result visitTypeDecl(GoParserBase.TypeDeclContext ctx);
+	@Override public Result visitTypeDecl(AbstractGoParser.TypeDeclContext ctx) { return visitChildren(ctx); }
 
-	Result visitUnaryExpr(GoParserBase.UnaryExprContext ctx);
+	@Override public Result visitUnaryExpr(AbstractGoParser.UnaryExprContext ctx) { return visitChildren(ctx); }
 
-	Result visitChannel(GoParserBase.ChannelContext ctx);
+	@Override public Result visitChannel(AbstractGoParser.ChannelContext ctx) { return visitChildren(ctx); }
 
-	Result visitLiteral(GoParserBase.LiteralContext ctx);
+	@Override public Result visitLiteral(AbstractGoParser.LiteralContext ctx) { return visitChildren(ctx); }
 }

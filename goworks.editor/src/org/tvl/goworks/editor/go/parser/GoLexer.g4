@@ -6,7 +6,11 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-lexer grammar GoLexerBase;
+lexer grammar GoLexer;
+
+options {
+    abstract=true;
+}
 
 @header {/*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC

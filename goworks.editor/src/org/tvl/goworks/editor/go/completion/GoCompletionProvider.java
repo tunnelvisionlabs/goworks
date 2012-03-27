@@ -37,7 +37,7 @@ import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
-import org.tvl.goworks.editor.go.parser.GoLexerBase;
+import org.tvl.goworks.editor.go.parser.GoLexer;
 
 /**
  *
@@ -211,15 +211,15 @@ public class GoCompletionProvider extends AbstractCompletionProvider {
         }
 
         switch (token.getType()) {
-        case GoLexerBase.COMMENT:
+        case GoLexer.COMMENT:
             return false;
 
-        case GoLexerBase.CharLiteral:
-        case GoLexerBase.StringLiteral:
+        case GoLexer.CharLiteral:
+        case GoLexer.StringLiteral:
             return allowInStrings;
 
-        case GoLexerBase.WS:
-        case GoLexerBase.NEWLINE:
+        case GoLexer.WS:
+        case GoLexer.NEWLINE:
             return true;
 
         default:

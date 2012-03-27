@@ -18,7 +18,7 @@ import org.antlr.v4.runtime.atn.LexerATNSimulator;
  *
  * @author Sam Harwell
  */
-public class GoHighlighterLexer extends GoHighlighterLexerBase {
+public class GoHighlighterLexer extends AbstractGoHighlighterLexer {
 
     public GoHighlighterLexer(CharStream input) {
         super(input);

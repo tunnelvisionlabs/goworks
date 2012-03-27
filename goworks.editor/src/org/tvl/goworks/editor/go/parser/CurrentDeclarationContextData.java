@@ -10,7 +10,7 @@ package org.tvl.goworks.editor.go.parser;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.RuleDependency;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
 
 /**
  *
@@ -33,7 +33,7 @@ public final class CurrentDeclarationContextData {
         return context;
     }
 
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0)
     public String getMemberName() {
         if (context == null) {
             return null;

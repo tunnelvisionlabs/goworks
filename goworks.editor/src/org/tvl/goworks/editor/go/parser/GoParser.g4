@@ -6,10 +6,11 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-parser grammar GoParserBase;
+parser grammar GoParser;
 
 options {
-    tokenVocab=GoLexerBase;
+    tokenVocab=GoLexer;
+    abstract=true;
 }
 
 @header {/*

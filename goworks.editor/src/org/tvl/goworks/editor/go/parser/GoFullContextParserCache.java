@@ -63,7 +63,7 @@ public class GoFullContextParserCache extends AbstractParserCache<Token, GoParse
 
         public GoParserATNSimulator(Parser<Token> parser, ATN atn) {
             super(parser, atn);
-            ATNState decisionState = atn.ruleToStartState[GoParserBase.RULE_qualifiedIdentifier].transition(0).target;
+            ATNState decisionState = atn.ruleToStartState[GoParser.RULE_qualifiedIdentifier].transition(0).target;
             if (decisionState instanceof DecisionState) {
                 QID_DECISION = ((DecisionState)decisionState).decision;
             } else {
@@ -79,7 +79,7 @@ public class GoFullContextParserCache extends AbstractParserCache<Token, GoParse
                 if (input.LA(1) == GoParser.IDENTIFIER) {
                     if (input.LA(2) == GoParser.Dot) {
                         if (input.LA(3) == GoParser.IDENTIFIER) {
-                            return parser.sempred(outerContext, GoParserBase.RULE_qualifiedIdentifier, 0) ? 1 : 2;
+                            return parser.sempred(outerContext, GoParser.RULE_qualifiedIdentifier, 0) ? 1 : 2;
                         } else if (input.LA(3) != CaretToken.CARET_TOKEN_TYPE) {
                             return 2;
                         }

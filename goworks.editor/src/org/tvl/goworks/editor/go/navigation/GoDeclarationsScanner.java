@@ -26,22 +26,22 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BlockContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.IdentifierListContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
-import org.tvl.goworks.editor.go.parser.GoParserBase;
-import org.tvl.goworks.editor.go.parser.GoParserBase.BlockContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ConstSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.FieldDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.FunctionDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.IdentifierListContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.MethodDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ResultContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ShortVarDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.SourceFileContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.StructTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.VarSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
+import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
 
 /**
  *
@@ -99,7 +99,7 @@ public class GoDeclarationsScanner {
         }
     }
 
-    private static class DeclarationsScannerListener extends GoParserBaseBaseListener {
+    private static class DeclarationsScannerListener extends GoParserBaseListener {
         private final DocumentSnapshot snapshot;
         private final Deque<DeclarationDescription> descriptionStack = new ArrayDeque<DeclarationDescription>();
         private final Deque<String> typeNameStack = new ArrayDeque<String>();
@@ -118,8 +118,8 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_constSpec, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         })
         public void enterConstSpec(ConstSpecContext ctx) {
             IdentifierListContext idListContext = ctx.identifierList();
@@ -137,8 +137,8 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_varSpec, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         })
         public void enterVarSpec(VarSpecContext ctx) {
             // no locals in navigator
@@ -161,8 +161,8 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_shortVarDecl, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         })
         public void enterShortVarDecl(ShortVarDeclContext ctx) {
             // no locals in navigator
@@ -185,8 +185,8 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_fieldDecl, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         })
         public void enterFieldDecl(FieldDeclContext ctx) {
             IdentifierListContext idListContext = ctx.identifierList();
@@ -205,7 +205,7 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_structType, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
         public void enterStructType(StructTypeContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
@@ -219,13 +219,13 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_structType, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
         public void exitStructType(StructTypeContext ctx) {
             descriptionStack.pop();
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0)
         public void enterFunctionDecl(FunctionDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = String.format("%s", ctx.IDENTIFIER().getSymbol().getText());
@@ -239,15 +239,15 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0)
         public void exitFunctionDecl(FunctionDeclContext ctx) {
             descriptionStack.pop();
         }
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodDecl, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
         })
         public void enterMethodDecl(MethodDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
@@ -263,43 +263,43 @@ public class GoDeclarationsScanner {
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodDecl, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0)
         public void exitMethodDecl(MethodDeclContext ctx) {
             descriptionStack.pop();
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSpec, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0)
         public void enterTypeSpec(TypeSpecContext ctx) {
             typeNameStack.push(ctx.IDENTIFIER().getSymbol().getText());
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSpec, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0)
         public void exitTypeSpec(TypeSpecContext ctx) {
             typeNameStack.pop();
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_result, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0)
         public void enterResult(ResultContext ctx) {
             resultLevel++;
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_result, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0)
         public void exitResult(ResultContext ctx) {
             resultLevel--;
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_block, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_block, version=0)
         public void enterBlock(BlockContext ctx) {
             blockLevel++;
         }
 
         @Override
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_block, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_block, version=0)
         public void exitBlock(BlockContext ctx) {
             blockLevel--;
         }

@@ -23,13 +23,13 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GoParserAnchorListener extends GoParserBaseBaseListener {
+public class GoParserAnchorListener extends GoParserBaseListener {
     private final Stack<Integer> anchorPositions = new Stack<Integer>();
     private final List<Anchor> anchors = new ArrayList<Anchor>();
     private final DocumentSnapshot snapshot;
@@ -75,13 +75,13 @@ public class GoParserAnchorListener extends GoParserBaseBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0)
     public void enterTopLevelDecl(TopLevelDeclContext ctx) {
         handleEnterAnchor(ctx);
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0)
     public void exitTopLevelDecl(TopLevelDeclContext ctx) {
         handleExitAnchor(ctx, ctx.getRuleIndex());
     }

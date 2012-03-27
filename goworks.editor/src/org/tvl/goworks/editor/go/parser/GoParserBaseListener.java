@@ -11,379 +11,386 @@ package org.tvl.goworks.editor.go.parser;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.antlr.v4.runtime.tree.*;
+
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 
-public interface GoParserBaseListener extends ParseTreeListener<Token> {
-	void enterMultExpr(GoParserBase.MultExprContext ctx);
-	void exitMultExpr(GoParserBase.MultExprContext ctx);
+public class GoParserBaseListener implements GoParserListener {
+	@Override public void enterMultExpr(AbstractGoParser.MultExprContext ctx) { }
+	@Override public void exitMultExpr(AbstractGoParser.MultExprContext ctx) { }
 
-	void enterChannelType(GoParserBase.ChannelTypeContext ctx);
-	void exitChannelType(GoParserBase.ChannelTypeContext ctx);
+	@Override public void enterChannelType(AbstractGoParser.ChannelTypeContext ctx) { }
+	@Override public void exitChannelType(AbstractGoParser.ChannelTypeContext ctx) { }
 
-	void enterMulAssignOp(GoParserBase.MulAssignOpContext ctx);
-	void exitMulAssignOp(GoParserBase.MulAssignOpContext ctx);
+	@Override public void enterMulAssignOp(AbstractGoParser.MulAssignOpContext ctx) { }
+	@Override public void exitMulAssignOp(AbstractGoParser.MulAssignOpContext ctx) { }
 
-	void enterPackageName(GoParserBase.PackageNameContext ctx);
-	void exitPackageName(GoParserBase.PackageNameContext ctx);
+	@Override public void enterPackageName(AbstractGoParser.PackageNameContext ctx) { }
+	@Override public void exitPackageName(AbstractGoParser.PackageNameContext ctx) { }
 
-	void enterReceiver(GoParserBase.ReceiverContext ctx);
-	void exitReceiver(GoParserBase.ReceiverContext ctx);
+	@Override public void enterReceiver(AbstractGoParser.ReceiverContext ctx) { }
+	@Override public void exitReceiver(AbstractGoParser.ReceiverContext ctx) { }
 
-	void enterArrayType(GoParserBase.ArrayTypeContext ctx);
-	void exitArrayType(GoParserBase.ArrayTypeContext ctx);
+	@Override public void enterArrayType(AbstractGoParser.ArrayTypeContext ctx) { }
+	@Override public void exitArrayType(AbstractGoParser.ArrayTypeContext ctx) { }
 
-	void enterExpressionList(GoParserBase.ExpressionListContext ctx);
-	void exitExpressionList(GoParserBase.ExpressionListContext ctx);
+	@Override public void enterExpressionList(AbstractGoParser.ExpressionListContext ctx) { }
+	@Override public void exitExpressionList(AbstractGoParser.ExpressionListContext ctx) { }
 
-	void enterTag(GoParserBase.TagContext ctx);
-	void exitTag(GoParserBase.TagContext ctx);
+	@Override public void enterTag(AbstractGoParser.TagContext ctx) { }
+	@Override public void exitTag(AbstractGoParser.TagContext ctx) { }
 
-	void enterFallthroughStmt(GoParserBase.FallthroughStmtContext ctx);
-	void exitFallthroughStmt(GoParserBase.FallthroughStmtContext ctx);
+	@Override public void enterFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx) { }
+	@Override public void exitFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx) { }
 
-	void enterSelectorExpr(GoParserBase.SelectorExprContext ctx);
-	void exitSelectorExpr(GoParserBase.SelectorExprContext ctx);
+	@Override public void enterSelectorExpr(AbstractGoParser.SelectorExprContext ctx) { }
+	@Override public void exitSelectorExpr(AbstractGoParser.SelectorExprContext ctx) { }
 
-	void enterParameterList(GoParserBase.ParameterListContext ctx);
-	void exitParameterList(GoParserBase.ParameterListContext ctx);
+	@Override public void enterParameterList(AbstractGoParser.ParameterListContext ctx) { }
+	@Override public void exitParameterList(AbstractGoParser.ParameterListContext ctx) { }
 
-	void enterReceiverType(GoParserBase.ReceiverTypeContext ctx);
-	void exitReceiverType(GoParserBase.ReceiverTypeContext ctx);
+	@Override public void enterReceiverType(AbstractGoParser.ReceiverTypeContext ctx) { }
+	@Override public void exitReceiverType(AbstractGoParser.ReceiverTypeContext ctx) { }
 
-	void enterFieldName(GoParserBase.FieldNameContext ctx);
-	void exitFieldName(GoParserBase.FieldNameContext ctx);
+	@Override public void enterFieldName(AbstractGoParser.FieldNameContext ctx) { }
+	@Override public void exitFieldName(AbstractGoParser.FieldNameContext ctx) { }
 
-	void enterIfStmt(GoParserBase.IfStmtContext ctx);
-	void exitIfStmt(GoParserBase.IfStmtContext ctx);
+	@Override public void enterIfStmt(AbstractGoParser.IfStmtContext ctx) { }
+	@Override public void exitIfStmt(AbstractGoParser.IfStmtContext ctx) { }
 
-	void enterMethodName(GoParserBase.MethodNameContext ctx);
-	void exitMethodName(GoParserBase.MethodNameContext ctx);
+	@Override public void enterMethodName(AbstractGoParser.MethodNameContext ctx) { }
+	@Override public void exitMethodName(AbstractGoParser.MethodNameContext ctx) { }
 
-	void enterSignature(GoParserBase.SignatureContext ctx);
-	void exitSignature(GoParserBase.SignatureContext ctx);
+	@Override public void enterSignature(AbstractGoParser.SignatureContext ctx) { }
+	@Override public void exitSignature(AbstractGoParser.SignatureContext ctx) { }
 
-	void enterMapType(GoParserBase.MapTypeContext ctx);
-	void exitMapType(GoParserBase.MapTypeContext ctx);
+	@Override public void enterMapType(AbstractGoParser.MapTypeContext ctx) { }
+	@Override public void exitMapType(AbstractGoParser.MapTypeContext ctx) { }
 
-	void enterElement(GoParserBase.ElementContext ctx);
-	void exitElement(GoParserBase.ElementContext ctx);
+	@Override public void enterElement(AbstractGoParser.ElementContext ctx) { }
+	@Override public void exitElement(AbstractGoParser.ElementContext ctx) { }
 
-	void enterCallExpr(GoParserBase.CallExprContext ctx);
-	void exitCallExpr(GoParserBase.CallExprContext ctx);
+	@Override public void enterCallExpr(AbstractGoParser.CallExprContext ctx) { }
+	@Override public void exitCallExpr(AbstractGoParser.CallExprContext ctx) { }
 
-	void enterTypeCaseClause(GoParserBase.TypeCaseClauseContext ctx);
-	void exitTypeCaseClause(GoParserBase.TypeCaseClauseContext ctx);
+	@Override public void enterTypeCaseClause(AbstractGoParser.TypeCaseClauseContext ctx) { }
+	@Override public void exitTypeCaseClause(AbstractGoParser.TypeCaseClauseContext ctx) { }
 
-	void enterExprCaseClause(GoParserBase.ExprCaseClauseContext ctx);
-	void exitExprCaseClause(GoParserBase.ExprCaseClauseContext ctx);
+	@Override public void enterExprCaseClause(AbstractGoParser.ExprCaseClauseContext ctx) { }
+	@Override public void exitExprCaseClause(AbstractGoParser.ExprCaseClauseContext ctx) { }
 
-	void enterTypeSwitchGuard(GoParserBase.TypeSwitchGuardContext ctx);
-	void exitTypeSwitchGuard(GoParserBase.TypeSwitchGuardContext ctx);
+	@Override public void enterTypeSwitchGuard(AbstractGoParser.TypeSwitchGuardContext ctx) { }
+	@Override public void exitTypeSwitchGuard(AbstractGoParser.TypeSwitchGuardContext ctx) { }
 
-	void enterFunctionLiteral(GoParserBase.FunctionLiteralContext ctx);
-	void exitFunctionLiteral(GoParserBase.FunctionLiteralContext ctx);
+	@Override public void enterFunctionLiteral(AbstractGoParser.FunctionLiteralContext ctx) { }
+	@Override public void exitFunctionLiteral(AbstractGoParser.FunctionLiteralContext ctx) { }
 
-	void enterOrExpr(GoParserBase.OrExprContext ctx);
-	void exitOrExpr(GoParserBase.OrExprContext ctx);
+	@Override public void enterOrExpr(AbstractGoParser.OrExprContext ctx) { }
+	@Override public void exitOrExpr(AbstractGoParser.OrExprContext ctx) { }
 
-	void enterRecvExpr(GoParserBase.RecvExprContext ctx);
-	void exitRecvExpr(GoParserBase.RecvExprContext ctx);
+	@Override public void enterRecvExpr(AbstractGoParser.RecvExprContext ctx) { }
+	@Override public void exitRecvExpr(AbstractGoParser.RecvExprContext ctx) { }
 
-	void enterTopLevelDecl(GoParserBase.TopLevelDeclContext ctx);
-	void exitTopLevelDecl(GoParserBase.TopLevelDeclContext ctx);
+	@Override public void enterTopLevelDecl(AbstractGoParser.TopLevelDeclContext ctx) { }
+	@Override public void exitTopLevelDecl(AbstractGoParser.TopLevelDeclContext ctx) { }
 
-	void enterMethodSpec(GoParserBase.MethodSpecContext ctx);
-	void exitMethodSpec(GoParserBase.MethodSpecContext ctx);
+	@Override public void enterMethodSpec(AbstractGoParser.MethodSpecContext ctx) { }
+	@Override public void exitMethodSpec(AbstractGoParser.MethodSpecContext ctx) { }
 
-	void enterConstSpec(GoParserBase.ConstSpecContext ctx);
-	void exitConstSpec(GoParserBase.ConstSpecContext ctx);
+	@Override public void enterConstSpec(AbstractGoParser.ConstSpecContext ctx) { }
+	@Override public void exitConstSpec(AbstractGoParser.ConstSpecContext ctx) { }
 
-	void enterCompositeLiteral(GoParserBase.CompositeLiteralContext ctx);
-	void exitCompositeLiteral(GoParserBase.CompositeLiteralContext ctx);
+	@Override public void enterCompositeLiteral(AbstractGoParser.CompositeLiteralContext ctx) { }
+	@Override public void exitCompositeLiteral(AbstractGoParser.CompositeLiteralContext ctx) { }
 
-	void enterForClause(GoParserBase.ForClauseContext ctx);
-	void exitForClause(GoParserBase.ForClauseContext ctx);
+	@Override public void enterForClause(AbstractGoParser.ForClauseContext ctx) { }
+	@Override public void exitForClause(AbstractGoParser.ForClauseContext ctx) { }
 
-	void enterShortVarDecl(GoParserBase.ShortVarDeclContext ctx);
-	void exitShortVarDecl(GoParserBase.ShortVarDeclContext ctx);
+	@Override public void enterShortVarDecl(AbstractGoParser.ShortVarDeclContext ctx) { }
+	@Override public void exitShortVarDecl(AbstractGoParser.ShortVarDeclContext ctx) { }
 
-	void enterGotoStmt(GoParserBase.GotoStmtContext ctx);
-	void exitGotoStmt(GoParserBase.GotoStmtContext ctx);
+	@Override public void enterGotoStmt(AbstractGoParser.GotoStmtContext ctx) { }
+	@Override public void exitGotoStmt(AbstractGoParser.GotoStmtContext ctx) { }
 
-	void enterArrayLength(GoParserBase.ArrayLengthContext ctx);
-	void exitArrayLength(GoParserBase.ArrayLengthContext ctx);
+	@Override public void enterArrayLength(AbstractGoParser.ArrayLengthContext ctx) { }
+	@Override public void exitArrayLength(AbstractGoParser.ArrayLengthContext ctx) { }
 
-	void enterInterfaceType(GoParserBase.InterfaceTypeContext ctx);
-	void exitInterfaceType(GoParserBase.InterfaceTypeContext ctx);
+	@Override public void enterInterfaceType(AbstractGoParser.InterfaceTypeContext ctx) { }
+	@Override public void exitInterfaceType(AbstractGoParser.InterfaceTypeContext ctx) { }
 
-	void enterConversion(GoParserBase.ConversionContext ctx);
-	void exitConversion(GoParserBase.ConversionContext ctx);
+	@Override public void enterConversion(AbstractGoParser.ConversionContext ctx) { }
+	@Override public void exitConversion(AbstractGoParser.ConversionContext ctx) { }
 
-	void enterBlock(GoParserBase.BlockContext ctx);
-	void exitBlock(GoParserBase.BlockContext ctx);
+	@Override public void enterBlock(AbstractGoParser.BlockContext ctx) { }
+	@Override public void exitBlock(AbstractGoParser.BlockContext ctx) { }
 
-	void enterBreakStmt(GoParserBase.BreakStmtContext ctx);
-	void exitBreakStmt(GoParserBase.BreakStmtContext ctx);
+	@Override public void enterBreakStmt(AbstractGoParser.BreakStmtContext ctx) { }
+	@Override public void exitBreakStmt(AbstractGoParser.BreakStmtContext ctx) { }
 
-	void enterEmptyStmt(GoParserBase.EmptyStmtContext ctx);
-	void exitEmptyStmt(GoParserBase.EmptyStmtContext ctx);
+	@Override public void enterEmptyStmt(AbstractGoParser.EmptyStmtContext ctx) { }
+	@Override public void exitEmptyStmt(AbstractGoParser.EmptyStmtContext ctx) { }
 
-	void enterFunctionType(GoParserBase.FunctionTypeContext ctx);
-	void exitFunctionType(GoParserBase.FunctionTypeContext ctx);
+	@Override public void enterFunctionType(AbstractGoParser.FunctionTypeContext ctx) { }
+	@Override public void exitFunctionType(AbstractGoParser.FunctionTypeContext ctx) { }
 
-	void enterBaseType(GoParserBase.BaseTypeContext ctx);
-	void exitBaseType(GoParserBase.BaseTypeContext ctx);
+	@Override public void enterBaseType(AbstractGoParser.BaseTypeContext ctx) { }
+	@Override public void exitBaseType(AbstractGoParser.BaseTypeContext ctx) { }
 
-	void enterOperandExpr(GoParserBase.OperandExprContext ctx);
-	void exitOperandExpr(GoParserBase.OperandExprContext ctx);
+	@Override public void enterOperandExpr(AbstractGoParser.OperandExprContext ctx) { }
+	@Override public void exitOperandExpr(AbstractGoParser.OperandExprContext ctx) { }
 
-	void enterFieldDecl(GoParserBase.FieldDeclContext ctx);
-	void exitFieldDecl(GoParserBase.FieldDeclContext ctx);
+	@Override public void enterFieldDecl(AbstractGoParser.FieldDeclContext ctx) { }
+	@Override public void exitFieldDecl(AbstractGoParser.FieldDeclContext ctx) { }
 
-	void enterExprSwitchStmt(GoParserBase.ExprSwitchStmtContext ctx);
-	void exitExprSwitchStmt(GoParserBase.ExprSwitchStmtContext ctx);
+	@Override public void enterExprSwitchStmt(AbstractGoParser.ExprSwitchStmtContext ctx) { }
+	@Override public void exitExprSwitchStmt(AbstractGoParser.ExprSwitchStmtContext ctx) { }
 
-	void enterGoStmt(GoParserBase.GoStmtContext ctx);
-	void exitGoStmt(GoParserBase.GoStmtContext ctx);
+	@Override public void enterGoStmt(AbstractGoParser.GoStmtContext ctx) { }
+	@Override public void exitGoStmt(AbstractGoParser.GoStmtContext ctx) { }
 
-	void enterParameterDecl(GoParserBase.ParameterDeclContext ctx);
-	void exitParameterDecl(GoParserBase.ParameterDeclContext ctx);
+	@Override public void enterParameterDecl(AbstractGoParser.ParameterDeclContext ctx) { }
+	@Override public void exitParameterDecl(AbstractGoParser.ParameterDeclContext ctx) { }
 
-	void enterBasicLiteral(GoParserBase.BasicLiteralContext ctx);
-	void exitBasicLiteral(GoParserBase.BasicLiteralContext ctx);
+	@Override public void enterBasicLiteral(AbstractGoParser.BasicLiteralContext ctx) { }
+	@Override public void exitBasicLiteral(AbstractGoParser.BasicLiteralContext ctx) { }
 
-	void enterExprSwitchCase(GoParserBase.ExprSwitchCaseContext ctx);
-	void exitExprSwitchCase(GoParserBase.ExprSwitchCaseContext ctx);
+	@Override public void enterExprSwitchCase(AbstractGoParser.ExprSwitchCaseContext ctx) { }
+	@Override public void exitExprSwitchCase(AbstractGoParser.ExprSwitchCaseContext ctx) { }
 
-	void enterTypeLiteral(GoParserBase.TypeLiteralContext ctx);
-	void exitTypeLiteral(GoParserBase.TypeLiteralContext ctx);
+	@Override public void enterTypeLiteral(AbstractGoParser.TypeLiteralContext ctx) { }
+	@Override public void exitTypeLiteral(AbstractGoParser.TypeLiteralContext ctx) { }
 
-	void enterSelectStmt(GoParserBase.SelectStmtContext ctx);
-	void exitSelectStmt(GoParserBase.SelectStmtContext ctx);
+	@Override public void enterSelectStmt(AbstractGoParser.SelectStmtContext ctx) { }
+	@Override public void exitSelectStmt(AbstractGoParser.SelectStmtContext ctx) { }
 
-	void enterImportSpec(GoParserBase.ImportSpecContext ctx);
-	void exitImportSpec(GoParserBase.ImportSpecContext ctx);
+	@Override public void enterImportSpec(AbstractGoParser.ImportSpecContext ctx) { }
+	@Override public void exitImportSpec(AbstractGoParser.ImportSpecContext ctx) { }
 
-	void enterTypeName(GoParserBase.TypeNameContext ctx);
-	void exitTypeName(GoParserBase.TypeNameContext ctx);
+	@Override public void enterTypeName(AbstractGoParser.TypeNameContext ctx) { }
+	@Override public void exitTypeName(AbstractGoParser.TypeNameContext ctx) { }
 
-	void enterLiteralType(GoParserBase.LiteralTypeContext ctx);
-	void exitLiteralType(GoParserBase.LiteralTypeContext ctx);
+	@Override public void enterLiteralType(AbstractGoParser.LiteralTypeContext ctx) { }
+	@Override public void exitLiteralType(AbstractGoParser.LiteralTypeContext ctx) { }
 
-	void enterAssignment(GoParserBase.AssignmentContext ctx);
-	void exitAssignment(GoParserBase.AssignmentContext ctx);
+	@Override public void enterAssignment(AbstractGoParser.AssignmentContext ctx) { }
+	@Override public void exitAssignment(AbstractGoParser.AssignmentContext ctx) { }
 
-	void enterAssignOp(GoParserBase.AssignOpContext ctx);
-	void exitAssignOp(GoParserBase.AssignOpContext ctx);
+	@Override public void enterAssignOp(AbstractGoParser.AssignOpContext ctx) { }
+	@Override public void exitAssignOp(AbstractGoParser.AssignOpContext ctx) { }
 
-	void enterRecvStmt(GoParserBase.RecvStmtContext ctx);
-	void exitRecvStmt(GoParserBase.RecvStmtContext ctx);
+	@Override public void enterRecvStmt(AbstractGoParser.RecvStmtContext ctx) { }
+	@Override public void exitRecvStmt(AbstractGoParser.RecvStmtContext ctx) { }
 
-	void enterTypeSpec(GoParserBase.TypeSpecContext ctx);
-	void exitTypeSpec(GoParserBase.TypeSpecContext ctx);
+	@Override public void enterTypeSpec(AbstractGoParser.TypeSpecContext ctx) { }
+	@Override public void exitTypeSpec(AbstractGoParser.TypeSpecContext ctx) { }
 
-	void enterPackageClause(GoParserBase.PackageClauseContext ctx);
-	void exitPackageClause(GoParserBase.PackageClauseContext ctx);
+	@Override public void enterPackageClause(AbstractGoParser.PackageClauseContext ctx) { }
+	@Override public void exitPackageClause(AbstractGoParser.PackageClauseContext ctx) { }
 
-	void enterBuiltinCallExpr(GoParserBase.BuiltinCallExprContext ctx);
-	void exitBuiltinCallExpr(GoParserBase.BuiltinCallExprContext ctx);
+	@Override public void enterBuiltinCallExpr(AbstractGoParser.BuiltinCallExprContext ctx) { }
+	@Override public void exitBuiltinCallExpr(AbstractGoParser.BuiltinCallExprContext ctx) { }
 
-	void enterLiteralValue(GoParserBase.LiteralValueContext ctx);
-	void exitLiteralValue(GoParserBase.LiteralValueContext ctx);
+	@Override public void enterLiteralValue(AbstractGoParser.LiteralValueContext ctx) { }
+	@Override public void exitLiteralValue(AbstractGoParser.LiteralValueContext ctx) { }
 
-	void enterIndexExpr(GoParserBase.IndexExprContext ctx);
-	void exitIndexExpr(GoParserBase.IndexExprContext ctx);
+	@Override public void enterIndexExpr(AbstractGoParser.IndexExprContext ctx) { }
+	@Override public void exitIndexExpr(AbstractGoParser.IndexExprContext ctx) { }
 
-	void enterVarSpec(GoParserBase.VarSpecContext ctx);
-	void exitVarSpec(GoParserBase.VarSpecContext ctx);
+	@Override public void enterVarSpec(AbstractGoParser.VarSpecContext ctx) { }
+	@Override public void exitVarSpec(AbstractGoParser.VarSpecContext ctx) { }
 
-	void enterBody(GoParserBase.BodyContext ctx);
-	void exitBody(GoParserBase.BodyContext ctx);
+	@Override public void enterBody(AbstractGoParser.BodyContext ctx) { }
+	@Override public void exitBody(AbstractGoParser.BodyContext ctx) { }
 
-	void enterCommClause(GoParserBase.CommClauseContext ctx);
-	void exitCommClause(GoParserBase.CommClauseContext ctx);
+	@Override public void enterCommClause(AbstractGoParser.CommClauseContext ctx) { }
+	@Override public void exitCommClause(AbstractGoParser.CommClauseContext ctx) { }
 
-	void enterQualifiedIdentifier(GoParserBase.QualifiedIdentifierContext ctx);
-	void exitQualifiedIdentifier(GoParserBase.QualifiedIdentifierContext ctx);
+	@Override public void enterQualifiedIdentifier(AbstractGoParser.QualifiedIdentifierContext ctx) { }
+	@Override public void exitQualifiedIdentifier(AbstractGoParser.QualifiedIdentifierContext ctx) { }
 
-	void enterReturnStmt(GoParserBase.ReturnStmtContext ctx);
-	void exitReturnStmt(GoParserBase.ReturnStmtContext ctx);
+	@Override public void enterReturnStmt(AbstractGoParser.ReturnStmtContext ctx) { }
+	@Override public void exitReturnStmt(AbstractGoParser.ReturnStmtContext ctx) { }
 
-	void enterSimpleStmt(GoParserBase.SimpleStmtContext ctx);
-	void exitSimpleStmt(GoParserBase.SimpleStmtContext ctx);
+	@Override public void enterSimpleStmt(AbstractGoParser.SimpleStmtContext ctx) { }
+	@Override public void exitSimpleStmt(AbstractGoParser.SimpleStmtContext ctx) { }
 
-	void enterTypeAssertionExpr(GoParserBase.TypeAssertionExprContext ctx);
-	void exitTypeAssertionExpr(GoParserBase.TypeAssertionExprContext ctx);
+	@Override public void enterTypeAssertionExpr(AbstractGoParser.TypeAssertionExprContext ctx) { }
+	@Override public void exitTypeAssertionExpr(AbstractGoParser.TypeAssertionExprContext ctx) { }
 
-	void enterType(GoParserBase.TypeContext ctx);
-	void exitType(GoParserBase.TypeContext ctx);
+	@Override public void enterType(AbstractGoParser.TypeContext ctx) { }
+	@Override public void exitType(AbstractGoParser.TypeContext ctx) { }
 
-	void enterInterfaceTypeName(GoParserBase.InterfaceTypeNameContext ctx);
-	void exitInterfaceTypeName(GoParserBase.InterfaceTypeNameContext ctx);
+	@Override public void enterInterfaceTypeName(AbstractGoParser.InterfaceTypeNameContext ctx) { }
+	@Override public void exitInterfaceTypeName(AbstractGoParser.InterfaceTypeNameContext ctx) { }
 
-	void enterContinueStmt(GoParserBase.ContinueStmtContext ctx);
-	void exitContinueStmt(GoParserBase.ContinueStmtContext ctx);
+	@Override public void enterContinueStmt(AbstractGoParser.ContinueStmtContext ctx) { }
+	@Override public void exitContinueStmt(AbstractGoParser.ContinueStmtContext ctx) { }
 
-	void enterValue(GoParserBase.ValueContext ctx);
-	void exitValue(GoParserBase.ValueContext ctx);
+	@Override public void enterValue(AbstractGoParser.ValueContext ctx) { }
+	@Override public void exitValue(AbstractGoParser.ValueContext ctx) { }
 
-	void enterMethodDecl(GoParserBase.MethodDeclContext ctx);
-	void exitMethodDecl(GoParserBase.MethodDeclContext ctx);
+	@Override public void enterMethodDecl(AbstractGoParser.MethodDeclContext ctx) { }
+	@Override public void exitMethodDecl(AbstractGoParser.MethodDeclContext ctx) { }
 
-	void enterLabeledStmt(GoParserBase.LabeledStmtContext ctx);
-	void exitLabeledStmt(GoParserBase.LabeledStmtContext ctx);
+	@Override public void enterLabeledStmt(AbstractGoParser.LabeledStmtContext ctx) { }
+	@Override public void exitLabeledStmt(AbstractGoParser.LabeledStmtContext ctx) { }
 
-	void enterParameters(GoParserBase.ParametersContext ctx);
-	void exitParameters(GoParserBase.ParametersContext ctx);
+	@Override public void enterParameters(AbstractGoParser.ParametersContext ctx) { }
+	@Override public void exitParameters(AbstractGoParser.ParametersContext ctx) { }
 
-	void enterDeferStmt(GoParserBase.DeferStmtContext ctx);
-	void exitDeferStmt(GoParserBase.DeferStmtContext ctx);
+	@Override public void enterDeferStmt(AbstractGoParser.DeferStmtContext ctx) { }
+	@Override public void exitDeferStmt(AbstractGoParser.DeferStmtContext ctx) { }
 
-	void enterKey(GoParserBase.KeyContext ctx);
-	void exitKey(GoParserBase.KeyContext ctx);
+	@Override public void enterKey(AbstractGoParser.KeyContext ctx) { }
+	@Override public void exitKey(AbstractGoParser.KeyContext ctx) { }
 
-	void enterDeclaration(GoParserBase.DeclarationContext ctx);
-	void exitDeclaration(GoParserBase.DeclarationContext ctx);
+	@Override public void enterDeclaration(AbstractGoParser.DeclarationContext ctx) { }
+	@Override public void exitDeclaration(AbstractGoParser.DeclarationContext ctx) { }
 
-	void enterCommCase(GoParserBase.CommCaseContext ctx);
-	void exitCommCase(GoParserBase.CommCaseContext ctx);
+	@Override public void enterCommCase(AbstractGoParser.CommCaseContext ctx) { }
+	@Override public void exitCommCase(AbstractGoParser.CommCaseContext ctx) { }
 
-	void enterBuiltinArgs(GoParserBase.BuiltinArgsContext ctx);
-	void exitBuiltinArgs(GoParserBase.BuiltinArgsContext ctx);
+	@Override public void enterBuiltinArgs(AbstractGoParser.BuiltinArgsContext ctx) { }
+	@Override public void exitBuiltinArgs(AbstractGoParser.BuiltinArgsContext ctx) { }
 
-	void enterCondition(GoParserBase.ConditionContext ctx);
-	void exitCondition(GoParserBase.ConditionContext ctx);
+	@Override public void enterCondition(AbstractGoParser.ConditionContext ctx) { }
+	@Override public void exitCondition(AbstractGoParser.ConditionContext ctx) { }
 
-	void enterConversionOrCallExpr(GoParserBase.ConversionOrCallExprContext ctx);
-	void exitConversionOrCallExpr(GoParserBase.ConversionOrCallExprContext ctx);
+	@Override public void enterConversionOrCallExpr(AbstractGoParser.ConversionOrCallExprContext ctx) { }
+	@Override public void exitConversionOrCallExpr(AbstractGoParser.ConversionOrCallExprContext ctx) { }
 
-	void enterLabel(GoParserBase.LabelContext ctx);
-	void exitLabel(GoParserBase.LabelContext ctx);
+	@Override public void enterLabel(AbstractGoParser.LabelContext ctx) { }
+	@Override public void exitLabel(AbstractGoParser.LabelContext ctx) { }
 
-	void enterElementType(GoParserBase.ElementTypeContext ctx);
-	void exitElementType(GoParserBase.ElementTypeContext ctx);
+	@Override public void enterElementType(AbstractGoParser.ElementTypeContext ctx) { }
+	@Override public void exitElementType(AbstractGoParser.ElementTypeContext ctx) { }
 
-	void enterFunctionDecl(GoParserBase.FunctionDeclContext ctx);
-	void exitFunctionDecl(GoParserBase.FunctionDeclContext ctx);
+	@Override public void enterFunctionDecl(AbstractGoParser.FunctionDeclContext ctx) { }
+	@Override public void exitFunctionDecl(AbstractGoParser.FunctionDeclContext ctx) { }
 
-	void enterStatement(GoParserBase.StatementContext ctx);
-	void exitStatement(GoParserBase.StatementContext ctx);
+	@Override public void enterStatement(AbstractGoParser.StatementContext ctx) { }
+	@Override public void exitStatement(AbstractGoParser.StatementContext ctx) { }
 
-	void enterPointerType(GoParserBase.PointerTypeContext ctx);
-	void exitPointerType(GoParserBase.PointerTypeContext ctx);
+	@Override public void enterPointerType(AbstractGoParser.PointerTypeContext ctx) { }
+	@Override public void exitPointerType(AbstractGoParser.PointerTypeContext ctx) { }
 
-	void enterAddAssignOp(GoParserBase.AddAssignOpContext ctx);
-	void exitAddAssignOp(GoParserBase.AddAssignOpContext ctx);
+	@Override public void enterAddAssignOp(AbstractGoParser.AddAssignOpContext ctx) { }
+	@Override public void exitAddAssignOp(AbstractGoParser.AddAssignOpContext ctx) { }
 
-	void enterSourceFile(GoParserBase.SourceFileContext ctx);
-	void exitSourceFile(GoParserBase.SourceFileContext ctx);
+	@Override public void enterSourceFile(AbstractGoParser.SourceFileContext ctx) { }
+	@Override public void exitSourceFile(AbstractGoParser.SourceFileContext ctx) { }
 
-	void enterSliceExpr(GoParserBase.SliceExprContext ctx);
-	void exitSliceExpr(GoParserBase.SliceExprContext ctx);
+	@Override public void enterSliceExpr(AbstractGoParser.SliceExprContext ctx) { }
+	@Override public void exitSliceExpr(AbstractGoParser.SliceExprContext ctx) { }
 
-	void enterBaseTypeName(GoParserBase.BaseTypeNameContext ctx);
-	void exitBaseTypeName(GoParserBase.BaseTypeNameContext ctx);
+	@Override public void enterBaseTypeName(AbstractGoParser.BaseTypeNameContext ctx) { }
+	@Override public void exitBaseTypeName(AbstractGoParser.BaseTypeNameContext ctx) { }
 
-	void enterMethodExpr(GoParserBase.MethodExprContext ctx);
-	void exitMethodExpr(GoParserBase.MethodExprContext ctx);
+	@Override public void enterMethodExpr(AbstractGoParser.MethodExprContext ctx) { }
+	@Override public void exitMethodExpr(AbstractGoParser.MethodExprContext ctx) { }
 
-	void enterElementIndex(GoParserBase.ElementIndexContext ctx);
-	void exitElementIndex(GoParserBase.ElementIndexContext ctx);
+	@Override public void enterElementIndex(AbstractGoParser.ElementIndexContext ctx) { }
+	@Override public void exitElementIndex(AbstractGoParser.ElementIndexContext ctx) { }
 
-	void enterTypeList(GoParserBase.TypeListContext ctx);
-	void exitTypeList(GoParserBase.TypeListContext ctx);
+	@Override public void enterTypeList(AbstractGoParser.TypeListContext ctx) { }
+	@Override public void exitTypeList(AbstractGoParser.TypeListContext ctx) { }
 
-	void enterIncDecStmt(GoParserBase.IncDecStmtContext ctx);
-	void exitIncDecStmt(GoParserBase.IncDecStmtContext ctx);
+	@Override public void enterIncDecStmt(AbstractGoParser.IncDecStmtContext ctx) { }
+	@Override public void exitIncDecStmt(AbstractGoParser.IncDecStmtContext ctx) { }
 
-	void enterBuiltinCall(GoParserBase.BuiltinCallContext ctx);
-	void exitBuiltinCall(GoParserBase.BuiltinCallContext ctx);
+	@Override public void enterBuiltinCall(AbstractGoParser.BuiltinCallContext ctx) { }
+	@Override public void exitBuiltinCall(AbstractGoParser.BuiltinCallContext ctx) { }
 
-	void enterConstDecl(GoParserBase.ConstDeclContext ctx);
-	void exitConstDecl(GoParserBase.ConstDeclContext ctx);
+	@Override public void enterConstDecl(AbstractGoParser.ConstDeclContext ctx) { }
+	@Override public void exitConstDecl(AbstractGoParser.ConstDeclContext ctx) { }
 
-	void enterResult(GoParserBase.ResultContext ctx);
-	void exitResult(GoParserBase.ResultContext ctx);
+	@Override public void enterResult(AbstractGoParser.ResultContext ctx) { }
+	@Override public void exitResult(AbstractGoParser.ResultContext ctx) { }
 
-	void enterAndExpr(GoParserBase.AndExprContext ctx);
-	void exitAndExpr(GoParserBase.AndExprContext ctx);
+	@Override public void enterAndExpr(AbstractGoParser.AndExprContext ctx) { }
+	@Override public void exitAndExpr(AbstractGoParser.AndExprContext ctx) { }
 
-	void enterStructType(GoParserBase.StructTypeContext ctx);
-	void exitStructType(GoParserBase.StructTypeContext ctx);
+	@Override public void enterStructType(AbstractGoParser.StructTypeContext ctx) { }
+	@Override public void exitStructType(AbstractGoParser.StructTypeContext ctx) { }
 
-	void enterVarDecl(GoParserBase.VarDeclContext ctx);
-	void exitVarDecl(GoParserBase.VarDeclContext ctx);
+	@Override public void enterVarDecl(AbstractGoParser.VarDeclContext ctx) { }
+	@Override public void exitVarDecl(AbstractGoParser.VarDeclContext ctx) { }
 
-	void enterInitStmt(GoParserBase.InitStmtContext ctx);
-	void exitInitStmt(GoParserBase.InitStmtContext ctx);
+	@Override public void enterInitStmt(AbstractGoParser.InitStmtContext ctx) { }
+	@Override public void exitInitStmt(AbstractGoParser.InitStmtContext ctx) { }
 
-	void enterIdentifierList(GoParserBase.IdentifierListContext ctx);
-	void exitIdentifierList(GoParserBase.IdentifierListContext ctx);
+	@Override public void enterIdentifierList(AbstractGoParser.IdentifierListContext ctx) { }
+	@Override public void exitIdentifierList(AbstractGoParser.IdentifierListContext ctx) { }
 
-	void enterSliceType(GoParserBase.SliceTypeContext ctx);
-	void exitSliceType(GoParserBase.SliceTypeContext ctx);
+	@Override public void enterSliceType(AbstractGoParser.SliceTypeContext ctx) { }
+	@Override public void exitSliceType(AbstractGoParser.SliceTypeContext ctx) { }
 
-	void enterCompareExpr(GoParserBase.CompareExprContext ctx);
-	void exitCompareExpr(GoParserBase.CompareExprContext ctx);
+	@Override public void enterCompareExpr(AbstractGoParser.CompareExprContext ctx) { }
+	@Override public void exitCompareExpr(AbstractGoParser.CompareExprContext ctx) { }
 
-	void enterImportDecl(GoParserBase.ImportDeclContext ctx);
-	void exitImportDecl(GoParserBase.ImportDeclContext ctx);
+	@Override public void enterImportDecl(AbstractGoParser.ImportDeclContext ctx) { }
+	@Override public void exitImportDecl(AbstractGoParser.ImportDeclContext ctx) { }
 
-	void enterElementList(GoParserBase.ElementListContext ctx);
-	void exitElementList(GoParserBase.ElementListContext ctx);
+	@Override public void enterElementList(AbstractGoParser.ElementListContext ctx) { }
+	@Override public void exitElementList(AbstractGoParser.ElementListContext ctx) { }
 
-	void enterKeyType(GoParserBase.KeyTypeContext ctx);
-	void exitKeyType(GoParserBase.KeyTypeContext ctx);
+	@Override public void enterKeyType(AbstractGoParser.KeyTypeContext ctx) { }
+	@Override public void exitKeyType(AbstractGoParser.KeyTypeContext ctx) { }
 
-	void enterImportPath(GoParserBase.ImportPathContext ctx);
-	void exitImportPath(GoParserBase.ImportPathContext ctx);
+	@Override public void enterImportPath(AbstractGoParser.ImportPathContext ctx) { }
+	@Override public void exitImportPath(AbstractGoParser.ImportPathContext ctx) { }
 
-	void enterAnonymousField(GoParserBase.AnonymousFieldContext ctx);
-	void exitAnonymousField(GoParserBase.AnonymousFieldContext ctx);
+	@Override public void enterAnonymousField(AbstractGoParser.AnonymousFieldContext ctx) { }
+	@Override public void exitAnonymousField(AbstractGoParser.AnonymousFieldContext ctx) { }
 
-	void enterAddExpr(GoParserBase.AddExprContext ctx);
-	void exitAddExpr(GoParserBase.AddExprContext ctx);
+	@Override public void enterAddExpr(AbstractGoParser.AddExprContext ctx) { }
+	@Override public void exitAddExpr(AbstractGoParser.AddExprContext ctx) { }
 
-	void enterExpressionStmt(GoParserBase.ExpressionStmtContext ctx);
-	void exitExpressionStmt(GoParserBase.ExpressionStmtContext ctx);
+	@Override public void enterExpressionStmt(AbstractGoParser.ExpressionStmtContext ctx) { }
+	@Override public void exitExpressionStmt(AbstractGoParser.ExpressionStmtContext ctx) { }
 
-	void enterSendStmt(GoParserBase.SendStmtContext ctx);
-	void exitSendStmt(GoParserBase.SendStmtContext ctx);
+	@Override public void enterSendStmt(AbstractGoParser.SendStmtContext ctx) { }
+	@Override public void exitSendStmt(AbstractGoParser.SendStmtContext ctx) { }
 
-	void enterSwitchStmt(GoParserBase.SwitchStmtContext ctx);
-	void exitSwitchStmt(GoParserBase.SwitchStmtContext ctx);
+	@Override public void enterSwitchStmt(AbstractGoParser.SwitchStmtContext ctx) { }
+	@Override public void exitSwitchStmt(AbstractGoParser.SwitchStmtContext ctx) { }
 
-	void enterPostStmt(GoParserBase.PostStmtContext ctx);
-	void exitPostStmt(GoParserBase.PostStmtContext ctx);
+	@Override public void enterPostStmt(AbstractGoParser.PostStmtContext ctx) { }
+	@Override public void exitPostStmt(AbstractGoParser.PostStmtContext ctx) { }
 
-	void enterForStmt(GoParserBase.ForStmtContext ctx);
-	void exitForStmt(GoParserBase.ForStmtContext ctx);
+	@Override public void enterForStmt(AbstractGoParser.ForStmtContext ctx) { }
+	@Override public void exitForStmt(AbstractGoParser.ForStmtContext ctx) { }
 
-	void enterTypeSwitchCase(GoParserBase.TypeSwitchCaseContext ctx);
-	void exitTypeSwitchCase(GoParserBase.TypeSwitchCaseContext ctx);
+	@Override public void enterTypeSwitchCase(AbstractGoParser.TypeSwitchCaseContext ctx) { }
+	@Override public void exitTypeSwitchCase(AbstractGoParser.TypeSwitchCaseContext ctx) { }
 
-	void enterRangeClause(GoParserBase.RangeClauseContext ctx);
-	void exitRangeClause(GoParserBase.RangeClauseContext ctx);
+	@Override public void enterRangeClause(AbstractGoParser.RangeClauseContext ctx) { }
+	@Override public void exitRangeClause(AbstractGoParser.RangeClauseContext ctx) { }
 
-	void enterOperand(GoParserBase.OperandContext ctx);
-	void exitOperand(GoParserBase.OperandContext ctx);
+	@Override public void enterOperand(AbstractGoParser.OperandContext ctx) { }
+	@Override public void exitOperand(AbstractGoParser.OperandContext ctx) { }
 
-	void enterArgumentList(GoParserBase.ArgumentListContext ctx);
-	void exitArgumentList(GoParserBase.ArgumentListContext ctx);
+	@Override public void enterArgumentList(AbstractGoParser.ArgumentListContext ctx) { }
+	@Override public void exitArgumentList(AbstractGoParser.ArgumentListContext ctx) { }
 
-	void enterTypeSwitchStmt(GoParserBase.TypeSwitchStmtContext ctx);
-	void exitTypeSwitchStmt(GoParserBase.TypeSwitchStmtContext ctx);
+	@Override public void enterTypeSwitchStmt(AbstractGoParser.TypeSwitchStmtContext ctx) { }
+	@Override public void exitTypeSwitchStmt(AbstractGoParser.TypeSwitchStmtContext ctx) { }
 
-	void enterTypeDecl(GoParserBase.TypeDeclContext ctx);
-	void exitTypeDecl(GoParserBase.TypeDeclContext ctx);
+	@Override public void enterTypeDecl(AbstractGoParser.TypeDeclContext ctx) { }
+	@Override public void exitTypeDecl(AbstractGoParser.TypeDeclContext ctx) { }
 
-	void enterUnaryExpr(GoParserBase.UnaryExprContext ctx);
-	void exitUnaryExpr(GoParserBase.UnaryExprContext ctx);
+	@Override public void enterUnaryExpr(AbstractGoParser.UnaryExprContext ctx) { }
+	@Override public void exitUnaryExpr(AbstractGoParser.UnaryExprContext ctx) { }
 
-	void enterChannel(GoParserBase.ChannelContext ctx);
-	void exitChannel(GoParserBase.ChannelContext ctx);
+	@Override public void enterChannel(AbstractGoParser.ChannelContext ctx) { }
+	@Override public void exitChannel(AbstractGoParser.ChannelContext ctx) { }
 
-	void enterLiteral(GoParserBase.LiteralContext ctx);
-	void exitLiteral(GoParserBase.LiteralContext ctx);
+	@Override public void enterLiteral(AbstractGoParser.LiteralContext ctx) { }
+	@Override public void exitLiteral(AbstractGoParser.LiteralContext ctx) { }
+
+	@Override public void enterEveryRule(ParserRuleContext<? extends Token> ctx) { }
+	@Override public void exitEveryRule(ParserRuleContext<? extends Token> ctx) { }
+	@Override public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) { }
+	@Override public void visitErrorNode(ParseTree.ErrorNode<? extends Token> node) { }
 }

@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> GoLexerBase.java generatedTimestamp>
+// $ANTLR ANTLRVersion> AbstractGoLexer.java generatedTimestamp>
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -18,7 +18,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-public class GoLexerBase extends Lexer {
+public abstract class AbstractGoLexer extends Lexer {
 	public static final int
 		Break=3, Case=4, Chan=5, Const=6, Continue=7, Default=8, Defer=9, Else=10, 
 		Fallthrough=11, For=12, Func=13, Go=14, Goto=15, If=16, Import=17, Interface=18, 
@@ -79,13 +79,13 @@ public class GoLexerBase extends Lexer {
 	}
 
 
-	public GoLexerBase(CharStream input) {
+	public AbstractGoLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "GoLexerBase.g4"; }
+	public String getGrammarFileName() { return "GoLexer.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }

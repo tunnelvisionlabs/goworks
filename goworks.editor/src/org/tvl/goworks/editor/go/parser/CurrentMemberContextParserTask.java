@@ -37,7 +37,7 @@ import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
 
 /**
  *
@@ -54,7 +54,7 @@ public class CurrentMemberContextParserTask implements ParserTask {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0)
     public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 

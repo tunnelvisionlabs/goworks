@@ -95,39 +95,39 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
-import org.tvl.goworks.editor.go.parser.GoLexerBase;
-import org.tvl.goworks.editor.go.parser.GoParserBase;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ArrayTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.BaseTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.BaseTypeNameContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.BuiltinCallExprContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.CallExprContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ChannelTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ConstSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.FunctionTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.InterfaceTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.LabeledStmtContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.LiteralTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.MapTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.OperandContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.OperandExprContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.PackageNameContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ParameterDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.PointerTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.QualifiedIdentifierContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.RangeClauseContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ReceiverContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.RecvStmtContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.SelectorExprContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.ShortVarDeclContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.SliceTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.StructTypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeLiteralContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeNameContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.TypeSwitchGuardContext;
-import org.tvl.goworks.editor.go.parser.GoParserBase.VarSpecContext;
-import org.tvl.goworks.editor.go.parser.GoParserBaseBaseListener;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.CallExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.LabeledStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.LiteralTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PointerTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.QualifiedIdentifierContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.RangeClauseContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ReceiverContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.RecvStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SelectorExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSwitchGuardContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
+import org.tvl.goworks.editor.go.parser.GoLexer;
+import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
 import org.tvl.goworks.editor.go.semantics.CodeElementReference;
 import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
 import org.tvl.goworks.editor.go.semantics.GoAnnotations;
@@ -246,9 +246,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
     @RuleDependencies({
         // these are dependencies from the BREAK_SCOPES and CONTINUE_SCOPES fields
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_forStmt, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_switchStmt, version=0),
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_selectStmt, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_forStmt, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_switchStmt, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_selectStmt, version=0),
     })
     private class TaskImpl extends Task {
         private final DocumentSnapshot snapshot;
@@ -262,12 +262,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         private TargetAnalyzer targetAnalyzer = new TargetAnalyzer();
 
         private final IntervalSet BREAK_SCOPES = new IntervalSet() {{
-            add(GoParserBase.RULE_forStmt);
-            add(GoParserBase.RULE_switchStmt);
-            add(GoParserBase.RULE_selectStmt);
+            add(GoParser.RULE_forStmt);
+            add(GoParser.RULE_switchStmt);
+            add(GoParser.RULE_selectStmt);
         }};
 
-        private final IntervalSet CONTINUE_SCOPES = IntervalSet.of(GoParserBase.RULE_forStmt);
+        private final IntervalSet CONTINUE_SCOPES = IntervalSet.of(GoParser.RULE_forStmt);
 
         public TaskImpl(BaseDocument document, DocumentSnapshot snapshot) {
             super(document);
@@ -283,29 +283,29 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_topLevelDecl, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodName, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageName, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_label, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_baseTypeName, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_builtinCall, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_fieldName, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_qualifiedIdentifier, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_receiver, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSpec, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSwitchGuard, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSwitchCase, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_exprSwitchCase, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_commCase, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodExpr, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_compositeLiteral, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_fieldName, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_literalValue, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeName, version=0),
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_labeledStmt, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_label, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchCase, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_exprSwitchCase, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_commCase, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalValue, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0),
         })
         public void runImpl(BaseDocument document) {
             results = new ArrayList<CompletionItem>();
@@ -340,7 +340,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                  */
                 for (Anchor anchor : anchors) {
                     // TODO: support more anchors
-                    if (anchor.getRule() != GoParserBase.RULE_topLevelDecl) {
+                    if (anchor.getRule() != GoParser.RULE_topLevelDecl) {
                         continue;
                     }
 
@@ -402,7 +402,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         }
 
                         switch (previous.getRule()) {
-                        case GoParserBase.RULE_topLevelDecl:
+                        case GoParser.RULE_topLevelDecl:
                             parseTrees = getParseTrees(parser);
                             annotatedParseTrees = analyzeParseTrees(snapshot.getVersionedDocument(), parseTrees);
                             break;
@@ -431,16 +431,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
                                 for (ATNConfig c : transitions.keySet()) {
                                     for (Transition t : transitions.get(c)) {
-                                        if (!t.label().contains(GoParserBase.IDENTIFIER)) {
+                                        if (!t.label().contains(GoParser.IDENTIFIER)) {
                                             continue;
                                         }
 
                                         int ruleIndex = t.target.ruleIndex;
                                         switch (ruleIndex) {
-                                        case GoParserBase.RULE_methodName:
+                                        case GoParser.RULE_methodName:
                                             {
                                                 int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
-                                                if (invokingRule == GoParserBase.RULE_methodSpec || invokingRule == GoParserBase.RULE_methodDecl) {
+                                                if (invokingRule == GoParser.RULE_methodSpec || invokingRule == GoParser.RULE_methodDecl) {
                                                     possibleDeclaration = true;
                                                 } else {
                                                     possibleReference = true;
@@ -448,10 +448,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
                                             break;
 
-                                        case GoParserBase.RULE_label:
+                                        case GoParser.RULE_label:
                                             {
                                                 int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
-                                                if (invokingRule == GoParserBase.RULE_labeledStmt) {
+                                                if (invokingRule == GoParser.RULE_labeledStmt) {
                                                     possibleDeclaration = true;
                                                 } else {
                                                     possibleReference = true;
@@ -459,8 +459,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
                                             break;
 
-                                        case GoParserBase.RULE_packageName:
-                                            if (isInContext(parser, entry.getValue().getFinalContext(), IntervalSet.of(GoParserBase.RULE_packageClause))) {
+                                        case GoParser.RULE_packageName:
+                                            if (isInContext(parser, entry.getValue().getFinalContext(), IntervalSet.of(GoParser.RULE_packageClause))) {
                                                 possibleDeclaration = true;
                                             } else {
                                                 possibleReference = true;
@@ -468,19 +468,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                             break;
 
-                                        case GoParserBase.RULE_baseTypeName:
-                                        case GoParserBase.RULE_builtinCall: // only happens for builtin method name
-                                        case GoParserBase.RULE_expression:  // only happens for selector
-                                        case GoParserBase.RULE_fieldName:
-                                        case GoParserBase.RULE_qualifiedIdentifier:
+                                        case GoParser.RULE_baseTypeName:
+                                        case GoParser.RULE_builtinCall: // only happens for builtin method name
+                                        case GoParser.RULE_expression:  // only happens for selector
+                                        case GoParser.RULE_fieldName:
+                                        case GoParser.RULE_qualifiedIdentifier:
                                             possibleReference = true;
                                             break;
 
-                                        case GoParserBase.RULE_identifierList:
-                                        case GoParserBase.RULE_functionDecl:
-                                        case GoParserBase.RULE_receiver:
-                                        case GoParserBase.RULE_typeSpec:
-                                        case GoParserBase.RULE_typeSwitchGuard:
+                                        case GoParser.RULE_identifierList:
+                                        case GoParser.RULE_functionDecl:
+                                        case GoParser.RULE_receiver:
+                                        case GoParser.RULE_typeSpec:
+                                        case GoParser.RULE_typeSwitchGuard:
                                             possibleDeclaration = true;
                                             break;
 
@@ -526,24 +526,24 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             continue;
                                         }
 
-                                        if (!canContinue && label.contains(GoLexerBase.Continue)) {
+                                        if (!canContinue && label.contains(GoLexer.Continue)) {
                                             canContinue = isInContext(parser, caretReachedException.getFinalContext(), CONTINUE_SCOPES);
                                             if (canContinue) {
                                                 canBreak = true;
                                             }
                                         }
 
-                                        if (!canBreak && label.contains(GoLexerBase.Break)) {
+                                        if (!canBreak && label.contains(GoLexer.Break)) {
                                             canBreak = isInContext(parser, caretReachedException.getFinalContext(), BREAK_SCOPES);
                                         }
 
-                                        if (!canDefaultOrCase && label.contains(GoLexerBase.Default)) {
+                                        if (!canDefaultOrCase && label.contains(GoLexer.Default)) {
                                             if (caretReachedException.getFinalContext() instanceof ParserRuleContext<?>) {
                                                 int currentRule = caretReachedException.getFinalContext().getRuleIndex();
                                                 canDefaultOrCase =
-                                                    currentRule == GoParserBase.RULE_typeSwitchCase
-                                                    || currentRule == GoParserBase.RULE_exprSwitchCase
-                                                    || currentRule == GoParserBase.RULE_commCase;
+                                                    currentRule == GoParser.RULE_typeSwitchCase
+                                                    || currentRule == GoParser.RULE_exprSwitchCase
+                                                    || currentRule == GoParser.RULE_commCase;
                                             } else {
                                                 canDefaultOrCase = true;
                                             }
@@ -560,20 +560,20 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             }
 
                             if (!canContinue) {
-                                allowedKeywords.remove(GoLexerBase.Continue);
+                                allowedKeywords.remove(GoLexer.Continue);
                             }
 
                             if (!canBreak) {
-                                allowedKeywords.remove(GoLexerBase.Break);
+                                allowedKeywords.remove(GoLexer.Break);
                             }
 
                             if (!canDefaultOrCase) {
-                                allowedKeywords.remove(GoLexerBase.Case);
-                                allowedKeywords.remove(GoLexerBase.Default);
+                                allowedKeywords.remove(GoLexer.Case);
+                                allowedKeywords.remove(GoLexer.Default);
                             }
 
                             for (int keyword : allowedKeywords.toArray()) {
-                                KeywordCompletionItem item = new KeywordCompletionItem(GoLexerBase.tokenNames[keyword].substring(1, GoLexerBase.tokenNames[keyword].length() - 1));
+                                KeywordCompletionItem item = new KeywordCompletionItem(GoLexer.tokenNames[keyword].substring(1, GoLexer.tokenNames[keyword].length() - 1));
                                 intermediateResults.put(item.getInsertPrefix().toString(), item);
                             }
 
@@ -599,7 +599,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 assert singleTransitionList.size() == 1;
                                 Transition transition = singleTransitionList.get(0);
                                 // only interested in identifiers
-                                if (!transition.label().contains(GoParserBase.IDENTIFIER)) {
+                                if (!transition.label().contains(GoParser.IDENTIFIER)) {
                                     continue;
                                 }
 
@@ -612,36 +612,36 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 pathToRoot.add(finalContext);
                                 Collections.reverse(pathToRoot);
                                 for (ParseTree<Token> tree : pathToRoot) {
-                                    if (tree instanceof GoParserBase.SelectorExprContext) {
-                                        GoParserBase.SelectorExprContext context = (GoParserBase.SelectorExprContext)tree;
+                                    if (tree instanceof GoParser.SelectorExprContext) {
+                                        GoParser.SelectorExprContext context = (GoParser.SelectorExprContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
                                             selectorTarget = context.expression();
                                             break;
                                         }
-                                    } else if (tree instanceof GoParserBase.TypeSwitchGuardContext) {
-                                        GoParserBase.TypeSwitchGuardContext context = (GoParserBase.TypeSwitchGuardContext)tree;
+                                    } else if (tree instanceof GoParser.TypeSwitchGuardContext) {
+                                        GoParser.TypeSwitchGuardContext context = (GoParser.TypeSwitchGuardContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
                                             selectorTarget = context.expression();
                                             break;
                                         }
-                                    } else if (tree instanceof GoParserBase.TypeAssertionExprContext) {
-                                        GoParserBase.TypeAssertionExprContext context = (GoParserBase.TypeAssertionExprContext)tree;
+                                    } else if (tree instanceof GoParser.TypeAssertionExprContext) {
+                                        GoParser.TypeAssertionExprContext context = (GoParser.TypeAssertionExprContext)tree;
                                         if (context.dot != null && context.lp == null) {
                                             selectorExpressionRoot = tree;
                                             selectorTarget = context.expression();
                                             break;
                                         }
-                                    } else if (tree instanceof GoParserBase.MethodExprContext) {
-                                        GoParserBase.MethodExprContext context = (GoParserBase.MethodExprContext)tree;
+                                    } else if (tree instanceof GoParser.MethodExprContext) {
+                                        GoParser.MethodExprContext context = (GoParser.MethodExprContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
                                             selectorTarget = context.receiverType();
                                             break;
                                         }
-                                    } else if (tree instanceof GoParserBase.QualifiedIdentifierContext) {
-                                        GoParserBase.QualifiedIdentifierContext context = (GoParserBase.QualifiedIdentifierContext)tree;
+                                    } else if (tree instanceof GoParser.QualifiedIdentifierContext) {
+                                        GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)tree;
                                         if (context.dot != null) {
                                             selectorExpressionRoot = tree;
                                             selectorTarget = context.packageName();
@@ -708,7 +708,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                         //if (model instanceof PackageModel) {
                                         //    PackageModel packageModel = (PackageModel)model;
-                                        //    if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                        //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
                                         //        continue;
                                         //    }
                                         //
@@ -729,7 +729,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         //    }
                                         //} else if (model instanceof TypeModel) {
                                         //    TypeModel typeModel = (TypeModel)model;
-                                        //    if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                        //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
                                         //        for (FunctionModel method : typeModel.getMethods()) {
                                         //            intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
                                         //        }
@@ -739,7 +739,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         //    // TODO: any other possibilities?
                                         //} else if (model instanceof VarModel) {
                                         //    VarModel varModel = (VarModel)model;
-                                        //    if (selectorExpressionRoot instanceof GoParserBase.methodExprContext) {
+                                        //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
                                         //        continue;
                                         //    }
                                         //
@@ -755,7 +755,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         //    LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
                                         //}
                                     }
-                                } else if (finalContext instanceof GoParserBase.PackageNameContext) {
+                                } else if (finalContext instanceof GoParser.PackageNameContext) {
                                     /* AVAILABLE PACKAGES
                                     */
                                     if (getFileModel() == null || addedPackages) {
@@ -784,16 +784,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                     *  - any packages imported with alias '.'
                                     *  - built-in elements
                                     */
-                                    RuleContext<Token> compositeLiteralRuleContext = getTopContext(parser, finalContext, IntervalSet.of(GoParserBase.RULE_compositeLiteral));
-                                    GoParserBase.CompositeLiteralContext compositeLiteralContext = (GoParserBase.CompositeLiteralContext)compositeLiteralRuleContext;
-                                    if (finalContext instanceof GoParserBase.FieldNameContext) {
+                                    RuleContext<Token> compositeLiteralRuleContext = getTopContext(parser, finalContext, IntervalSet.of(GoParser.RULE_compositeLiteral));
+                                    GoParser.CompositeLiteralContext compositeLiteralContext = (GoParser.CompositeLiteralContext)compositeLiteralRuleContext;
+                                    if (finalContext instanceof GoParser.FieldNameContext) {
                                         assert compositeLiteralContext != null && compositeLiteralContext.literalType() != null;
 
-                                        List<GoParserBase.LiteralValueContext> literalValueContexts = new ArrayList<GoParserBase.LiteralValueContext>();
+                                        List<GoParser.LiteralValueContext> literalValueContexts = new ArrayList<GoParser.LiteralValueContext>();
                                         for (RuleContext<Token> context = finalContext; context != null; context = context.parent) {
-                                            if (context instanceof GoParserBase.LiteralValueContext) {
-                                                literalValueContexts.add((GoParserBase.LiteralValueContext)context);
-                                            } else if (context instanceof GoParserBase.CompositeLiteralContext) {
+                                            if (context instanceof GoParser.LiteralValueContext) {
+                                                literalValueContexts.add((GoParser.LiteralValueContext)context);
+                                            } else if (context instanceof GoParser.CompositeLiteralContext) {
                                                 // stop at the containing compositeLiteral
                                                 break;
                                             }
@@ -823,8 +823,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                 }
                                             }
                                         }
-                                    } else if (finalContext instanceof GoParserBase.QualifiedIdentifierContext) {
-                                        GoParserBase.QualifiedIdentifierContext context = (GoParserBase.QualifiedIdentifierContext)finalContext;
+                                    } else if (finalContext instanceof GoParser.QualifiedIdentifierContext) {
+                                        GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)finalContext;
                                         if (context.packageName() != null) {
                                             continue;
                                         }
@@ -845,7 +845,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
                                         }
 
-                                        if (finalContext.getParent() instanceof GoParserBase.TypeNameContext) {
+                                        if (finalContext.getParent() instanceof GoParser.TypeNameContext) {
                                             for (String builtin : SemanticHighlighter.PREDEFINED_TYPES) {
                                                 if (intermediateResults.containsKey(builtin)) {
                                                     continue;
@@ -865,7 +865,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                 }
                                             }
                                         } else {
-                                            assert finalContext.getParent() instanceof GoParserBase.OperandContext;
+                                            assert finalContext.getParent() instanceof GoParser.OperandContext;
                                             // add builtin items
                                             for (String builtin : SemanticHighlighter.PREDEFINED_CONSTANTS) {
                                                 if (intermediateResults.containsKey(builtin)) {
@@ -908,7 +908,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             Map<Token, ParserRuleContext<Token>> vars = Collections.emptyMap();
                                             Map<Token, ParserRuleContext<Token>> constants = Collections.emptyMap();
 
-                                            ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
+                                            ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                                             if (functionContext != null) {
                                                 vars = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                                                 vars.putAll(localsAnalyzer.getReceiverParameters(functionContext));
@@ -960,7 +960,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
     //                                            }
     //                                        }
                                         }
-                                    } else if (finalContext instanceof GoParserBase.BaseTypeNameContext) {
+                                    } else if (finalContext instanceof GoParser.BaseTypeNameContext) {
                                         // this is the name of a type in the current package
                                         if (getFileModel() == null) {
                                             continue;
@@ -975,16 +975,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                             intermediateResults.put(typeModel.getName(), new TypeReferenceCompletionItem(typeModel));
                                         }
-                                    } else if (finalContext instanceof GoParserBase.LabelContext) {
-                                        if (finalContext.getParent() instanceof GoParserBase.LabeledStmtContext) {
+                                    } else if (finalContext instanceof GoParser.LabelContext) {
+                                        if (finalContext.getParent() instanceof GoParser.LabeledStmtContext) {
                                             continue;
                                         }
 
                                         final List<Token> labels = new ArrayList<Token>();
-                                        ParseTreeListener<Token> listener = new GoParserBaseBaseListener() {
+                                        ParseTreeListener<Token> listener = new GoParserBaseListener() {
 
                                             @Override
-                                            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_labeledStmt, version=0)
+                                            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0)
                                             public void enterLabeledStmt(LabeledStmtContext ctx) {
                                                 if (ctx.label() != null && ctx.label().IDENTIFIER() != null) {
                                                     labels.add(ctx.label().IDENTIFIER().getSymbol());
@@ -1003,7 +1003,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         }
 
                                         LOGGER.log(Level.FINE, "TODO: Also include labels for the current function as obtained from the FunctionModel.");
-                                    } else if (finalContext instanceof GoParserBase.BuiltinCallContext) {
+                                    } else if (finalContext instanceof GoParser.BuiltinCallContext) {
                                         // this is easy - just add the names of built in methods
                                         for (String builtin : SemanticHighlighter.PREDEFINED_FUNCTIONS) {
                                             if (intermediateResults.containsKey(builtin)) {
@@ -1012,23 +1012,23 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                             intermediateResults.put(builtin, new FunctionReferenceCompletionItem(builtin));
                                         }
-                                    } else if (finalContext instanceof GoParserBase.MethodNameContext) {
+                                    } else if (finalContext instanceof GoParser.MethodNameContext) {
                                         // This block only handles non-dotted identifiers, which means this can't be a methodExpr
                                         // and is therefore always a declaration (never a reference).
                                         continue;
-                                    } else if (finalContext instanceof GoParserBase.ReceiverContext) {
+                                    } else if (finalContext instanceof GoParser.ReceiverContext) {
                                         // this is a declaration not a reference
                                         continue;
-                                    } else if (finalContext instanceof GoParserBase.FunctionDeclContext) {
+                                    } else if (finalContext instanceof GoParser.FunctionDeclContext) {
                                         // this is a declaration not a reference
                                         continue;
-                                    } else if (finalContext instanceof GoParserBase.TypeSpecContext) {
+                                    } else if (finalContext instanceof GoParser.TypeSpecContext) {
                                         // this is a declaration not a reference
                                         continue;
-                                    } else if (finalContext instanceof GoParserBase.IdentifierListContext) {
+                                    } else if (finalContext instanceof GoParser.IdentifierListContext) {
                                         // this is a declaration not a reference
                                         continue;
-                                    } else if (finalContext instanceof GoParserBase.TypeSwitchGuardContext) {
+                                    } else if (finalContext instanceof GoParser.TypeSwitchGuardContext) {
                                         // this is a declaration not a reference
                                         continue;
                                     }
@@ -1164,7 +1164,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 annotations.putProperty(context, property, locals);
             }
 
-            private class Listener extends GoParserBaseBaseListener {
+            private class Listener extends GoParserBaseListener {
                 private final Map<Token, ParserRuleContext<Token>> locals = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                 private final Map<Token, ParserRuleContext<Token>> receiverParameters = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                 private final Map<Token, ParserRuleContext<Token>> parameters = new IdentityHashMap<Token, ParserRuleContext<Token>>();
@@ -1193,11 +1193,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_varSpec, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expressionList, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
                 public void enterVarSpec(VarSpecContext ctx) {
                     addVars(locals, ctx.identifierList(), ctx.type(), ctx.expressionList(0));
@@ -1205,9 +1205,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_shortVarDecl, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
                 })
                 public void enterShortVarDecl(ShortVarDeclContext ctx) {
                     addVars(locals, ctx.identifierList(), null, ctx.expressionList());
@@ -1215,8 +1215,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_rangeClause, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
                 public void enterRangeClause(RangeClauseContext ctx) {
                     if (ctx.defeq != null) {
@@ -1231,7 +1231,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 @Override
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeSwitchGuard, version=0)
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0)
                 public void enterTypeSwitchGuard(TypeSwitchGuardContext ctx) {
                     if (ctx.IDENTIFIER() != null) {
                         locals.put(ctx.IDENTIFIER().getSymbol(), null);
@@ -1240,8 +1240,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_recvStmt, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_recvStmt, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
                 public void enterRecvStmt(RecvStmtContext ctx) {
                     if (ctx.defeq != null) {
@@ -1257,8 +1257,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_receiver, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_baseTypeName, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
                 })
                 public void enterReceiver(ReceiverContext ctx) {
                     if (ctx.IDENTIFIER() != null) {
@@ -1268,46 +1268,46 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_parameterDecl, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_parameters, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_result, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameters, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0),
                 })
                 public void enterParameterDecl(ParameterDeclContext ctx) {
                     if (ctx.identifierList() != null) {
-                        GoParserBase.ParametersContext parametersContext = (GoParserBase.ParametersContext)getTopContext(parser, ctx, IntervalSet.of(GoParserBase.RULE_parameters));
-                        Map<Token, ParserRuleContext<Token>> map = parametersContext.parent instanceof GoParserBase.ResultContext ? returnParameters : parameters;
+                        GoParser.ParametersContext parametersContext = (GoParser.ParametersContext)getTopContext(parser, ctx, IntervalSet.of(GoParser.RULE_parameters));
+                        Map<Token, ParserRuleContext<Token>> map = parametersContext.parent instanceof GoParser.ResultContext ? returnParameters : parameters;
                         addVars(map, ctx.identifierList(), ctx.type(), null);
                     }
                 }
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_constSpec, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
                 })
                 public void enterConstSpec(ConstSpecContext ctx) {
                     addVars(constants, ctx.identifierList(), ctx.type(), ctx.expressionList());
                 }
 
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_identifierList, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expressionList, version=0),
-                    @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
                 private void addVars(@NonNull Map<Token, ParserRuleContext<Token>> map,
-                                     @NullAllowed GoParserBase.IdentifierListContext idList,
-                                     @NullAllowed GoParserBase.TypeContext explicitType,
-                                     @NullAllowed GoParserBase.ExpressionListContext exprList) {
+                                     @NullAllowed GoParser.IdentifierListContext idList,
+                                     @NullAllowed GoParser.TypeContext explicitType,
+                                     @NullAllowed GoParser.ExpressionListContext exprList) {
 
                     if (idList == null || idList.IDENTIFIER() == null) {
                         return;
                     }
 
-                    List<? extends GoParserBase.ExpressionContext> expressions = exprList != null ? exprList.expression() : null;
+                    List<? extends GoParser.ExpressionContext> expressions = exprList != null ? exprList.expression() : null;
                     for (int i = 0; i < idList.IDENTIFIER().size(); i++) {
                         Token name = idList.IDENTIFIER(i).getSymbol();
                         ParserRuleContext<Token> type = explicitType;
@@ -1321,7 +1321,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
         }
 
-        private class TargetAnalyzer extends GoParserBaseBaseListener {
+        private class TargetAnalyzer extends GoParserBaseListener {
 
             @NonNull
             public Collection<? extends CodeElementModel> resolveTarget(@NullAllowed ParseTree<Token> context) {
@@ -1345,8 +1345,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageName, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageClause, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageClause, version=0),
             })
             public void enterPackageName(PackageNameContext ctx) {
                 FileModel fileModel = getFileModel();
@@ -1354,7 +1354,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return;
                 }
 
-                if (ctx.getParent() instanceof GoParserBase.PackageClauseContext) {
+                if (ctx.getParent() instanceof GoParser.PackageClauseContext) {
                     setTargetProperty(ctx, Collections.singletonList(fileModel.getPackage()));
                 } else {
                     // look up the package by import
@@ -1373,8 +1373,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_operand, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
             })
             public void enterOperandExpr(OperandExprContext ctx) {
                 OperandContext operandContext = ctx.operand();
@@ -1386,13 +1386,13 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
             public void enterBuiltinCallExpr(BuiltinCallExprContext ctx) {
                 LOGGER.log(Level.FINE, "TODO: handle other expressions.");
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
             public void enterSelectorExpr(SelectorExprContext ctx) {
                 if (ctx.IDENTIFIER() == null) {
                     annotations.putProperty(ctx, ATTR_TARGET, null);
@@ -1421,9 +1421,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_type, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeName, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeLiteral, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
             })
             public void enterType(TypeContext ctx) {
                 Collection<? extends CodeElementModel> result;
@@ -1442,7 +1442,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeLiteral, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0)
             public void enterTypeLiteral(TypeLiteralContext ctx) {
                 assert ctx.getChildCount() <= 1 : "Unknown typeLiteral syntax.";
                 Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
@@ -1451,8 +1451,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_arrayType, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_elementType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public void enterArrayType(ArrayTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
@@ -1473,15 +1473,15 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_structType, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
             public void enterStructType(StructTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_pointerType, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_baseType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0),
             })
             public void enterPointerType(PointerTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
@@ -1502,7 +1502,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_baseType, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0)
             public void enterBaseType(BaseTypeContext ctx) {
                 if (ctx.getChildCount() != 1) {
                     LOGGER.log(Level.FINE, "Unknown baseType syntax.");
@@ -1514,21 +1514,21 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionType, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0)
             public void enterFunctionType(FunctionTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_interfaceType, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
             public void enterInterfaceType(InterfaceTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_sliceType, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_elementType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public void enterSliceType(SliceTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
@@ -1549,15 +1549,15 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_mapType, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0)
             public void enterMapType(MapTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
             }
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_channelType, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_elementType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public void enterChannelType(ChannelTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
@@ -1586,8 +1586,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_literalType, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_elementType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public void enterLiteralType(LiteralTypeContext ctx) {
                 if (ctx.elementType() != null) {
@@ -1601,7 +1601,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_typeName, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0)
             public void enterTypeName(TypeNameContext ctx) {
                 assert ctx.getChildCount() <= 1 : "Unknown typeName syntax.";
                 Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
@@ -1610,8 +1610,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_baseTypeName, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_receiver, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0),
             })
             public void enterBaseTypeName(BaseTypeNameContext ctx) {
                 // must be a type in the current package
@@ -1640,11 +1640,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_operand, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_literal, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_qualifiedIdentifier, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodExpr, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literal, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
             })
             public void enterOperand(OperandContext ctx) {
                 Collection<? extends CodeElementModel> result;
@@ -1665,7 +1665,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
             public void enterCallExpr(CallExprContext ctx) {
                 if (ctx.expression() == null) {
                     return;
@@ -1686,10 +1686,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_qualifiedIdentifier, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_functionDecl, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_methodDecl, version=0),
-                @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
             })
             public void enterQualifiedIdentifier(QualifiedIdentifierContext ctx) {
                 Map<Token, ParserRuleContext<Token>> vars = Collections.emptyMap();
@@ -1703,7 +1703,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         }
                     }
 
-                    ParseTree<Token> functionContext = getTopContext(parser, ctx, new IntervalSet() {{ add(GoParserBase.RULE_functionDecl); add(GoParserBase.RULE_methodDecl); }});
+                    ParseTree<Token> functionContext = getTopContext(parser, ctx, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                     if (functionContext != null) {
                         vars = new IdentityHashMap<Token, ParserRuleContext<Token>>();
                         vars.putAll(localsAnalyzer.getReceiverParameters(functionContext));
@@ -1765,7 +1765,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
         }
 
-        @RuleDependency(recognizer=GoParserBase.class, rule=GoParserBase.RULE_packageName, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0)
         private Collection<? extends CodeElementModel> resolveSelectorTarget(ParserRuleContext<Token> qualifier, GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
             if (qualifier == null) {
                 // don't have the information necessary to resolve
