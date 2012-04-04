@@ -665,7 +665,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                     final boolean INCLUDE_EXPRESSION = false;
                                     if (INCLUDE_EXPRESSION) {
-                                        String text = tokens.toString(selectorTarget.start, selectorTarget.stop);
+                                        String text = tokens.getText(selectorTarget.start, selectorTarget.stop);
                                         if (text != null && !text.isEmpty()) {
                                             intermediateResults.put(text, new KeywordCompletionItem(text));
                                         }

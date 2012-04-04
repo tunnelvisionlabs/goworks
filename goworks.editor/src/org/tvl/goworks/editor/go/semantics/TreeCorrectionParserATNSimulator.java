@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
@@ -51,7 +51,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     }
 
     @Override
-    public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
+    public int adaptivePredict(TokenStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
         boolean ll1opt = optimize_ll1;
         try {
             startIndex = input.index();
@@ -66,7 +66,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     }
 
     @Override
-    public SimulatorState<Token> getStartState(DFA dfa, SymbolStream<? extends Token> input, ParserRuleContext<Token> outerContext, boolean useContext) {
+    public SimulatorState<Token> getStartState(DFA dfa, TokenStream<? extends Token> input, ParserRuleContext<Token> outerContext, boolean useContext) {
         // force execATN for special decisions
         if (getSuppressedSet(startIndex).isNil()) {
             return null;
