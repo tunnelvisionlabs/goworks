@@ -20,26 +20,26 @@ import org.antlr.v4.runtime.misc.*;
 
 public abstract class AbstractGoLexer extends Lexer {
 	public static final int
-		Break=3, Case=4, Chan=5, Const=6, Continue=7, Default=8, Defer=9, Else=10, 
-		Fallthrough=11, For=12, Func=13, Go=14, Goto=15, If=16, Import=17, Interface=18, 
-		Map=19, Package=20, Range=21, Return=22, Select=23, Struct=24, Switch=25, 
-		Type=26, Var=27, Plus=28, Minus=29, Star=30, Slash=31, Percent=32, Amp=33, 
-		Pipe=34, Caret=35, LeftShift=36, RightShift=37, AmpCaret=38, PlusEqual=39, 
-		MinusEqual=40, StarEqual=41, SlashEqual=42, PercentEqual=43, AmpEqual=44, 
-		PipeEqual=45, CaretEqual=46, LeftShiftEqual=47, RightShiftEqual=48, AmpCaretEqual=49, 
-		And=50, Or=51, LeftArrow=52, Inc=53, Dec=54, EqualEqual=55, LessThan=56, 
-		GreaterThan=57, Equal=58, Bang=59, BangEqual=60, LessEqual=61, GreaterEqual=62, 
-		ColonEqual=63, Ellipsis=64, LeftParen=65, RightParen=66, LeftBrack=67, 
-		RightBrack=68, LeftBrace=69, RightBrace=70, Comma=71, Dot=72, Semi=73, 
-		Colon=74, IDENTIFIER=75, WS=76, NEWLINE=77, COMMENT=78, ML_COMMENT=79, 
-		INT_LITERAL=80, IMAGINARY_LITERAL=81, FLOAT_LITERAL=82, CharLiteral=83, 
-		StringLiteral=84, ANYCHAR=85;
+		Break=1, Case=2, Chan=3, Const=4, Continue=5, Default=6, Defer=7, Else=8, 
+		Fallthrough=9, For=10, Func=11, Go=12, Goto=13, If=14, Import=15, Interface=16, 
+		Map=17, Package=18, Range=19, Return=20, Select=21, Struct=22, Switch=23, 
+		Type=24, Var=25, Plus=26, Minus=27, Star=28, Slash=29, Percent=30, Amp=31, 
+		Pipe=32, Caret=33, LeftShift=34, RightShift=35, AmpCaret=36, PlusEqual=37, 
+		MinusEqual=38, StarEqual=39, SlashEqual=40, PercentEqual=41, AmpEqual=42, 
+		PipeEqual=43, CaretEqual=44, LeftShiftEqual=45, RightShiftEqual=46, AmpCaretEqual=47, 
+		And=48, Or=49, LeftArrow=50, Inc=51, Dec=52, EqualEqual=53, LessThan=54, 
+		GreaterThan=55, Equal=56, Bang=57, BangEqual=58, LessEqual=59, GreaterEqual=60, 
+		ColonEqual=61, Ellipsis=62, LeftParen=63, RightParen=64, LeftBrack=65, 
+		RightBrack=66, LeftBrace=67, RightBrace=68, Comma=69, Dot=70, Semi=71, 
+		Colon=72, IDENTIFIER=73, WS=74, NEWLINE=75, COMMENT=76, ML_COMMENT=77, 
+		INT_LITERAL=78, IMAGINARY_LITERAL=79, FLOAT_LITERAL=80, CharLiteral=81, 
+		StringLiteral=82, ANYCHAR=83;
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
 
 	public static final String[] tokenNames = {
-		"<INVALID>", "<INVALID>", "<INVALID>",
+		"<INVALID>",
 		"'break'", "'case'", "'chan'", "'const'", "'continue'", "'default'", "'defer'", 
 		"'else'", "'fallthrough'", "'for'", "'func'", "'go'", "'goto'", "'if'", 
 		"'import'", "'interface'", "'map'", "'package'", "'range'", "'return'", 
@@ -758,7 +758,7 @@ public abstract class AbstractGoLexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2U\u0311\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6"+
+		"\2S\u0311\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6"+
 		"\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2\13\7\13\2\f\7\f\2\r\7\r\2\16\7"+
 		"\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22\7\22\2\23\7\23\2\24\7\24\2\25\7"+
 		"\25\2\26\7\26\2\27\7\27\2\30\7\30\2\31\7\31\2\32\7\32\2\33\7\33\2\34\7"+
@@ -798,24 +798,24 @@ public abstract class AbstractGoLexer extends Lexer {
 		"\1\\\0\1\\\0\1\\\0\1\\\1\\\1]\0\1]\1]\1^\0\1^\0\3^\b^\1_\0\1_\0\1_\0\5"+
 		"_\b_\n_\f_\u02dd\t_\1_\1_\1`\0\1`\0\1`\0\5`\b`\n`\f`\u02ea\t`\1`\1`\1"+
 		"a\1a\1b\1b\1c\1c\1d\1d\1e\0\1e\0\3e\be\1f\1f\1g\0\1g\0\3g\bg\1h\1h\1i"+
-		"\1i\1j\0\1j\0\1j\0\3j\bj\1k\1kl\1\3\uffff\3\4\uffff\5\5\uffff\7\6\uffff"+
-		"\t\7\uffff\13\b\uffff\r\t\uffff\17\n\uffff\21\13\uffff\23\f\uffff\25\r"+
-		"\uffff\27\16\uffff\31\17\uffff\33\20\uffff\35\21\uffff\37\22\uffff!\23"+
-		"\uffff#\24\uffff%\25\uffff\'\26\uffff)\27\uffff+\30\uffff-\31\uffff/\32"+
-		"\uffff\61\33\uffff\63\34\uffff\65\35\uffff\67\36\uffff9\37\uffff; \uffff"+
-		"=!\uffff?\"\uffffA#\uffffC$\uffffE%\uffffG&\uffffI\'\uffffK(\uffffM)\uffff"+
-		"O*\uffffQ+\uffffS,\uffffU-\uffffW.\uffffY/\uffff[\60\uffff]\61\uffff_"+
-		"\62\uffffa\63\uffffc\64\uffffe\65\uffffg\66\uffffi\67\uffffk8\uffffm9"+
-		"\uffffo:\uffffq;\uffffs<\uffffu=\uffffw>\uffffy?\uffff{@\uffff}A\uffff"+
-		"\177B\uffff\u0081C\uffff\u0083D\uffff\u0085E\uffff\u0087F\uffff\u0089"+
-		"G\uffff\u008bH\uffff\u008dI\uffff\u008fJ\uffff\u0091K\uffff\u0093L\0\u0095"+
-		"M\1\u0097N\2\u0099O\3\u009bP\uffff\u009d\0\uffff\u009f\0\uffff\u00a1\0"+
-		"\uffff\u00a3Q\uffff\u00a5R\uffff\u00a7\0\uffff\u00a9\0\uffff\u00abS\uffff"+
+		"\1i\1j\0\1j\0\1j\0\3j\bj\1k\1kl\1\1\uffff\3\2\uffff\5\3\uffff\7\4\uffff"+
+		"\t\5\uffff\13\6\uffff\r\7\uffff\17\b\uffff\21\t\uffff\23\n\uffff\25\13"+
+		"\uffff\27\f\uffff\31\r\uffff\33\16\uffff\35\17\uffff\37\20\uffff!\21\uffff"+
+		"#\22\uffff%\23\uffff\'\24\uffff)\25\uffff+\26\uffff-\27\uffff/\30\uffff"+
+		"\61\31\uffff\63\32\uffff\65\33\uffff\67\34\uffff9\35\uffff;\36\uffff="+
+		"\37\uffff? \uffffA!\uffffC\"\uffffE#\uffffG$\uffffI%\uffffK&\uffffM\'"+
+		"\uffffO(\uffffQ)\uffffS*\uffffU+\uffffW,\uffffY-\uffff[.\uffff]/\uffff"+
+		"_\60\uffffa\61\uffffc\62\uffffe\63\uffffg\64\uffffi\65\uffffk\66\uffff"+
+		"m\67\uffffo8\uffffq9\uffffs:\uffffu;\uffffw<\uffffy=\uffff{>\uffff}?\uffff"+
+		"\177@\uffff\u0081A\uffff\u0083B\uffff\u0085C\uffff\u0087D\uffff\u0089"+
+		"E\uffff\u008bF\uffff\u008dG\uffff\u008fH\uffff\u0091I\uffff\u0093J\0\u0095"+
+		"K\1\u0097L\2\u0099M\3\u009bN\uffff\u009d\0\uffff\u009f\0\uffff\u00a1\0"+
+		"\uffff\u00a3O\uffff\u00a5P\uffff\u00a7\0\uffff\u00a9\0\uffff\u00abQ\uffff"+
 		"\u00ad\0\uffff\u00af\0\uffff\u00b1\0\uffff\u00b3\0\uffff\u00b5\0\uffff"+
-		"\u00b7\0\uffff\u00b9\0\uffff\u00bb\0\uffff\u00bdT\uffff\u00bf\0\uffff"+
+		"\u00b7\0\uffff\u00b9\0\uffff\u00bb\0\uffff\u00bdR\uffff\u00bf\0\uffff"+
 		"\u00c1\0\uffff\u00c3\0\uffff\u00c5\0\uffff\u00c7\0\uffff\u00c9\0\uffff"+
 		"\u00cb\0\uffff\u00cd\0\uffff\u00cf\0\uffff\u00d1\0\uffff\u00d3\0\uffff"+
-		"\u00d5\0\uffff\u00d7U\uffff\1\0\t\2\t\t  \2\n\n\r\r\2XXxx\2EEee\2++--"+
+		"\u00d5\0\uffff\u00d7S\uffff\1\0\t\2\t\t  \2\n\n\r\r\2XXxx\2EEee\2++--"+
 		"\t\"\"\'\'\\\\abffnnrrttvv\2\n\n\'\'\2\n\n\"\"\2\n\n``\u02d1\0\1\1\0\0"+
 		"\0\0\3\1\0\0\0\0\5\1\0\0\0\0\7\1\0\0\0\0\t\1\0\0\0\0\13\1\0\0\0\0\r\1"+
 		"\0\0\0\0\17\1\0\0\0\0\21\1\0\0\0\0\23\1\0\0\0\0\25\1\0\0\0\0\27\1\0\0"+

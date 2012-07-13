@@ -362,35 +362,35 @@ functionLiteral
 
 expression
     :   operand
-        -> operandExpr
+        # operandExpr
     |   conversion
-        -> conversionOrCallExpr
+        # conversionOrCallExpr
     |   builtinCall
-        -> builtinCallExpr
+        # builtinCallExpr
     |   expression dot='.' IDENTIFIER
-        -> selectorExpr
+        # selectorExpr
     |   expression '[' expression ']'
-        -> indexExpr
+        # indexExpr
     |   expression '[' from=expression? ':' to=expression? ']'
-        -> sliceExpr
+        # sliceExpr
     |   expression dot='.' lp='(' type rp=')'
-        -> typeAssertionExpr
+        # typeAssertionExpr
     |   expression lp='(' (argumentList ','?)? rp=')'
-        -> callExpr
+        # callExpr
 
     |   (op='+' | op='-' | op='!' | op='^' | op='*' | op='&' | op='<-') expression
-        -> unaryExpr
+        # unaryExpr
 
     |   expression (op='*' | op='/' | op='%' | op='<<' | op='>>' | op='&' | op='&^') expression
-        -> multExpr
+        # multExpr
     |   expression (op='+' | op='-' | op='|' | op='^') expression
-        -> addExpr
+        # addExpr
     |   expression (op='==' | op='!=' | op='<' | op='<=' | op='>' | op='>=') expression
-        -> compareExpr
+        # compareExpr
     |   expression '&&' expression
-        -> andExpr
+        # andExpr
     |   expression '||' expression
-        -> orExpr
+        # orExpr
     ;
 
 //primaryExpr
