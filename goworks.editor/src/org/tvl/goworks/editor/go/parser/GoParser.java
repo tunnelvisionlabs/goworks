@@ -36,7 +36,7 @@ public class GoParser extends AbstractGoParser {
 
     public GoParser(TokenStream<? extends Token> input) {
         super(input);
-        CharStream charStream = input.getTokenSource().getInputStream();
+        CharStream charStream = input != null ? input.getTokenSource().getInputStream() : null;
         if (charStream instanceof DocumentSnapshotCharStream) {
             DocumentSnapshotCharStream documentSnapshotCharStream = (DocumentSnapshotCharStream)charStream;
             this.snapshot = documentSnapshotCharStream.getSnapshot();
@@ -63,7 +63,7 @@ public class GoParser extends AbstractGoParser {
     public void setTokenStream(TokenStream<? extends Token> input) {
         super.setTokenStream(input);
 
-        CharStream charStream = input.getTokenSource().getInputStream();
+        CharStream charStream = input != null ? input.getTokenSource().getInputStream() : null;
         if (charStream instanceof DocumentSnapshotCharStream) {
             DocumentSnapshotCharStream documentSnapshotCharStream = (DocumentSnapshotCharStream)charStream;
             this.snapshot = documentSnapshotCharStream.getSnapshot();
@@ -99,7 +99,7 @@ public class GoParser extends AbstractGoParser {
     protected class ErrorListener implements ANTLRErrorListener<Token> {
 
         @Override
-        public <T extends Token> void error(Recognizer<T, ?> recognizer, T offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+        public <T extends Token> void syntaxError(Recognizer<T, ?> recognizer, T offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
             if (snapshot != null) {
                 syntaxErrors.add(new AntlrSyntaxErrorV4(snapshot, offendingSymbol, e, msg, Severity.ERROR));
             }

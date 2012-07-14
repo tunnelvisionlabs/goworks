@@ -97,7 +97,7 @@ public class GoLexer extends AbstractGoLexer {
     }
 
     @Override
-    public Token anEOF() {
+    public Token emitEOF() {
         Token semicolonToken = null;
         if (insertSemicolonAtEol) {
             // emit the virtual semicolon token first
@@ -109,7 +109,7 @@ public class GoLexer extends AbstractGoLexer {
             insertSemicolonAtEol = false;
         }
 
-        Token result = super.anEOF();
+        Token result = super.emitEOF();
         if (semicolonToken != null) {
             deferredEol = result;
             return semicolonToken;
