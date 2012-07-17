@@ -904,40 +904,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
 
                                             LOGGER.log(Level.FINE, "TODO: proper block scope for vars");
-                                            Map<Token, ParserRuleContext<Token>> vars = Collections.emptyMap();
                                             Map<Token, ParserRuleContext<Token>> constants = Collections.emptyMap();
 
                                             ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                                             if (functionContext != null) {
-                                                vars = new IdentityHashMap<Token, ParserRuleContext<Token>>();
-                                                vars.putAll(localsAnalyzer.getReceiverParameters(functionContext));
-                                                vars.putAll(localsAnalyzer.getParameters(functionContext));
-                                                vars.putAll(localsAnalyzer.getReturnParameters(functionContext));
-                                                vars.putAll(localsAnalyzer.getLocals(functionContext));
+                                                addVars(VarKind.RECEIVER, localsAnalyzer.getReceiverParameters(functionContext), intermediateResults);
+                                                addVars(VarKind.PARAMETER, localsAnalyzer.getParameters(functionContext), intermediateResults);
+                                                addVars(VarKind.RETURN, localsAnalyzer.getReturnParameters(functionContext), intermediateResults);
+                                                addVars(VarKind.LOCAL, localsAnalyzer.getLocals(functionContext), intermediateResults);
+
                                                 constants.putAll(localsAnalyzer.getConstants(functionContext));
-                                            }
-
-                                            for (Map.Entry<Token, ParserRuleContext<Token>> varEntry : vars.entrySet()) {
-                                                String name = varEntry.getKey().getText();
-                                                if (intermediateResults.containsKey(name)) {
-                                                    continue;
-                                                }
-
-                                                Collection<? extends CodeElementModel> varTypes = targetAnalyzer.resolveTarget(varEntry.getValue());
-                                                if (varTypes.isEmpty()) {
-                                                    varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
-                                                }
-
-                                                for (CodeElementModel varType : varTypes) {
-                                                    if (!(varType instanceof TypeModel)) {
-                                                        continue;
-                                                    }
-
-                                                    // TODO: use the proper var kind
-                                                    VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModel)varType, (FileModelImpl)getFileModel());
-                                                    intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
-                                                    break;
-                                                }
                                             }
 
                                             LOGGER.log(Level.FINE, "TODO: local constants");
@@ -1068,6 +1044,30 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
+        }
+
+        private void addVars(VarKind varKind, Map<? extends Token, ? extends ParserRuleContext<Token>> vars, Map<String, ? super VarReferenceCompletionItem> intermediateResults) {
+            for (Map.Entry<? extends Token, ? extends ParserRuleContext<Token>> varEntry : vars.entrySet()) {
+                String name = varEntry.getKey().getText();
+                if (intermediateResults.containsKey(name)) {
+                    continue;
+                }
+
+                Collection<? extends CodeElementModel> varTypes = targetAnalyzer.resolveTarget(varEntry.getValue());
+                if (varTypes.isEmpty()) {
+                    varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
+                }
+
+                for (CodeElementModel varType : varTypes) {
+                    if (!(varType instanceof TypeModel)) {
+                        continue;
+                    }
+
+                    VarModelImpl varModel = new VarModelImpl(name, varKind, (TypeModel)varType, (FileModelImpl)getFileModel());
+                    intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
+                    break;
+                }
+            }
         }
 
         @Override
