@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.completion;
 
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionItem;
 import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 
 /**
@@ -42,5 +43,8 @@ public abstract class GoCompletionItem extends AbstractCompletionItem {
     public CodeElementModel getCodeElementModel() {
         return null;
     }
+
+    @NonNull
+    public abstract String getToolTipText();
 
 }

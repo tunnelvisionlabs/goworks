@@ -65,6 +65,15 @@ public class FunctionReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public String getToolTipText() {
+        if (functionModel != null) {
+            return functionModel.toString();
+        }
+
+        return "";
+    }
+
+    @Override
     protected ImageIcon getIcon() {
         ImageIcon icon;
         if (functionModel == null || functionModel.getReceiverParameter() == null) {

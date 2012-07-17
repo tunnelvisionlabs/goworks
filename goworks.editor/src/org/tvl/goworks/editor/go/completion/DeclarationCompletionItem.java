@@ -59,6 +59,11 @@ public class DeclarationCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public String getToolTipText() {
+        return "";
+    }
+
+    @Override
     public CharSequence getInsertPrefix() {
         VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(getDocument());
         DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();

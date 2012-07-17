@@ -93,6 +93,11 @@ public class KeywordCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public String getToolTipText() {
+        return "";
+    }
+
+    @Override
     protected ImageIcon getIcon() {
         if (ICON == null) {
             ICON = new ImageIcon(ImageUtilities.loadImage("org/tvl/goworks/editor/go/resources/duke.png"));

@@ -65,6 +65,15 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public String getToolTipText() {
+        if (constModel != null) {
+            return constModel.toString();
+        }
+
+        return "";
+    }
+
+    @Override
     protected ImageIcon getIcon() {
         ImageIcon icon;
         if (localScope) {

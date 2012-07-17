@@ -41,6 +41,11 @@ public class LabelReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public String getToolTipText() {
+        return "label " + labelName;
+    }
+
+    @Override
     protected String getLeftHtmlText() {
         if (leftText == null) {
             StringBuilder builder = new StringBuilder();

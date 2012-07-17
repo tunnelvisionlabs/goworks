@@ -44,6 +44,15 @@ public class TypeReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public String getToolTipText() {
+        if (typeModel != null) {
+            return typeModel.getSimpleName();
+        }
+
+        return typeName;
+    }
+
+    @Override
     protected ImageIcon getIcon() {
         String resourceLocation = "org/tvl/goworks/editor/go/resources/";
         String imageName;

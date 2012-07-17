@@ -68,6 +68,30 @@ public class VarReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public String getToolTipText() {
+        if (varModel != null) {
+            switch (varModel.getVarKind()) {
+            case PARAMETER:
+                return "(Parameter) " + varModel;
+
+            case LOCAL:
+                return "(Local variable) " + varModel;
+
+            case RECEIVER:
+                return "(Receiver) " + varModel;
+
+            case RETURN:
+                return "(Return variable) " + varModel;
+
+            default:
+                return varModel.toString();
+            }
+        }
+
+        return varName;
+    }
+
+    @Override
     protected ImageIcon getIcon() {
         ImageIcon icon;
         if (localScope) {
