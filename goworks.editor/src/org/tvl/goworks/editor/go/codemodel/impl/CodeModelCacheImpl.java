@@ -74,7 +74,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
     public Collection<? extends PackageModelImpl> resolvePackages(ImportDeclarationModel importModel) {
         Project project = importModel.getPackage().getProject();
         CodeModelProjectCache projectCache = getProjectCache(project, false);
-        PackageModelImpl unique = projectCache.getUniquePackage(importModel.getPath());
+        PackageModelImpl unique = projectCache != null ? projectCache.getUniquePackage(importModel.getPath()) : null;
         if (unique == null) {
             return Collections.emptyList();
         }
@@ -99,10 +99,20 @@ public class CodeModelCacheImpl implements CodeModelCache {
         }
     }
 
+    @NonNull
+    public final CodeModelProjectCache getOrCreateProjectCache(@NullAllowed Project project) {
+        CodeModelProjectCache cache = getProjectCache(project, true);
+        if (cache == null) {
+            throw new IllegalStateException("getProjectCache should not return null when 'create' is true.");
+        }
+
+        return cache;
+    }
+
     public void updateFile(@NonNull FileModelImpl fileModel) {
         assert fileModel.isFrozen();
         Project project = fileModel.getProject();
-        CodeModelProjectCache projectCache = getProjectCache(project, true);
+        CodeModelProjectCache projectCache = getOrCreateProjectCache(project);
         projectCache.updateFile(fileModel);
     }
 
