@@ -68,7 +68,6 @@ import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
@@ -210,7 +209,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
     }
 
     @Override
-    protected boolean isQueryContext(CompletionResultSet resultSet, Document doc, int caretOffset) {
+    protected boolean isQueryContext(Document doc, int caretOffset) {
         return getCompletionProvider().isGoContext(getComponent(), caretOffset, true);
     }
 

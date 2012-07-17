@@ -29,9 +29,9 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionProvider;
+import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionProvider;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -101,7 +101,7 @@ public class GoCompletionProvider extends AbstractCompletionProvider {
     }
 
     @Override
-    protected AsyncCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend) {
+    protected AbstractCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend) {
         return new GoCompletionQuery(this, queryType, caretOffset, true, extend);
     }
 
