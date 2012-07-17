@@ -43,7 +43,8 @@ public class VarReferenceCompletionItem extends GoCompletionItem {
         this.localScope = localScope;
     }
 
-    public VarModel getVarModel() {
+    @Override
+    public VarModel getCodeElementModel() {
         return varModel;
     }
 

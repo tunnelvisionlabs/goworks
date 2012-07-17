@@ -39,6 +39,11 @@ public class TypeReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public TypeModel getCodeElementModel() {
+        return typeModel;
+    }
+
+    @Override
     protected ImageIcon getIcon() {
         String resourceLocation = "org/tvl/goworks/editor/go/resources/";
         String imageName;

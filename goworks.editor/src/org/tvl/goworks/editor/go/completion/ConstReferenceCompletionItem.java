@@ -45,6 +45,11 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public ConstModel getCodeElementModel() {
+        return constModel;
+    }
+
+    @Override
     public int getSortPriority() {
         return MEMBER_SORT_PRIORITY;
     }

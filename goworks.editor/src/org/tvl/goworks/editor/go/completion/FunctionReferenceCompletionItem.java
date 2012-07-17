@@ -45,6 +45,11 @@ public class FunctionReferenceCompletionItem extends GoCompletionItem {
     }
 
     @Override
+    public FunctionModel getCodeElementModel() {
+        return functionModel;
+    }
+
+    @Override
     public int getSortPriority() {
         return MEMBER_SORT_PRIORITY;
     }

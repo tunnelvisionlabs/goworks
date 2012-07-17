@@ -9,6 +9,8 @@
 package org.tvl.goworks.editor.go.completion;
 
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionItem;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 
 /**
  *
@@ -35,5 +37,10 @@ public abstract class GoCompletionItem extends AbstractCompletionItem {
     public static final String PACKAGE_COLOR = "<font color=#a06001>"; //NOI18N
     public static final String TYPE_COLOR = "<font color=#2B91AF>"; //NOI18N
     public static final String LABEL_COLOR = "<font color=#000000>"; //NOI18N
+
+    @CheckForNull
+    public CodeElementModel getCodeElementModel() {
+        return null;
+    }
 
 }
