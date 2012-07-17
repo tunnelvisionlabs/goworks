@@ -68,6 +68,7 @@ import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionItem;
+import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
@@ -1044,6 +1045,25 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
+            if ((getQueryType() & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
+                String enteredText = applicableTo.getText(snapshot);
+                List<CompletionItem> updated = new ArrayList<CompletionItem>();
+                for (CompletionItem item : results) {
+                    if (item.getInsertPrefix().equals(enteredText)) {
+                        updated.add(item);
+                    }
+                }
+
+                results.clear();
+                results.addAll(updated);
+                if (updated.size() > 0) {
+                    if (updated.get(0) instanceof GoCompletionItem) {
+                        getToolTip().setTipText(((GoCompletionItem)updated.get(0)).getToolTipText());
+                    } else {
+                        getToolTip().setTipText(updated.get(0).getInsertPrefix().toString());
+                    }
+                }
+            }
         }
 
         private void addVars(VarKind varKind, Map<? extends Token, ? extends ParserRuleContext<Token>> vars, Map<String, ? super VarReferenceCompletionItem> intermediateResults) {
