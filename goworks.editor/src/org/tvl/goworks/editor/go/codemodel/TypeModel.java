@@ -24,12 +24,16 @@ public interface TypeModel extends CodeElementModel {
 
     TypeKind getKind();
 
+    @NonNull
     Collection<? extends FieldModel> getFields();
 
+    @NonNull
     Collection<? extends FieldModel> getFields(String name);
 
+    @NonNull
     Collection<? extends FunctionModel> getMethods();
 
+    @NonNull
     Collection<? extends FunctionModel> getMethods(String name);
 
 }

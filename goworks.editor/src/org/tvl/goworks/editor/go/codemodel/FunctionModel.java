@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -18,8 +19,10 @@ public interface FunctionModel extends CodeElementModel {
 
     boolean isMethod();
 
+    @NonNull
     Collection<? extends ParameterModel> getParameters();
 
+    @NonNull
     Collection<? extends ParameterModel> getReturnValues();
 
     ParameterModel getReceiverParameter();

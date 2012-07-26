@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -20,8 +21,10 @@ public interface CodeElementModel {
 
     String getName();
 
+    @NonNull
     Collection<? extends CodeElementModel> getMembers();
 
+    @NonNull
     Collection<? extends CodeElementModel> getMembers(String name);
 
 }

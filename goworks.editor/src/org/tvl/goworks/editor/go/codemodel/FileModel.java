@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -17,24 +18,34 @@ import java.util.Collection;
 public interface FileModel extends CodeElementModel {
 
     // allow multiples to improve ability to recover from syntax errors
+    @NonNull
     Collection<? extends PackageDeclarationModel> getPackageDeclarations();
 
+    @NonNull
     Collection<? extends ImportDeclarationModel> getImportDeclarations();
 
+    @NonNull
     Collection<? extends TypeModel> getTypes();
 
+    @NonNull
     Collection<? extends TypeModel> getTypes(String name);
 
+    @NonNull
     Collection<? extends ConstModel> getConstants();
 
+    @NonNull
     Collection<? extends ConstModel> getConstants(String name);
 
+    @NonNull
     Collection<? extends VarModel> getVars();
 
+    @NonNull
     Collection<? extends VarModel> getVars(String name);
 
+    @NonNull
     Collection<? extends FunctionModel> getFunctions();
 
+    @NonNull
     Collection<? extends FunctionModel> getFunctions(String name);
 
 }

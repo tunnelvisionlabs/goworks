@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -16,11 +17,14 @@ import java.util.Collection;
  */
 public interface InterfaceModel extends TypeModel {
 
+    @NonNull
     Collection<? extends FunctionModel> getInterfaceMethods();
 
+    @NonNull
     Collection<? extends FunctionModel> getInterfaceMethods(String name);
 
     // extends TypeModel since it may contain aliases/references which resolve to interfaces
+    @NonNull
     Collection<? extends TypeModel> getImplementedInterfaces();
 
 }
