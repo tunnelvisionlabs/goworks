@@ -157,7 +157,7 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
         }
     }
 
-    private static final class TooltipResolver implements HighlightAttributeValue<String> {
+    public static final class TooltipResolver implements HighlightAttributeValue<String> {
 
         @Override
         public String getValue(JTextComponent component, Document document, Object attributeKey, int startOffset, int endOffset) {
