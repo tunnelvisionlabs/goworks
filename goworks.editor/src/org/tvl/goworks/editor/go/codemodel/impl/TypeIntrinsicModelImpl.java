@@ -23,7 +23,7 @@ public class TypeIntrinsicModelImpl extends TypeModelImpl implements TypeIntrins
     private final IntrinsicKind kind;
 
     public TypeIntrinsicModelImpl(IntrinsicKind kind) {
-        super(kind.toString().toLowerCase(), IntrinsicFileModelImpl.INSTANCE);
+        super(kind.toString().toLowerCase(), IntrinsicFileModelImpl.INSTANCE, null, null);
         this.kind = kind;
     }
 

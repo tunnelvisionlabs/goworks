@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.tvl.goworks.editor.go.codemodel.FieldModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
@@ -20,8 +22,8 @@ public class FieldModelImpl extends VarModelImpl implements FieldModel {
 
     private final boolean anonymous;
 
-    public FieldModelImpl(String name, TypeModel varType, boolean anonymous, FileModelImpl file) {
-        super(name, VarKind.FIELD, varType, file);
+    public FieldModelImpl(String name, TypeModel varType, boolean anonymous, FileModelImpl file, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
+        super(name, VarKind.FIELD, varType, file, seek, span);
         this.anonymous = anonymous;
     }
 

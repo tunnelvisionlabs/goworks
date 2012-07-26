@@ -9,11 +9,13 @@
 package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 
 /**
@@ -39,6 +41,26 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     public FileModelImpl(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
         super(name, project, packagePath);
         this.fileObject = null;
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (getFileObject() == null) {
+            return null;
+        }
+
+        OffsetRegion region = new OffsetRegion(0, 0);
+        return new CodeElementPositionRegionImpl(this, region);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (getFileObject() == null) {
+            return null;
+        }
+
+        OffsetRegion region = new OffsetRegion(0, 0);
+        return new CodeElementPositionRegionImpl(this, region);
     }
 
     @Override

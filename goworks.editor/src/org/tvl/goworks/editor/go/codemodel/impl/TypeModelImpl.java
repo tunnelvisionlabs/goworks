@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.netbeans.api.annotations.common.NullAllowed;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
@@ -20,8 +25,31 @@ import org.tvl.goworks.editor.go.codemodel.TypeModel;
  */
 public abstract class TypeModelImpl extends AbstractCodeElementModel implements TypeModel {
 
-    public TypeModelImpl(String name, FileModelImpl fileModel) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    public TypeModelImpl(String name, FileModelImpl fileModel, @NullAllowed ParseTree.TerminalNode<?> seek, @NullAllowed ParserRuleContext<?> span) {
         super(name, fileModel);
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 
     @Override

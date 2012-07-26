@@ -27,7 +27,7 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
     private final String referencedTypeName;
 
     public TypeReferenceModelImpl(String referencedPackageName, String referencedTypeName, FileModelImpl fileModel) {
-        super(getQualifiedName(referencedPackageName, referencedTypeName), fileModel);
+        super(getQualifiedName(referencedPackageName, referencedTypeName), fileModel, null, null);
         this.referencedPackageName = referencedPackageName;
         this.referencedTypeName = referencedTypeName;
     }

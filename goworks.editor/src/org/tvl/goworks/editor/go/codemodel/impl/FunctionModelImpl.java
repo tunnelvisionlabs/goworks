@@ -10,7 +10,11 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Utils;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 
@@ -24,8 +28,31 @@ public class FunctionModelImpl extends AbstractCodeElementModel implements Funct
     private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
     private ParameterModelImpl receiverParameter;
 
-    public FunctionModelImpl(String name, FileModelImpl file) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    public FunctionModelImpl(String name, FileModelImpl file, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
         super(name, file);
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 
     @Override

@@ -10,7 +10,11 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.netbeans.api.project.Project;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.PackageDeclarationModel;
 
 /**
@@ -19,8 +23,31 @@ import org.tvl.goworks.editor.go.codemodel.PackageDeclarationModel;
  */
 public class PackageDeclarationModelImpl extends AbstractCodeElementModel implements PackageDeclarationModel {
 
-    public PackageDeclarationModelImpl(String name, Project project) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    public PackageDeclarationModelImpl(String name, Project project, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
         super(name, project, name);
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 
     @Override

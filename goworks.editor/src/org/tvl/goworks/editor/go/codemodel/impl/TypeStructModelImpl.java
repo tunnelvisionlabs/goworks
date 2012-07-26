@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.tvl.goworks.editor.go.codemodel.StructModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -20,8 +21,8 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
 public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
     private final FreezableArrayList<FieldModelImpl> fields = new FreezableArrayList<FieldModelImpl>();
 
-    public TypeStructModelImpl(String name, FileModelImpl fileModel) {
-        super(name, fileModel);
+    public TypeStructModelImpl(String name, FileModelImpl fileModel, ParserRuleContext<?> span) {
+        super(name, fileModel, null, span);
     }
 
     @Override

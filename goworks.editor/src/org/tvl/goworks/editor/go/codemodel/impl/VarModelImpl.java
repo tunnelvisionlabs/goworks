@@ -10,6 +10,10 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.codemodel.VarModel;
@@ -22,10 +26,15 @@ public class VarModelImpl extends AbstractCodeElementModel implements VarModel {
     private final VarKind kind;
     private final TypeModel varType;
 
-    public VarModelImpl(String name, VarKind kind, TypeModel varType, FileModelImpl file) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    public VarModelImpl(String name, VarKind kind, TypeModel varType, FileModelImpl file, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
         super(name, file);
         this.kind = kind;
         this.varType = varType;
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
     }
 
     @Override
@@ -36,6 +45,24 @@ public class VarModelImpl extends AbstractCodeElementModel implements VarModel {
     @Override
     public TypeModel getVarType() {
         return varType;
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 
     @Override

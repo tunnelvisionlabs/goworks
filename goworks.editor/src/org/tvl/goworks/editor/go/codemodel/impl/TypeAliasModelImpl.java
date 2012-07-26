@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.tvl.goworks.editor.go.codemodel.TypeAliasModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -23,8 +25,8 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
 
     private final TypeModelImpl type;
 
-    public TypeAliasModelImpl(String name, TypeModelImpl type, FileModelImpl fileModel) {
-        super(name, fileModel);
+    public TypeAliasModelImpl(String name, TypeModelImpl type, FileModelImpl fileModel, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
+        super(name, fileModel, seek, span);
         this.type = type;
     }
 
@@ -36,7 +38,7 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
 
         List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getType().resolve());
         for (int i = 0; i < resolved.size(); i++) {
-            resolved.set(i, new TypeAliasModelImpl(getName(), resolved.get(i), getFile()));
+            resolved.set(i, new TypeAliasModelImpl(getName(), resolved.get(i), getFile(), null, null));
         }
 
         return resolved;

@@ -11,6 +11,7 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.tvl.goworks.editor.go.codemodel.TypeFunctionModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -25,8 +26,8 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
 
     private String simpleName;
 
-    public TypeFunctionModelImpl(String name, FileModelImpl fileModel) {
-        super(name, fileModel);
+    public TypeFunctionModelImpl(String name, FileModelImpl fileModel, ParserRuleContext<?> span) {
+        super(name, fileModel, null, span);
     }
 
     @Override

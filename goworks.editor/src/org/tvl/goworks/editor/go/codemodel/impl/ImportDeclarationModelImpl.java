@@ -10,9 +10,12 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 
 /**
@@ -23,12 +26,29 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
     private final String path;
     private final String alias;
     private final boolean mergeWithLocal;
+    private final OffsetRegion span;
 
-    public ImportDeclarationModelImpl(@NonNull String path, @NullAllowed String alias, boolean mergeWithLocal, @NonNull FileModelImpl file) {
+    public ImportDeclarationModelImpl(@NonNull String path, @NullAllowed String alias, boolean mergeWithLocal, @NonNull FileModelImpl file, ParserRuleContext<?> span) {
         super(getAlias(path, alias), file);
         this.path = path;
         this.alias = alias;
         this.mergeWithLocal = mergeWithLocal;
+        this.span = getOffsetRegion(span);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        // super returns beginning position of span by default
+        return super.getSeek();
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 
     @Override

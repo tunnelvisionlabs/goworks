@@ -161,7 +161,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         PackageNameContext nameContext = ctx.packageName();
         if (nameContext != null && nameContext.IDENTIFIER() != null) {
             String name = nameContext.IDENTIFIER().getSymbol().getText();
-            PackageDeclarationModelImpl model = new PackageDeclarationModelImpl(name, project);
+            PackageDeclarationModelImpl model = new PackageDeclarationModelImpl(name, project, nameContext.IDENTIFIER(), nameContext);
             fileModel.getPackageDeclarations().add(model);
         }
     }
@@ -189,7 +189,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             alias = GoParser.getPackageName(ctx.importPath().StringLiteral().getSymbol());
         }
 
-        ImportDeclarationModelImpl model = new ImportDeclarationModelImpl(path, alias, ctx.dot != null, fileModel);
+        ImportDeclarationModelImpl model = new ImportDeclarationModelImpl(path, alias, ctx.dot != null, fileModel, ctx);
         fileModel.getImportDeclarations().add(model);
     }
 
@@ -239,7 +239,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
     public void enterStructType(StructTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
-        structModelStack.push(new TypeStructModelImpl(typeName, fileModel));
+        structModelStack.push(new TypeStructModelImpl(typeName, fileModel, ctx));
     }
 
     @Override
@@ -261,7 +261,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0)
     public void enterFunctionType(FunctionTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
-        functionModelStack.push(new TypeFunctionModelImpl(typeName, fileModel));
+        functionModelStack.push(new TypeFunctionModelImpl(typeName, fileModel, ctx));
         parameterContainerStack.push(new ArrayList<ParameterModelImpl>());
     }
 
@@ -277,7 +277,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
     public void enterInterfaceType(InterfaceTypeContext ctx) {
         String typeName = createAnonymousTypeName(ctx);
-        interfaceModelStack.push(new TypeInterfaceModelImpl(typeName, fileModel));
+        interfaceModelStack.push(new TypeInterfaceModelImpl(typeName, fileModel, ctx));
         implementedTypesContainerStack.push(interfaceModelStack.peek().getImplementedInterfaces());
         functionContainerStack.push(interfaceModelStack.peek().getInterfaceMethods());
     }
@@ -332,7 +332,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         }
 
         TypeModelImpl type = typeModelStack.pop();
-        TypeModelImpl model = new TypeAliasModelImpl(ctx.IDENTIFIER().getSymbol().getText(), type, fileModel);
+        TypeModelImpl model = new TypeAliasModelImpl(name, type, fileModel, ctx.IDENTIFIER(), ctx);
         typeContainerStack.peek().add(model);
     }
 
@@ -347,7 +347,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
         if (ids != null) {
             for (TerminalNode<Token> id : ids) {
-                ConstModelImpl model = new ConstModelImpl(id.getSymbol().getText(), fileModel);
+                ConstModelImpl model = new ConstModelImpl(id.getSymbol().getText(), fileModel, id, ctx);
                 constContainerStack.peek().add(model);
             }
         }
@@ -370,7 +370,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         if (ids != null && !ids.isEmpty()) {
             boolean isGlobal = varContainerStack.peek() == fileModel.getVars();
             for (TerminalNode<Token> id : ids) {
-                VarModelImpl model = new VarModelImpl(id.getSymbol().getText(), isGlobal ? VarKind.GLOBAL : VarKind.LOCAL, varType, fileModel);
+                VarModelImpl model = new VarModelImpl(id.getSymbol().getText(), isGlobal ? VarKind.GLOBAL : VarKind.LOCAL, varType, fileModel, id, ctx);
                 varContainerStack.peek().add(model);
             }
         }
@@ -382,8 +382,9 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
     })
     public void enterMethodDecl(MethodDeclContext ctx) {
-        String name = ctx.methodName() != null && ctx.methodName().IDENTIFIER() != null ? ctx.methodName().IDENTIFIER().getSymbol().getText() : createAnonymousTypeName(ctx);
-        FunctionModelImpl model = new FunctionModelImpl(name, fileModel);
+        TerminalNode<Token> nameNode = ctx.methodName() != null ? ctx.methodName().IDENTIFIER() : null;
+        String name = nameNode != null ? nameNode.getSymbol().getText() : createAnonymousTypeName(ctx);
+        FunctionModelImpl model = new FunctionModelImpl(name, fileModel, nameNode, ctx);
         functionContainerStack.peek().add(model);
         functionModelStack.push(model);
         parameterContainerStack.push(model.getParameters());
@@ -403,7 +404,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void enterMethodSpec(MethodSpecContext ctx) {
         if (ctx.methodName() != null) {
-            FunctionModelImpl model = new FunctionModelImpl(ctx.methodName().IDENTIFIER().getSymbol().getText(), fileModel);
+            TerminalNode<Token> nameNode = ctx.methodName().IDENTIFIER();
+            FunctionModelImpl model = new FunctionModelImpl(nameNode.getSymbol().getText(), fileModel, nameNode, ctx);
             functionContainerStack.peek().add(model);
             functionModelStack.push(model);
             parameterContainerStack.push(model.getParameters());
@@ -439,10 +441,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
     })
     public void exitReceiver(ReceiverContext ctx) {
-        String name = "_";
-        if (ctx.IDENTIFIER() != null) {
-            name = ctx.IDENTIFIER().getSymbol().getText();
-        }
+        TerminalNode<? extends Token> nameNode = ctx.IDENTIFIER();
+        String name = nameNode != null ? nameNode.getSymbol().getText() : "_";
 
         if (ctx.baseTypeName() != null) {
             TypeModelImpl type = typeModelStack.pop();
@@ -450,7 +450,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
                 type = new TypePointerModelImpl(type);
             }
 
-            ParameterModelImpl receiver = new ParameterModelImpl(name, VarKind.RECEIVER, type, fileModel);
+            ParameterModelImpl receiver = new ParameterModelImpl(name, VarKind.RECEIVER, type, fileModel, nameNode, ctx);
             ((FunctionModelImpl)functionModelStack.peek()).setReceiverParameter(receiver);
         }
     }
@@ -458,7 +458,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0)
     public void enterFunctionDecl(FunctionDeclContext ctx) {
-        FunctionModelImpl model = new FunctionModelImpl(ctx.IDENTIFIER().getSymbol().getText(), fileModel);
+        TerminalNode<Token> nameNode = ctx.IDENTIFIER();
+        FunctionModelImpl model = new FunctionModelImpl(nameNode.getSymbol().getText(), fileModel, nameNode, ctx);
         functionContainerStack.peek().add(model);
         functionModelStack.push(model);
         parameterContainerStack.push(model.getParameters());
@@ -493,7 +494,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void exitResult(ResultContext ctx) {
         if (ctx.type() != null) {
-            parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, typeModelStack.pop(), fileModel));
+            parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, typeModelStack.pop(), fileModel, null, ctx));
         }
     }
 
@@ -516,10 +517,10 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         boolean isReturnParameter = functionModelStack.peek().getReturnValues() == parameterContainerStack.peek();
         if (ctx.identifierList() != null) {
             for (TerminalNode<Token> id : ctx.identifierList().IDENTIFIER()) {
-                parameterContainerStack.peek().add(new ParameterModelImpl(id.getSymbol().getText(), isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, fileModel));
+                parameterContainerStack.peek().add(new ParameterModelImpl(id.getSymbol().getText(), isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, fileModel, id, ctx));
             }
         } else {
-            parameterContainerStack.peek().add(new ParameterModelImpl("_", isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, fileModel));
+            parameterContainerStack.peek().add(new ParameterModelImpl("_", isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, fileModel, null, ctx));
         }
     }
 
@@ -549,7 +550,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
 
         if (ids != null && !ids.isEmpty()) {
             for (TerminalNode<Token> id : ids) {
-                FieldModelImpl model = new FieldModelImpl(id.getSymbol().getText(), fieldType, ctx.anonymousField() != null, fileModel);
+                FieldModelImpl model = new FieldModelImpl(id.getSymbol().getText(), fieldType, ctx.anonymousField() != null, fileModel, id, ctx);
                 structModelStack.peek().getFields().add(model);
             }
         }
