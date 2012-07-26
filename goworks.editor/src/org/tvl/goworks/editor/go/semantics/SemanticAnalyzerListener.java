@@ -298,7 +298,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     private static String getCurrentPackagePath(Project project, VersionedDocument document) {
         FileObject documentFileObject = document.getFileObject();
-        FileObject packageFolder = documentFileObject.getParent();
+        FileObject packageFolder = documentFileObject != null ? documentFileObject.getParent() : null;
         FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
 
         String packagePath;
@@ -500,14 +500,14 @@ public class SemanticAnalyzerListener implements GoParserListener {
             } else if (qualifierNodeType == NodeType.VAR_REF) {
                 // must be referring to something within the current file since it's resolved internally
                 Token target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
-                assert tokenDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
-                ParserRuleContext<Token> explicitType = tokenDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE);
+                assert target != null && tokenDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
+                ParserRuleContext<Token> explicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE) : null;
                 if (explicitType != null) {
                     LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier);
                     resolvedQualifier = Collections.emptyList();
                 } else {
-                    ParserRuleContext<Token> implicitType = tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE);
-                    int implicitIndex = tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX);
+                    ParserRuleContext<Token> implicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE) : null;
+                    int implicitIndex = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX) : -1;
                     LOGGER.log(Level.WARNING, "Unable to resolve implicit type for qualifier: {0}", qualifier);
                     resolvedQualifier = Collections.emptyList();
                 }

@@ -52,6 +52,10 @@ public class DeclarationFoldManagerParserTask implements ParserTask {
         }
 
         Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
+        if (futureData == null) {
+            return;
+        }
+
         ParserData<CompiledModel> parserData = futureData.get();
         AbstractFoldScanner<CompiledModel> scanner = getScanner();
         scanner.run(parserData);

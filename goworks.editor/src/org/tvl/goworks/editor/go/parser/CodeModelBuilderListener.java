@@ -123,7 +123,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=0)
     public void enterSourceFile(SourceFileContext ctx) {
-        FileObject packageFolder = snapshot.getVersionedDocument().getFileObject().getParent();
+        FileObject documentFileObject = snapshot.getVersionedDocument().getFileObject();
+        FileObject packageFolder = documentFileObject != null ? documentFileObject.getParent() : null;
         FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
 
         String packagePath;

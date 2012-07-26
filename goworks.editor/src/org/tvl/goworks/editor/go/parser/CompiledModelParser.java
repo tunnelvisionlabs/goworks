@@ -82,7 +82,7 @@ public class CompiledModelParser {
 
             try {
                 Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS);
-                Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
+                Tagger<TokenTag<Token>> tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
                 TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
                 CommonTokenStream tokenStream = new CommonTokenStream(tokenSource);
                 GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);

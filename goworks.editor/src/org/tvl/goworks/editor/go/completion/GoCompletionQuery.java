@@ -322,7 +322,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             Future<ParserData<List<Anchor>>> result =
                 taskManager.getData(snapshot, GoParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
             try {
-                anchors = result.get().getData();
+                anchors = result != null ? result.get().getData() : null;
             } catch (InterruptedException ex) {
                 anchors = null;
             } catch (ExecutionException ex) {
@@ -359,7 +359,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
                     Tagger<TokenTag<Token>> tagger = null;
                     try {
-                        tagger = futureTokensData.get().getData();
+                        tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
                     } catch (InterruptedException ex) {
                         Exceptions.printStackTrace(ex);
                     } catch (ExecutionException ex) {
@@ -431,7 +431,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
                                 for (ATNConfig c : transitions.keySet()) {
                                     for (Transition t : transitions.get(c)) {
-                                        if (!t.label().contains(GoParser.IDENTIFIER)) {
+                                        IntervalSet label = t.label();
+                                        if (label == null || !label.contains(GoParser.IDENTIFIER)) {
                                             continue;
                                         }
 
@@ -599,7 +600,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 assert singleTransitionList.size() == 1;
                                 Transition transition = singleTransitionList.get(0);
                                 // only interested in identifiers
-                                if (!transition.label().contains(GoParser.IDENTIFIER)) {
+                                IntervalSet label = transition.label();
+                                if (label == null || !label.contains(GoParser.IDENTIFIER)) {
                                     continue;
                                 }
 
@@ -669,6 +671,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         if (text != null && !text.isEmpty()) {
                                             intermediateResults.put(text, new KeywordCompletionItem(text));
                                         }
+                                    }
+
+                                    if (annotatedParseTrees == null) {
+                                        continue;
                                     }
 
                                     GoAnnotatedParseTree annotatedParseTree = annotatedParseTrees.get(entry.getKey());
@@ -1099,7 +1105,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             if (fileModel == null && !fileModelDataFailed) {
                 Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
                 try {
-                    fileModel = futureFileModelData.get().getData();
+                    fileModel = futureFileModelData != null ? futureFileModelData.get().getData() : null;
+                    fileModelDataFailed = fileModel != null;
                 } catch (InterruptedException ex) {
                     Exceptions.printStackTrace(ex);
                     fileModelDataFailed = true;
@@ -1853,14 +1860,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 } else if (qualifierNodeType == NodeType.VAR_REF) {
                     // must be referring to something within the current file since it's resolved internally
                     Token target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
-                    assert tokenDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
-                    ParserRuleContext<Token> explicitType = tokenDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE);
+                    assert target != null && tokenDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
+                    ParserRuleContext<Token> explicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE) : null;
                     if (explicitType != null) {
                         LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier);
                         resolvedQualifier = Collections.emptyList();
                     } else {
-                        ParserRuleContext<Token> implicitType = tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE);
-                        int implicitIndex = tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX);
+                        ParserRuleContext<Token> implicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE) : null;
+                        int implicitIndex = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX) : -1;
                         LOGGER.log(Level.WARNING, "Unable to resolve implicit type for qualifier: {0}", qualifier);
                         resolvedQualifier = Collections.emptyList();
                     }

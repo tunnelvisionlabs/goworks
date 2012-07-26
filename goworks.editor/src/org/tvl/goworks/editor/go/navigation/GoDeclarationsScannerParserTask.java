@@ -52,14 +52,15 @@ public class GoDeclarationsScannerParserTask implements ParserTask {
 
         if (requestedData.contains(GoParserDataDefinitions.NAVIGATOR_ROOT)) {
             synchronized (lock) {
-                ParserData<Description> data = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+                Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE));
+                ParserData<Description> data = futureData != null ? futureData.get() : null;
                 if (data != null) {
                     results.addResult(data);
                     return;
                 }
 
-                Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
-                ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
+                Future<ParserData<CompiledModel>> futureParserData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
+                ParserData<CompiledModel> parserData = futureParserData != null ? futureParserData.get() : null;
                 CompiledModel model = parserData != null ? parserData.getData() : null;
                 if (model != null) {
                     GoDeclarationsScanner scanner = getScanner(model);

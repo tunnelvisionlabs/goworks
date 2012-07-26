@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.fold;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -40,6 +41,10 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
 
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();
         CompiledModel model = result.getData();
+        if (model == null) {
+            return Collections.emptyList();
+        }
+
         CompiledFileModel fileModel = model.getResult();
         FoldListener listener = new FoldListener(snapshot, folds);
         ParseTreeWalker.DEFAULT.walk(listener, fileModel.getResult());

@@ -202,14 +202,22 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         };
     }
 
+    @CheckForNull
     public static Token getContext(SnapshotPosition position) {
         ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         DocumentSnapshot snapshot = position.getSnapshot();
         int offset = position.getOffset();
         Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+        if (futureTokensData == null) {
+            return null;
+        }
+
         Tagger<TokenTag<Token>> tagger;
         try {
             tagger = futureTokensData.get().getData();
+            if (tagger == null) {
+                return null;
+            }
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
             return null;
@@ -314,6 +322,10 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             }
 
             if (referencedElements.isEmpty()) {
+                return;
+            }
+
+            if (currentToken == null) {
                 return;
             }
 

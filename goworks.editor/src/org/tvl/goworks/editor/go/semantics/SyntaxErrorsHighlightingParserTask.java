@@ -61,8 +61,13 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
         }
 
         Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
-        ParserData<CompiledModel> parserData = futureData.get();
+        ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
         CompiledModel model = parserData.getData();
+        assert model != null;
+        if (model == null) {
+            return;
+        }
+
         DocumentSnapshot latestSnapshot = snapshot.getVersionedDocument().getCurrentSnapshot();
 
         try {
@@ -80,14 +85,19 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
 
                 String message = syntaxError.getMessage();
                 try {
-                    ErrorDescription errorDescription;
+                    ErrorDescription errorDescription = null;
                     if (document != null) {
                         errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(region.getStart().getOffset()), document.createPosition(region.getEnd().getOffset()));
                     } else {
                         FileObject file = context.getDocument().getFileObject();
-                        errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, file, region.getStart().getOffset(), region.getEnd().getOffset());
+                        if (file != null) {
+                            errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, file, region.getStart().getOffset(), region.getEnd().getOffset());
+                        }
                     }
-                    errors.add(errorDescription);
+
+                    if (errorDescription != null) {
+                        errors.add(errorDescription);
+                    }
                 } catch (BadLocationException ex) {
                     Exceptions.printStackTrace(ex);
                 }
@@ -96,7 +106,10 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
             if (document != null) {
                 HintsController.setErrors(document, "go-syntax", errors);
             } else {
-                HintsController.setErrors(context.getDocument().getFileObject(), "go-syntax", errors);
+                FileObject fileObject = context.getDocument().getFileObject();
+                if (fileObject != null) {
+                    HintsController.setErrors(fileObject, "go-syntax", errors);
+                }
             }
         } catch (RuntimeException ex) {
             Exceptions.printStackTrace(ex);

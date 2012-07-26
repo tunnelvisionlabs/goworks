@@ -59,7 +59,8 @@ public class SemanticAnalyzerParserTask implements ParserTask {
 
         if (requestedData.contains(GoParserDataDefinitions.ANNOTATED_PARSE_TREE)) {
             synchronized (lock) {
-                ParserData<GoAnnotatedParseTree> parseTreeResult = getTaskManager().getData(snapshot, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+                Future<ParserData<GoAnnotatedParseTree>> futureParseTreeResult = getTaskManager().getData(snapshot, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE));
+                ParserData<GoAnnotatedParseTree> parseTreeResult = futureParseTreeResult != null ? futureParseTreeResult.get() : null;
                 if (parseTreeResult != null) {
                     results.addResult(parseTreeResult);
                     return;

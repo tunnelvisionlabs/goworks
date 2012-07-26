@@ -64,11 +64,13 @@ public class ReferenceAnchorsParserTask implements ParserTask {
     @Override
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
-            ParserData<List<Anchor>> anchorPointsResult = taskManager.getData(snapshot, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
-            ParserData<FileModel> fileModelResult = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+            Future<ParserData<List<Anchor>>> futureAnchorPointsResult = taskManager.getData(snapshot, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            ParserData<List<Anchor>> anchorPointsResult = futureAnchorPointsResult != null ? futureAnchorPointsResult.get() : null;
+            Future<ParserData<FileModel>> futureFileModelResult = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            ParserData<FileModel> fileModelResult = futureFileModelResult != null ? futureFileModelResult.get() : null;
             if (anchorPointsResult == null || fileModelResult == null) {
                 Future<ParserData<CompiledModel>> futureCompiledModelData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL);
-                ParserData<CompiledModel> compiledModelData = futureCompiledModelData.get();
+                ParserData<CompiledModel> compiledModelData = futureCompiledModelData != null ? futureCompiledModelData.get() : null;
                 CompiledModel compiledModel = compiledModelData != null ? compiledModelData.getData() : null;
                 CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;
                 ParserRuleContext<Token> parseResult = compiledFileModel != null ? compiledFileModel.getResult() : null;

@@ -68,16 +68,19 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
         CodeModelCacheImpl cache = CodeModelCacheImpl.getInstance();
         List<PackageModelImpl> packages = new ArrayList<PackageModelImpl>();
 
-        for (ImportDeclarationModel importModel : getFile().getImportDeclarations()) {
-            boolean include = false;
-            if (referencedPackageName != null && !importModel.isMergeWithLocal() && referencedPackageName.equals(importModel.getName())) {
-                include = true;
-            } else if (referencedPackageName == null && importModel.isMergeWithLocal()) {
-                include = true;
-            }
+        FileModelImpl file = getFile();
+        if (file != null) {
+            for (ImportDeclarationModel importModel : file.getImportDeclarations()) {
+                boolean include = false;
+                if (referencedPackageName != null && !importModel.isMergeWithLocal() && referencedPackageName.equals(importModel.getName())) {
+                    include = true;
+                } else if (referencedPackageName == null && importModel.isMergeWithLocal()) {
+                    include = true;
+                }
 
-            if (include) {
-                packages.addAll(cache.resolvePackages(importModel));
+                if (include) {
+                    packages.addAll(cache.resolvePackages(importModel));
+                }
             }
         }
 

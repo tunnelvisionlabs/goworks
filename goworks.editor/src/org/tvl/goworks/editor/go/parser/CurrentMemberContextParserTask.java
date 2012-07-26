@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -60,13 +61,14 @@ public class CurrentMemberContextParserTask implements ParserTask {
 
         if (requestedData.contains(GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT)) {
             CurrentDeclarationContextData data = null;
-            if (parseContext.getPosition() != null) {
-                int caretOffset = parseContext.getPosition().getOffset();
+            SnapshotPosition position = parseContext.getPosition();
+            if (position != null) {
+                int caretOffset = position.getOffset();
 
                 Future<ParserData<List<Anchor>>> result =
                     taskManager.getData(snapshot, GoParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
 
-                ParserData<List<Anchor>> anchorsData = result.get();
+                ParserData<List<Anchor>> anchorsData = result != null ? result.get() : null;
                 List<Anchor> anchors = anchorsData.getData();
 
                 TopLevelDeclContext context = null;

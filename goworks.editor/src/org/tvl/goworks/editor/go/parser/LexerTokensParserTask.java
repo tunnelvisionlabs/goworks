@@ -86,8 +86,8 @@ public class LexerTokensParserTask implements ParserTask {
                         }
                     }
 
-                    if (previousResult != null) {
-                        GoTokensTaskTaggerSnapshot previousTagger = (GoTokensTaskTaggerSnapshot)previousResult.getData();
+                    GoTokensTaskTaggerSnapshot previousTagger = previousResult != null ? (GoTokensTaskTaggerSnapshot)previousResult.getData() : null;
+                    if (previousTagger != null) {
                         result = new BaseParserData<Tagger<TokenTag<Token>>>(context, GoParserDataDefinitions.LEXER_TOKENS, snapshot, previousTagger.translateTo(snapshot));
                     } else {
                         GoTokensTaskTaggerSnapshot tagger = new GoTokensTaskTaggerSnapshot(snapshot);

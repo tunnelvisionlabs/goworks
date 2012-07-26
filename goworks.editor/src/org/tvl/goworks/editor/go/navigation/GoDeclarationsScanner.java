@@ -92,8 +92,7 @@ public class GoDeclarationsScanner {
                                     GoNode.DeclarationDescription rootDescription) {
 
         SourceFileContext parseResult = result.getResult();
-
-        if (result != null) {
+        if (parseResult != null) {
             DeclarationsScannerListener listener = new DeclarationsScannerListener(snapshot, rootDescription);
             ParseTreeWalker.DEFAULT.walk(listener, parseResult);
         }

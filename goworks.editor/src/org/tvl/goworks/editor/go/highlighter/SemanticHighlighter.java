@@ -188,8 +188,8 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         try {
             Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.FILE_MODEL);
             Future<ParserData<GoAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.ANNOTATED_PARSE_TREE);
-            fileModel = futureFileModelData.get().getData();
-            annotatedParseTree = futureAnnotatedParseTreeData.get().getData();
+            fileModel = futureFileModelData != null ? futureFileModelData.get().getData() : null;
+            annotatedParseTree = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get().getData() : null;
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
         } catch (ExecutionException ex) {
