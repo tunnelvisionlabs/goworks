@@ -36,6 +36,7 @@ import org.netbeans.editor.ext.ExtKit;
 import org.netbeans.modules.editor.NbEditorKit;
 import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
+import org.tvl.goworks.editor.go.navigation.GoToSupport;
 
 /**
  *
@@ -202,12 +203,8 @@ public class GoEditorKit extends NbEditorKit {
 
         @Override
         public boolean gotoDeclaration(JTextComponent target) {
-            if (!(target.getDocument() instanceof StyledDocument))
-                return false;
-
-            //GoToSupport.goTo((StyledDocument) target.getDocument(), target.getCaretPosition(), false);
-            //return true;
-            return false;
+            GoToSupport.goTo(target, target.getCaretPosition(), false);
+            return true;
         }
     }
 
