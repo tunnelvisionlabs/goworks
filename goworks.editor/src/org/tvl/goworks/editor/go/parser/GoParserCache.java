@@ -19,6 +19,7 @@ import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.SemanticContext;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.misc.RuleDependencyChecker;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
@@ -71,6 +72,8 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
     }
 
     private static final class GoParserATNSimulator extends ParserATNSimulator<Token> {
+        private static final SemanticContext.Predicate qidPredicate = new SemanticContext.Predicate(GoParser.RULE_qualifiedIdentifier, 0, false);
+
         private final int QID_DECISION;
 
         public GoParserATNSimulator(Parser<Token> parser, ATN atn) {
@@ -91,7 +94,7 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
                 if (input.LA(1) == GoParser.IDENTIFIER) {
                     if (input.LA(2) == GoParser.Dot) {
                         if (input.LA(3) == GoParser.IDENTIFIER) {
-                            return parser.sempred(outerContext, GoParser.RULE_qualifiedIdentifier, 0) ? 1 : 2;
+                            return qidPredicate.eval(parser, outerContext) ? 1 : 2;
                         } else if (input.LA(3) != CaretToken.CARET_TOKEN_TYPE) {
                             return 2;
                         }
