@@ -9,6 +9,8 @@
 package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
+import javax.swing.text.JTextComponent;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
@@ -26,5 +28,14 @@ public interface CodeElementModel {
 
     @NonNull
     Collection<? extends CodeElementModel> getMembers(String name);
+
+    @CheckForNull
+    CodeElementPositionRegion getSeek();
+
+    @CheckForNull
+    CodeElementPositionRegion getSpan();
+
+    @CheckForNull
+    JTextComponent navigateTo();
 
 }
