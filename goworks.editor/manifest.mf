@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.tvl.goworks.editor
+OpenIDE-Module-Install: org/tvl/goworks/editor/Installer.class
+OpenIDE-Module-Layer: org/tvl/goworks/editor/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/tvl/goworks/editor/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
