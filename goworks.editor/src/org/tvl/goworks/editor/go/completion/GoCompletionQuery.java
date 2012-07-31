@@ -1769,26 +1769,29 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                String name = ctx.IDENTIFIER().getSymbol().getText();
                 Set<CodeElementModel> members = new HashSet<CodeElementModel>();
-                for (CodeElementModel model : contextModels) {
-                    members.addAll(model.getMembers(name));
-                }
-
-                for (Map.Entry<ParseTree.TerminalNode<Token>, ParserRuleContext<Token>> entry : vars.entrySet()) {
-                    if (!name.equals(entry.getKey().getText())) {
-                        continue;
+                ParseTree.TerminalNode<Token> nameNode = ctx.IDENTIFIER();
+                if (nameNode != null) {
+                    String name = nameNode.getSymbol().getText();
+                    for (CodeElementModel model : contextModels) {
+                        members.addAll(model.getMembers(name));
                     }
 
-                    Collection<? extends CodeElementModel> varTypes = resolveTarget(entry.getValue());
-                    for (CodeElementModel varType : varTypes) {
-                        if (!(varType instanceof TypeModel)) {
+                    for (Map.Entry<ParseTree.TerminalNode<Token>, ParserRuleContext<Token>> entry : vars.entrySet()) {
+                        if (!name.equals(entry.getKey().getText())) {
                             continue;
                         }
 
-                        // TODO: use proper var kind
-                        VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModel)varType, (FileModelImpl)getFileModel(), entry.getKey(), entry.getValue());
-                        members.add(varModel);
+                        Collection<? extends CodeElementModel> varTypes = resolveTarget(entry.getValue());
+                        for (CodeElementModel varType : varTypes) {
+                            if (!(varType instanceof TypeModel)) {
+                                continue;
+                            }
+
+                            // TODO: use proper var kind
+                            VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModel)varType, (FileModelImpl)getFileModel(), entry.getKey(), entry.getValue());
+                            members.add(varModel);
+                        }
                     }
                 }
 

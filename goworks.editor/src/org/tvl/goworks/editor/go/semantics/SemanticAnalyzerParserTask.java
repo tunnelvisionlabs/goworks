@@ -79,7 +79,11 @@ public class SemanticAnalyzerParserTask implements ParserTask {
                     Exceptions.printStackTrace(ex);
                 }
 
-                GoAnnotatedParseTree annotatedParseTree = SemanticAnalyzer.analyze(snapshot.getVersionedDocument(), referenceParseTree);
+                GoAnnotatedParseTree annotatedParseTree = null;
+                if (referenceParseTree != null) {
+                    annotatedParseTree = SemanticAnalyzer.analyze(snapshot.getVersionedDocument(), referenceParseTree);
+                }
+
                 parseTreeResult = new BaseParserData<GoAnnotatedParseTree>(context, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, annotatedParseTree);
                 results.addResult(parseTreeResult);
             }

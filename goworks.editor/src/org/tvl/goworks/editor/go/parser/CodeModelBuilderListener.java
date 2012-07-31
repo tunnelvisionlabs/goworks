@@ -208,7 +208,13 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void exitTypeName(TypeNameContext ctx) {
         String pkgName = ctx.qualifiedIdentifier().packageName() != null ? ctx.qualifiedIdentifier().packageName().IDENTIFIER().getSymbol().getText() : null;
-        String typeName = ctx.qualifiedIdentifier().IDENTIFIER().getSymbol().getText();
+        String typeName;
+        if (ctx.qualifiedIdentifier().IDENTIFIER() != null) {
+            typeName = ctx.qualifiedIdentifier().IDENTIFIER().getSymbol().getText();
+        } else {
+            typeName = "?";
+        }
+
         typeModelStack.push(new TypeReferenceModelImpl(pkgName, typeName, fileModel));
         assert !typeModelStack.isEmpty();
     }
@@ -431,7 +437,13 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0)
     public void exitBaseTypeName(BaseTypeNameContext ctx) {
         String pkgName = null;
-        String typeName = ctx.IDENTIFIER().getSymbol().getText();
+        String typeName;
+        if (ctx.IDENTIFIER() != null) {
+            typeName = ctx.IDENTIFIER().getSymbol().getText();
+        } else {
+            typeName = "?";
+        }
+
         typeModelStack.push(new TypeReferenceModelImpl(pkgName, typeName, fileModel));
     }
 
