@@ -92,6 +92,7 @@ public class CompiledModelParser {
                     try {
                         parser.setBuildParseTree(true);
                         parser.setErrorHandler(new BailErrorStrategy<Token>());
+                        parser.removeErrorListeners();
                         sourceFileContext = parser.sourceFile();
                     } catch (RuntimeException ex) {
                         GoParserCache.DEFAULT.putParser(parser);
