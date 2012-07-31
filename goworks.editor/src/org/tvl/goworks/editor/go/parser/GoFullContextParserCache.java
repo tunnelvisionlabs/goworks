@@ -14,19 +14,13 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNState;
-import org.antlr.v4.runtime.atn.DecisionState;
-import org.antlr.v4.runtime.atn.ParserATNSimulator;
-import org.antlr.v4.runtime.atn.SemanticContext;
-import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
-import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GoFullContextParserCache extends AbstractParserCache<Token, GoParser> {
+public class GoFullContextParserCache extends AbstractGoParserCache {
 
     public static final GoFullContextParserCache DEFAULT = new GoFullContextParserCache();
 
@@ -60,39 +54,14 @@ public class GoFullContextParserCache extends AbstractParserCache<Token, GoParse
 
     }
 
-    private static final class GoParserATNSimulator extends ParserATNSimulator<Token> {
-        private static final SemanticContext.Predicate qidPredicate = new SemanticContext.Predicate(GoParser.RULE_qualifiedIdentifier, 0, false);
-
-        private final int QID_DECISION;
-
+    private static final class GoParserATNSimulator extends AbstractGoParserATNSimulator {
         public GoParserATNSimulator(Parser<Token> parser, ATN atn) {
             super(parser, atn);
-            ATNState decisionState = atn.ruleToStartState[GoParser.RULE_qualifiedIdentifier].transition(0).target;
-            if (decisionState instanceof DecisionState) {
-                QID_DECISION = ((DecisionState)decisionState).decision;
-            } else {
-                QID_DECISION = -1;
-            }
         }
 
         @Override
         public int adaptivePredict(TokenStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
             assert !disable_global_context && force_global_context;
-
-            if (decision == QID_DECISION && QID_DECISION >= 0) {
-                if (input.LA(1) == GoParser.IDENTIFIER) {
-                    if (input.LA(2) == GoParser.Dot) {
-                        if (input.LA(3) == GoParser.IDENTIFIER) {
-                            return qidPredicate.eval(parser, outerContext) ? 1 : 2;
-                        } else if (input.LA(3) != CaretToken.CARET_TOKEN_TYPE) {
-                            return 2;
-                        }
-                    } else if (input.LA(2) != CaretToken.CARET_TOKEN_TYPE) {
-                        return 2;
-                    }
-                }
-            }
-
             return super.adaptivePredict(input, decision, outerContext);
         }
     }
