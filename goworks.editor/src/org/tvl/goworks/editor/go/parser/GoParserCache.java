@@ -8,15 +8,12 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
-import java.util.BitSet;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNConfig;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
@@ -111,22 +108,6 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
 
             return super.adaptivePredict(input, decision, outerContext);
         }
-
-        @Override
-        public BitSet getConflictingAlts(ATNConfigSet configs) {
-            BitSet result = super.getConflictingAlts(configs);
-            if (result != null) {
-                // (workaround) make sure the result contains all possible configs or premature resolution could occur
-                for (ATNConfig config : configs) {
-                    if (!result.get(config.getAlt())) {
-                        return null;
-                    }
-                }
-            }
-
-            return result;
-        }
-
     }
 
     private static void checkDependencies() {
