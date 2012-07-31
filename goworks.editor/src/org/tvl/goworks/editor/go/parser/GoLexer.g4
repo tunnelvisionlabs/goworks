@@ -108,9 +108,7 @@ IDENTIFIER
 	;
 
 WS
-	:	(	' '
-		|	'\t'
-		)+                      {$channel = HIDDEN;}
+	:	[ \t]+                  {$channel = HIDDEN;}
 	;
 
 NEWLINE
@@ -143,7 +141,7 @@ OctalLiteral
 
 fragment
 HexLiteral
-    :   '0' ('x' | 'X') HEX_DIGIT_CHAR+
+    :   '0' [xX] HEX_DIGIT_CHAR+
     ;
 
 IMAGINARY_LITERAL
@@ -163,7 +161,7 @@ Decimals
 
 fragment
 Exponent
-    :   ('e' | 'E') ('+' | '-')? Decimals
+    :   [eE] [+-]? Decimals
     ;
 
 CharLiteral
@@ -207,7 +205,7 @@ BigUValue
 
 fragment
 EscapedChar
-    :   '\\' ('a' | 'b' | 'f' | 'n' | 'r' | 't' | 'v' | '\\' | '\'' | '"')
+    :   '\\' [abfnrtv\\'"]
     ;
 
 StringLiteral
@@ -232,12 +230,12 @@ NEWLINE_CHAR
 
 fragment
 UNICODE_CHAR_NOSQUOTE
-    :   ~('\n' | '\'')
+    :   ~('\n' | '\'' | '\\')
     ;
 
 fragment
 UNICODE_CHAR_NODQUOTE
-    :   ~('\n' | '"')
+    :   ~('\n' | '"' | '\\')
     ;
 
 fragment
@@ -247,7 +245,7 @@ UNICODE_CHAR_NOBTICK
 
 fragment
 UNICODE_LETTER_CHAR
-    :   'a'..'z' | 'A'..'Z'
+    :   [a-zA-Z]
     ;
 
 fragment
@@ -272,7 +270,7 @@ OCTAL_DIGIT_CHAR
 
 fragment
 HEX_DIGIT_CHAR
-    :   '0'..'9' | 'a'..'f' | 'A'..'F'
+    :   [0-9a-fA-F]
     ;
 
 ANYCHAR
