@@ -9,7 +9,6 @@
 package org.tvl.goworks.editor.go.parser;
 
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 
 /**
@@ -76,9 +75,7 @@ public class GoLexer extends AbstractGoLexer {
         if (_type == NEWLINE || _type == COMMENT) {
             if (insertSemicolonAtEol) {
                 // emit the virtual semicolon token first
-                // TODO: text is separately set due to bug in CommonTokenFactory
-                semicolonToken = _factory.create(this, Semi, null, DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
-                ((CommonToken)semicolonToken).setText(";");
+                semicolonToken = _factory.create(this, Semi, ";", DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
                 emit(semicolonToken);
             }
 
@@ -101,9 +98,7 @@ public class GoLexer extends AbstractGoLexer {
         Token semicolonToken = null;
         if (insertSemicolonAtEol) {
             // emit the virtual semicolon token first
-            // TODO: text is separately set due to bug in CommonTokenFactory
             semicolonToken = _factory.create(this, Semi, ";", DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
-            ((CommonToken)semicolonToken).setText(";");
             emit(semicolonToken);
             // don't want to emit it twice
             insertSemicolonAtEol = false;
