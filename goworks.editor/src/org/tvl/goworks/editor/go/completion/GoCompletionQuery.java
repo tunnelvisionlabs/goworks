@@ -1084,12 +1084,23 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
                 }
 
-                for (CodeElementModel varType : varTypes) {
-                    if (!(varType instanceof TypeModel)) {
+                for (CodeElementModel model : varTypes) {
+                    TypeModel typeModel;
+                    if (model instanceof TypeModel) {
+                        typeModel = (TypeModel)model;
+                    } else if (model instanceof VarModel) {
+                        // this could be an implicit reference to the return value of a function
+                        VarModel varModel = (VarModel)model;
+                        if (varModel.getVarKind() != VarKind.RETURN) {
+                            continue;
+                        }
+
+                        typeModel = varModel.getVarType();
+                    } else {
                         continue;
                     }
 
-                    VarModelImpl varModel = new VarModelImpl(name, varKind, (TypeModel)varType, (FileModelImpl)getFileModel(), varEntry.getKey(), varEntry.getValue());
+                    VarModelImpl varModel = new VarModelImpl(name, varKind, typeModel, (FileModelImpl)getFileModel(), varEntry.getKey(), varEntry.getValue());
                     intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
                     break;
                 }
