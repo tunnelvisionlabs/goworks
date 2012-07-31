@@ -12,13 +12,61 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.atn.RangeTransition;
+import org.antlr.v4.runtime.atn.SetTransition;
+import org.antlr.v4.runtime.atn.Transition;
+import org.antlr.v4.runtime.misc.IntervalSet;
 
 /**
  *
  * @author Sam Harwell
  */
 public class GoHighlighterLexer extends AbstractGoHighlighterLexer {
+
+    static {
+        int unicodeDigitRule;
+        for (unicodeDigitRule = 0; unicodeDigitRule < ruleNames.length; unicodeDigitRule++) {
+            if ("UNICODE_DIGIT_CHAR".equals(ruleNames[unicodeDigitRule])) {
+                break;
+            }
+        }
+
+        int unicodeLetterRule;
+        for (unicodeLetterRule = 0; unicodeLetterRule < ruleNames.length; unicodeLetterRule++) {
+            if ("UNICODE_LETTER_CHAR".equals(ruleNames[unicodeLetterRule])) {
+                break;
+            }
+        }
+
+        IntervalSet digitChars = new IntervalSet();
+        IntervalSet letterChars = new IntervalSet();
+        for (char c = 0; c < Character.MAX_VALUE; c++) {
+            if (Character.isDigit(c)) {
+                digitChars.add(c);
+            }
+            else if (Character.isLetter(c)) {
+                letterChars.add(c);
+            }
+        }
+
+        if (unicodeDigitRule < ruleNames.length) {
+            ATNState sourceState = _ATN.ruleToStartState[unicodeDigitRule].transition(0).target;
+            assert sourceState.getNumberOfTransitions() == 1 && sourceState.transition(0) instanceof RangeTransition;
+            Transition existingDigitTransition = sourceState.transition(0);
+            SetTransition digitTransition = new SetTransition(existingDigitTransition.target, digitChars);
+            sourceState.setTransition(0, digitTransition);
+        }
+
+        if (unicodeLetterRule < ruleNames.length) {
+            ATNState sourceState = _ATN.ruleToStartState[unicodeLetterRule].transition(0).target;
+            assert sourceState.getNumberOfTransitions() == 1 && sourceState.transition(0) instanceof SetTransition;
+            Transition existingLetterTransition = sourceState.transition(0);
+            SetTransition letterTransition = new SetTransition(existingLetterTransition.target, letterChars);
+            sourceState.setTransition(0, letterTransition);
+        }
+    }
 
     public GoHighlighterLexer(CharStream input) {
         super(input);
