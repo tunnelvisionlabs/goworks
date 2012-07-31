@@ -23,6 +23,7 @@ import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.SemanticContext;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
+import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 
 /**
  *
@@ -46,6 +47,10 @@ public class GoFullContextParserCache extends AbstractParserCache<Token, GoParse
         result.getInterpreter().disable_global_context = false;
         result.getInterpreter().always_try_local_context = false;
         result.getInterpreter().force_global_context = true;
+
+        result.removeErrorListeners();
+        result.addErrorListener(DescriptiveErrorListener.INSTANCE);
+
         return result;
     }
 

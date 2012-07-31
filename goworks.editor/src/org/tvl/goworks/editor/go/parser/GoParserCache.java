@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.atn.SemanticContext;
 import org.antlr.v4.runtime.misc.RuleDependencyChecker;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
+import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
 import org.tvl.goworks.editor.go.fold.DeclarationFoldScanner;
 import org.tvl.goworks.editor.go.navigation.GoDeclarationsScanner;
@@ -59,6 +60,10 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
         result.getInterpreter().disable_global_context = true;
         result.getInterpreter().always_try_local_context = true;
         result.getInterpreter().force_global_context = false;
+
+        result.removeErrorListeners();
+        result.addErrorListener(DescriptiveErrorListener.INSTANCE);
+
         return result;
     }
 
