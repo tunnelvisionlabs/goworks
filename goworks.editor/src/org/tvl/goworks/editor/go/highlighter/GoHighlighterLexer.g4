@@ -23,16 +23,6 @@ options {
 package org.tvl.goworks.editor.go.highlighter;
 }
 
-@members {
-protected int getMultilineCommentType() {
-    return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
-}
-}
-
-//tokens {
-//    RawStringLiteral;
-//}
-
 Break       : 'break';
 Case        : 'case';
 Chan        : 'chan';
@@ -124,7 +114,7 @@ COMMENT
 	;
 
 ML_COMMENT
-    :   '/*'                    {pushMode(BlockComment);}
+    :   '/*'                                            -> pushMode(BlockComment)
     ;
 
 INT_LITERAL
@@ -213,7 +203,7 @@ EscapedChar
     ;
 
 RawStringLiteral
-    :   '`' {pushMode(RawLiteralMode);}
+    :   '`'                                         -> pushMode(RawLiteralMode)
     ;
 
 InterpretedStringLiteral
@@ -276,36 +266,36 @@ ANYCHAR
 
 mode BlockComment;
 
-    BlockComment_NEWLINE : NEWLINE {$type = NEWLINE;};
+    BlockComment_NEWLINE : NEWLINE  -> type(NEWLINE);
 
     CONTINUE_ML_COMMENT
-        :   ~('\r' | '\n' | '*')+   {$type = getMultilineCommentType();}
+        :   ~('\r' | '\n' | '*')+   -> type(ML_COMMENT)
         ;
 
     END_ML_COMMENT
-        :   '*/'                    {$type = getMultilineCommentType(); popMode();}
+        :   '*/'                    -> type(ML_COMMENT), popMode
         ;
 
     ML_COMMENT_STAR
-        :   '*'                     {$type = getMultilineCommentType();}
+        :   '*'                     -> type(ML_COMMENT)
         ;
 
-    BlockComment_ANYCHAR : . {$type = ANYCHAR;};
+    BlockComment_ANYCHAR : .        -> type(ANYCHAR);
 
 mode RawLiteralMode;
 
     RawLiteralNewline
-        :   NEWLINE                             {$type = NEWLINE;}
+        :   NEWLINE                 -> type(NEWLINE)
         ;
 
     ContinueRawLiteral
-        :   (UNICODE_CHAR_NOBTICK | NEWLINE_CHAR)*  {$type = RawStringLiteral;}
+        :   (UNICODE_CHAR_NOBTICK | NEWLINE_CHAR)*  -> type(RawStringLiteral)
         ;
 
     EndRawLiteral
-        :   '`'                                 {$type = RawStringLiteral; popMode();}
+        :   '`'                                     -> type(RawStringLiteral), popMode
         ;
 
     RawLiteral_ANYCHAR
-        :   . {$type = ANYCHAR;}
+        :   .                       -> type(ANYCHAR)
         ;

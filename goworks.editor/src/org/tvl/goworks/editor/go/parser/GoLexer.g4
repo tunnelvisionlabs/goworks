@@ -23,12 +23,6 @@ options {
 package org.tvl.goworks.editor.go.parser;
 }
 
-@members {
-protected int getMultilineCommentType() {
-    return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : ML_COMMENT;
-}
-}
-
 Break       : 'break';
 Case        : 'case';
 Chan        : 'chan';
@@ -108,19 +102,19 @@ IDENTIFIER
 	;
 
 WS
-	:	[ \t]+                  {$channel = HIDDEN;}
+	:	[ \t]+                  -> channel(HIDDEN)
 	;
 
 NEWLINE
-	:	'\r'? '\n'              {$channel = HIDDEN;}
+	:	'\r'? '\n'              -> channel(HIDDEN)
 	;
 
 COMMENT
-	:	'//' (~('\r' | '\n'))*  {$channel = HIDDEN;}
+	:	'//' (~('\r' | '\n'))*  -> channel(HIDDEN)
 	;
 
 ML_COMMENT
-    :   '/*' .* '*/'            {$channel = HIDDEN;}
+    :   '/*' .* '*/'            -> channel(HIDDEN)
     ;
 
 INT_LITERAL
