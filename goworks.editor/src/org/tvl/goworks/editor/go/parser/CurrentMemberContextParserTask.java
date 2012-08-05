@@ -94,6 +94,7 @@ public class CurrentMemberContextParserTask implements ParserTask {
                         CommonTokenStream tokens = new TaskTokenStream(lexer);
                         GoParser parser = GoFullContextParserCache.DEFAULT.getParser(tokens);
                         try {
+                            parser.removeErrorListeners();
                             parser.setBuildParseTree(true);
                             context = parser.topLevelDecl();
                         } finally {
