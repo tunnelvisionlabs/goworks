@@ -36,11 +36,6 @@ public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<Token, 
     }
 
     @Override
-    public CharStream getCharStream() {
-        return lexer.getInputStream();
-    }
-
-    @Override
     public String getSourceName() {
         return "Grammar Highlighter";
     }
