@@ -469,14 +469,14 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
                 return;
             }
 
-            boolean isDeclaration = annotatedTree.isDeclaration(symbol);
-            boolean resolved = annotatedTree.isResolved(symbol);
+            boolean isDeclaration = annotatedTree.isDeclaration(node);
+            boolean resolved = annotatedTree.isResolved(node);
             if (!resolved) {
                 unresolvedIdentifiers.add(symbol);
                 return;
             }
 
-            NodeType nodeType = annotatedTree.getNodeType(symbol);
+            NodeType nodeType = annotatedTree.getNodeType(node);
             switch (nodeType) {
             case PACKAGE_DECL:
                 packageDeclarations.add(symbol);
@@ -487,7 +487,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
                 break;
 
             case CONST_DECL:
-                if (annotatedTree.isGlobal(symbol)) {
+                if (annotatedTree.isGlobal(node)) {
                     this.globalConstDeclarations.add(symbol);
                 } else {
                     this.localConstDeclarations.add(symbol);
@@ -495,7 +495,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
                 break;
 
             case CONST_REF:
-                if (annotatedTree.isGlobal(symbol)) {
+                if (annotatedTree.isGlobal(node)) {
                     this.globalConstUses.add(symbol);
                 } else {
                     this.localConstUses.add(symbol);
@@ -504,7 +504,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
             case VAR_DECL:
             case VAR_REF:
-                VarKind varType = annotatedTree.getVarType(symbol);
+                VarKind varType = annotatedTree.getVarType(node);
                 Collection<Token> varCollection;
                 switch (varType) {
                 case GLOBAL:
@@ -544,7 +544,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
                 break;
 
             case FUNC_REF:
-                if (annotatedTree.isBuiltin(symbol)) {
+                if (annotatedTree.isBuiltin(node)) {
                     this.builtinFunctionUses.add(symbol);
                 } else {
                     this.funcUses.add(symbol);
@@ -561,8 +561,8 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
             case TYPE_DECL:
             case TYPE_REF:
-                TypeKind kind = annotatedTree.getTypeKind(symbol);
-                isDeclaration = annotatedTree.isDeclaration(symbol);
+                TypeKind kind = annotatedTree.getTypeKind(node);
+                isDeclaration = annotatedTree.isDeclaration(node);
                 Collection<Token> typeCollection;
                 switch (kind) {
                 case INTERFACE:

@@ -90,7 +90,7 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
                 }
             }
 
-            NodeType nodeType = annotatedParseTree.getNodeType(context.IDENTIFIER().getSymbol());
+            NodeType nodeType = annotatedParseTree.getNodeType(context.IDENTIFIER());
             switch (nodeType) {
             case VAR_REF:
             {

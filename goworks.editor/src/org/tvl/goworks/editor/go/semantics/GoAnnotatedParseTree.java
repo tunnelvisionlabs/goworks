@@ -25,38 +25,38 @@ public class GoAnnotatedParseTree extends AnnotatedParseTree {
     }
 
     @NonNull
-    public CodeElementReference getTarget(ParseTree<Token> parseTree) {
+    public CodeElementReference getTarget(ParseTree<? extends Token> parseTree) {
         return getTreeDecorator().getProperty(parseTree, GoAnnotations.PROP_ELEMENT_REFERENCE);
     }
 
-    public NodeType getNodeType(Token symbol) {
-        return getTokenDecorator().getProperty(symbol, GoAnnotations.NODE_TYPE);
+    public NodeType getNodeType(ParseTree.TerminalNode<? extends Token> node) {
+        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.NODE_TYPE);
     }
 
-    public VarKind getVarType(Token symbol) {
-        return getTokenDecorator().getProperty(symbol, GoAnnotations.VAR_TYPE);
+    public VarKind getVarType(ParseTree.TerminalNode<? extends Token> node) {
+        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.VAR_TYPE);
     }
 
-    public TypeKind getTypeKind(Token symbol) {
-        return getTokenDecorator().getProperty(symbol, GoAnnotations.TYPE_KIND);
+    public TypeKind getTypeKind(ParseTree.TerminalNode<? extends Token> node) {
+        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.TYPE_KIND);
     }
 
-    public boolean isGlobal(Token symbol) {
-        return getTokenDecorator().getProperty(symbol, GoAnnotations.GLOBAL);
+    public boolean isGlobal(ParseTree.TerminalNode<? extends Token> node) {
+        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.GLOBAL);
     }
 
-    public boolean isDeclaration(Token symbol) {
-        return getNodeType(symbol).isDeclaration();
+    public boolean isDeclaration(ParseTree.TerminalNode<? extends Token> node) {
+        return getNodeType(node).isDeclaration();
     }
 
-    public boolean isResolved(Token symbol) {
-        return getTokenDecorator().getProperty(symbol, GoAnnotations.RESOLVED)
-            || isDeclaration(symbol)
-            || isBuiltin(symbol);
+    public boolean isResolved(ParseTree.TerminalNode<? extends Token> node) {
+        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.RESOLVED)
+            || isDeclaration(node)
+            || isBuiltin(node);
     }
 
-    public boolean isBuiltin(Token symbol) {
-        return getTokenDecorator().getProperty(symbol, GoAnnotations.BUILTIN);
+    public boolean isBuiltin(ParseTree.TerminalNode<? extends Token> node) {
+        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.BUILTIN);
     }
 
 }

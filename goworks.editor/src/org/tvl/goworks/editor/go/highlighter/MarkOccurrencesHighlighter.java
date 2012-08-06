@@ -38,6 +38,7 @@ import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
@@ -301,8 +302,10 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             this.annotatedParseTree = annotatedParseTree;
 
             this.currentToken = getContext(position);
-            this.referencedToken = currentToken != null ? findReferencedToken(currentToken) : null;
-            this.referencedElements = currentToken != null ? findReferencedElements(currentToken) : Collections.<CodeElementModel>emptyList();
+
+            ParseTree.TerminalNode<Token> currentNode = findNodeForToken(annotatedParseTree.getParseTree(), currentToken);
+            this.referencedToken = currentNode != null ? findReferencedToken(currentNode) : null;
+            this.referencedElements = currentNode != null ? findReferencedElements(currentToken) : Collections.<CodeElementModel>emptyList();
         }
 
         @NonNull
@@ -313,7 +316,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         @Override
         public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
             Token symbol = node.getSymbol();
-            Token otherReferenced = findReferencedToken(symbol);
+            Token otherReferenced = findReferencedToken(node);
             if (referencedToken != null && otherReferenced != null) {
                 if (referencedToken.equals(otherReferenced)) {
                     markedOccurrences.add(symbol);
@@ -345,14 +348,14 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @CheckForNull
-        private Token findReferencedToken(Token symbol) {
-            Token target = annotatedParseTree.getTokenDecorator().getProperty(symbol, GoAnnotations.LOCAL_TARGET);
+        private Token findReferencedToken(ParseTree.TerminalNode<? extends Token> node) {
+            Token target = annotatedParseTree.getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.LOCAL_TARGET);
             if (target != null) {
                 return target;
             }
 
-            if (annotatedParseTree.isDeclaration(symbol)) {
-                return symbol;
+            if (annotatedParseTree.isDeclaration(node)) {
+                return node.getSymbol();
             }
 
             return null;
@@ -366,6 +369,37 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             }
 
             return models;
+        }
+
+        private static ParseTree.TerminalNode<Token> findNodeForToken(ParseTree<Token> parseTree, Token currentToken) {
+            if (parseTree instanceof ParseTree.TerminalNode<?>) {
+                ParseTree.TerminalNode<Token> node = (ParseTree.TerminalNode<Token>)parseTree;
+                Token symbol = node.getSymbol();
+                if (symbol.equals(currentToken)) {
+                    return node;
+                }
+
+                return null;
+            }
+
+            for (int i = 0; i < parseTree.getChildCount(); i++) {
+                ParseTree<Token> child = parseTree.getChild(i);
+                Interval sourceInterval = child.getSourceInterval();
+                if (sourceInterval == null || sourceInterval.b < currentToken.getStartIndex()) {
+                    continue;
+                }
+
+                if (sourceInterval.a > currentToken.getStopIndex()) {
+                    break;
+                }
+
+                ParseTree.TerminalNode<Token> node = findNodeForToken(child, currentToken);
+                if (node != null) {
+                    return node;
+                }
+            }
+
+            return null;
         }
 
     }
