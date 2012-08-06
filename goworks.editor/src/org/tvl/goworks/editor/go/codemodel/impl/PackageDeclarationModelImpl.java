@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.project.Project;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.PackageDeclarationModel;
@@ -26,7 +26,7 @@ public class PackageDeclarationModelImpl extends AbstractCodeElementModel implem
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public PackageDeclarationModelImpl(String name, Project project, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
+    public PackageDeclarationModelImpl(String name, Project project, TerminalNode<?> seek, ParserRuleContext<?> span) {
         super(name, project, name);
         this.seek = getOffsetRegion(seek);
         this.span = getOffsetRegion(span);

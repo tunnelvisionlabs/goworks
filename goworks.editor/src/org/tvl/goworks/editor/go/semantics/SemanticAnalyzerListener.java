@@ -27,9 +27,10 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.netbeans.api.annotations.common.NonNull;
@@ -2889,11 +2890,11 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
+    public void visitTerminal(TerminalNode<? extends Token> node) {
     }
 
     @Override
-    public void visitErrorNode(ParseTree.ErrorNode<? extends Token> node) {
+    public void visitErrorNode(ErrorNode<? extends Token> node) {
     }
 
     @Override

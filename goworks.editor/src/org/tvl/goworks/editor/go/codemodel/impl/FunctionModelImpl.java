@@ -13,7 +13,7 @@ import java.util.Collections;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Utils;
-import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.ParameterModel;
@@ -31,7 +31,7 @@ public class FunctionModelImpl extends AbstractCodeElementModel implements Funct
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public FunctionModelImpl(String name, FileModelImpl file, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
+    public FunctionModelImpl(String name, FileModelImpl file, TerminalNode<?> seek, ParserRuleContext<?> span) {
         super(name, file);
         this.seek = getOffsetRegion(seek);
         this.span = getOffsetRegion(span);

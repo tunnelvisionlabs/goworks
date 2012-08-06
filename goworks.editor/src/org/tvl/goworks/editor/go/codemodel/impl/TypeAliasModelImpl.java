@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.tvl.goworks.editor.go.codemodel.TypeAliasModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -25,7 +25,7 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
 
     private final TypeModelImpl type;
 
-    public TypeAliasModelImpl(String name, TypeModelImpl type, FileModelImpl fileModel, ParseTree.TerminalNode<?> seek, ParserRuleContext<?> span) {
+    public TypeAliasModelImpl(String name, TypeModelImpl type, FileModelImpl fileModel, TerminalNode<?> seek, ParserRuleContext<?> span) {
         super(name, fileModel, seek, span);
         this.type = type;
     }
