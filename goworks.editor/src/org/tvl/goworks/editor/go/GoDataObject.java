@@ -16,6 +16,7 @@ import org.openide.filesystems.MIMEResolver;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
+import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -35,6 +36,11 @@ public class GoDataObject extends MultiDataObject {
     public GoDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
         registerEditor(GoEditorKit.GO_MIME_TYPE, true);
+    }
+
+    @Override
+    protected Node createNodeDelegate() {
+        return GoDataSupport.createGoNode(getPrimaryFile());
     }
 
     @Override
