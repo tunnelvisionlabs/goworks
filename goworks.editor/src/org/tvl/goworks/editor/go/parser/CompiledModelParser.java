@@ -27,6 +27,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
+import org.antlr.works.editor.antlr4.parsing.SyntaxErrorListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
@@ -88,6 +89,7 @@ public class CompiledModelParser {
                 GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);
                 boolean fullContext = false;
                 try {
+                    SyntaxErrorListener syntaxErrorListener = new SyntaxErrorListener(snapshot);
                     SourceFileContext sourceFileContext;
                     try {
                         parser.setBuildParseTree(true);
@@ -101,6 +103,7 @@ public class CompiledModelParser {
                             // retry with default error handler
                             tokenStream.reset();
                             parser = GoFullContextParserCache.DEFAULT.getParser(tokenStream);
+                            parser.addErrorListener(syntaxErrorListener);
                             parser.setBuildParseTree(true);
                             sourceFileContext = parser.sourceFile();
                         } else {
@@ -111,7 +114,7 @@ public class CompiledModelParser {
                     FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
                     Token[] groupTokens = tokenStream.getTokens().toArray(new Token[0]);
                     lastSnapshot = snapshot;
-                    lastResult = new CompiledFileModel(sourceFileContext, parser.getSyntaxErrors(), fileObject, groupTokens);
+                    lastResult = new CompiledFileModel(sourceFileContext, syntaxErrorListener.getSyntaxErrors(), fileObject, groupTokens);
                     lastException = null;
                     return new CompiledModel(snapshot, lastResult);
                 } catch (RecognitionException ex) {
