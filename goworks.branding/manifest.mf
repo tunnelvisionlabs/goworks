@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.tvl.goworks.branding
+OpenIDE-Module-Layer: org/tvl/goworks/branding/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/tvl/goworks/branding/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
