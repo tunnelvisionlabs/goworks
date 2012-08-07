@@ -243,6 +243,9 @@ public class GoParserBaseListener implements GoParserListener {
 	@Override public void enterDeferStmt(AbstractGoParser.DeferStmtContext ctx) { }
 	@Override public void exitDeferStmt(AbstractGoParser.DeferStmtContext ctx) { }
 
+	@Override public void enterSourceFileBody(AbstractGoParser.SourceFileBodyContext ctx) { }
+	@Override public void exitSourceFileBody(AbstractGoParser.SourceFileBodyContext ctx) { }
+
 	@Override public void enterKey(AbstractGoParser.KeyContext ctx) { }
 	@Override public void exitKey(AbstractGoParser.KeyContext ctx) { }
 

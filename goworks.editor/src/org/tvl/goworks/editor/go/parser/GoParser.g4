@@ -611,8 +611,13 @@ builtinArgs
     |   expressionList
     ;
 
-sourceFile
+sourceFileBody
     :   (packageClause ';')? (importDecl ';')* (topLevelDecl ';')*
+    ;
+
+sourceFile
+@version{1}
+    :   sourceFileBody EOF
     ;
 
 packageClause

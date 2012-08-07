@@ -240,6 +240,9 @@ public interface GoParserListener extends ParseTreeListener<Token> {
 	void enterDeferStmt(AbstractGoParser.DeferStmtContext ctx);
 	void exitDeferStmt(AbstractGoParser.DeferStmtContext ctx);
 
+	void enterSourceFileBody(AbstractGoParser.SourceFileBodyContext ctx);
+	void exitSourceFileBody(AbstractGoParser.SourceFileBodyContext ctx);
+
 	void enterKey(AbstractGoParser.KeyContext ctx);
 	void exitKey(AbstractGoParser.KeyContext ctx);
 

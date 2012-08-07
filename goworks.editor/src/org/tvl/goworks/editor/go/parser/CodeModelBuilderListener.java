@@ -75,7 +75,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.PointerTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ReceiverContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceTypeContext;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileBodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeAssertionExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeContext;
@@ -121,8 +121,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=0)
-    public void enterSourceFile(SourceFileContext ctx) {
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0)
+    public void enterSourceFileBody(SourceFileBodyContext ctx) {
         FileObject documentFileObject = snapshot.getVersionedDocument().getFileObject();
         FileObject packageFolder = documentFileObject != null ? documentFileObject.getParent() : null;
         FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
@@ -143,8 +143,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=0)
-    public void exitSourceFile(SourceFileContext ctx) {
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0)
+    public void exitSourceFileBody(SourceFileBodyContext ctx) {
         this.fileModel.freeze();
         this.typeContainerStack.pop();
         this.constContainerStack.pop();

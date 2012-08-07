@@ -160,6 +160,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.SignatureContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SimpleStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileBodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.StatementContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
@@ -2283,12 +2284,22 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0)
+    public void enterSourceFileBody(SourceFileBodyContext ctx) {
+    }
+
+    @Override
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0)
+    public void exitSourceFileBody(SourceFileBodyContext ctx) {
+    }
+
+    @Override
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=1)
     public void enterSourceFile(SourceFileContext ctx) {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=1)
     public void exitSourceFile(SourceFileContext ctx) {
     }
 

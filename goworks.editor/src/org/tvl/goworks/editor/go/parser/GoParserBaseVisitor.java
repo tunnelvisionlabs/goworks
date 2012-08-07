@@ -166,6 +166,8 @@ public class GoParserBaseVisitor<Result> extends AbstractParseTreeVisitor<Token,
 
 	@Override public Result visitDeferStmt(AbstractGoParser.DeferStmtContext ctx) { return visitChildren(ctx); }
 
+	@Override public Result visitSourceFileBody(AbstractGoParser.SourceFileBodyContext ctx) { return visitChildren(ctx); }
+
 	@Override public Result visitKey(AbstractGoParser.KeyContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitDeclaration(AbstractGoParser.DeclarationContext ctx) { return visitChildren(ctx); }

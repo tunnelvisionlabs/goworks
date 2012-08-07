@@ -165,6 +165,8 @@ public interface GoParserVisitor<Symbol extends Token, Result> extends ParseTree
 
 	Result visitDeferStmt(AbstractGoParser.DeferStmtContext ctx);
 
+	Result visitSourceFileBody(AbstractGoParser.SourceFileBodyContext ctx);
+
 	Result visitKey(AbstractGoParser.KeyContext ctx);
 
 	Result visitDeclaration(AbstractGoParser.DeclarationContext ctx);

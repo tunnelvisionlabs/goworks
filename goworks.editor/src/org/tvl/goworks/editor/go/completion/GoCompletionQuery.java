@@ -1111,7 +1111,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
         @Override
         protected RuleContext<Token> parseImpl(CodeCompletionParser parser) {
-            return ((CodeCompletionGoParser)parser).sourceFile();
+            return ((CodeCompletionGoParser)parser).sourceFileBody();
         }
 
         private FileModel getFileModel() {
