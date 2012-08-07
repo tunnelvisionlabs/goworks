@@ -99,7 +99,9 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>org.tvl.goworks.project</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

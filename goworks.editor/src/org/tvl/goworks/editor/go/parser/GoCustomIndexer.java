@@ -20,11 +20,13 @@ import org.netbeans.modules.parsing.spi.indexing.Context;
 import org.netbeans.modules.parsing.spi.indexing.CustomIndexer;
 import org.netbeans.modules.parsing.spi.indexing.CustomIndexerFactory;
 import org.netbeans.modules.parsing.spi.indexing.Indexable;
+import org.netbeans.modules.parsing.spi.indexing.PathRecognizerRegistration;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.URLMapper;
 import org.openide.util.Lookup;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -66,6 +68,7 @@ public class GoCustomIndexer extends CustomIndexer {
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=CustomIndexerFactory.class)
+    @PathRecognizerRegistration(sourcePathIds={ GoProject.SOURCE }, binaryLibraryPathIds={}, libraryPathIds={}, mimeTypes={ GoEditorKit.GO_MIME_TYPE })
     public static class Factory extends CustomIndexerFactory {
 
         public Factory() {
