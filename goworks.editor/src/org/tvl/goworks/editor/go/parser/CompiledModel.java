@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.parser;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -18,6 +19,8 @@ import org.openide.util.Parameters;
 public class CompiledModel {
 
     private final DocumentSnapshot snapshot;
+
+    @NonNull
     private final CompiledFileModel result;
 
     public CompiledModel(DocumentSnapshot snapshot, CompiledFileModel result) {
@@ -31,6 +34,7 @@ public class CompiledModel {
         return snapshot;
     }
 
+    @NonNull
     public CompiledFileModel getResult() {
         return result;
     }
