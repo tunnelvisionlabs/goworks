@@ -38,10 +38,10 @@ import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
@@ -385,13 +385,26 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
             for (int i = 0; i < parseTree.getChildCount(); i++) {
                 ParseTree<Token> child = parseTree.getChild(i);
-                Interval sourceInterval = child.getSourceInterval();
-                if (sourceInterval == null || sourceInterval.b < currentToken.getStartIndex()) {
+                TerminalNode<Token> stopNode = ParseTrees.getStopNode(child);
+                if (stopNode == null) {
                     continue;
                 }
 
-                if (sourceInterval.a > currentToken.getStopIndex()) {
+                Token symbol = stopNode.getSymbol();
+                if (symbol.getStopIndex() < currentToken.getStartIndex()) {
+                    continue;
+                }
+
+                TerminalNode<Token> startNode = ParseTrees.getStartNode(child);
+                assert startNode != null;
+
+                symbol = startNode.getSymbol();
+                if (symbol.getStartIndex() > currentToken.getStopIndex()) {
                     break;
+                }
+
+                if (symbol.equals(currentToken)) {
+                    return startNode;
                 }
 
                 TerminalNode<Token> node = findNodeForToken(child, currentToken);
