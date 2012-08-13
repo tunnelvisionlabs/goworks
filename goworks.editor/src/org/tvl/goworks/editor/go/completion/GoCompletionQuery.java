@@ -431,8 +431,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 }
 
                                 Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                                for (ATNConfig c : transitions.keySet()) {
-                                    for (Transition t : transitions.get(c)) {
+                                for (Map.Entry<ATNConfig, List<Transition>> transitionEntry : transitions.entrySet()) {
+                                    for (Transition t : transitionEntry.getValue()) {
                                         IntervalSet label = t.label();
                                         if (label == null || !label.contains(GoParser.IDENTIFIER)) {
                                             continue;
