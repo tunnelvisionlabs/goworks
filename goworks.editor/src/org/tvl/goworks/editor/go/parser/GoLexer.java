@@ -24,21 +24,10 @@ public class GoLexer extends AbstractGoLexer {
     private boolean insertSemicolonAtEol;
     private Token deferredEol;
 
+    private static final char unicodeDigitPlaceholder = '\u0660';
+    private static final char unicodeLetterPlaceholder = '\u0101';
+
     static {
-        int unicodeDigitRule;
-        for (unicodeDigitRule = 0; unicodeDigitRule < ruleNames.length; unicodeDigitRule++) {
-            if ("UNICODE_DIGIT_CHAR".equals(ruleNames[unicodeDigitRule])) {
-                break;
-            }
-        }
-
-        int unicodeLetterRule;
-        for (unicodeLetterRule = 0; unicodeLetterRule < ruleNames.length; unicodeLetterRule++) {
-            if ("UNICODE_LETTER_CHAR".equals(ruleNames[unicodeLetterRule])) {
-                break;
-            }
-        }
-
         IntervalSet digitChars = new IntervalSet();
         IntervalSet letterChars = new IntervalSet();
         for (char c = 0; c < Character.MAX_VALUE; c++) {
@@ -50,21 +39,75 @@ public class GoLexer extends AbstractGoLexer {
             }
         }
 
-        if (unicodeDigitRule < ruleNames.length) {
-            ATNState sourceState = _ATN.ruleToStartState[unicodeDigitRule].transition(0).target;
-            assert sourceState.getNumberOfTransitions() == 1 && sourceState.transition(0) instanceof RangeTransition;
-            Transition existingDigitTransition = sourceState.transition(0);
-            SetTransition digitTransition = new SetTransition(existingDigitTransition.target, digitChars);
-            sourceState.setTransition(0, digitTransition);
+        for (ATNState state : _ATN.states) {
+            if (state == null || state.onlyHasEpsilonTransitions()) {
+                continue;
+            }
+
+            for (int i = 0; i < state.getNumberOfTransitions(); i++) {
+                Transition updated = patchTransition(state.transition(i), digitChars, letterChars);
+                if (updated != null) {
+                    state.setTransition(i, updated);
+                }
+            }
+
+            if (!state.isOptimized()) {
+                continue;
+            }
+
+            for (int i = 0; i < state.getNumberOfOptimizedTransitions(); i++) {
+                Transition updated = patchTransition(state.getOptimizedTransition(i), digitChars, letterChars);
+                if (updated != null) {
+                    state.setOptimizedTransition(i, updated);
+                }
+            }
+        }
+    }
+
+    private static Transition patchTransition(Transition transition, IntervalSet digitChars, IntervalSet letterChars) {
+        switch (transition.getSerializationType()) {
+        case Transition.ATOM:
+        case Transition.RANGE:
+        case Transition.SET:
+            break;
+
+        default:
+            return null;
         }
 
-        if (unicodeLetterRule < ruleNames.length) {
-            ATNState sourceState = _ATN.ruleToStartState[unicodeLetterRule].transition(0).target;
-            assert sourceState.getNumberOfTransitions() == 1 && sourceState.transition(0) instanceof SetTransition;
-            Transition existingLetterTransition = sourceState.transition(0);
-            SetTransition letterTransition = new SetTransition(existingLetterTransition.target, letterChars);
-            sourceState.setTransition(0, letterTransition);
+        IntervalSet label = transition.label();
+        if (label == null) {
+            return null;
         }
+
+        IntervalSet updated = null;
+        if (label.contains(unicodeDigitPlaceholder)) {
+            updated = new IntervalSet(label);
+            updated.addAll(digitChars);
+            if (updated.size() == digitChars.size()) {
+                updated = digitChars;
+            }
+        }
+
+        if (label.contains(unicodeLetterPlaceholder)) {
+            if (updated != null) {
+                updated.addAll(label);
+            }
+            else {
+                updated = new IntervalSet(label);
+            }
+
+            updated.addAll(letterChars);
+            if (updated.size() == letterChars.size()) {
+                updated = letterChars;
+            }
+        }
+
+        if (updated == null) {
+            return null;
+        }
+
+        return new SetTransition(transition.target, updated);
     }
 
     public GoLexer(CharStream input) {

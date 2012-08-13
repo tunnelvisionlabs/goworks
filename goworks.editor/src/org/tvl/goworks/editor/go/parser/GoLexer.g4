@@ -239,12 +239,12 @@ UNICODE_CHAR_NOBTICK
 
 fragment
 UNICODE_LETTER_CHAR
-    :   [a-zA-Z]
+    :   [a-zA-Z\u0101]
     ;
 
 fragment
 UNICODE_DIGIT_CHAR
-    :   '0'..'9'
+    :   '0'..'9' | '\u0660'
     ;
 
 fragment
