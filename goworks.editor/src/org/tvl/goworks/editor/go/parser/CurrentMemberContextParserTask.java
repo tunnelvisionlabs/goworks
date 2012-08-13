@@ -29,11 +29,8 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
-import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.DefaultErrorStrategy;
-import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
@@ -95,13 +92,13 @@ public class CurrentMemberContextParserTask implements ParserTask {
                         input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                         GoLexer lexer = new GoLexer(input);
                         CommonTokenStream tokens = new TaskTokenStream(lexer);
-                        GoParser parser = GoFullContextParserCache.DEFAULT.getParser(tokens);
+                        final GoParser parser = GoParserCache.DEFAULT.getParser(tokens);
                         try {
                             parser.removeErrorListeners();
                             parser.setBuildParseTree(true);
                             context = parser.topLevelDecl();
                         } finally {
-                            GoFullContextParserCache.DEFAULT.putParser(parser);
+                            GoParserCache.DEFAULT.putParser(parser);
                         }
                     }
                 }

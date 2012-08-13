@@ -24,6 +24,7 @@ import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
@@ -86,25 +87,23 @@ public class CompiledModelParser {
                 Tagger<TokenTag<Token>> tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
                 TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
                 CommonTokenStream tokenStream = new CommonTokenStream(tokenSource);
-                GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);
-                boolean fullContext = false;
+                final GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);
                 try {
                     SyntaxErrorListener syntaxErrorListener = new SyntaxErrorListener(snapshot);
                     SourceFileContext sourceFileContext;
                     try {
                         parser.setBuildParseTree(true);
+                        parser.getInterpreter().disable_global_context = true;
                         parser.setErrorHandler(new BailErrorStrategy<Token>());
                         parser.removeErrorListeners();
                         sourceFileContext = parser.sourceFile();
                     } catch (RuntimeException ex) {
-                        GoParserCache.DEFAULT.putParser(parser);
-                        fullContext = true;
                         if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
                             // retry with default error handler
                             tokenStream.reset();
-                            parser = GoFullContextParserCache.DEFAULT.getParser(tokenStream);
+                            parser.getInterpreter().disable_global_context = false;
+                            parser.setErrorHandler(new DefaultErrorStrategy<Token>());
                             parser.addErrorListener(syntaxErrorListener);
-                            parser.setBuildParseTree(true);
                             sourceFileContext = parser.sourceFile();
                         } else {
                             throw ex;
@@ -127,11 +126,7 @@ public class CompiledModelParser {
                     lastException = null;
                     return null;
                 } finally {
-                    if (!fullContext) {
-                        GoParserCache.DEFAULT.putParser(parser);
-                    } else {
-                        GoFullContextParserCache.DEFAULT.putParser(parser);
-                    }
+                    GoParserCache.DEFAULT.putParser(parser);
                 }
             } catch (Exception ex) {
                 lastSnapshot = snapshot;
