@@ -437,9 +437,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                             assert state.transition(0).target instanceof StarLoopEntryState;
                             state = state.transition(0).target;
                         } else if (state instanceof PlusBlockStartState && ((PlusBlockStartState)state).decision == -1) {
-                            state = parser.getATN().states.get(state.stateNumber + 2);
+                            state = ((PlusBlockStartState)state).loopBackState;
                             assert state instanceof PlusLoopbackState;
-                            assert state.transition(0).target.stateNumber == state.stateNumber - 2;
                         }
 
                         if (state instanceof DecisionState) {
@@ -448,7 +447,11 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                                 LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
                             }
                         } else {
-                            LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            if (state != null) {
+                                LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            } else {
+                                LOGGER.log(Level.FINE, "No decision number found for state <null>.");
+                            }
                             // continuing is likely to never terminate
                             return;
                         }

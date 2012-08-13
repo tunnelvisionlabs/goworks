@@ -781,16 +781,18 @@ public abstract class AbstractGoLexer extends Lexer {
 		"\1\61\1\61\1\62\1\62\1\62\1\63\1\63\1\63\1\64\1\64\1\64\1\65\1\65\1\66"+
 		"\1\66\1\67\1\67\18\18\19\19\19\1:\1:\1:\1;\1;\1;\1<\1<\1<\1=\1=\1=\1="+
 		"\1>\1>\1?\1?\1@\1@\1A\1A\1B\1B\1C\1C\1D\1D\1E\1E\1F\1F\1G\1G\1H\1H\1H"+
-		"\5H\bH\nH\fH\u01f5\tH\1I\4I\bI\13I\fI\u01f9\1I\1I\1J\3J\bJ\1J\1J\1J\1"+
-		"J\1K\1K\1K\1K\5K\bK\nK\fK\u020c\tK\1K\1K\1L\1L\1L\1L\5L\bL\nL\fL\u0217"+
-		"\tL\1L\1L\1L\1L\1L\1M\1M\1M\3M\bM\1N\1N\5N\bN\nN\fN\u0228\tN\1O\1O\5O"+
-		"\bO\nO\fO\u022f\tO\1P\1P\1P\4P\bP\13P\fP\u0235\1Q\1Q\3Q\bQ\1Q\1Q\1R\1"+
-		"R\1R\3R\bR\1R\3R\bR\1R\1R\1R\1R\1R\1R\3R\bR\3R\bR\1S\4S\bS\13S\fS\u0252"+
-		"\1T\1T\3T\bT\1T\1T\1U\1U\1U\3U\bU\1U\1U\1V\1V\1V\1V\3V\bV\1W\1W\1W\1W"+
-		"\3W\bW\1X\1X\3X\bX\1Y\1Y\1Y\1Y\1Y\1Z\1Z\1Z\1Z\1Z\1Z\1[\1[\1[\1[\1[\1["+
-		"\1[\1[\1\\\1\\\1\\\1\\\1\\\1\\\1\\\1\\\1\\\1\\\1\\\1\\\1]\1]\1]\1^\1^"+
-		"\3^\b^\1_\1_\1_\5_\b_\n_\f_\u029e\t_\1_\1_\1`\1`\1`\5`\b`\n`\f`\u02a8"+
-		"\t`\1`\1`\1a\1a\1b\1b\1c\1c\1d\1d\1e\1e\1f\1f\1g\1g\3g\bg\1h\1h\1i\1i"+
+		"\5H\u01f2\bH\nH\fH\u01f5\tH\1I\4I\u01f8\bI\13I\fI\u01f9\1I\1I\1J\3J\u01ff"+
+		"\bJ\1J\1J\1J\1J\1K\1K\1K\1K\5K\u0209\bK\nK\fK\u020c\tK\1K\1K\1L\1L\1L"+
+		"\1L\5L\u0214\bL\nL\fL\u0217\tL\1L\1L\1L\1L\1L\1M\1M\1M\3M\u0221\bM\1N"+
+		"\1N\5N\u0225\bN\nN\fN\u0228\tN\1O\1O\5O\u022c\bO\nO\fO\u022f\tO\1P\1P"+
+		"\1P\4P\u0234\bP\13P\fP\u0235\1Q\1Q\3Q\u023a\bQ\1Q\1Q\1R\1R\1R\3R\u0241"+
+		"\bR\1R\3R\u0244\bR\1R\1R\1R\1R\1R\1R\3R\u024c\bR\3R\u024e\bR\1S\4S\u0251"+
+		"\bS\13S\fS\u0252\1T\1T\3T\u0257\bT\1T\1T\1U\1U\1U\3U\u025e\bU\1U\1U\1"+
+		"V\1V\1V\1V\3V\u0266\bV\1W\1W\1W\1W\3W\u026c\bW\1X\1X\3X\u0270\bX\1Y\1"+
+		"Y\1Y\1Y\1Y\1Z\1Z\1Z\1Z\1Z\1Z\1[\1[\1[\1[\1[\1[\1[\1[\1\\\1\\\1\\\1\\\1"+
+		"\\\1\\\1\\\1\\\1\\\1\\\1\\\1\\\1]\1]\1]\1^\1^\3^\u0296\b^\1_\1_\1_\5_"+
+		"\u029b\b_\n_\f_\u029e\t_\1_\1_\1`\1`\1`\5`\u02a5\b`\n`\f`\u02a8\t`\1`"+
+		"\1`\1a\1a\1b\1b\1c\1c\1d\1d\1e\1e\1f\1f\1g\1g\3g\u02ba\bg\1h\1h\1i\1i"+
 		"\1j\1j\1k\1kl\1\1\uffff\3\2\uffff\5\3\uffff\7\4\uffff\t\5\uffff\13\6\uffff"+
 		"\r\7\uffff\17\b\uffff\21\t\uffff\23\n\uffff\25\13\uffff\27\f\uffff\31"+
 		"\r\uffff\33\16\uffff\35\17\uffff\37\20\uffff!\21\uffff#\22\uffff%\23\uffff"+

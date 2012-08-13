@@ -128,6 +128,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
@@ -243,13 +245,13 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
                         Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
                         Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
-                        for (ATNConfig c : transitions.keySet()) {
+                        for (Map.Entry<ATNConfig, List<Transition>> transitionEntry : transitions.entrySet()) {
                             boolean currentActionConfig = false;
                             visited.clear();
                             workList.clear();
                             stateWorkList.clear();
-                            workList.add(c.getContext());
-                            stateWorkList.add(c.getState().stateNumber);
+                            workList.add(transitionEntry.getKey().getContext());
+                            stateWorkList.add(transitionEntry.getKey().getState().stateNumber);
                             while (!workList.isEmpty()) {
                                 PredictionContext context = workList.poll();
                                 int state = stateWorkList.poll();
@@ -275,11 +277,36 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             hasActionConfig |= currentActionConfig;
                             hasNonActionConfig |= !currentActionConfig;
 
-                            for (Transition t : transitions.get(c)) {
+                            for (Transition t : transitionEntry.getValue()) {
                                 int ruleIndex = t.target.ruleIndex;
-                                if (ruleIndex == GrammarParser.RULE_ruleref
-                                    || ruleIndex == GrammarParser.RULE_terminal) {
+                                switch (ruleIndex) {
+                                case GrammarParser.RULE_ruleref:
+                                case GrammarParser.RULE_terminal:
                                     possibleReference = true;
+                                    break;
+
+                                case GrammarParser.RULE_lexerRule:
+                                    {
+                                        IntervalSet label = t.label();
+                                        if (label != null && label.contains(GrammarParser.TOKEN_REF)) {
+                                            possibleDeclaration = true;
+                                        }
+
+                                        break;
+                                    }
+
+                                case GrammarParser.RULE_parserRuleSpec:
+                                    {
+                                        IntervalSet label = t.label();
+                                        if (label != null && label.contains(GrammarParser.RULE_REF)) {
+                                            possibleDeclaration = true;
+                                        }
+
+                                        break;
+                                    }
+
+                                default:
+                                    break;
                                 }
 
                                 if (possibleDeclaration && possibleReference) {
