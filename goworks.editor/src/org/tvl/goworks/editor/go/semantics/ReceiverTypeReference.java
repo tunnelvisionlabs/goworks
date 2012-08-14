@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.antlr4.classification.DocumentSnapshotToken;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
@@ -36,11 +38,44 @@ public class ReceiverTypeReference extends CodeElementReference {
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         Token localTarget = annotatedParseTree.getTokenDecorator().getProperty(name, GoAnnotations.LOCAL_TARGET);
-        if (localTarget != null) {
-            LOGGER.log(Level.WARNING, "Unable to resolve receiver type from the current file. Attempting cache lookup.");
-        }
 
         Collection<? extends CodeElementModel> types = currentPackage.getTypes(name.getText());
+
+        if (localTarget instanceof DocumentSnapshotToken) {
+            DocumentSnapshotToken snapshotToken = (DocumentSnapshotToken)localTarget;
+            boolean foundCurrentDefinition = false;
+            boolean foundCurrentFile = false;
+            for (CodeElementModel model : types) {
+                CodeElementPositionRegion seek = model.getSeek();
+                if (seek == null) {
+                    continue;
+                }
+
+                if (!seek.getFileObject().equals(snapshotToken.getSnapshot().getVersionedDocument().getFileObject())) {
+                    continue;
+                }
+
+                foundCurrentFile = true;
+                foundCurrentDefinition |= seek.getOffsetRegion().getStart() == localTarget.getStartIndex();
+                if (foundCurrentDefinition) {
+                    break;
+                }
+            }
+
+            if (!foundCurrentDefinition) {
+                String reason;
+                if (foundCurrentFile) {
+                    reason = "Cached type appears to be out-of-date.";
+                } else {
+                    reason = "Type not found in cache.";
+                }
+
+                LOGGER.log(Level.WARNING, "Unable to verify receiver type for local target type '{0}'. {1}", new Object[] { localTarget.getText(), reason });
+            }
+        } else if (localTarget != null) {
+            LOGGER.log(Level.WARNING, "Unable to verify receiver type for local target from token class {0}.", localTarget.getClass());
+        }
+
         if (!pointer) {
             return types;
         }
