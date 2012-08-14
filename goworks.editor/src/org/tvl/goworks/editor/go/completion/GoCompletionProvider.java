@@ -35,6 +35,7 @@ import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.Parameters;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.GoLexer;
@@ -127,6 +128,8 @@ public class GoCompletionProvider extends AbstractCompletionProvider {
 
     @Override
     public Token getContext(Document document, int offset) {
+        Parameters.notNull("document", document);
+
         if (document instanceof AbstractDocument) {
             ((AbstractDocument)document).readLock();
         }
