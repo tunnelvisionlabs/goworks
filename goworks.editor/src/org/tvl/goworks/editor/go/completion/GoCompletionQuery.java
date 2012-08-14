@@ -144,8 +144,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
     // -J-Dorg.tvl.goworks.editor.go.completion.GoCompletionQuery.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoCompletionQuery.class.getName());
 
-    private static final ParserCache parserCache = new ParserCache();
-
     private boolean possibleReference;
 
     /*package*/ GoCompletionQuery(GoCompletionProvider completionProvider, int queryType, int caretOffset, boolean hasTask, boolean extend) {
@@ -385,7 +383,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                     CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-                    parser = parserCache.getParser(tokens);
+                    parser = ParserCache.DEFAULT.getParser(tokens);
                     try {
                         parser.setBuildParseTree(true);
                         parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
@@ -400,6 +398,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 }
                             }
 
+                            parser.setCheckPackageNames(true);
                             parser.setPackageNames(packageNames);
                         }
 
@@ -1022,7 +1021,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             results.addAll(intermediateResults.values());
                         }
                     } finally {
-                        parserCache.putParser(parser);
+                        ParserCache.DEFAULT.putParser(parser);
                         parser = null;
                     }
                 }
