@@ -88,7 +88,8 @@ public class CategorySupport implements PreviewProvider, PreferencesCustomizer {
 
         CodeStyle codeStyle = FormatOptions.codeStyleFactory.create(preferences);
         jep.setIgnoreRepaint(true);
-        jep.setText(previewText);
+        String formattedPreviewText = GoReformatTask.reformat(previewText, codeStyle);
+        jep.setText(formattedPreviewText);
         jep.setIgnoreRepaint(false);
         jep.scrollRectToVisible(new Rectangle(0,0,10,10) );
         jep.repaint(100);
