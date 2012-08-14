@@ -15,11 +15,17 @@ import java.util.Map;
 import java.util.prefs.Preferences;
 import org.netbeans.api.editor.settings.SimpleValueNames;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 /**
  *
  * @author Sam Harwell
  */
+@NbBundle.Messages({
+    "SAMPLE_Default=",
+    "AD_Preview=",
+    "AN_Preview=",
+})
 public class FormatOptions {
 
     public static final BooleanFormatOption expandTabToSpaces = new BooleanFormatOption(SimpleValueNames.EXPAND_TABS, true);
