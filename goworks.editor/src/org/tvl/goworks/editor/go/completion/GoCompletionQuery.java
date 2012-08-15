@@ -63,7 +63,6 @@ import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.antlr4.completion.CaretReachedException;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionErrorStrategy;
-import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionTokenSource;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.netbeans.api.annotations.common.NonNull;
@@ -404,7 +403,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                         switch (previous.getRule()) {
                         case GoParser.RULE_topLevelDecl:
-                            parseTrees = getParseTrees(parser);
+                            parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
                             annotatedParseTrees = analyzeParseTrees(snapshot.getVersionedDocument(), parseTrees);
                             break;
 
@@ -1106,11 +1105,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     break;
                 }
             }
-        }
-
-        @Override
-        protected RuleContext<Token> parseImpl(CodeCompletionParser parser) {
-            return ((CodeCompletionGoParser)parser).sourceFileBody();
         }
 
         private FileModel getFileModel() {
