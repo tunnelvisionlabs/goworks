@@ -169,6 +169,41 @@
                             <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatTabsIndents.getController"/>
                             <attr name="position" intvalue="100"/>
                         </file>
+                        <file name="Alignment.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatAlignment.getController"/>
+                            <attr name="position" intvalue="200"/>
+                        </file>
+                        <file name="Wrapping.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatWrapping.getController"/>
+                            <attr name="position" intvalue="300"/>
+                        </file>
+                        <file name="BlankLines.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatBlankLines.getController"/>
+                            <attr name="position" intvalue="400"/>
+                        </file>
+                        <file name="Spaces.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatSpaces.getController"/>
+                            <attr name="position" intvalue="500"/>
+                        </file>
+                        <file name="Comments.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatComments.getController"/>
+                            <attr name="position" intvalue="600"/>
+                        </file>
+                        <file name="Imports.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatImports.getController"/>
+                            <attr name="position" intvalue="700"/>
+                        </file>
+                        <file name="CodeGeneration.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.tvl.goworks.editor.go.formatting.FormatCodeGeneration.getController"/>
+                            <attr name="position" intvalue="800"/>
+                        </file>
                     </folder>
                 </folder>
             </folder>
