@@ -22,13 +22,90 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="chkEnableCommentsFormatting" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="chkWrapOneLineComments" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkFormatBlockComments" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkWrapTextAtRightMargin" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkAddLeadingStar" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkPreserveNewLines" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="lblGeneral" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator1" pref="185" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="chkEnableCommentsFormatting" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="chkFormatBlockComments" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="lblGeneral" min="-2" max="-2" attributes="0"/>
+                  <Component id="jSeparator1" min="-2" pref="7" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="chkAddLeadingStar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="chkWrapTextAtRightMargin" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="chkWrapOneLineComments" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="chkPreserveNewLines" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JCheckBox" name="chkEnableCommentsFormatting">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Enable Comments Formatting"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkFormatBlockComments">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Format Block Comments"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkAddLeadingStar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Add Leading Star"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkWrapTextAtRightMargin">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Wrap Text At Right Margin"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkWrapOneLineComments">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Wrap One Line Comments"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkPreserveNewLines">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Preserve New Lines"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblGeneral">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="General"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+  </SubComponents>
 </Form>

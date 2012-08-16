@@ -101,6 +101,13 @@ public class FormatOptions {
     public static final BooleanFormatOption spaceAfterColon = new BooleanFormatOption("spaceAfterColon", true);
     public static final BooleanFormatOption spaceAfterTypeCast = new BooleanFormatOption("spaceAfterTypeCast", false);
 
+    public static final BooleanFormatOption enableCommentsFormatting = new BooleanFormatOption("enableCommentsFormatting", true);
+    public static final BooleanFormatOption formatBlockComments = new BooleanFormatOption("formatBlockComments", false);
+    public static final BooleanFormatOption addLeadingStarInComments = new BooleanFormatOption("addLeadingStarInComments", true);
+    public static final BooleanFormatOption wrapTextInComments = new BooleanFormatOption("wrapTextInComments", true);
+    public static final BooleanFormatOption wrapOneLineComments = new BooleanFormatOption("wrapOneLineComments", true);
+    public static final BooleanFormatOption preserveNewLinesInComments = new BooleanFormatOption("preserveNewLinesInComments", false);
+
     public static CodeStyleFactory codeStyleFactory;
 
     private static final Map<String, AbstractFormatOption> knownOptions;

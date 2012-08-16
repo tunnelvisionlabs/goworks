@@ -305,6 +305,30 @@ public final class CodeStyle {
         return FormatOptions.spaceAfterTypeCast.getValue(_preferences);
     }
 
+    public boolean isEnableCommentsFormatting() {
+        return FormatOptions.enableCommentsFormatting.getValue(_preferences);
+    }
+
+    public boolean isFormatBlockComments() {
+        return FormatOptions.formatBlockComments.getValue(_preferences);
+    }
+
+    public boolean isAddLeadingStarInComments() {
+        return FormatOptions.addLeadingStarInComments.getValue(_preferences);
+    }
+
+    public boolean isWrapTextInComments() {
+        return FormatOptions.wrapTextInComments.getValue(_preferences);
+    }
+
+    public boolean isWrapOneLineComments() {
+        return FormatOptions.wrapOneLineComments.getValue(_preferences);
+    }
+
+    public boolean isPreserveNewLinesInComments() {
+        return FormatOptions.preserveNewLinesInComments.getValue(_preferences);
+    }
+
     public static final class Factory implements FormatOptions.CodeStyleFactory {
         @Override
         public CodeStyle create(Preferences preferences) {
