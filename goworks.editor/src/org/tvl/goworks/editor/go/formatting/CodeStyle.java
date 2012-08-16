@@ -329,6 +329,58 @@ public final class CodeStyle {
         return FormatOptions.preserveNewLinesInComments.getValue(_preferences);
     }
 
+    public WrapStyle getWrapArrayInitializer() {
+        return FormatOptions.wrapArrayInitializer.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapAssignmentOperators() {
+        return FormatOptions.wrapAssignmentOperators.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapBinaryOperators() {
+        return FormatOptions.wrapBinaryOperators.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapChainedMethodCalls() {
+        return FormatOptions.wrapChainedMethodCalls.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapDoWhileStatement() {
+        return FormatOptions.wrapDoWhileStatement.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapEnumConstants() {
+        return FormatOptions.wrapEnumConstants.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapFor() {
+        return FormatOptions.wrapFor.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapForStatement() {
+        return FormatOptions.wrapForStatement.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapIfStatement() {
+        return FormatOptions.wrapIfStatement.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapMethodCallArguments() {
+        return FormatOptions.wrapMethodCallArguments.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapMethodParameters() {
+        return FormatOptions.wrapMethodParameters.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapTernaryOperators() {
+        return FormatOptions.wrapTernaryOperators.getValue(_preferences);
+    }
+
+    public WrapStyle getWrapWhileStatement() {
+        return FormatOptions.wrapWhileStatement.getValue(_preferences);
+    }
+
     public static final class Factory implements FormatOptions.CodeStyleFactory {
         @Override
         public CodeStyle create(Preferences preferences) {

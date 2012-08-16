@@ -108,6 +108,20 @@ public class FormatOptions {
     public static final BooleanFormatOption wrapOneLineComments = new BooleanFormatOption("wrapOneLineComments", true);
     public static final BooleanFormatOption preserveNewLinesInComments = new BooleanFormatOption("preserveNewLinesInComments", false);
 
+    public static final EnumFormatOption<WrapStyle> wrapArrayInitializer = new EnumFormatOption<WrapStyle>("wrapArrayInitializer", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapAssignmentOperators = new EnumFormatOption<WrapStyle>("wrapAssignmentOperators", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapBinaryOperators = new EnumFormatOption<WrapStyle>("wrapBinaryOperators", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapChainedMethodCalls = new EnumFormatOption<WrapStyle>("wrapChainedMethodCalls", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapDoWhileStatement = new EnumFormatOption<WrapStyle>("wrapDoWhileStatement", WrapStyle.class, WrapStyle.ALWAYS);
+    public static final EnumFormatOption<WrapStyle> wrapEnumConstants = new EnumFormatOption<WrapStyle>("wrapEnumConstants", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapFor = new EnumFormatOption<WrapStyle>("wrapFor", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapForStatement = new EnumFormatOption<WrapStyle>("wrapForStatement", WrapStyle.class, WrapStyle.ALWAYS);
+    public static final EnumFormatOption<WrapStyle> wrapIfStatement = new EnumFormatOption<WrapStyle>("wrapIfStatement", WrapStyle.class, WrapStyle.ALWAYS);
+    public static final EnumFormatOption<WrapStyle> wrapMethodCallArguments = new EnumFormatOption<WrapStyle>("wrapMethodCallArguments", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapMethodParameters = new EnumFormatOption<WrapStyle>("wrapMethodParameters", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapTernaryOperators = new EnumFormatOption<WrapStyle>("wrapTernaryOperators", WrapStyle.class, WrapStyle.NEVER);
+    public static final EnumFormatOption<WrapStyle> wrapWhileStatement = new EnumFormatOption<WrapStyle>("wrapWhileStatement", WrapStyle.class, WrapStyle.ALWAYS);
+
     public static CodeStyleFactory codeStyleFactory;
 
     private static final Map<String, AbstractFormatOption> knownOptions;
