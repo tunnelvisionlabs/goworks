@@ -45,6 +45,17 @@ public class FormatOptions {
     public static final BooleanFormatOption alignMultilineReturnParameters = new BooleanFormatOption("alignMultilineReturnParameters", false);
     public static final BooleanFormatOption alignMultilineTernaryOperators = new BooleanFormatOption("alignMultilineTernaryOperators", false);
 
+    public static final IntFormatOption blankLinesBeforePackage = new IntFormatOption("blankLinesBeforePackage", 0);
+    public static final IntFormatOption blankLinesAfterPackage = new IntFormatOption("blankLinesAfterPackage", 1);
+    public static final IntFormatOption blankLinesBeforeImports = new IntFormatOption("blankLinesBeforeImports", 1);
+    public static final IntFormatOption blankLinesAfterImports = new IntFormatOption("blankLinesAfterImports", 1);
+    public static final IntFormatOption blankLinesBeforeType = new IntFormatOption("blankLinesBeforeType", 1);
+    public static final IntFormatOption blankLinesAfterType = new IntFormatOption("blankLinesAfterType", 0);
+    public static final IntFormatOption blankLinesBeforeVar = new IntFormatOption("blankLinesBeforeVar", 0);
+    public static final IntFormatOption blankLinesAfterVar = new IntFormatOption("blankLinesAfterVar", 0);
+    public static final IntFormatOption blankLinesBeforeFunction = new IntFormatOption("blankLinesBeforeFunction", 1);
+    public static final IntFormatOption blankLinesAfterFunction = new IntFormatOption("blankLinesAfterFunction", 0);
+
     public static CodeStyleFactory codeStyleFactory;
 
     private static final Map<String, AbstractFormatOption> knownOptions;

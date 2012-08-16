@@ -109,6 +109,46 @@ public final class CodeStyle {
         return FormatOptions.alignMultilineTernaryOperators.getValue(_preferences);
     }
 
+    public int getBlankLinesBeforePackage() {
+        return FormatOptions.blankLinesBeforePackage.getValue(_preferences);
+    }
+
+    public int getBlankLinesAfterPackage() {
+        return FormatOptions.blankLinesAfterPackage.getValue(_preferences);
+    }
+
+    public int getBlankLinesBeforeImports() {
+        return FormatOptions.blankLinesBeforeImports.getValue(_preferences);
+    }
+
+    public int getBlankLinesAfterImports() {
+        return FormatOptions.blankLinesAfterImports.getValue(_preferences);
+    }
+
+    public int getBlankLinesBeforeType() {
+        return FormatOptions.blankLinesBeforeType.getValue(_preferences);
+    }
+
+    public int getBlankLinesAfterType() {
+        return FormatOptions.blankLinesAfterType.getValue(_preferences);
+    }
+
+    public int getBlankLinesBeforeVar() {
+        return FormatOptions.blankLinesBeforeVar.getValue(_preferences);
+    }
+
+    public int getBlankLinesAfterVar() {
+        return FormatOptions.blankLinesAfterVar.getValue(_preferences);
+    }
+
+    public int getBlankLinesBeforeFunction() {
+        return FormatOptions.blankLinesBeforeFunction.getValue(_preferences);
+    }
+
+    public int getBlankLinesAfterFunction() {
+        return FormatOptions.blankLinesAfterFunction.getValue(_preferences);
+    }
+
     public static final class Factory implements FormatOptions.CodeStyleFactory {
         @Override
         public CodeStyle create(Preferences preferences) {

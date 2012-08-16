@@ -22,13 +22,225 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblBeforePackage" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblBeforeVar" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAfterVar" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAfterFunction" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblBeforeFunction" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAfterType" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblBeforeType" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAfterImports" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblBeforeImports" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAfterPackage" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="txtBeforePackage" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAfterPackage" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="txtBeforeImports" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="txtAfterImports" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="txtBeforeType" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="txtAfterType" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="txtBeforeFunction" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="txtAfterFunction" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                  <Component id="txtBeforeVar" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAfterVar" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblBeforePackage" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBeforePackage" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblAfterPackage" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAfterPackage" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblBeforeImports" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBeforeImports" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblAfterImports" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAfterImports" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblBeforeType" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBeforeType" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblAfterType" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAfterType" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblBeforeFunction" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBeforeFunction" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblAfterFunction" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAfterFunction" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblBeforeVar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBeforeVar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblAfterVar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAfterVar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="lblBeforePackage">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtBeforePackage"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Before Package:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAfterPackage">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtAfterPackage"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="After Package:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblBeforeImports">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtBeforeImports"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Before Imports:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAfterImports">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtAfterImports"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="After Imports:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAfterType">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="lblAfterType"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="After Type:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblBeforeType">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtBeforeType"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Before Type:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblBeforeFunction">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtBeforeFunction"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Before Function:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAfterFunction">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtAfterFunction"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="After Function:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblBeforeVar">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtBeforeVar"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Before Var:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAfterVar">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtAfterVar"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="After Var:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtBeforePackage">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtAfterPackage">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtBeforeImports">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtAfterImports">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtBeforeType">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtAfterType">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtBeforeFunction">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtAfterFunction">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtBeforeVar">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtAfterVar">
+      <Properties>
+        <Property name="columns" type="int" value="2"/>
+      </Properties>
+    </Component>
+  </SubComponents>
 </Form>

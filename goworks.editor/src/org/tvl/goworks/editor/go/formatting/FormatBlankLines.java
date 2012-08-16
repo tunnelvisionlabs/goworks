@@ -25,6 +25,28 @@ public class FormatBlankLines extends javax.swing.JPanel {
      */
     public FormatBlankLines() {
         initComponents();
+
+        txtBeforePackage.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforePackage);
+        txtAfterPackage.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterPackage);
+        txtBeforeImports.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeImports);
+        txtAfterImports.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterImports);
+        txtBeforeType.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeType);
+        txtAfterType.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterType);
+        txtBeforeVar.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeVar);
+        txtAfterVar.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterVar);
+        txtBeforeFunction.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeFunction);
+        txtAfterFunction.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterFunction);
+
+        txtBeforePackage.addKeyListener(new NumericKeyListener());
+        txtAfterPackage.addKeyListener(new NumericKeyListener());
+        txtBeforeImports.addKeyListener(new NumericKeyListener());
+        txtAfterImports.addKeyListener(new NumericKeyListener());
+        txtBeforeType.addKeyListener(new NumericKeyListener());
+        txtAfterType.addKeyListener(new NumericKeyListener());
+        txtBeforeVar.addKeyListener(new NumericKeyListener());
+        txtAfterVar.addKeyListener(new NumericKeyListener());
+        txtBeforeFunction.addKeyListener(new NumericKeyListener());
+        txtAfterFunction.addKeyListener(new NumericKeyListener());
     }
 
     public static PreferencesCustomizer.Factory getController() {
@@ -41,21 +63,178 @@ public class FormatBlankLines extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblBeforePackage = new javax.swing.JLabel();
+        lblAfterPackage = new javax.swing.JLabel();
+        lblBeforeImports = new javax.swing.JLabel();
+        lblAfterImports = new javax.swing.JLabel();
+        lblAfterType = new javax.swing.JLabel();
+        lblBeforeType = new javax.swing.JLabel();
+        lblBeforeFunction = new javax.swing.JLabel();
+        lblAfterFunction = new javax.swing.JLabel();
+        lblBeforeVar = new javax.swing.JLabel();
+        lblAfterVar = new javax.swing.JLabel();
+        txtBeforePackage = new javax.swing.JTextField();
+        txtAfterPackage = new javax.swing.JTextField();
+        txtBeforeImports = new javax.swing.JTextField();
+        txtAfterImports = new javax.swing.JTextField();
+        txtBeforeType = new javax.swing.JTextField();
+        txtAfterType = new javax.swing.JTextField();
+        txtBeforeFunction = new javax.swing.JTextField();
+        txtAfterFunction = new javax.swing.JTextField();
+        txtBeforeVar = new javax.swing.JTextField();
+        txtAfterVar = new javax.swing.JTextField();
+
         setName(org.openide.util.NbBundle.getMessage(FormatBlankLines.class, "LBL_BlankLines")); // NOI18N
         setOpaque(false);
+
+        lblBeforePackage.setLabelFor(txtBeforePackage);
+        lblBeforePackage.setText("Before Package:");
+
+        lblAfterPackage.setLabelFor(txtAfterPackage);
+        lblAfterPackage.setText("After Package:");
+
+        lblBeforeImports.setLabelFor(txtBeforeImports);
+        lblBeforeImports.setText("Before Imports:");
+
+        lblAfterImports.setLabelFor(txtAfterImports);
+        lblAfterImports.setText("After Imports:");
+
+        lblAfterType.setLabelFor(lblAfterType);
+        lblAfterType.setText("After Type:");
+
+        lblBeforeType.setLabelFor(txtBeforeType);
+        lblBeforeType.setText("Before Type:");
+
+        lblBeforeFunction.setLabelFor(txtBeforeFunction);
+        lblBeforeFunction.setText("Before Function:");
+
+        lblAfterFunction.setLabelFor(txtAfterFunction);
+        lblAfterFunction.setText("After Function:");
+
+        lblBeforeVar.setLabelFor(txtBeforeVar);
+        lblBeforeVar.setText("Before Var:");
+
+        lblAfterVar.setLabelFor(txtAfterVar);
+        lblAfterVar.setText("After Var:");
+
+        txtBeforePackage.setColumns(2);
+
+        txtAfterPackage.setColumns(2);
+
+        txtBeforeImports.setColumns(2);
+
+        txtAfterImports.setColumns(2);
+
+        txtBeforeType.setColumns(2);
+
+        txtAfterType.setColumns(2);
+
+        txtBeforeFunction.setColumns(2);
+
+        txtAfterFunction.setColumns(2);
+
+        txtBeforeVar.setColumns(2);
+
+        txtAfterVar.setColumns(2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblBeforePackage)
+                    .addComponent(lblBeforeVar)
+                    .addComponent(lblAfterVar)
+                    .addComponent(lblAfterFunction)
+                    .addComponent(lblBeforeFunction)
+                    .addComponent(lblAfterType)
+                    .addComponent(lblBeforeType)
+                    .addComponent(lblAfterImports)
+                    .addComponent(lblBeforeImports)
+                    .addComponent(lblAfterPackage))
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBeforePackage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAfterPackage, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBeforeImports, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAfterImports, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBeforeType, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAfterType, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBeforeFunction, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAfterFunction, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBeforeVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAfterVar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBeforePackage)
+                    .addComponent(txtBeforePackage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAfterPackage)
+                    .addComponent(txtAfterPackage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBeforeImports)
+                    .addComponent(txtBeforeImports, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAfterImports)
+                    .addComponent(txtAfterImports, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBeforeType)
+                    .addComponent(txtBeforeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAfterType)
+                    .addComponent(txtAfterType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBeforeFunction)
+                    .addComponent(txtBeforeFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAfterFunction)
+                    .addComponent(txtAfterFunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBeforeVar)
+                    .addComponent(txtBeforeVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAfterVar)
+                    .addComponent(txtAfterVar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblAfterFunction;
+    private javax.swing.JLabel lblAfterImports;
+    private javax.swing.JLabel lblAfterPackage;
+    private javax.swing.JLabel lblAfterType;
+    private javax.swing.JLabel lblAfterVar;
+    private javax.swing.JLabel lblBeforeFunction;
+    private javax.swing.JLabel lblBeforeImports;
+    private javax.swing.JLabel lblBeforePackage;
+    private javax.swing.JLabel lblBeforeType;
+    private javax.swing.JLabel lblBeforeVar;
+    private javax.swing.JTextField txtAfterFunction;
+    private javax.swing.JTextField txtAfterImports;
+    private javax.swing.JTextField txtAfterPackage;
+    private javax.swing.JTextField txtAfterType;
+    private javax.swing.JTextField txtAfterVar;
+    private javax.swing.JTextField txtBeforeFunction;
+    private javax.swing.JTextField txtBeforeImports;
+    private javax.swing.JTextField txtBeforePackage;
+    private javax.swing.JTextField txtBeforeType;
+    private javax.swing.JTextField txtBeforeVar;
     // End of variables declaration//GEN-END:variables
 }
