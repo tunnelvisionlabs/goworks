@@ -13,9 +13,15 @@ import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.prefs.Preferences;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -30,6 +36,7 @@ import org.netbeans.modules.options.editor.spi.PreviewProvider;
 import org.openide.text.CloneableEditorSupport;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
+import org.openide.util.NbBundle;
 import org.tvl.goworks.editor.GoEditorKit;
 
 /**
@@ -43,6 +50,10 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
     private static final int LOAD = 0;
     private static final int STORE = 1;
     private static final int ADD_LISTENERS = 2;
+
+    @SuppressWarnings("rawtypes")
+    private static final Map<Class<? extends Enum>, ComboItem[]> COMBO_BOX_ITEMS =
+        new HashMap<Class<? extends Enum>, ComboItem[]>();
 
     private final String previewText;
 
@@ -261,6 +272,7 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
 
     /** Very smart method which tries to set the values in the components correctly
      */
+    @SuppressWarnings("unchecked")
     private void loadData( JComponent jc, AbstractFormatOption optionID, Preferences node ) {
         if ( jc instanceof JTextField ) {
             JTextField field = (JTextField)jc;
@@ -269,6 +281,16 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
         else if ( jc instanceof JToggleButton ) {
             JToggleButton toggle = (JToggleButton)jc;
             toggle.setSelected( ((BooleanFormatOption)optionID).getValue(node) );
+        }
+        else if ( jc instanceof JComboBox ) {
+            @SuppressWarnings("rawtypes")
+            JComboBox cb  = (JComboBox)jc;
+            Enum<?> value = ((EnumFormatOption<?>)optionID).getValue(node);
+            @SuppressWarnings("rawtypes")
+            ComboBoxModel model = createModel(value);
+            cb.setModel(model);
+            ComboItem item = whichItem(value, model);
+            cb.setSelectedItem(item);
         }
     }
 
@@ -308,6 +330,16 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
             else
                 node.putBoolean(option.getName(), toggle.isSelected());
         }
+        else if ( jc instanceof JComboBox ) {
+            @SuppressWarnings("rawtypes")
+            JComboBox cb  = (JComboBox)jc;
+            // Logger.global.info( cb.getSelectedItem() + " " + optionID);
+            Enum<?> value = ((ComboItem) cb.getSelectedItem()).value;
+            if (((EnumFormatOption<?>)option).getDefaultValue().equals(value))
+                node.remove(option.getName());
+            else
+                node.put(option.getName(), value.name());
+        }
     }
 
     private void addListener( JComponent jc ) {
@@ -320,6 +352,59 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
             JToggleButton toggle = (JToggleButton)jc;
             toggle.addActionListener(this);
         }
+        else if ( jc instanceof JComboBox) {
+            @SuppressWarnings("rawtypes")
+            JComboBox cb  = (JComboBox)jc;
+            cb.addActionListener(this);
+        }
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static synchronized ComboBoxModel createModel( Enum<?> value ) {
+
+        ComboItem[] items = COMBO_BOX_ITEMS.get(value.getClass());
+        if (items == null) {
+            EnumSet<?> enumSet = EnumSet.allOf(value.getClass());
+            items = new ComboItem[enumSet.size()];
+            int i = 0;
+            for (Object item : enumSet) {
+                items[i++] = new ComboItem((Enum)item);
+            }
+
+            COMBO_BOX_ITEMS.put(value.getClass(), items);
+        }
+
+        return new DefaultComboBoxModel(items);
+    }
+
+    private static ComboItem whichItem(Enum<?> value,
+                                        @SuppressWarnings("rawtypes")
+                                       ComboBoxModel model) {
+        for (int i = 0; i < model.getSize(); i++) {
+            ComboItem item = (ComboItem)model.getElementAt(i);
+            if ( value.equals(item.value)) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    private static class ComboItem {
+
+        Enum<?> value;
+        String displayName;
+
+        public ComboItem(Enum<?> value) {
+            this.value = value;
+            this.displayName = NbBundle.getMessage(value.getClass(), String.format("LBL_%s_%s", value.getClass().getSimpleName(), value.name()));
+        }
+
+        @Override
+        public String toString() {
+            return displayName;
+        }
+
     }
 
 }

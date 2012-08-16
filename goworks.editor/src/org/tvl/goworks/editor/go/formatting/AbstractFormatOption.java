@@ -9,6 +9,8 @@
 package org.tvl.goworks.editor.go.formatting;
 
 import java.util.prefs.Preferences;
+import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.Parameters;
 
 /**
  *
@@ -18,7 +20,8 @@ public abstract class AbstractFormatOption {
 
     private final String _name;
 
-    public AbstractFormatOption(String name) {
+    public AbstractFormatOption(@NonNull String name) {
+        Parameters.notWhitespace("name", name);
         this._name = name;
     }
 
