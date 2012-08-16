@@ -149,6 +149,162 @@ public final class CodeStyle {
         return FormatOptions.blankLinesAfterFunction.getValue(_preferences);
     }
 
+    public boolean isSpaceBeforeWhile() {
+        return FormatOptions.spaceBeforeWhile.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeElse() {
+        return FormatOptions.spaceBeforeElse.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeParensMethodDeclaration() {
+        return FormatOptions.spaceBeforeParensMethodDeclaration.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeParensMethodCall() {
+        return FormatOptions.spaceBeforeParensMethodCall.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeParensIf() {
+        return FormatOptions.spaceBeforeParensIf.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeParensFor() {
+        return FormatOptions.spaceBeforeParensFor.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeParensWhile() {
+        return FormatOptions.spaceBeforeParensWhile.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeParensSwitch() {
+        return FormatOptions.spaceBeforeParensSwitch.getValue(_preferences);
+    }
+
+    public boolean isSpaceAroundUnaryOperators() {
+        return FormatOptions.spaceAroundUnaryOperators.getValue(_preferences);
+    }
+
+    public boolean isSpaceAroundBinaryOperators() {
+        return FormatOptions.spaceAroundBinaryOperators.getValue(_preferences);
+    }
+
+    public boolean isSpaceAroundTernaryOperators() {
+        return FormatOptions.spaceAroundTernaryOperators.getValue(_preferences);
+    }
+
+    public boolean isSpaceAroundAssignmentOperators() {
+        return FormatOptions.spaceAroundAssignmentOperators.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceTypeDeclaration() {
+        return FormatOptions.spaceBeforeBraceTypeDeclaration.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceMethodDeclaration() {
+        return FormatOptions.spaceBeforeBraceMethodDeclaration.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceIf() {
+        return FormatOptions.spaceBeforeBraceIf.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceElse() {
+        return FormatOptions.spaceBeforeBraceElse.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceFor() {
+        return FormatOptions.spaceBeforeBraceFor.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceDo() {
+        return FormatOptions.spaceBeforeBraceDo.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceWhile() {
+        return FormatOptions.spaceBeforeBraceWhile.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceSwitch() {
+        return FormatOptions.spaceBeforeBraceSwitch.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceStaticInitializer() {
+        return FormatOptions.spaceBeforeBraceStaticInitializer.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeBraceArrayInitializer() {
+        return FormatOptions.spaceBeforeBraceArrayInitializer.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParens() {
+        return FormatOptions.spaceInParens.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensMethodDeclaration() {
+        return FormatOptions.spaceInParensMethodDeclaration.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensMethodCall() {
+        return FormatOptions.spaceInParensMethodCall.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensIf() {
+        return FormatOptions.spaceInParensIf.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensFor() {
+        return FormatOptions.spaceInParensFor.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensWhile() {
+        return FormatOptions.spaceInParensWhile.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensSwitch() {
+        return FormatOptions.spaceInParensSwitch.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensTypeCast() {
+        return FormatOptions.spaceInParensTypeCast.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensBraces() {
+        return FormatOptions.spaceInParensBraces.getValue(_preferences);
+    }
+
+    public boolean isSpaceInParensArrayInitBrackets() {
+        return FormatOptions.spaceInParensArrayInitBrackets.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeComma() {
+        return FormatOptions.spaceBeforeComma.getValue(_preferences);
+    }
+
+    public boolean isSpaceAfterComma() {
+        return FormatOptions.spaceAfterComma.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeSemicolon() {
+        return FormatOptions.spaceBeforeSemicolon.getValue(_preferences);
+    }
+
+    public boolean isSpaceAfterSemicolon() {
+        return FormatOptions.spaceAfterSemicolon.getValue(_preferences);
+    }
+
+    public boolean isSpaceBeforeColon() {
+        return FormatOptions.spaceBeforeColon.getValue(_preferences);
+    }
+
+    public boolean isSpaceAfterColon() {
+        return FormatOptions.spaceAfterColon.getValue(_preferences);
+    }
+
+    public boolean isSpaceAfterTypeCast() {
+        return FormatOptions.spaceAfterTypeCast.getValue(_preferences);
+    }
+
     public static final class Factory implements FormatOptions.CodeStyleFactory {
         @Override
         public CodeStyle create(Preferences preferences) {

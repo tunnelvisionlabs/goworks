@@ -47,7 +47,7 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
     private final String previewText;
 
     private final String id;
-    private final JPanel panel;
+    protected final JPanel panel;
 
     private final Preferences preferences;
 

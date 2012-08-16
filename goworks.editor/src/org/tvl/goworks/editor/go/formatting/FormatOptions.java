@@ -56,6 +56,51 @@ public class FormatOptions {
     public static final IntFormatOption blankLinesBeforeFunction = new IntFormatOption("blankLinesBeforeFunction", 1);
     public static final IntFormatOption blankLinesAfterFunction = new IntFormatOption("blankLinesAfterFunction", 0);
 
+    public static final BooleanFormatOption spaceBeforeWhile = new BooleanFormatOption("spaceBeforeWhile", true);
+    public static final BooleanFormatOption spaceBeforeElse = new BooleanFormatOption("spaceBeforeElse", true);
+
+    public static final BooleanFormatOption spaceBeforeParensMethodDeclaration = new BooleanFormatOption("spaceBeforeParensMethodDeclaration", false);
+    public static final BooleanFormatOption spaceBeforeParensMethodCall = new BooleanFormatOption("spaceBeforeParensMethodCall", false);
+    public static final BooleanFormatOption spaceBeforeParensIf = new BooleanFormatOption("spaceBeforeParensIf", true);
+    public static final BooleanFormatOption spaceBeforeParensFor = new BooleanFormatOption("spaceBeforeParensFor", true);
+    public static final BooleanFormatOption spaceBeforeParensWhile = new BooleanFormatOption("spaceBeforeParensWhile", true);
+    public static final BooleanFormatOption spaceBeforeParensSwitch = new BooleanFormatOption("spaceBeforeParensSwitch", true);
+
+    public static final BooleanFormatOption spaceAroundUnaryOperators = new BooleanFormatOption("spaceAroundUnaryOperators", false);
+    public static final BooleanFormatOption spaceAroundBinaryOperators = new BooleanFormatOption("spaceAroundBinaryOperators", true);
+    public static final BooleanFormatOption spaceAroundTernaryOperators = new BooleanFormatOption("spaceAroundTernaryOperators", true);
+    public static final BooleanFormatOption spaceAroundAssignmentOperators = new BooleanFormatOption("spaceAroundAssignmentOperators", true);
+
+    public static final BooleanFormatOption spaceBeforeBraceTypeDeclaration = new BooleanFormatOption("spaceBeforeBraceTypeDeclaration", true);
+    public static final BooleanFormatOption spaceBeforeBraceMethodDeclaration = new BooleanFormatOption("spaceBeforeBraceMethodDeclaration", true);
+    public static final BooleanFormatOption spaceBeforeBraceIf = new BooleanFormatOption("spaceBeforeBraceIf", true);
+    public static final BooleanFormatOption spaceBeforeBraceElse = new BooleanFormatOption("spaceBeforeBraceElse", true);
+    public static final BooleanFormatOption spaceBeforeBraceFor = new BooleanFormatOption("spaceBeforeBraceFor", true);
+    public static final BooleanFormatOption spaceBeforeBraceDo = new BooleanFormatOption("spaceBeforeBraceDo", true);
+    public static final BooleanFormatOption spaceBeforeBraceWhile = new BooleanFormatOption("spaceBeforeBraceWhile", true);
+    public static final BooleanFormatOption spaceBeforeBraceSwitch = new BooleanFormatOption("spaceBeforeBraceSwitch", true);
+    public static final BooleanFormatOption spaceBeforeBraceStaticInitializer = new BooleanFormatOption("spaceBeforeBraceStaticInitializer", true);
+    public static final BooleanFormatOption spaceBeforeBraceArrayInitializer = new BooleanFormatOption("spaceBeforeBraceArrayInitializer", false);
+
+    public static final BooleanFormatOption spaceInParens = new BooleanFormatOption("spaceInParens", false);
+    public static final BooleanFormatOption spaceInParensMethodDeclaration = new BooleanFormatOption("spaceInParensMethodDeclaration", false);
+    public static final BooleanFormatOption spaceInParensMethodCall = new BooleanFormatOption("spaceInParensMethodCall", false);
+    public static final BooleanFormatOption spaceInParensIf = new BooleanFormatOption("spaceInParensIf", false);
+    public static final BooleanFormatOption spaceInParensFor = new BooleanFormatOption("spaceInParensFor", false);
+    public static final BooleanFormatOption spaceInParensWhile = new BooleanFormatOption("spaceInParensWhile", false);
+    public static final BooleanFormatOption spaceInParensSwitch = new BooleanFormatOption("spaceInParensSwitch", false);
+    public static final BooleanFormatOption spaceInParensTypeCast = new BooleanFormatOption("spaceInParensTypeCast", false);
+    public static final BooleanFormatOption spaceInParensBraces = new BooleanFormatOption("spaceInParensBraces", false);
+    public static final BooleanFormatOption spaceInParensArrayInitBrackets = new BooleanFormatOption("spaceInParensArrayInitBrackets", false);
+
+    public static final BooleanFormatOption spaceBeforeComma = new BooleanFormatOption("spaceBeforeComma", false);
+    public static final BooleanFormatOption spaceAfterComma = new BooleanFormatOption("spaceAfterComma", true);
+    public static final BooleanFormatOption spaceBeforeSemicolon = new BooleanFormatOption("spaceBeforeSemicolon", false);
+    public static final BooleanFormatOption spaceAfterSemicolon = new BooleanFormatOption("spaceAfterSemicolon", true);
+    public static final BooleanFormatOption spaceBeforeColon = new BooleanFormatOption("spaceBeforeColon", true);
+    public static final BooleanFormatOption spaceAfterColon = new BooleanFormatOption("spaceAfterColon", true);
+    public static final BooleanFormatOption spaceAfterTypeCast = new BooleanFormatOption("spaceAfterTypeCast", false);
+
     public static CodeStyleFactory codeStyleFactory;
 
     private static final Map<String, AbstractFormatOption> knownOptions;

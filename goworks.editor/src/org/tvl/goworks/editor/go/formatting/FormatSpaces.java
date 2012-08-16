@@ -8,6 +8,25 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.prefs.Preferences;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.openide.util.NbBundle;
 
@@ -18,18 +37,47 @@ import org.openide.util.NbBundle;
 @NbBundle.Messages({
     "SAMPLE_Spaces="
 })
-public class FormatSpaces extends javax.swing.JPanel {
+public class FormatSpaces extends JPanel implements TreeCellRenderer, MouseListener, KeyListener {
+
+    private SpacesCategorySupport scs;
+    private DefaultTreeModel model;
+
+    private DefaultTreeCellRenderer dr = new DefaultTreeCellRenderer();
+    private JCheckBox renderer = new JCheckBox();
 
     /**
      * Creates new form FormatSpaces
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public FormatSpaces() {
         initComponents();
+
+        model = createModel();
+        cfgTree.setModel(model);
+        cfgTree.setRootVisible(false);
+        cfgTree.setShowsRootHandles(true);
+        cfgTree.setCellRenderer(this);
+        cfgTree.setEditable(false);
+        cfgTree.addMouseListener(this);
+        cfgTree.addKeyListener(this);
+
+        dr.setIcon(null);
+        dr.setOpenIcon(null);
+        dr.setClosedIcon(null);
+
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
+        for (int i = root.getChildCount(); i >= 0; i--) {
+            cfgTree.expandRow(i);
+        }
     }
 
     public static PreferencesCustomizer.Factory getController() {
-        return new CategorySupport.Factory("spaces", FormatSpaces.class, //NOI18N
-                Bundle.SAMPLE_Spaces());
+        return new PreferencesCustomizer.Factory() {
+            @Override
+            public PreferencesCustomizer create(Preferences preferences) {
+                return new SpacesCategorySupport(preferences, new FormatSpaces());
+            }
+        };
     }
 
     /**
@@ -40,22 +88,324 @@ public class FormatSpaces extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        cfgTree = new javax.swing.JTree();
 
         setName(org.openide.util.NbBundle.getMessage(FormatSpaces.class, "LBL_Spaces")); // NOI18N
         setOpaque(false);
+        setLayout(new java.awt.GridBagLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        cfgTree.setRootVisible(false);
+        jScrollPane1.setViewportView(cfgTree);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jScrollPane1, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTree cfgTree;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        renderer.setBackground(selected ? dr.getBackgroundSelectionColor() : dr.getBackgroundNonSelectionColor());
+        renderer.setForeground(selected ? dr.getTextSelectionColor() : dr.getTextNonSelectionColor());
+        renderer.setEnabled(true);
+
+        Object data = ((DefaultMutableTreeNode)value).getUserObject();
+        if (data instanceof Item) {
+            Item item = ((Item)data);
+            if (((DefaultMutableTreeNode)value).getAllowsChildren()) {
+                Component component = dr.getTreeCellRendererComponent(tree, value, leaf, expanded, leaf, row, hasFocus);
+                return component;
+            } else {
+                renderer.setText(item.displayName);
+                renderer.setSelected(item.value);
+            }
+        } else {
+            Component component = dr.getTreeCellRendererComponent(tree, value, leaf, expanded, leaf, row, hasFocus);
+            return component;
+        }
+
+        return renderer;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Point p = e.getPoint();
+        TreePath path = cfgTree.getPathForLocation(e.getPoint().x, e.getPoint().y);
+        if (path != null) {
+            Rectangle r = cfgTree.getPathBounds(path);
+            if (r != null && r.contains(p)) {
+                toggle(path);
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (e.getSource() instanceof JTree) {
+                JTree tree = (JTree)e.getSource();
+                TreePath path = tree.getSelectionPath();
+                if (toggle(path)) {
+                    e.consume();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @NbBundle.Messages({
+        "LBL_BeforeKeywords=Before Keywords",
+        "LBL_BeforeParentheses=Before Parentheses",
+        "LBL_AroundOperators=Around Operators",
+        "LBL_BeforeLeftBraces=Before Left Braces",
+        "LBL_WithinParentheses=Within Parentheses",
+        "LBL_Other=Other",
+
+        "LBL_spaceBeforeWhile=\"while\"",
+        "LBL_spaceBeforeElse=\"else\"",
+
+        "LBL_spaceBeforeParensMethodDeclaration=Method Declaration",
+        "LBL_spaceBeforeParensMethodCall=Method Call",
+        "LBL_spaceBeforeParensIf=\"if\"",
+        "LBL_spaceBeforeParensFor=\"for\"",
+        "LBL_spaceBeforeParensWhile=\"while\"",
+        "LBL_spaceBeforeParensSwitch=\"switch\"",
+
+        "LBL_spaceAroundUnaryOperators=Unary Operators",
+        "LBL_spaceAroundBinaryOperators=Binary Operators",
+        "LBL_spaceAroundTernaryOperators=Ternary Operators",
+        "LBL_spaceAroundAssignmentOperators=Assignment Operators",
+
+        "LBL_spaceBeforeBraceTypeDeclaration=Type Declaration",
+        "LBL_spaceBeforeBraceMethodDeclaration=Method Declaration",
+        "LBL_spaceBeforeBraceIf=\"if\"",
+        "LBL_spaceBeforeBraceElse=\"else\"",
+        "LBL_spaceBeforeBraceFor=\"for\"",
+        "LBL_spaceBeforeBraceDo=\"do\"",
+        "LBL_spaceBeforeBraceWhile=\"while\"",
+        "LBL_spaceBeforeBraceSwitch=\"switch\"",
+        "LBL_spaceBeforeBraceStaticInitializer=Static Initializer",
+        "LBL_spaceBeforeBraceArrayInitializer=Array Initializer",
+
+        "LBL_spaceInParens=Parentheses",
+        "LBL_spaceInParensMethodDeclaration=Method Declaration",
+        "LBL_spaceInParensMethodCall=Method Call",
+        "LBL_spaceInParensIf=\"if\"",
+        "LBL_spaceInParensFor=\"for\"",
+        "LBL_spaceInParensWhile=\"while\"",
+        "LBL_spaceInParensSwitch=\"switch\"",
+        "LBL_spaceInParensTypeCast=Type Cast",
+        "LBL_spaceInParensBraces=Braces",
+        "LBL_spaceInParensArrayInitBrackets=Array Initializer Brackets",
+
+        "LBL_spaceBeforeComma=Before Comma",
+        "LBL_spaceAfterComma=After Comma",
+        "LBL_spaceBeforeSemicolon=Before Semicolon",
+        "LBL_spaceAfterSemicolon=After Semicolon",
+        "LBL_spaceBeforeColon=Before Colon",
+        "LBL_spaceAfterColon=After Colon",
+        "LBL_spaceAfterTypeCast=After Type Cast",
+    })
+    private DefaultTreeModel createModel() {
+        Item[] categories = new Item[] {
+            new Item("BeforeKeywords",
+                new Item(FormatOptions.spaceBeforeWhile),
+                new Item(FormatOptions.spaceBeforeElse)),
+            new Item("BeforeParentheses",
+                new Item(FormatOptions.spaceBeforeParensMethodDeclaration),
+                new Item(FormatOptions.spaceBeforeParensMethodCall),
+                new Item(FormatOptions.spaceBeforeParensIf),
+                new Item(FormatOptions.spaceBeforeParensFor),
+                new Item(FormatOptions.spaceBeforeParensWhile),
+                new Item(FormatOptions.spaceBeforeParensSwitch)),
+            new Item("AroundOperators",
+                new Item(FormatOptions.spaceAroundUnaryOperators),
+                new Item(FormatOptions.spaceAroundBinaryOperators),
+                new Item(FormatOptions.spaceAroundTernaryOperators),
+                new Item(FormatOptions.spaceAroundAssignmentOperators)),
+            new Item("BeforeLeftBraces",
+                new Item(FormatOptions.spaceBeforeBraceTypeDeclaration),
+                new Item(FormatOptions.spaceBeforeBraceMethodDeclaration),
+                new Item(FormatOptions.spaceBeforeBraceIf),
+                new Item(FormatOptions.spaceBeforeBraceElse),
+                new Item(FormatOptions.spaceBeforeBraceFor),
+                new Item(FormatOptions.spaceBeforeBraceDo),
+                new Item(FormatOptions.spaceBeforeBraceWhile),
+                new Item(FormatOptions.spaceBeforeBraceSwitch),
+                new Item(FormatOptions.spaceBeforeBraceStaticInitializer),
+                new Item(FormatOptions.spaceBeforeBraceArrayInitializer)),
+            new Item("WithinParentheses",
+                new Item(FormatOptions.spaceInParens),
+                new Item(FormatOptions.spaceInParensMethodDeclaration),
+                new Item(FormatOptions.spaceInParensMethodCall),
+                new Item(FormatOptions.spaceInParensIf),
+                new Item(FormatOptions.spaceInParensFor),
+                new Item(FormatOptions.spaceInParensWhile),
+                new Item(FormatOptions.spaceInParensSwitch),
+                new Item(FormatOptions.spaceInParensTypeCast),
+                new Item(FormatOptions.spaceInParensBraces),
+                new Item(FormatOptions.spaceInParensArrayInitBrackets)),
+            new Item("Other",
+                new Item(FormatOptions.spaceBeforeComma),
+                new Item(FormatOptions.spaceAfterComma),
+                new Item(FormatOptions.spaceBeforeSemicolon),
+                new Item(FormatOptions.spaceAfterSemicolon),
+                new Item(FormatOptions.spaceBeforeColon),
+                new Item(FormatOptions.spaceAfterColon),
+                new Item(FormatOptions.spaceAfterTypeCast)),
+        };
+
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
+        DefaultTreeModel dtm = new DefaultTreeModel(root);
+        for (Item item : categories) {
+            DefaultMutableTreeNode cn = new DefaultMutableTreeNode(item, true);
+            root.add(cn);
+            for (Item si : item.items) {
+                DefaultMutableTreeNode in = new DefaultMutableTreeNode(si, false);
+                cn.add(in);
+            }
+        }
+
+        return dtm;
+    }
+
+    private boolean toggle(TreePath treePath) {
+        if (treePath == null) {
+            return false;
+        }
+
+        Object o = ((DefaultMutableTreeNode)treePath.getLastPathComponent()).getUserObject();
+
+        DefaultTreeModel dtm = (DefaultTreeModel)cfgTree.getModel();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) treePath.getLastPathComponent();
+
+        if ( o instanceof Item ) {
+            Item item = (Item)o;
+
+            if ( node.getAllowsChildren() ) {
+                return false;
+            }
+
+            item.value = !item.value;
+            dtm.nodeChanged(node);
+            dtm.nodeChanged(node.getParent());
+            scs.notifyChanged();
+        }
+
+        return false;
+    }
+
+    // Innerclasses ------------------------------------------------------------
+
+    private static class Item {
+        private static final Item[] EmptyItems = new Item[0];
+
+        BooleanFormatOption id;
+        String displayName;
+        boolean value;
+        Item[] items;
+
+        public Item(String category, Item... items) {
+            this.id = null;
+            this.items = items;
+            this.displayName = NbBundle.getMessage(FormatSpaces.class, "LBL_" + category); // NOI18N
+        }
+
+        public Item(BooleanFormatOption option) {
+            this.id = option;
+            this.items = EmptyItems;
+            this.displayName = NbBundle.getMessage(FormatSpaces.class, "LBL_" + option.getName()); // NOI18N
+        }
+
+        @Override
+        public String toString() {
+            return displayName;
+        }
+
+    }
+
+    private static final class SpacesCategorySupport extends CategorySupport {
+
+        @SuppressWarnings("LeakingThisInConstructor")
+        public SpacesCategorySupport(Preferences preferences, FormatSpaces panel) {
+            super(preferences, "spaces", panel, Bundle.SAMPLE_Spaces()); //NOI18N
+            panel.scs = this;
+        }
+
+        @Override
+        protected void addListeners() {
+            // Should not do anything
+        }
+
+        @Override
+        protected void loadFrom(Preferences preferences) {
+            for (Item item : getAllItems()) {
+                item.value = item.id.getValue(preferences);
+            }
+        }
+
+        @Override
+        protected void storeTo(Preferences preferences) {
+            for (Item item : getAllItems()) {
+                boolean df = item.id.getDefaultValue();
+                if (df == item.value)
+                    preferences.remove(item.id.getName());
+                else
+                    preferences.putBoolean(item.id.getName(), item.value);
+            }
+        }
+
+        private List<Item> getAllItems() {
+            List<Item> result = new LinkedList<FormatSpaces.Item>();
+            DefaultMutableTreeNode root = (DefaultMutableTreeNode) ((FormatSpaces) panel).model.getRoot();
+            @SuppressWarnings("rawtypes")
+            Enumeration children = root.depthFirstEnumeration();
+            while( children.hasMoreElements() ) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) children.nextElement();
+                Object o = node.getUserObject();
+                if (o instanceof Item) {
+                    Item item = (Item) o;
+                    if ( item.id != null ) {
+                        result.add( item );
+                    }
+                }
+            }
+
+            return result;
+        }
+    }
 }
