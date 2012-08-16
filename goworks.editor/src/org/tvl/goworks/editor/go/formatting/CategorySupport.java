@@ -19,7 +19,10 @@ import java.util.prefs.Preferences;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.settings.SimpleValueNames;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
@@ -33,7 +36,7 @@ import org.tvl.goworks.editor.GoEditorKit;
  *
  * @author Sam Harwell
  */
-public class CategorySupport implements ActionListener, PreviewProvider, PreferencesCustomizer {
+public class CategorySupport implements ActionListener, DocumentListener, PreviewProvider, PreferencesCustomizer {
 
     public static final String OPTION_ID = "org.tvl.goworks.editor.go.formatting.FormatOptions.ID";
 
@@ -86,6 +89,23 @@ public class CategorySupport implements ActionListener, PreviewProvider, Prefere
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        notifyChanged();
+    }
+
+    // DocumentListener implementation -------------------------------------
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        notifyChanged();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        notifyChanged();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
         notifyChanged();
     }
 
@@ -242,14 +262,46 @@ public class CategorySupport implements ActionListener, PreviewProvider, Prefere
     /** Very smart method which tries to set the values in the components correctly
      */
     private void loadData( JComponent jc, AbstractFormatOption optionID, Preferences node ) {
-        if ( jc instanceof JToggleButton ) {
+        if ( jc instanceof JTextField ) {
+            JTextField field = (JTextField)jc;
+            field.setText( optionID.getValueAsString(node) );
+        }
+        else if ( jc instanceof JToggleButton ) {
             JToggleButton toggle = (JToggleButton)jc;
             toggle.setSelected( ((BooleanFormatOption)optionID).getValue(node) );
         }
     }
 
     private void storeData( JComponent jc, @NonNull AbstractFormatOption option, Preferences node ) {
-        if ( jc instanceof JToggleButton ) {
+        if ( jc instanceof JTextField ) {
+            JTextField field = (JTextField)jc;
+
+            String text = field.getText();
+
+            // XXX test for numbers
+            if ( option instanceof IntFormatOption ) {
+                try {
+                    int i = Integer.parseInt(text);
+                } catch (NumberFormatException e) {
+                    return;
+                }
+            }
+
+            // XXX: watch out, tabSize, spacesPerTab, indentSize and expandTabToSpaces
+            // fall back on getGlopalXXX() values and not getDefaultAsXXX value,
+            // which is why we must not remove them. Proper solution would be to
+            // store formatting preferences to MimeLookup and not use NbPreferences.
+            // The problem currently is that MimeLookup based Preferences do not support subnodes.
+            if (!option.equals(FormatOptions.tabSize) &&
+                !option.equals(FormatOptions.spacesPerTab) && !option.equals(FormatOptions.indentSize) &&
+                option.getDefaultValueAsString().equals(text)
+            ) {
+                node.remove(option.getName());
+            } else {
+                node.put(option.getName(), text);
+            }
+        }
+        else if ( jc instanceof JToggleButton ) {
             JToggleButton toggle = (JToggleButton)jc;
             if (!option.equals(FormatOptions.expandTabToSpaces) && ((BooleanFormatOption)option).getDefaultValue() == toggle.isSelected())
                 node.remove(option.getName());
@@ -259,7 +311,12 @@ public class CategorySupport implements ActionListener, PreviewProvider, Prefere
     }
 
     private void addListener( JComponent jc ) {
-        if ( jc instanceof JToggleButton ) {
+        if ( jc instanceof JTextField ) {
+            JTextField field = (JTextField)jc;
+            field.addActionListener(this);
+            field.getDocument().addDocumentListener(this);
+        }
+        else if ( jc instanceof JToggleButton ) {
             JToggleButton toggle = (JToggleButton)jc;
             toggle.addActionListener(this);
         }
