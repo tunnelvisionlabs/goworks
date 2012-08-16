@@ -34,6 +34,17 @@ public class FormatOptions {
     public static final IntFormatOption indentSize = new IntFormatOption(SimpleValueNames.INDENT_SHIFT_WIDTH, 4);
     public static final IntFormatOption rightMargin = new IntFormatOption(SimpleValueNames.TEXT_LIMIT_WIDTH, 80);
 
+    public static final BooleanFormatOption alignMultilineArrayInitializer = new BooleanFormatOption("alignMultilineArrayInitializer", false);
+    public static final BooleanFormatOption alignMultilineAssignment = new BooleanFormatOption("alignMultilineAssignment", false);
+    public static final BooleanFormatOption alignMultilineBinaryOperators = new BooleanFormatOption("alignMultilineBinaryOperators", false);
+    public static final BooleanFormatOption alignMultilineCallArguments = new BooleanFormatOption("alignMultilineCallArguments", false);
+    public static final BooleanFormatOption alignMultilineCompositeLiteral = new BooleanFormatOption("alignMultilineCompositeLiteral", false);
+    public static final BooleanFormatOption alignMultilineFor = new BooleanFormatOption("alignMultilineFor", false);
+    public static final BooleanFormatOption alignMultilineMethodParameters = new BooleanFormatOption("alignMultilineMethodParameters", false);
+    public static final BooleanFormatOption alignMultilineParenthesized = new BooleanFormatOption("alignMultilineParenthesized", false);
+    public static final BooleanFormatOption alignMultilineReturnParameters = new BooleanFormatOption("alignMultilineReturnParameters", false);
+    public static final BooleanFormatOption alignMultilineTernaryOperators = new BooleanFormatOption("alignMultilineTernaryOperators", false);
+
     public static CodeStyleFactory codeStyleFactory;
 
     private static final Map<String, AbstractFormatOption> knownOptions;

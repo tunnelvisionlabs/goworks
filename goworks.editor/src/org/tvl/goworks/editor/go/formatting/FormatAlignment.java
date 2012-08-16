@@ -25,6 +25,16 @@ public class FormatAlignment extends javax.swing.JPanel {
      */
     public FormatAlignment() {
         initComponents();
+        chkAlignArrayInitializer.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineArrayInitializer);
+        chkAlignAssignment.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineAssignment);
+        chkAlignBinaryOperators.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineBinaryOperators);
+        chkAlignCallArguments.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineCallArguments);
+        chkAlignCompositeLiteral.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineCompositeLiteral);
+        chkAlignFor.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineFor);
+        chkAlignMethodParameters.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineMethodParameters);
+        chkAlignParenthesized.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineParenthesized);
+        chkAlignReturnParameters.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineReturnParameters);
+        chkAlignTernaryOperators.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineTernaryOperators);
     }
 
     public static PreferencesCustomizer.Factory getController() {
@@ -41,21 +51,140 @@ public class FormatAlignment extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        chkAlignMethodParameters = new javax.swing.JCheckBox();
+        chkAlignCallArguments = new javax.swing.JCheckBox();
+        chkAlignReturnParameters = new javax.swing.JCheckBox();
+        chkAlignBinaryOperators = new javax.swing.JCheckBox();
+        chkAlignFor = new javax.swing.JCheckBox();
+        chkAlignAssignment = new javax.swing.JCheckBox();
+        chkAlignParenthesized = new javax.swing.JCheckBox();
+        chkAlignArrayInitializer = new javax.swing.JCheckBox();
+        chkAlignTernaryOperators = new javax.swing.JCheckBox();
+        chkAlignCompositeLiteral = new javax.swing.JCheckBox();
+        jSeparator1 = new javax.swing.JSeparator();
+
         setName(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_Alignment")); // NOI18N
         setOpaque(false);
+
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_al_multilineAlignment")); // NOI18N
+
+        chkAlignMethodParameters.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_MethodParameters")); // NOI18N
+        chkAlignMethodParameters.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignMethodParameters.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignMethodParameters.setOpaque(false);
+
+        chkAlignCallArguments.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_MethodCallArguments")); // NOI18N
+        chkAlignCallArguments.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignCallArguments.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignCallArguments.setOpaque(false);
+
+        chkAlignReturnParameters.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_MethodReturnParameters")); // NOI18N
+        chkAlignReturnParameters.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignReturnParameters.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignReturnParameters.setOpaque(false);
+
+        chkAlignBinaryOperators.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_BinaryOperators")); // NOI18N
+        chkAlignBinaryOperators.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignBinaryOperators.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignBinaryOperators.setOpaque(false);
+
+        chkAlignFor.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_For")); // NOI18N
+        chkAlignFor.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignFor.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignFor.setOpaque(false);
+
+        chkAlignAssignment.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_Assignment")); // NOI18N
+        chkAlignAssignment.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignAssignment.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignAssignment.setOpaque(false);
+
+        chkAlignParenthesized.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_Parenthesized")); // NOI18N
+        chkAlignParenthesized.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignParenthesized.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignParenthesized.setOpaque(false);
+
+        chkAlignArrayInitializer.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_ArrayInitializer")); // NOI18N
+        chkAlignArrayInitializer.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignArrayInitializer.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignArrayInitializer.setOpaque(false);
+
+        chkAlignTernaryOperators.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_TernaryOperators")); // NOI18N
+        chkAlignTernaryOperators.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignTernaryOperators.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignTernaryOperators.setOpaque(false);
+
+        chkAlignCompositeLiteral.setText(org.openide.util.NbBundle.getMessage(FormatAlignment.class, "LBL_ma_CompositeLiteral")); // NOI18N
+        chkAlignCompositeLiteral.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        chkAlignCompositeLiteral.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        chkAlignCompositeLiteral.setOpaque(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkAlignMethodParameters)
+                    .addComponent(chkAlignBinaryOperators)
+                    .addComponent(chkAlignAssignment)
+                    .addComponent(chkAlignParenthesized)
+                    .addComponent(chkAlignCallArguments)
+                    .addComponent(chkAlignArrayInitializer)
+                    .addComponent(chkAlignCompositeLiteral)
+                    .addComponent(chkAlignTernaryOperators)
+                    .addComponent(chkAlignFor)
+                    .addComponent(chkAlignReturnParameters))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignMethodParameters)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignBinaryOperators)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignAssignment)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignParenthesized)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignCallArguments)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignArrayInitializer)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignCompositeLiteral)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignTernaryOperators)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignFor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkAlignReturnParameters)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkAlignArrayInitializer;
+    private javax.swing.JCheckBox chkAlignAssignment;
+    private javax.swing.JCheckBox chkAlignBinaryOperators;
+    private javax.swing.JCheckBox chkAlignCallArguments;
+    private javax.swing.JCheckBox chkAlignCompositeLiteral;
+    private javax.swing.JCheckBox chkAlignFor;
+    private javax.swing.JCheckBox chkAlignMethodParameters;
+    private javax.swing.JCheckBox chkAlignParenthesized;
+    private javax.swing.JCheckBox chkAlignReturnParameters;
+    private javax.swing.JCheckBox chkAlignTernaryOperators;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

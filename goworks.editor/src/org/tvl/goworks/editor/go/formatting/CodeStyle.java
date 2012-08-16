@@ -69,6 +69,46 @@ public final class CodeStyle {
         return FormatOptions.rightMargin.getValue(_preferences);
     }
 
+    public boolean isAlignMultilineArrayInitializer() {
+        return FormatOptions.alignMultilineArrayInitializer.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineAssignment() {
+        return FormatOptions.alignMultilineAssignment.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineBinaryOperators() {
+        return FormatOptions.alignMultilineBinaryOperators.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineCallArguments() {
+        return FormatOptions.alignMultilineCallArguments.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineCompositeLiteral() {
+        return FormatOptions.alignMultilineCompositeLiteral.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineFor() {
+        return FormatOptions.alignMultilineFor.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineMethodParameters() {
+        return FormatOptions.alignMultilineMethodParameters.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineParenthesized() {
+        return FormatOptions.alignMultilineParenthesized.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineReturnParameters() {
+        return FormatOptions.alignMultilineReturnParameters.getValue(_preferences);
+    }
+
+    public boolean isAlignMultilineTernaryOperators() {
+        return FormatOptions.alignMultilineTernaryOperators.getValue(_preferences);
+    }
+
     public static final class Factory implements FormatOptions.CodeStyleFactory {
         @Override
         public CodeStyle create(Preferences preferences) {
