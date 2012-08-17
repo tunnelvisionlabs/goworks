@@ -208,6 +208,10 @@ public class GoIndentTask implements IndentTask {
             NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels =
                 new TreeMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>>();
             for (Map.Entry<RuleContext<Token>, CaretReachedException> parseTree : parseTrees.entrySet()) {
+                if (parseTree.getValue() == null) {
+                    continue;
+                }
+
                 ParseTree<Token> firstNodeOnLine = findFirstNodeAfterOffset(parseTree.getKey(), endPositionOnLine.getContainingLine().getStart().getOffset());
                 if (firstNodeOnLine == null) {
                     firstNodeOnLine = parseTree.getValue().getFinalContext();
