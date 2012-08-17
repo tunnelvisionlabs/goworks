@@ -427,11 +427,7 @@ public class GoIndentTask implements IndentTask {
                 if (current.getParent() == null) {
                     int outerLineOffset = context.lineStartOffset(ruleContext.start.getStartIndex());
                     int outerIndent = context.lineIndent(outerLineOffset);
-                    if (nodeLineStart == outerLineOffset) {
-                        return outerIndent;
-                    }
-
-                    return outerIndent + getCodeStyle().getIndentSize();
+                    return outerIndent;
                 }
 
                 continue;
