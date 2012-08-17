@@ -9,7 +9,6 @@
 package org.tvl.goworks.editor.go.semantics;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -88,7 +87,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     @Override
     protected DFAState addDFAEdge(DFA dfa, DFAState fromState, int t, IntegerList contextTransitions, ATNConfigSet toConfigs, PredictionContextCache contextCache) {
         if (!getSuppressedSet(startIndex).isNil()) {
-            DFAState to = addDFAState(dfa, toConfigs);
+            DFAState to = addDFAState(dfa, toConfigs, contextCache);
             return to;
         }
 
