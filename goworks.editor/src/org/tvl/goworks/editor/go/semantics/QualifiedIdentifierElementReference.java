@@ -95,7 +95,7 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
             case VAR_REF:
             {
                 CodeElementReference varType = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.EXPR_TYPE);
-                if (varType == null) {
+                if (varType == CodeElementReference.MISSING) {
                     ParseTree<Token> explicitType = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.EXPLICIT_TYPE);
                     if (explicitType != null) {
                         varType = annotatedParseTree.getTreeDecorator().getProperty(explicitType, GoAnnotations.CODE_CLASS);
@@ -112,7 +112,7 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
                         varType = annotatedParseTree.getTreeDecorator().getProperty(implicitType, GoAnnotations.EXPR_TYPE);
                     }
 
-                    if (varType == null) {
+                    if (varType == CodeElementReference.MISSING) {
                         LOGGER.log(Level.FINE, String.format("Unable to resolve the type of var declared with token: '%s'.", decl.toString()));
                         return Collections.emptyList();
                     }

@@ -1827,14 +1827,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             Collection<? extends CodeElementModel> resolvedQualifier = treeDecorator.getProperty(qualifier, GoAnnotations.MODELS);
             if (resolvedQualifier == null) {
                 CodeElementReference qualifierCodeClass = treeDecorator.getProperty(qualifier, GoAnnotations.CODE_CLASS);
-                if (qualifierCodeClass != null) {
+                if (qualifierCodeClass != CodeElementReference.MISSING) {
                     resolvedQualifier = qualifierCodeClass.resolve(annotatedParseTree, currentPackage, resolvedPackages);
                 }
             }
 
             if (resolvedQualifier == null) {
                 CodeElementReference qualifierExprType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPR_TYPE);
-                if (qualifierExprType != null) {
+                if (qualifierExprType != CodeElementReference.MISSING) {
                     resolvedQualifier = qualifierExprType.resolve(annotatedParseTree, currentPackage, resolvedPackages);
                 }
             }

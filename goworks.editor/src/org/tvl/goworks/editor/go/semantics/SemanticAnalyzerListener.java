@@ -446,14 +446,14 @@ public class SemanticAnalyzerListener implements GoParserListener {
         Collection<? extends CodeElementModel> resolvedQualifier = treeDecorator.getProperty(qualifier, GoAnnotations.MODELS);
         if (resolvedQualifier == null) {
             CodeElementReference qualifierCodeClass = treeDecorator.getProperty(qualifier, GoAnnotations.CODE_CLASS);
-            if (qualifierCodeClass != null) {
+            if (qualifierCodeClass != CodeElementReference.MISSING) {
                 resolvedQualifier = qualifierCodeClass.resolve(annotatedParseTree, currentPackage, resolvedPackages);
             }
         }
 
         if (resolvedQualifier == null) {
             CodeElementReference qualifierExprType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPR_TYPE);
-            if (qualifierExprType != null) {
+            if (qualifierExprType != CodeElementReference.MISSING) {
                 resolvedQualifier = qualifierExprType.resolve(annotatedParseTree, currentPackage, resolvedPackages);
             }
         }
@@ -1071,7 +1071,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     ExpressionListContext exprs = args.expressionList();
                     if (exprs != null && !exprs.expression().isEmpty()) {
                         typeArgument = treeDecorator.getProperty(exprs.expression(0), GoAnnotations.CODE_CLASS);
-                        if (typeArgument == null) {
+                        if (typeArgument == CodeElementReference.MISSING) {
                             typeArgument = treeDecorator.getProperty(exprs.expression(0), GoAnnotations.EXPR_TYPE);
                         }
                     }
@@ -2425,7 +2425,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     List<? extends ExpressionContext> exprs = exprList.expression();
                     if (exprs != null && !exprs.isEmpty()) {
                         typeArgument = treeDecorator.getProperty(exprs.get(0), GoAnnotations.EXPR_TYPE);
-                        if (typeArgument == null) {
+                        if (typeArgument == CodeElementReference.MISSING) {
                             typeArgument = treeDecorator.getProperty(exprs.get(0), GoAnnotations.CODE_CLASS);
                         }
                     }
@@ -3004,13 +3004,13 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @SuppressWarnings("element-type-mismatch")
     public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
         if (EXPR_TYPE_CONTEXTS.contains(ctx.getClass())) {
-            if (treeDecorator.getProperty(ctx, GoAnnotations.EXPR_TYPE) == null) {
+            if (treeDecorator.getProperty(ctx, GoAnnotations.EXPR_TYPE) == CodeElementReference.MISSING) {
                 LOGGER.log(Level.WARNING, "Expected EXPR_TYPE data for context {0}.", ctx.getClass().getSimpleName());
             }
         }
 
         if (CODE_CLASS_CONTEXTS.contains(ctx.getClass())) {
-            if (treeDecorator.getProperty(ctx, GoAnnotations.CODE_CLASS) == null) {
+            if (treeDecorator.getProperty(ctx, GoAnnotations.CODE_CLASS) == CodeElementReference.MISSING) {
                 LOGGER.log(Level.WARNING, "Expected CODE_TYPE data for context {0}.", ctx.getClass().getSimpleName());
             }
         }

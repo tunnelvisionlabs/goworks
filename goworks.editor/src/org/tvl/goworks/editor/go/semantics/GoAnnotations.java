@@ -40,8 +40,8 @@ public class GoAnnotations {
     public static final ObjectProperty<ParserRuleContext<Token>> IMPLICIT_TYPE = new ObjectProperty<ParserRuleContext<Token>>("implicit-type");
     public static final ObjectProperty<Integer> IMPLICIT_INDEX = new ObjectProperty<Integer>("implicit-index", -1);
 
-    public static final ObjectProperty<CodeElementReference> EXPR_TYPE = new ObjectProperty<CodeElementReference>("expression-type");
-    public static final ObjectProperty<CodeElementReference> CODE_CLASS = new ObjectProperty<CodeElementReference>("code-type");
+    public static final ObjectProperty<CodeElementReference> EXPR_TYPE = new ObjectProperty<CodeElementReference>("expression-type", CodeElementReference.MISSING);
+    public static final ObjectProperty<CodeElementReference> CODE_CLASS = new ObjectProperty<CodeElementReference>("code-type", CodeElementReference.MISSING);
 
     public static final ObjectProperty<CodeElementReference> PROP_ELEMENT_REFERENCE =
         new ObjectProperty<CodeElementReference>("element-reference");
