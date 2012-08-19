@@ -404,7 +404,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         switch (previous.getRule()) {
                         case GoParser.RULE_topLevelDecl:
                             parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
-                            annotatedParseTrees = analyzeParseTrees(snapshot.getVersionedDocument(), parseTrees);
+                            annotatedParseTrees = new HashMap<ParseTree<Token>, GoAnnotatedParseTree>();
                             break;
 
                         default:
@@ -677,7 +677,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         continue;
                                     }
 
-                                    GoAnnotatedParseTree annotatedParseTree = annotatedParseTrees.get(entry.getKey());
+                                    GoAnnotatedParseTree annotatedParseTree = getAnnotatedParseTree(snapshot.getVersionedDocument(), entry.getKey(), annotatedParseTrees);
                                     PackageModel currentPackage = getFileModel().getPackage();
                                     Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
                                     for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
@@ -1916,15 +1916,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             //return qualifiedModels;
         }
 
-        private Map<ParseTree<Token>, GoAnnotatedParseTree> analyzeParseTrees(VersionedDocument document, Map<? extends ParseTree<Token>, ? extends CaretReachedException> parseTrees) {
-            Map<ParseTree<Token>, GoAnnotatedParseTree> result = new IdentityHashMap<ParseTree<Token>, GoAnnotatedParseTree>();
-            for (Map.Entry<? extends ParseTree<Token>, ? extends CaretReachedException> entry : parseTrees.entrySet()) {
-                ParseTree<Token> context = entry.getKey();
-                GoAnnotatedParseTree annotatedTree = SemanticAnalyzer.analyze(document, context);
-                result.put(context, annotatedTree);
+        private GoAnnotatedParseTree getAnnotatedParseTree(VersionedDocument document, ParseTree<Token> parseTree, Map<ParseTree<Token>, GoAnnotatedParseTree> annotatedParseTrees) {
+            GoAnnotatedParseTree annotatedParseTree = annotatedParseTrees.get(parseTree);
+            if (annotatedParseTree == null) {
+                annotatedParseTree = SemanticAnalyzer.analyze(document, parseTree);
+                annotatedParseTrees.put(parseTree, annotatedParseTree);
             }
 
-            return result;
+            return annotatedParseTree;
         }
     }
 
