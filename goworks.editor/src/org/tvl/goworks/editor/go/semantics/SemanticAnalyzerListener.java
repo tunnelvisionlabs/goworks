@@ -759,7 +759,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
     public void exitMultExpr(MultExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) == null) {
+        if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) != null) {
             CodeElementReference left = treeDecorator.getProperty(ctx.expression(0), GoAnnotations.EXPR_TYPE);
             CodeElementReference right = treeDecorator.getProperty(ctx.expression(1), GoAnnotations.EXPR_TYPE);
             exprType = new BinaryExpressionTypeReference(left, ctx.op, right);
@@ -2661,7 +2661,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
     public void exitAddExpr(AddExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
-        if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) == null) {
+        if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) != null) {
             CodeElementReference left = treeDecorator.getProperty(ctx.expression(0), GoAnnotations.EXPR_TYPE);
             CodeElementReference right = treeDecorator.getProperty(ctx.expression(1), GoAnnotations.EXPR_TYPE);
             exprType = new BinaryExpressionTypeReference(left, ctx.op, right);
