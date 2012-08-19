@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.completion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -1857,7 +1858,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             qualifierNodeType = NodeType.UNKNOWN;
                         }
                     } else {
-                        LOGGER.log(Level.WARNING, "Unable to resolve unqualified link from qualifier: {0}", qualifier);
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING, "Unable to resolve unqualified link from qualifier: {0}", qualifier.toString(Arrays.asList(GoParser.ruleNames)));
+                        }
+
                         qualifierNodeType = NodeType.UNKNOWN;
                     }
                 }

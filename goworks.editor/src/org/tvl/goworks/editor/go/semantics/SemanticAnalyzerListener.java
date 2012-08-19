@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.semantics;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
@@ -476,7 +477,10 @@ public class SemanticAnalyzerListener implements GoParserListener {
                         qualifierNodeType = NodeType.UNKNOWN;
                     }
                 } else {
-                    LOGGER.log(Level.WARNING, "Unable to resolve unqualified link from qualifier: {0}", qualifier);
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, "Unable to resolve unqualified link from qualifier: {0}", qualifier.toString(Arrays.asList(GoParser.ruleNames)));
+                    }
+
                     qualifierNodeType = NodeType.UNKNOWN;
                 }
             }
@@ -505,16 +509,25 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 assert target != null && tokenDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
                 ParserRuleContext<Token> explicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE) : null;
                 if (explicitType != null) {
-                    LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier);
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier.toString(Arrays.asList(GoParser.ruleNames)));
+                    }
+
                     resolvedQualifier = Collections.emptyList();
                 } else {
                     ParserRuleContext<Token> implicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE) : null;
                     int implicitIndex = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX) : -1;
-                    LOGGER.log(Level.WARNING, "Unable to resolve implicit type for qualifier: {0}", qualifier);
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING, "Unable to resolve implicit type for qualifier: {0}", qualifier.toString(Arrays.asList(GoParser.ruleNames)));
+                    }
+
                     resolvedQualifier = Collections.emptyList();
                 }
             } else {
-                LOGGER.log(Level.WARNING, "Unable to resolve qualifier: {0}", qualifier);
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, "Unable to resolve qualifier: {0}", qualifier.toString(Arrays.asList(GoParser.ruleNames)));
+                }
+
                 resolvedQualifier = Collections.emptyList();
             }
         }
@@ -1815,7 +1828,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         if (ctx.operand() != null) {
             treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.operand()));
         } else {
-            LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParser(null)));
+            LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(Arrays.asList(GoParser.ruleNames)));
         }
     }
 
@@ -1838,7 +1851,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, CodeElementReference.UNKNOWN);
         }
 
-        LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParser(null)));
+        LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(Arrays.asList(GoParser.ruleNames)));
     }
 
     @Override
@@ -2809,7 +2822,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         if (ctx.qualifiedIdentifier() != null) {
             treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.qualifiedIdentifier()));
         } else {
-            LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParser(null)));
+            LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(Arrays.asList(GoParser.ruleNames)));
         }
     }
 
