@@ -1126,7 +1126,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0)
     public void exitFunctionLiteral(FunctionLiteralContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        LOGGER.log(Level.WARNING, "Element references not implemented for context {0}.", ctx.getClass().getSimpleName());
+        LOGGER.log(Level.FINE, "Element references not implemented for context {0}.", ctx.getClass().getSimpleName());
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
 
         popVarScope();
@@ -2349,7 +2349,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0)
     public void exitMethodExpr(MethodExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        LOGGER.log(Level.WARNING, "Element references not implemented for context {0}.", ctx.getClass().getSimpleName());
+        LOGGER.log(Level.FINE, "Element references not implemented for context {0}.", ctx.getClass().getSimpleName());
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
     }
 
