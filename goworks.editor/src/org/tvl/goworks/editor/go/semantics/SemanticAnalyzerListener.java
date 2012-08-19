@@ -1155,11 +1155,11 @@ public class SemanticAnalyzerListener implements GoParserListener {
     })
     public void exitRecvExpr(RecvExprContext ctx) {
         assert ctx.getChildCount() <= 1;
-        assert ctx.getChildCount() == 0 || ctx.getChild(0) instanceof ExpressionContext;
+        assert ctx.getChildCount() == 0 || ctx.expression() != null;
 
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.getChild(0) != null) {
-            exprType = treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.EXPR_TYPE);
+        if (ctx.expression() != null) {
+            exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
@@ -1523,6 +1523,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0)
     public void exitTypeLiteral(TypeLiteralContext ctx) {
+        assert ctx.getChildCount() <= 1;
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.getChildCount() == 1) {
             codeClass = treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.CODE_CLASS);
@@ -1803,15 +1804,16 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
     })
     public void exitOperandExpr(OperandExprContext ctx) {
-        if (ctx.getChildCount() == 1 && ctx.getChild(0) instanceof OperandContext) {
-            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.EXPR_TYPE));
+        assert ctx.getChildCount() == 0 || (ctx.getChildCount() == 1 && ctx.operand() != null);
+        if (ctx.operand() != null) {
+            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, treeDecorator.getProperty(ctx.operand(), GoAnnotations.EXPR_TYPE));
         } else {
             LOGGER.log(Level.WARNING, "Unrecognized tree structure.");
             treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, CodeElementReference.UNKNOWN);
         }
 
-        if (ctx.getChildCount() == 1 && ctx.getChild(0) instanceof OperandContext) {
-            treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.getChild(0)));
+        if (ctx.operand() != null) {
+            treeDecorator.putProperties(ctx, treeDecorator.getProperties(ctx.operand()));
         } else {
             LOGGER.log(Level.FINER, "Expression resolution links are not supported for context: {0}", ctx.toString(new GoParser(null)));
         }
@@ -1828,8 +1830,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
     })
     public void exitBuiltinCallExpr(BuiltinCallExprContext ctx) {
-        if (ctx.getChildCount() == 1 && ctx.getChild(0) instanceof BuiltinCallContext) {
-            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.EXPR_TYPE));
+        assert ctx.getChildCount() == 0 || (ctx.getChildCount() == 1 && ctx.builtinCall() != null);
+        if (ctx.builtinCall() != null) {
+            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, treeDecorator.getProperty(ctx.builtinCall(), GoAnnotations.EXPR_TYPE));
         } else {
             LOGGER.log(Level.WARNING, "Unrecognized tree structure.");
             treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, CodeElementReference.UNKNOWN);
@@ -2149,12 +2152,11 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
     })
     public void exitCondition(ConditionContext ctx) {
-        assert ctx.getChildCount() <= 1;
-        assert ctx.getChildCount() == 0 || ctx.getChild(0) instanceof ExpressionContext;
+        assert ctx.getChildCount() == 0 || (ctx.getChildCount() == 1 && ctx.expression() != null);
 
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        if (ctx.getChild(0) != null) {
-            exprType = treeDecorator.getProperty(ctx.getChild(0), GoAnnotations.EXPR_TYPE);
+        if (ctx.expression() != null) {
+            exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
