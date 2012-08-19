@@ -2435,6 +2435,8 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
         if (ctx.IDENTIFIER() != null) {
             treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new BuiltinCallResultReference(ctx.IDENTIFIER().getSymbol(), typeArgument));
+        } else {
+            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, CodeElementReference.UNKNOWN);
         }
     }
 
@@ -2872,6 +2874,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.expression() != null) {
             exprType = treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE);
+            assert exprType != CodeElementReference.MISSING;
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
