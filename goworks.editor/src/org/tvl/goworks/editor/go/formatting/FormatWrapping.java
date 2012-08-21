@@ -10,8 +10,10 @@ package org.tvl.goworks.editor.go.formatting;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import org.antlr.netbeans.editor.formatting.CategorySupport;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.openide.util.NbBundle;
+import org.tvl.goworks.editor.GoEditorKit;
 
 /**
  *
@@ -32,37 +34,37 @@ public class FormatWrapping extends javax.swing.JPanel implements FocusListener 
 
         scrollPane.getViewport().setBackground(java.awt.SystemColor.controlLtHighlight);
 
-        cmbArrayInitializer.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapArrayInitializer);
+        cmbArrayInitializer.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapArrayInitializer);
         cmbArrayInitializer.addFocusListener(this);
-        cmbAssignmentOperators.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapAssignmentOperators);
+        cmbAssignmentOperators.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapAssignmentOperators);
         cmbAssignmentOperators.addFocusListener(this);
-        cmbBinaryOperators.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapBinaryOperators);
+        cmbBinaryOperators.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapBinaryOperators);
         cmbBinaryOperators.addFocusListener(this);
-        cmbChainedMethodCalls.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapChainedMethodCalls);
+        cmbChainedMethodCalls.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapChainedMethodCalls);
         cmbChainedMethodCalls.addFocusListener(this);
-        cmbDoWhileStatement.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapDoWhileStatement);
+        cmbDoWhileStatement.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapDoWhileStatement);
         cmbDoWhileStatement.addFocusListener(this);
-        cmbEnumConstants.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapEnumConstants);
+        cmbEnumConstants.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapEnumConstants);
         cmbEnumConstants.addFocusListener(this);
-        cmbFor.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapFor);
+        cmbFor.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapFor);
         cmbFor.addFocusListener(this);
-        cmbForStatement.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapForStatement);
+        cmbForStatement.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapForStatement);
         cmbForStatement.addFocusListener(this);
-        cmbIfStatement.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapIfStatement);
+        cmbIfStatement.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapIfStatement);
         cmbIfStatement.addFocusListener(this);
-        cmbMethodCallArguments.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapMethodCallArguments);
+        cmbMethodCallArguments.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapMethodCallArguments);
         cmbMethodCallArguments.addFocusListener(this);
-        cmbMethodParameters.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapMethodParameters);
+        cmbMethodParameters.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapMethodParameters);
         cmbMethodParameters.addFocusListener(this);
-        cmbTernaryOperators.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapTernaryOperators);
+        cmbTernaryOperators.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapTernaryOperators);
         cmbTernaryOperators.addFocusListener(this);
-        cmbWhileStatement.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapWhileStatement);
+        cmbWhileStatement.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapWhileStatement);
         cmbWhileStatement.addFocusListener(this);
     }
 
     public static PreferencesCustomizer.Factory getController() {
-        return new CategorySupport.Factory("wrapping", FormatWrapping.class, //NOI18N
-                Bundle.SAMPLE_Wrapping());
+        return new CategorySupport.Factory(GoEditorKit.GO_MIME_TYPE, "wrapping", FormatWrapping.class, //NOI18N
+                Bundle.SAMPLE_Wrapping(), GoPreviewFormatter.INSTANCE);
     }
 
     @Override

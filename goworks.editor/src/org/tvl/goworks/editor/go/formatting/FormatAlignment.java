@@ -8,8 +8,10 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
+import org.antlr.netbeans.editor.formatting.CategorySupport;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.openide.util.NbBundle;
+import org.tvl.goworks.editor.GoEditorKit;
 
 /**
  *
@@ -25,21 +27,21 @@ public class FormatAlignment extends javax.swing.JPanel {
      */
     public FormatAlignment() {
         initComponents();
-        chkAlignArrayInitializer.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineArrayInitializer);
-        chkAlignAssignment.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineAssignment);
-        chkAlignBinaryOperators.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineBinaryOperators);
-        chkAlignCallArguments.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineCallArguments);
-        chkAlignCompositeLiteral.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineCompositeLiteral);
-        chkAlignFor.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineFor);
-        chkAlignMethodParameters.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineMethodParameters);
-        chkAlignParenthesized.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineParenthesized);
-        chkAlignReturnParameters.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineReturnParameters);
-        chkAlignTernaryOperators.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.alignMultilineTernaryOperators);
+        chkAlignArrayInitializer.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineArrayInitializer);
+        chkAlignAssignment.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineAssignment);
+        chkAlignBinaryOperators.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineBinaryOperators);
+        chkAlignCallArguments.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineCallArguments);
+        chkAlignCompositeLiteral.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineCompositeLiteral);
+        chkAlignFor.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineFor);
+        chkAlignMethodParameters.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineMethodParameters);
+        chkAlignParenthesized.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineParenthesized);
+        chkAlignReturnParameters.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineReturnParameters);
+        chkAlignTernaryOperators.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.alignMultilineTernaryOperators);
     }
 
     public static PreferencesCustomizer.Factory getController() {
-        return new CategorySupport.Factory("alignment", FormatAlignment.class, //NOI18N
-                Bundle.SAMPLE_Align());
+        return new CategorySupport.Factory(GoEditorKit.GO_MIME_TYPE, "alignment", FormatAlignment.class, //NOI18N
+                Bundle.SAMPLE_Align(), GoPreviewFormatter.INSTANCE);
     }
 
     /**

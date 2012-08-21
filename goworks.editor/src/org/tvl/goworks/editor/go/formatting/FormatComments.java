@@ -8,8 +8,10 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
+import org.antlr.netbeans.editor.formatting.CategorySupport;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.openide.util.NbBundle;
+import org.tvl.goworks.editor.GoEditorKit;
 
 /**
  *
@@ -26,18 +28,18 @@ public class FormatComments extends javax.swing.JPanel {
     public FormatComments() {
         initComponents();
 
-        chkEnableCommentsFormatting.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.enableCommentsFormatting);
-        chkFormatBlockComments.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.formatBlockComments);
+        chkEnableCommentsFormatting.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.enableCommentsFormatting);
+        chkFormatBlockComments.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.formatBlockComments);
 
-        chkAddLeadingStar.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.addLeadingStarInComments);
-        chkWrapTextAtRightMargin.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapTextInComments);
-        chkWrapOneLineComments.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.wrapOneLineComments);
-        chkPreserveNewLines.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.preserveNewLinesInComments);
+        chkAddLeadingStar.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.addLeadingStarInComments);
+        chkWrapTextAtRightMargin.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapTextInComments);
+        chkWrapOneLineComments.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.wrapOneLineComments);
+        chkPreserveNewLines.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.preserveNewLinesInComments);
     }
 
     public static PreferencesCustomizer.Factory getController() {
-        return new CategorySupport.Factory("comments", FormatComments.class, //NOI18N
-                Bundle.SAMPLE_Comments());
+        return new CategorySupport.Factory(GoEditorKit.GO_MIME_TYPE, "comments", FormatComments.class, //NOI18N
+                Bundle.SAMPLE_Comments(), GoPreviewFormatter.INSTANCE);
     }
 
     /**

@@ -28,8 +28,10 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 import org.antlr.netbeans.editor.formatting.BooleanFormatOption;
+import org.antlr.netbeans.editor.formatting.CategorySupport;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.openide.util.NbBundle;
+import org.tvl.goworks.editor.GoEditorKit;
 
 /**
  *
@@ -244,50 +246,50 @@ public class FormatSpaces extends JPanel implements TreeCellRenderer, MouseListe
     private DefaultTreeModel createModel() {
         Item[] categories = new Item[] {
             new Item("BeforeKeywords",
-                new Item(FormatOptions.spaceBeforeWhile),
-                new Item(FormatOptions.spaceBeforeElse)),
+                new Item(GoFormatOptions.spaceBeforeWhile),
+                new Item(GoFormatOptions.spaceBeforeElse)),
             new Item("BeforeParentheses",
-                new Item(FormatOptions.spaceBeforeParensMethodDeclaration),
-                new Item(FormatOptions.spaceBeforeParensMethodCall),
-                new Item(FormatOptions.spaceBeforeParensIf),
-                new Item(FormatOptions.spaceBeforeParensFor),
-                new Item(FormatOptions.spaceBeforeParensWhile),
-                new Item(FormatOptions.spaceBeforeParensSwitch)),
+                new Item(GoFormatOptions.spaceBeforeParensMethodDeclaration),
+                new Item(GoFormatOptions.spaceBeforeParensMethodCall),
+                new Item(GoFormatOptions.spaceBeforeParensIf),
+                new Item(GoFormatOptions.spaceBeforeParensFor),
+                new Item(GoFormatOptions.spaceBeforeParensWhile),
+                new Item(GoFormatOptions.spaceBeforeParensSwitch)),
             new Item("AroundOperators",
-                new Item(FormatOptions.spaceAroundUnaryOperators),
-                new Item(FormatOptions.spaceAroundBinaryOperators),
-                new Item(FormatOptions.spaceAroundTernaryOperators),
-                new Item(FormatOptions.spaceAroundAssignmentOperators)),
+                new Item(GoFormatOptions.spaceAroundUnaryOperators),
+                new Item(GoFormatOptions.spaceAroundBinaryOperators),
+                new Item(GoFormatOptions.spaceAroundTernaryOperators),
+                new Item(GoFormatOptions.spaceAroundAssignmentOperators)),
             new Item("BeforeLeftBraces",
-                new Item(FormatOptions.spaceBeforeBraceTypeDeclaration),
-                new Item(FormatOptions.spaceBeforeBraceMethodDeclaration),
-                new Item(FormatOptions.spaceBeforeBraceIf),
-                new Item(FormatOptions.spaceBeforeBraceElse),
-                new Item(FormatOptions.spaceBeforeBraceFor),
-                new Item(FormatOptions.spaceBeforeBraceDo),
-                new Item(FormatOptions.spaceBeforeBraceWhile),
-                new Item(FormatOptions.spaceBeforeBraceSwitch),
-                new Item(FormatOptions.spaceBeforeBraceStaticInitializer),
-                new Item(FormatOptions.spaceBeforeBraceArrayInitializer)),
+                new Item(GoFormatOptions.spaceBeforeBraceTypeDeclaration),
+                new Item(GoFormatOptions.spaceBeforeBraceMethodDeclaration),
+                new Item(GoFormatOptions.spaceBeforeBraceIf),
+                new Item(GoFormatOptions.spaceBeforeBraceElse),
+                new Item(GoFormatOptions.spaceBeforeBraceFor),
+                new Item(GoFormatOptions.spaceBeforeBraceDo),
+                new Item(GoFormatOptions.spaceBeforeBraceWhile),
+                new Item(GoFormatOptions.spaceBeforeBraceSwitch),
+                new Item(GoFormatOptions.spaceBeforeBraceStaticInitializer),
+                new Item(GoFormatOptions.spaceBeforeBraceArrayInitializer)),
             new Item("WithinParentheses",
-                new Item(FormatOptions.spaceInParens),
-                new Item(FormatOptions.spaceInParensMethodDeclaration),
-                new Item(FormatOptions.spaceInParensMethodCall),
-                new Item(FormatOptions.spaceInParensIf),
-                new Item(FormatOptions.spaceInParensFor),
-                new Item(FormatOptions.spaceInParensWhile),
-                new Item(FormatOptions.spaceInParensSwitch),
-                new Item(FormatOptions.spaceInParensTypeCast),
-                new Item(FormatOptions.spaceInParensBraces),
-                new Item(FormatOptions.spaceInParensArrayInitBrackets)),
+                new Item(GoFormatOptions.spaceInParens),
+                new Item(GoFormatOptions.spaceInParensMethodDeclaration),
+                new Item(GoFormatOptions.spaceInParensMethodCall),
+                new Item(GoFormatOptions.spaceInParensIf),
+                new Item(GoFormatOptions.spaceInParensFor),
+                new Item(GoFormatOptions.spaceInParensWhile),
+                new Item(GoFormatOptions.spaceInParensSwitch),
+                new Item(GoFormatOptions.spaceInParensTypeCast),
+                new Item(GoFormatOptions.spaceInParensBraces),
+                new Item(GoFormatOptions.spaceInParensArrayInitBrackets)),
             new Item("Other",
-                new Item(FormatOptions.spaceBeforeComma),
-                new Item(FormatOptions.spaceAfterComma),
-                new Item(FormatOptions.spaceBeforeSemicolon),
-                new Item(FormatOptions.spaceAfterSemicolon),
-                new Item(FormatOptions.spaceBeforeColon),
-                new Item(FormatOptions.spaceAfterColon),
-                new Item(FormatOptions.spaceAfterTypeCast)),
+                new Item(GoFormatOptions.spaceBeforeComma),
+                new Item(GoFormatOptions.spaceAfterComma),
+                new Item(GoFormatOptions.spaceBeforeSemicolon),
+                new Item(GoFormatOptions.spaceAfterSemicolon),
+                new Item(GoFormatOptions.spaceBeforeColon),
+                new Item(GoFormatOptions.spaceAfterColon),
+                new Item(GoFormatOptions.spaceAfterTypeCast)),
         };
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
@@ -363,8 +365,13 @@ public class FormatSpaces extends JPanel implements TreeCellRenderer, MouseListe
 
         @SuppressWarnings("LeakingThisInConstructor")
         public SpacesCategorySupport(Preferences preferences, FormatSpaces panel) {
-            super(preferences, "spaces", panel, Bundle.SAMPLE_Spaces()); //NOI18N
+            super(GoEditorKit.GO_MIME_TYPE, preferences, "spaces", panel, Bundle.SAMPLE_Spaces(), GoPreviewFormatter.INSTANCE); //NOI18N
             panel.scs = this;
+        }
+
+        @Override
+        public void notifyChanged() {
+            super.notifyChanged();
         }
 
         @Override

@@ -8,8 +8,10 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
+import org.antlr.netbeans.editor.formatting.CategorySupport;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.openide.util.NbBundle;
+import org.tvl.goworks.editor.GoEditorKit;
 
 /**
  *
@@ -26,16 +28,16 @@ public class FormatBlankLines extends javax.swing.JPanel {
     public FormatBlankLines() {
         initComponents();
 
-        txtBeforePackage.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforePackage);
-        txtAfterPackage.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterPackage);
-        txtBeforeImports.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeImports);
-        txtAfterImports.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterImports);
-        txtBeforeType.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeType);
-        txtAfterType.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterType);
-        txtBeforeVar.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeVar);
-        txtAfterVar.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterVar);
-        txtBeforeFunction.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesBeforeFunction);
-        txtAfterFunction.putClientProperty(CategorySupport.OPTION_ID, FormatOptions.blankLinesAfterFunction);
+        txtBeforePackage.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesBeforePackage);
+        txtAfterPackage.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesAfterPackage);
+        txtBeforeImports.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesBeforeImports);
+        txtAfterImports.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesAfterImports);
+        txtBeforeType.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesBeforeType);
+        txtAfterType.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesAfterType);
+        txtBeforeVar.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesBeforeVar);
+        txtAfterVar.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesAfterVar);
+        txtBeforeFunction.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesBeforeFunction);
+        txtAfterFunction.putClientProperty(CategorySupport.OPTION_ID, GoFormatOptions.blankLinesAfterFunction);
 
         txtBeforePackage.addKeyListener(new NumericKeyListener());
         txtAfterPackage.addKeyListener(new NumericKeyListener());
@@ -50,8 +52,8 @@ public class FormatBlankLines extends javax.swing.JPanel {
     }
 
     public static PreferencesCustomizer.Factory getController() {
-        return new CategorySupport.Factory("blank-lines", FormatBlankLines.class, //NOI18N
-                 Bundle.SAMPLE_BlankLines());
+        return new CategorySupport.Factory(GoEditorKit.GO_MIME_TYPE, "blank-lines", FormatBlankLines.class, //NOI18N
+                 Bundle.SAMPLE_BlankLines(), GoPreviewFormatter.INSTANCE);
     }
 
     /**

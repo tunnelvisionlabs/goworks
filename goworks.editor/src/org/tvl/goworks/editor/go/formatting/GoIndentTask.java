@@ -79,7 +79,7 @@ public class GoIndentTask implements IndentTask {
     private FileModel fileModel;
     private boolean fileModelDataFailed;
 
-    private CodeStyle codeStyle;
+    private GoCodeStyle codeStyle;
     private CodeCompletionGoParser parser;
 
     public GoIndentTask(Context context) {
@@ -362,9 +362,9 @@ public class GoIndentTask implements IndentTask {
         return null;
     }
 
-    private CodeStyle getCodeStyle() {
+    private GoCodeStyle getCodeStyle() {
         if (codeStyle == null) {
-            codeStyle = CodeStyle.getDefault(context.document());
+            codeStyle = GoCodeStyle.getDefault(context.document());
         }
 
         return codeStyle;

@@ -26,11 +26,11 @@ public class GoReformatTask implements ReformatTask {
         this.context = context;
     }
 
-    public static String reformat(String text, CodeStyle style) {
-        return reformat(text, style, style.getRightMargin());
+    public static String reformat(String text, GoCodeStyle style) {
+        return reformat(text, style, style.getTextLimitWidth());
     }
 
-    public static String reformat(String text, CodeStyle style, int rightMargin) {
+    public static String reformat(String text, GoCodeStyle style, int rightMargin) {
         return text;
     }
 

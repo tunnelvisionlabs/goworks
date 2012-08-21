@@ -8,8 +8,10 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
+import org.antlr.netbeans.editor.formatting.CategorySupport;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.openide.util.NbBundle;
+import org.tvl.goworks.editor.GoEditorKit;
 
 /**
  *
@@ -28,8 +30,8 @@ public class FormatCodeGeneration extends javax.swing.JPanel {
     }
 
     public static PreferencesCustomizer.Factory getController() {
-        return new CategorySupport.Factory("code-generation", FormatCodeGeneration.class, //NOI18N
-                Bundle.SAMPLE_CodeGeneration());
+        return new CategorySupport.Factory(GoEditorKit.GO_MIME_TYPE, "code-generation", FormatCodeGeneration.class, //NOI18N
+                Bundle.SAMPLE_CodeGeneration(), GoPreviewFormatter.INSTANCE);
     }
 
     /**

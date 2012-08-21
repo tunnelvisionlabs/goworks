@@ -16,8 +16,8 @@ import java.util.prefs.Preferences;
 import org.antlr.netbeans.editor.formatting.AbstractFormatOption;
 import org.antlr.netbeans.editor.formatting.BooleanFormatOption;
 import org.antlr.netbeans.editor.formatting.EnumFormatOption;
+import org.antlr.netbeans.editor.formatting.FormatOptions;
 import org.antlr.netbeans.editor.formatting.IntFormatOption;
-import org.netbeans.api.editor.settings.SimpleValueNames;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
@@ -30,13 +30,7 @@ import org.openide.util.NbBundle;
     "AD_Preview=",
     "AN_Preview=",
 })
-public class FormatOptions {
-
-    public static final BooleanFormatOption expandTabToSpaces = new BooleanFormatOption(SimpleValueNames.EXPAND_TABS, true);
-    public static final IntFormatOption tabSize = new IntFormatOption(SimpleValueNames.TAB_SIZE, 4);
-    public static final IntFormatOption spacesPerTab = new IntFormatOption(SimpleValueNames.SPACES_PER_TAB, 4);
-    public static final IntFormatOption indentSize = new IntFormatOption(SimpleValueNames.INDENT_SHIFT_WIDTH, 4);
-    public static final IntFormatOption rightMargin = new IntFormatOption(SimpleValueNames.TEXT_LIMIT_WIDTH, 80);
+public class GoFormatOptions extends FormatOptions {
 
     public static final BooleanFormatOption alignMultilineArrayInitializer = new BooleanFormatOption("alignMultilineArrayInitializer", false);
     public static final BooleanFormatOption alignMultilineAssignment = new BooleanFormatOption("alignMultilineAssignment", false);
@@ -132,7 +126,7 @@ public class FormatOptions {
 
     static {
         knownOptions = new HashMap<String, AbstractFormatOption>();
-        for (Field field : FormatOptions.class.getDeclaredFields()) {
+        for (Field field : GoFormatOptions.class.getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers())
                 && Modifier.isFinal(field.getModifiers())
                 && Modifier.isPublic(field.getModifiers())
@@ -157,7 +151,7 @@ public class FormatOptions {
     }
 
     public static interface CodeStyleFactory {
-        public CodeStyle create(Preferences preferences);
+        public GoCodeStyle create(Preferences preferences);
     }
 
 }
