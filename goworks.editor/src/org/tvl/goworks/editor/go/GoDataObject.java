@@ -30,7 +30,8 @@ import org.tvl.goworks.editor.GoEditorKit;
     position=100,
     displayName="#GoResolver",
     extension="go",
-    mimeType=GoEditorKit.GO_MIME_TYPE)
+    mimeType=GoEditorKit.GO_MIME_TYPE,
+    showInFileChooser="#GoResolver")
 public class GoDataObject extends MultiDataObject {
 
     public GoDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
