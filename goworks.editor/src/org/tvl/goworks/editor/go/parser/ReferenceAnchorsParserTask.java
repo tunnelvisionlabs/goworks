@@ -123,7 +123,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 
     private static final class Definition extends ParserTaskDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
-            Collections.<ParserDataDefinition<?>>emptyList();
+            Collections.<ParserDataDefinition<?>>singletonList(GoParserDataDefinitions.COMPILED_MODEL);
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS,
