@@ -378,14 +378,14 @@ expression
     |   expression lp='(' (argumentList ','?)? rp=')'
         # callExpr
 
-    |   (op='+' | op='-' | op='!' | op='^' | op='*' | op='&' | op='<-') expression
+    |   op=('+' | '-' | '!' | '^' | '*' | '&' | '<-') expression
         # unaryExpr
 
-    |   expression (op='*' | op='/' | op='%' | op='<<' | op='>>' | op='&' | op='&^') expression
+    |   expression op=('*' | '/' | '%' | '<<' | '>>' | '&' | '&^') expression
         # multExpr
-    |   expression (op='+' | op='-' | op='|' | op='^') expression
+    |   expression op=('+' | '-' | '|' | '^') expression
         # addExpr
-    |   expression (op='==' | op='!=' | op='<' | op='<=' | op='>' | op='>=') expression
+    |   expression op=('==' | '!=' | '<' | '<=' | '>' | '>=') expression
         # compareExpr
     |   expression '&&' expression
         # andExpr
