@@ -12,16 +12,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
+import org.antlr.netbeans.editor.fold.AbstractFoldScanner.FoldInfo;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.OffsetRegion;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.parsing.spi.ParserData;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.works.editor.antlr4.parsing.ParseTrees;
+import org.antlr.works.editor.antlr4.fold.AbstractAntlrFoldScanner;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
@@ -33,7 +29,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
  *
  * @author Sam Harwell
  */
-public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
+public class DeclarationFoldScanner extends AbstractAntlrFoldScanner<CompiledModel> {
 
     @Override
     protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> result) {
@@ -51,22 +47,7 @@ public class DeclarationFoldScanner extends AbstractFoldScanner<CompiledModel> {
         return folds;
     }
 
-    private static FoldInfo createFold(ParserRuleContext<Token> child, String blockHint, DocumentSnapshot snapshot) {
-        Token startToken = child.start;
-        Token stopToken = ParseTrees.getStopSymbol(child);
-
-        int startLine = snapshot.findLineNumber(startToken.getStartIndex());
-        int stopLine = snapshot.findLineNumber(stopToken.getStopIndex());
-        if (startLine >= stopLine) {
-            return null;
-        }
-
-        SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
-        FoldInfo fold = new FoldInfo(region, blockHint);
-        return fold;
-    }
-
-    private static class FoldListener extends GoParserBaseListener {
+    private class FoldListener extends GoParserBaseListener {
         private final DocumentSnapshot snapshot;
         private final Collection<FoldInfo> folds;
 

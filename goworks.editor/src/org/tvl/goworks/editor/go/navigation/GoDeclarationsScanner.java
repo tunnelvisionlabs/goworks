@@ -129,7 +129,7 @@ public class GoDeclarationsScanner {
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.CONSTANT);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                description.setHtmlHeader(String.format("%s", signature));
+                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
                 getCurrentParent().getChildren().add(description);
             }
         }
@@ -153,7 +153,7 @@ public class GoDeclarationsScanner {
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                description.setHtmlHeader(String.format("%s", signature));
+                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
                 getCurrentParent().getChildren().add(description);
             }
         }
@@ -177,7 +177,7 @@ public class GoDeclarationsScanner {
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                description.setHtmlHeader(String.format("%s", signature));
+                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
                 getCurrentParent().getChildren().add(description);
             }
         }
@@ -197,7 +197,7 @@ public class GoDeclarationsScanner {
 
                     GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FIELD);
                     description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                    description.setHtmlHeader(String.format("%s", signature));
+                    description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
                     getCurrentParent().getChildren().add(description);
                 }
             }
@@ -231,7 +231,7 @@ public class GoDeclarationsScanner {
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FUNCTION);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-            description.setHtmlHeader(String.format("%s", signature));
+            description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
             getCurrentParent().getChildren().add(description);
             description.setChildren(new ArrayList<Description>());
             descriptionStack.push(description);
@@ -255,7 +255,7 @@ public class GoDeclarationsScanner {
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-            description.setHtmlHeader(String.format("%s", signature));
+            description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
             getCurrentParent().getChildren().add(description);
             description.setChildren(new ArrayList<Description>());
             descriptionStack.push(description);

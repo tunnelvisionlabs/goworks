@@ -10,17 +10,11 @@ package org.tvl.goworks.editor.go.fold;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
-import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.parsing.spi.ParseContext;
+import org.antlr.netbeans.editor.fold.AbstractFoldManagerParserTask;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
-import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
@@ -33,9 +27,13 @@ import org.tvl.goworks.editor.go.parser.CompiledModel;
  *
  * @author Sam Harwell
  */
-public class DeclarationFoldManagerParserTask implements ParserTask {
+public class DeclarationFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
 
     private final DeclarationFoldScanner declarationFoldScanner = new DeclarationFoldScanner();
+
+    private DeclarationFoldManagerParserTask() {
+        super(GoParserDataDefinitions.COMPILED_MODEL);
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -43,26 +41,15 @@ public class DeclarationFoldManagerParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
-        throws InterruptedException, ExecutionException {
+    protected Runnable getScanner(final ParserData<CompiledModel> model) {
+        return new Runnable() {
 
-        if (snapshot.getVersionedDocument().getDocument() == null) {
-            // no code folding updates for background parsing
-            return;
-        }
+            @Override
+            public void run() {
+                declarationFoldScanner.run(model);
+            }
 
-        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
-        if (futureData == null) {
-            return;
-        }
-
-        ParserData<CompiledModel> parserData = futureData.get();
-        AbstractFoldScanner<CompiledModel> scanner = getScanner();
-        scanner.run(parserData);
-    }
-
-    private DeclarationFoldScanner getScanner() {
-        return declarationFoldScanner;
+        };
     }
 
     private static final class Definition extends ParserTaskDefinition {
