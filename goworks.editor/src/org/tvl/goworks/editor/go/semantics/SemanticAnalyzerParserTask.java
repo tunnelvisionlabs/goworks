@@ -59,7 +59,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
 
         if (requestedData.contains(GoParserDataDefinitions.ANNOTATED_PARSE_TREE)) {
             synchronized (lock) {
-                Future<ParserData<GoAnnotatedParseTree>> futureParseTreeResult = getTaskManager().getData(snapshot, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE));
+                Future<ParserData<GoAnnotatedParseTree>> futureParseTreeResult = taskManager.getData(snapshot, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE));
                 ParserData<GoAnnotatedParseTree> parseTreeResult = futureParseTreeResult != null ? futureParseTreeResult.get() : null;
                 if (parseTreeResult != null) {
                     results.addResult(parseTreeResult);
@@ -68,7 +68,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
 
                 ParserRuleContext<Token> referenceParseTree = null;
                 try {
-                    Future<ParserData<CompiledModel>> futureRefParseTreeData = getTaskManager().getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL);
+                    Future<ParserData<CompiledModel>> futureRefParseTreeData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL);
                     ParserData<CompiledModel> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
                     CompiledModel compiledModel = refParseTreeData != null ? refParseTreeData.getData() : null;
                     CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;
@@ -88,10 +88,6 @@ public class SemanticAnalyzerParserTask implements ParserTask {
                 results.addResult(parseTreeResult);
             }
         }
-    }
-
-    private ParserTaskManager getTaskManager() {
-        return Lookup.getDefault().lookup(ParserTaskManager.class);
     }
 
     private static final class Definition extends ParserTaskDefinition {
