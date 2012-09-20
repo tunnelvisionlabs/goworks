@@ -79,5 +79,9 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
             return SimpleLexerState.createSimpleState(this);
         }
 
+        @Override
+        public void close() {
+            // TODO: return this lexer to the lexer cache
+        }
     }
 }

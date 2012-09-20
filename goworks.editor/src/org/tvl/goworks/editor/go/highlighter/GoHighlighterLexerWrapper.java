@@ -49,6 +49,11 @@ public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<Token, 
         return getCachedState(lexer._mode, lexer._modeStack.toArray());
     }
 
+    @Override
+    public void close() {
+        // this lexer uses the normal shared ATN so there's need to do something special here
+    }
+
     private static GoHighlighterLexerState getCachedState(int mode, int[] modeStack) {
         GoHighlighterLexerState state = new GoHighlighterLexerState(mode, modeStack);
 
