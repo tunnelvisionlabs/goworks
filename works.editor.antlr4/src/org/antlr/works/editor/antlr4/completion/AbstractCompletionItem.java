@@ -11,8 +11,11 @@ package org.antlr.works.editor.antlr4.completion;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -25,6 +28,7 @@ import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.editor.BaseDocument;
+import org.netbeans.editor.GuardedDocument;
 import org.netbeans.spi.editor.completion.CompletionController;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionTask;
@@ -35,6 +39,10 @@ import org.netbeans.spi.editor.completion.support.CompletionUtilities;
  * @author Sam Harwell
  */
 public abstract class AbstractCompletionItem implements CompletionItem {
+    // -J-Dorg.antlr.works.editor.antlr4.completion.AbstractCompletionItem.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(AbstractCompletionItem.class.getName());
+
+    protected static final Object CT_HANDLER_DOC_PROPERTY = "code-template-insert-handler"; // NOI18N
 
     public static final String COLOR_END = "</font>"; //NOI18N
     public static final String STRIKE = "<s>"; //NOI18N
@@ -103,6 +111,22 @@ public abstract class AbstractCompletionItem implements CompletionItem {
         //} else if (evt.getID() == KeyEvent.KEY_PRESSED && evt.getKeyCode() == KeyEvent.VK_ENTER && evt.isAltDown()) {
         //    throw new UnsupportedOperationException("Not supported yet.");
         //}
+        JTextComponent comp = controller.getComponent();
+        boolean compEditable = (comp != null && comp.isEditable());
+        Document doc = comp.getDocument();
+        boolean guardedPos = doc instanceof GuardedDocument && ((GuardedDocument)doc).isPosGuarded(comp.getSelectionEnd());
+
+        if (evt.getKeyCode() == KeyEvent.VK_TAB && doc.getProperty(CT_HANDLER_DOC_PROPERTY) == null) {
+            evt.consume();
+            if (guardedPos) {
+                Toolkit.getDefaultToolkit().beep();
+            } else if (compEditable && evt.getID() == KeyEvent.KEY_PRESSED) {
+                controller.defaultAction(this, true);
+                evt.consume();
+            }
+
+            return;
+        }
 
         if (evt.getID() == KeyEvent.KEY_TYPED && !Character.isJavaIdentifierPart(evt.getKeyChar())) {
             Completion.get().hideCompletion();
@@ -198,6 +222,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
 //                    component.setCaretPosition(offset + replacement.length());
                 } catch (BadLocationException e) {
                     // Can't update
+                    LOGGER.log(Level.WARNING, e.getMessage(), e);
                 }
             }
         });

@@ -38,7 +38,6 @@ import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.openide.text.NbDocument;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -122,13 +121,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     private boolean _complete;
                     private OffsetRegion span;
                     private boolean spanExtended = false;
-                    private int extendMultiLineSpanToLine = 0;
                     private OffsetRegion extendedSpan;
-                    private OffsetRegion requestedSpan;
+                    private final OffsetRegion requestedSpan;
 
-                    private ParseRequest<TState> request;
+                    private final ParseRequest<TState> request;
                     private TState startState;
-                    private CharStream input;
+                    private final CharStream input;
 
                     private Token previousToken = null;
                     //private int previousTokenLine = 0;
@@ -151,11 +149,15 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         span = request.getRegion();
                         startState = request.getState();
 
+                        CharStream inputStream = null;
                         try {
-                            input = createInputStream(span);
+                            inputStream = createInputStream(span);
                         } catch (BadLocationException ex) {
+                            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                             _complete = true;
                         }
+
+                        input = inputStream;
                     }
 
                     @Override
@@ -217,9 +219,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
                                             for (int i = firstMultilineLine; i < startLineCurrent; i++)
                                             {
-                                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                                    extendMultiLineSpanToLine = i + 1;
-
                                                 if (inBounds)
                                                     setLineState(i, lineStates.get(i).createMultiLineState());
                                             }
@@ -237,9 +236,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                         int stopLine = NbDocument.findLineNumber(document, token.getStopIndex());
                                         for (int i = startLine; i < stopLine; i++)
                                         {
-                                            if (!lineStates.get(i).getIsMultiLineToken())
-                                                extendMultiLineSpanToLine = i + 1;
-
                                             if (inBounds)
                                                 setLineState(i, lineStates.get(i).createMultiLineState());
                                         }
@@ -315,23 +311,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                 lexer.close();
                             }
                         }
-
-                        if (updateOffsets && extendMultiLineSpanToLine > 0) {
-                            int endPosition = extendMultiLineSpanToLine < NbDocument.findLineRootElement(document).getElementCount() - 1 ? NbDocument.findLineOffset(document, extendMultiLineSpanToLine + 1) : document.getLength();
-                            if (endPosition > extendedSpan.getEnd()) {
-                                spanExtended = true;
-                                extendedSpan = OffsetRegion.fromBounds(extendedSpan.getStart(), endPosition);
-                            }
-                        }
-
-                        if (updateOffsets && spanExtended) {
-                            /* Subtract 1 from each of these because the spans include the line break on their last
-                             * line, forcing it to appear as the first position on the following line.
-                             */
-                            int firstLine = NbDocument.findLineNumber(document, span.getEnd());
-                            int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEnd()) - 1;
-                            forceRehighlightLines(firstLine, lastLine, false);
-                        }
                     }
                 };
             }
@@ -398,6 +377,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             try {
                 input = createInputStream(span);
             } catch (BadLocationException ex) {
+                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                 return null;
             }
 
@@ -709,7 +689,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             char c = document.getText(token.getStopIndex() + 1, 1).charAt(0);
             return c == '\r' || c == '\n';
         } catch (BadLocationException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
             return false;
         }
 

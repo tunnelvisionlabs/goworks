@@ -36,7 +36,6 @@ import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
@@ -139,6 +138,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 }
             }
 
+            LOGGER.log(Level.FINE, "Hiding the completion query in AbstractCompletionQuery.preQueryUpdate().");
             Completion.get().hideCompletion();
         }
     }
@@ -196,9 +196,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 }
             }
         } catch (Exception ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "An exception occurred while processing a completion query.", ex);
-            }
+            LOGGER.log(Level.WARNING, "An exception occurred while processing a completion query.", ex);
         } finally {
             resultSet.finish();
         }
@@ -216,7 +214,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
 
             applicableTo = null;
             if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
-                throw new UnsupportedOperationException("Not implemented yet.");
+                LOGGER.log(Level.WARNING, "Documentation query support is not yet implemented.");
+                return null;
             }
 
             Future<Void> value = getParserTaskManager().scheduleHighPriority(getTask((BaseDocument)doc));
@@ -261,6 +260,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                     filterPrefix = newOffset > toolTipOffset ? component.getDocument().getText(newOffset, caretOffset - newOffset) : null;
                 }
             } catch (BadLocationException e) {
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
             }
 
             return (filterPrefix != null && filterPrefix.indexOf(',') == -1 && filterPrefix.indexOf('(') == -1 && filterPrefix.indexOf(')') == -1);
@@ -280,6 +280,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                         handleDeclarationItem(resultSet);
                         resultSet.setHasAdditionalItems(hasAdditionalItems > 0);
                     } else {
+                        LOGGER.log(Level.FINE, "Hiding the completion query in AbstractCompletionQuery.filter().");
                         Completion.get().hideDocumentation();
                         Completion.get().hideCompletion();
                     }
@@ -293,7 +294,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 resultSet.setAnchorOffset(applicableTo.getStartPosition(textBuffer.getCurrentSnapshot()).getOffset());
             }
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
         }
 
         resultSet.finish();
@@ -305,7 +306,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
             SnapshotPositionRegion applicableSpan = getApplicableTo().getRegion(snapshot);
             if (applicableSpan.getLength() > 0) {
-                resultSet.addItem(createDeclarationCompletionItem(component.getDocument(), getApplicableTo()));
+                resultSet.addDeclarationItem(createDeclarationCompletionItem(component.getDocument(), getApplicableTo()));
             }
         }
     }
@@ -320,6 +321,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         }
 
         Pattern prefixBoundaryPattern = BaseCompletionController.getPrefixBoundaryPattern(prefix, false);
+        Pattern letterOrderPattern = BaseCompletionController.getLetterOrderPattern(prefix, false);
         String lowercasePrefix = prefix.toLowerCase(Locale.getDefault());
         List<CompletionItem> result = new ArrayList<CompletionItem>();
         for (CompletionItem item : data) {
@@ -327,6 +329,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             if (insertPrefix.toLowerCase(Locale.getDefault()).contains(lowercasePrefix)) {
                 result.add(item);
             } else if (prefixBoundaryPattern != null && prefixBoundaryPattern.matcher(insertPrefix).matches()) {
+                result.add(item);
+            } else if (letterOrderPattern != null && letterOrderPattern.matcher(insertPrefix).find()) {
                 result.add(item);
             }
         }
