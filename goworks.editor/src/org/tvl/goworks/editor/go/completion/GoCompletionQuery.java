@@ -80,6 +80,7 @@ import org.tvl.goworks.editor.go.codemodel.ConstModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
+import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
@@ -99,13 +100,18 @@ import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BasicLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CallExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ElementTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LabeledStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.LiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LiteralTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandContext;
@@ -1520,6 +1526,22 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+            })
+            public void enterElementType(ElementTypeContext ctx) {
+                Collection<? extends CodeElementModel> result;
+                if (ctx.type() != null) {
+                    result = resolveTarget(ctx.type());
+                } else {
+                    result = Collections.emptyList();
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
             public void enterStructType(StructTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
@@ -1768,6 +1790,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
+                PackageModel builtinPackage = CodeModelCacheImpl.getInstance().getUniquePackage(getFileModel().getPackage().getProject(), "builtin");
+                if (builtinPackage != null) {
+                    contextModels.add(builtinPackage);
+                }
+
                 for (ImportDeclarationModel importDeclarationModel : possibleImports) {
                     Collection<? extends PackageModel> resolved = CodeModelCacheImpl.getInstance().resolvePackages(importDeclarationModel);
                     if (resolved != null) {
@@ -1802,6 +1829,100 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 annotations.putProperty(ctx, ATTR_TARGET, members);
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literal, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_basicLiteral, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0),
+            })
+            public void enterLiteral(LiteralContext ctx) {
+                Collection<? extends CodeElementModel> result;
+                if (ctx.basicLiteral() != null) {
+                    result = resolveTarget(ctx.basicLiteral());
+                } else if (ctx.compositeLiteral() != null) {
+                    result = resolveTarget(ctx.compositeLiteral());
+                } else if (ctx.functionLiteral() != null) {
+                    result = resolveTarget(ctx.functionLiteral());
+                } else {
+                    result = Collections.emptyList();
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_basicLiteral, version=0)
+            public void enterBasicLiteral(BasicLiteralContext ctx) {
+                Collection<? extends CodeElementModel> result;
+                if (ctx.INT_LITERAL() != null) {
+                    result = Collections.singletonList(IntrinsicTypeModels.INT);
+                } else if (ctx.FLOAT_LITERAL() != null) {
+                    result = Collections.singletonList(IntrinsicTypeModels.FLOAT32);
+                } else if (ctx.IMAGINARY_LITERAL() != null) {
+                    result = Collections.singletonList(IntrinsicTypeModels.COMPLEX64);
+                } else if (ctx.CharLiteral() != null) {
+                    result = Collections.singletonList(IntrinsicTypeModels.INT32);
+                } else if (ctx.StringLiteral() != null) {
+                    result = Collections.singletonList(IntrinsicTypeModels.STRING);
+                } else {
+                    result = Collections.emptyList();
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
+            })
+            public void enterCompositeLiteral(CompositeLiteralContext ctx) {
+                Collection<? extends CodeElementModel> result;
+                LiteralTypeContext literalType = ctx.literalType();
+                if (literalType != null) {
+                    if (literalType.structType() != null) {
+                        result = resolveTarget(literalType.structType());
+                    } else if (literalType.arrayType() != null) {
+                        result = resolveTarget(literalType.arrayType());
+                    } else if (literalType.sliceType() != null) {
+                        result = resolveTarget(literalType.sliceType());
+                    } else if (literalType.mapType() != null) {
+                        result = resolveTarget(literalType.mapType());
+                    } else if (literalType.typeName() != null) {
+                        result = resolveTarget(literalType.typeName());
+                    } else if (literalType.elementType() != null) {
+                        List<CodeElementModel> arrayElementType = new ArrayList<CodeElementModel>();
+                        arrayElementType.addAll(resolveTarget(literalType.elementType()));
+                        for (int i = 0; i < arrayElementType.size(); i++) {
+                            CodeElementModel elementType = arrayElementType.get(i);
+                            if (elementType instanceof TypeModelImpl) {
+                                // eventually array types will have their length embedded
+                                arrayElementType.set(i, new TypeArrayModelImpl((TypeModelImpl)elementType));
+                            }
+                        }
+
+                        result = arrayElementType;
+                    } else {
+                        result = Collections.emptyList();
+                    }
+                } else {
+                    result = Collections.emptyList();
+                }
+
+                annotations.putProperty(ctx, ATTR_TARGET, result);
+            }
+
+            @Override
+            public void enterFunctionLiteral(FunctionLiteralContext ctx) {
             }
 
             private Collection<? extends CodeElementModel> getTargetProperty(ParseTree<Token> context) {
