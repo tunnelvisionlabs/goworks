@@ -24,7 +24,6 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
-import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BlockContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
@@ -48,6 +47,7 @@ import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
  * @author Sam Harwell
  */
 public class GoDeclarationsScanner {
+    // -J-Dorg.tvl.goworks.editor.go.navigation.GoDeclarationsScanner.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoDeclarationsScanner.class.getName());
 
     public Description scan(CompiledModel model) {
@@ -79,9 +79,7 @@ public class GoDeclarationsScanner {
             processParseResult(model.getSnapshot(), model.getResult(), ui, rootDescription);
             return rootDescription;
         } catch (RuntimeException ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                Exceptions.printStackTrace(ex);
-            }
+            LOGGER.log(Level.WARNING, "An exception occurred while scanning for declarations.", ex);
             return null;
         }
     }

@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
@@ -30,7 +32,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
@@ -41,6 +42,8 @@ import org.tvl.goworks.editor.go.parser.CompiledModel;
  * @author Sam Harwell
  */
 public class SemanticAnalyzerParserTask implements ParserTask {
+    // -J-Dorg.tvl.goworks.editor.go.semantics.SemanticAnalyzerParserTask.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(SemanticAnalyzerParserTask.class.getName());
 
     private final Object lock = new Object();
 
@@ -73,9 +76,9 @@ public class SemanticAnalyzerParserTask implements ParserTask {
                     CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;
                     referenceParseTree = compiledFileModel != null ? compiledFileModel.getResult() : null;
                 } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting the compiled model.", ex);
                 } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting the compiled model.", ex);
                 }
 
                 GoAnnotatedParseTree annotatedParseTree = null;

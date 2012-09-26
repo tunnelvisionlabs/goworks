@@ -53,7 +53,6 @@ import org.netbeans.modules.editor.indent.spi.Context;
 import org.netbeans.modules.editor.indent.spi.ExtraLock;
 import org.netbeans.modules.editor.indent.spi.IndentTask;
 import org.openide.text.NbDocument;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NotImplementedException;
 import org.tvl.goworks.editor.GoEditorKit;
@@ -149,9 +148,9 @@ public class GoIndentTask implements IndentTask {
         try {
             tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
         } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
         }
 
         int regionEnd = Math.min(snapshot.length(), endPosition.getOffset() + 1);
@@ -270,10 +269,10 @@ public class GoIndentTask implements IndentTask {
                 fileModel = futureFileModelData != null ? futureFileModelData.get().getData() : null;
                 fileModelDataFailed = fileModel != null;
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
                 fileModelDataFailed = true;
             } catch (ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
                 fileModelDataFailed = true;
             }
         }
@@ -290,7 +289,7 @@ public class GoIndentTask implements IndentTask {
         } catch (InterruptedException ex) {
             anchors = null;
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
             anchors = null;
         }
 

@@ -14,6 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -33,7 +35,6 @@ import org.netbeans.api.editor.settings.FontColorSettings;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.highlighting.HighlightAttributeValue;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.completion.GoCompletionItem;
@@ -44,6 +45,9 @@ import org.tvl.goworks.editor.go.completion.GoCompletionProvider;
  * @author Sam Harwell
  */
 public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerState> {
+    // -J-Dorg.tvl.goworks.editor.go.highlighter.GoHighlighter.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(GoHighlighter.class.getName());
+
     public static final String DOCUMENT_PROPERTY = "go-highlighter";
     private static final AttributeSet TOOLTIP =
         AttributesUtilities.createImmutable(EditorStyleConstants.Tooltip, new TooltipResolver());
@@ -189,13 +193,13 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
             try {
                 result = futureQuery.get(5, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while resolving a tooltip query.", ex);
                 return "";
             } catch (ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while resolving a tooltip query.", ex);
                 return "";
             } catch (TimeoutException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while resolving a tooltip query.", ex);
                 return "";
             }
 

@@ -12,13 +12,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import org.antlr.netbeans.editor.formatting.AbstractFormatOption;
 import org.antlr.netbeans.editor.formatting.BooleanFormatOption;
 import org.antlr.netbeans.editor.formatting.EnumFormatOption;
 import org.antlr.netbeans.editor.formatting.FormatOptions;
 import org.antlr.netbeans.editor.formatting.IntFormatOption;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 /**
@@ -31,6 +32,8 @@ import org.openide.util.NbBundle;
     "AN_Preview=",
 })
 public class GoFormatOptions extends FormatOptions {
+    // -J-Dorg.tvl.goworks.editor.go.formatting.GoFormatOptions.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(GoFormatOptions.class.getName());
 
     public static final BooleanFormatOption alignMultilineArrayInitializer = new BooleanFormatOption("alignMultilineArrayInitializer", false);
     public static final BooleanFormatOption alignMultilineAssignment = new BooleanFormatOption("alignMultilineAssignment", false);
@@ -138,9 +141,9 @@ public class GoFormatOptions extends FormatOptions {
                         knownOptions.put(value.getName(), value);
                     }
                 } catch (IllegalArgumentException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while examining formatting options.", ex);
                 } catch (IllegalAccessException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while examining formatting options.", ex);
                 }
             }
         }

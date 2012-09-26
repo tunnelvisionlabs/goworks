@@ -19,17 +19,21 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
-import org.openide.util.Exceptions;
 
 /**
  *
  * @author Sam Harwell
  */
 public class CodeModelProjectCache {
+    // -J-Dorg.tvl.goworks.editor.go.codemodel.impl.CodeModelProjectCache.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(CodeModelProjectCache.class.getName());
+
     @NullAllowed
     private final Project project;
 
@@ -134,7 +138,7 @@ public class CodeModelProjectCache {
             locked = true;
             return runnable.call();
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while executing a request.", ex);
             throw new RuntimeException(ex);
         } finally {
             if (locked) {

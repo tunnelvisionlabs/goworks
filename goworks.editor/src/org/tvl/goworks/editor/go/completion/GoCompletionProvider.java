@@ -11,6 +11,7 @@ package org.tvl.goworks.editor.go.completion;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.Document;
@@ -150,10 +151,10 @@ public class GoCompletionProvider extends AbstractCompletionProvider {
                         return null;
                     }
                 } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
                     return null;
                 } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
                     return null;
                 }
 

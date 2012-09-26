@@ -35,7 +35,6 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.FontColorSettings;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.GoEditorKit;
@@ -43,8 +42,6 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
-import org.tvl.goworks.editor.go.parser.CompiledFileModel;
-import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.GoParser;
 import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
 import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
@@ -194,9 +191,9 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             fileModel = fileModelData != null ? fileModelData.getData() : null;
             annotatedParseTree = parserData != null ? parserData.getData() : null;
         } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
         }
 
         if (fileModel == null || annotatedParseTree == null) {

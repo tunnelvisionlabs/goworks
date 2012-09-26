@@ -71,7 +71,6 @@ import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.ChannelKind;
@@ -326,7 +325,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             } catch (InterruptedException ex) {
                 anchors = null;
             } catch (ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while getting anchor points.", ex);
                 anchors = null;
             }
 
@@ -361,9 +360,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     try {
                         tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
                     } catch (InterruptedException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
                     } catch (ExecutionException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
                     }
 
                     int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
@@ -1115,10 +1114,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     fileModel = futureFileModelData != null ? futureFileModelData.get().getData() : null;
                     fileModelDataFailed = fileModel != null;
                 } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
                     fileModelDataFailed = true;
                 } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
                     fileModelDataFailed = true;
                 }
             }

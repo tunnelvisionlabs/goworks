@@ -38,7 +38,6 @@ import org.netbeans.modules.parsing.spi.indexing.Indexable;
 import org.netbeans.modules.parsing.spi.indexing.PathRecognizerRegistration;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.URLMapper;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
@@ -81,7 +80,7 @@ public class GoCustomIndexer extends CustomIndexer {
                     break;
                 }
             } catch (RuntimeException ex) {
-                LOGGER.log(Level.FINE, "An error occurred while indexing a document.", ex);
+                LOGGER.log(Level.WARNING, "An error occurred while indexing a document.", ex);
             }
         }
 
@@ -97,9 +96,9 @@ public class GoCustomIndexer extends CustomIndexer {
             try {
                 parserData = future.get(0, TimeUnit.MILLISECONDS);
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
             } catch (ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
             } catch (TimeoutException ex) {
                 futures.add(pair);
                 continue;
@@ -113,9 +112,9 @@ public class GoCustomIndexer extends CustomIndexer {
                 try {
                     compiledModelData = futureCompiledModelData != null ? futureCompiledModelData.get() : null;
                 } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
                 } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
                 }
 
                 CompiledModel model = compiledModelData != null ? compiledModelData.getData() : null;

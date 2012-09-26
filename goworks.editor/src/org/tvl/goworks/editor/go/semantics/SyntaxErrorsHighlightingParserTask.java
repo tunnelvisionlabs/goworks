@@ -15,6 +15,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import org.antlr.netbeans.editor.parsing.SyntaxError;
@@ -37,7 +39,6 @@ import org.netbeans.spi.editor.hints.ErrorDescription;
 import org.netbeans.spi.editor.hints.ErrorDescriptionFactory;
 import org.netbeans.spi.editor.hints.HintsController;
 import org.openide.filesystems.FileObject;
-import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
@@ -47,6 +48,8 @@ import org.tvl.goworks.editor.go.parser.CompiledModel;
  * @author Sam Harwell
  */
 public class SyntaxErrorsHighlightingParserTask implements ParserTask {
+    // -J-Dorg.tvl.goworks.editor.go.semantics.SyntaxErrorsHighlightingParserTask.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(SyntaxErrorsHighlightingParserTask.class.getName());
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -100,7 +103,7 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
                         errors.add(errorDescription);
                     }
                 } catch (BadLocationException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while updating error hints.", ex);
                 }
             }
 
@@ -113,7 +116,7 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
                 }
             }
         } catch (RuntimeException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while updating error hints.", ex);
         }
     }
 

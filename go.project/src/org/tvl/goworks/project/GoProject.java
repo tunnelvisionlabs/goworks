@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.netbeans.api.java.classpath.ClassPath;
@@ -37,6 +39,9 @@ import org.openide.util.lookup.Lookups;
  * @author Sam Harwell
  */
 public class GoProject implements Project {
+    // -J-Dorg.tvl.goworks.project.GoProject.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(GoProject.class.getName());
+
     public static final String SOURCE = "go/classpath/source";
 
     private final FileObject projectDir;
@@ -60,6 +65,7 @@ public class GoProject implements Project {
             try {
                 result = projectDir.createFolder(GoProjectFactory.PROJECT_DIR);
             } catch (IOException ioe) {
+                LOGGER.log(Level.WARNING, "An exception occurred while getting the project data folder.", ioe);
                 Exceptions.printStackTrace(ioe);
             }
         }

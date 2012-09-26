@@ -14,6 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.JTextComponent;
 import org.antlr.works.editor.antlr4.completion.CompletionQueryResult;
 import org.netbeans.api.annotations.common.NonNull;
@@ -21,7 +23,6 @@ import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.GoEditorKit;
@@ -34,6 +35,8 @@ import org.tvl.goworks.editor.go.completion.GoCompletionProvider;
  * @author Sam Harwell
  */
 public final class GoToSupport {
+    // -J-Dorg.tvl.goworks.editor.go.navigation.GoToSupport.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(GoToSupport.class.getName());
 
     private GoToSupport() {
     }
@@ -65,13 +68,13 @@ public final class GoToSupport {
         try {
             result = futureQuery.get(5, TimeUnit.SECONDS);
         } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while attempting to navigate to an element.", ex);
             return null;
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while attempting to navigate to an element.", ex);
             return null;
         } catch (TimeoutException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while attempting to navigate to an element.", ex);
             return null;
         }
 

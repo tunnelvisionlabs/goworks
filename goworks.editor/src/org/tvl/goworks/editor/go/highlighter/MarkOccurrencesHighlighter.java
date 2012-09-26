@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -60,7 +61,6 @@ import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
 import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.ZOrder;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.WeakListeners;
@@ -131,9 +131,9 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             ParserData<GoAnnotatedParseTree> annotatedParseTreeData = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get() : null;
             annotatedParseTree = annotatedParseTreeData != null ? annotatedParseTreeData.getData() : null;
         } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the annotated parse tree and file model.", ex);
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the annotated parse tree and file model.", ex);
         }
 
         if (fileModel == null || annotatedParseTree == null) {
@@ -183,7 +183,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
                 try {
                     ParseTreeWalker.DEFAULT.walk(listener, listener.annotatedParseTree.getParseTree());
                 } catch (RuntimeException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while walking the parse tree.", ex);
                     throw ex;
                 }
 
@@ -227,10 +227,10 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
                 return null;
             }
         } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
             return null;
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
             return null;
         }
 

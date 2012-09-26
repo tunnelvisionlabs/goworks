@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Position;
@@ -27,13 +29,14 @@ import org.netbeans.modules.editor.errorstripe.privatespi.Mark;
 import org.netbeans.modules.editor.errorstripe.privatespi.MarkProvider;
 import org.netbeans.modules.editor.errorstripe.privatespi.Status;
 import org.openide.text.NbDocument;
-import org.openide.util.Exceptions;
 
 /**
  *
  * @author Sam Harwell
  */
 public class MarkOccurrencesMarkProvider extends MarkProvider {
+    // -J-Dorg.tvl.goworks.editor.go.highlighter.MarkOccurrencesMarkProvider.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(MarkOccurrencesMarkProvider.class.getName());
 
     private final Object lock = new Object();
 
@@ -86,7 +89,7 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
                         result.add(new MarkImpl(doc, doc.createPosition(translatedPosition.getOffset()), color, tooltip));
                     } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOGGER.log(Level.WARNING, "An exception occurred while marking occurrences.", ex);
                     }
                 }
             }

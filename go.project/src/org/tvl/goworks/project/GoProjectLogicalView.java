@@ -9,6 +9,8 @@
 package org.tvl.goworks.project;
 
 import java.awt.Image;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Action;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
@@ -19,7 +21,6 @@ import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
-import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
@@ -30,6 +31,8 @@ import org.openide.util.lookup.ProxyLookup;
  * @author Sam Harwell
  */
 public class GoProjectLogicalView implements LogicalViewProvider {
+    // -J-Dorg.tvl.goworks.project.GoProjectLogicalView.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(GoProjectLogicalView.class.getName());
 
     private final GoProject project;
 
@@ -54,7 +57,7 @@ public class GoProjectLogicalView implements LogicalViewProvider {
             return new TextNode(realRootFolderNode, project);
 
         } catch (DataObjectNotFoundException donfe) {
-            Exceptions.printStackTrace(donfe);
+            LOGGER.log(Level.WARNING, "An exception occurred while opening a project.", donfe);
             //Fallback-the directory couldn't be created -
             //read-only filesystem or something evil happened
             return new AbstractNode(Children.LEAF);

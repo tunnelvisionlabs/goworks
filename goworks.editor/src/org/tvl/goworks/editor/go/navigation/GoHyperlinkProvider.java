@@ -12,6 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JEditorPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
@@ -27,7 +29,6 @@ import org.netbeans.modules.editor.NbEditorUtilities;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.cookies.EditorCookie;
 import org.openide.loaders.DataObject;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.completion.GoCompletionProvider;
@@ -40,6 +41,8 @@ import org.tvl.goworks.editor.go.parser.GoParser;
  */
 @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=HyperlinkProviderExt.class)
 public class GoHyperlinkProvider implements HyperlinkProviderExt {
+    // -J-Dorg.tvl.goworks.editor.go.navigation.GoHyperlinkProvider.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(GoHyperlinkProvider.class.getName());
 
     @Override
     public Set<HyperlinkType> getSupportedHyperlinkTypes() {
@@ -143,10 +146,10 @@ public class GoHyperlinkProvider implements HyperlinkProviderExt {
                     }
                 });
             } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while locating a document.", ex);
                 return null;
             } catch (InvocationTargetException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while locating a document.", ex);
                 return null;
             }
 
