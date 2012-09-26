@@ -55,4 +55,9 @@ public class ConstModelImpl extends AbstractCodeElementModel implements ConstMod
         return Collections.emptyList();
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s : const", getName());
+    }
+
 }
