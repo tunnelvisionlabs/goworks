@@ -38,18 +38,17 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		Defer=7, Star=28, RightParen=64, AmpCaret=36, Else=8, Comma=69, Var=25, 
 		Slash=29, RightBrace=68;
 	public static final String[] tokenNames = {
-        "<INVALID>", "'break'", "'case'", "'chan'", "'const'", "'continue'", 
-        "'default'", "'defer'", "'else'", "'fallthrough'", "'for'", "'func'", 
-        "'go'", "'goto'", "'if'", "'import'", "'interface'", "'map'", "'package'", 
-        "'range'", "'return'", "'select'", "'struct'", "'switch'", "'type'", 
-        "'var'", "'+'", "'-'", "'*'", "'/'", "'%'", "'&'", "'|'", "'^'", 
-        "'<<'", "'>>'", "'&^'", "'+='", "'-='", "'*='", "'/='", "'%='", 
-        "'&='", "'|='", "'^='", "'<<='", "'>>='", "'&^='", "'&&'", "'||'", 
-        "'<-'", "'++'", "'--'", "'=='", "'<'", "'>'", "'='", "'!'", "'!='", 
-        "'<='", "'>='", "':='", "'...'", "'('", "')'", "'['", "']'", "'{'", 
-        "'}'", "','", "'.'", "';'", "':'", "IDENTIFIER", "WS", "NEWLINE", 
-        "COMMENT", "ML_COMMENT", "INT_LITERAL", "IMAGINARY_LITERAL", "FLOAT_LITERAL", 
-        "CharLiteral", "StringLiteral", "ANYCHAR"
+		"<INVALID>", "'break'", "'case'", "'chan'", "'const'", "'continue'", "'default'", 
+		"'defer'", "'else'", "'fallthrough'", "'for'", "'func'", "'go'", "'goto'", 
+		"'if'", "'import'", "'interface'", "'map'", "'package'", "'range'", "'return'", 
+		"'select'", "'struct'", "'switch'", "'type'", "'var'", "'+'", "'-'", "'*'", 
+		"'/'", "'%'", "'&'", "'|'", "'^'", "'<<'", "'>>'", "'&^'", "'+='", "'-='", 
+		"'*='", "'/='", "'%='", "'&='", "'|='", "'^='", "'<<='", "'>>='", "'&^='", 
+		"'&&'", "'||'", "'<-'", "'++'", "'--'", "'=='", "'<'", "'>'", "'='", "'!'", 
+		"'!='", "'<='", "'>='", "':='", "'...'", "'('", "')'", "'['", "']'", "'{'", 
+		"'}'", "','", "'.'", "';'", "':'", "IDENTIFIER", "WS", "NEWLINE", "COMMENT", 
+		"ML_COMMENT", "INT_LITERAL", "IMAGINARY_LITERAL", "FLOAT_LITERAL", "CharLiteral", 
+		"StringLiteral", "ANYCHAR"
 	};
 	public static final int
 		RULE_type = 0, RULE_typeName = 1, RULE_typeLiteral = 2, RULE_arrayType = 3, 
@@ -171,13 +170,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public static class TypeContext extends ParserRuleContext<Token> {
 		public TypeNameContext typeName() {
-		    return getRuleContext(TypeNameContext.class,0);
+			return getRuleContext(TypeNameContext.class,0);
 		}
 		public TypeLiteralContext typeLiteral() {
-		    return getRuleContext(TypeLiteralContext.class,0);
+			return getRuleContext(TypeLiteralContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public TypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -243,7 +242,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TypeNameContext extends ParserRuleContext<Token> {
 		public QualifiedIdentifierContext qualifiedIdentifier() {
-		    return getRuleContext(QualifiedIdentifierContext.class,0);
+			return getRuleContext(QualifiedIdentifierContext.class,0);
 		}
 		public TypeNameContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -287,28 +286,28 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TypeLiteralContext extends ParserRuleContext<Token> {
 		public PointerTypeContext pointerType() {
-		    return getRuleContext(PointerTypeContext.class,0);
+			return getRuleContext(PointerTypeContext.class,0);
 		}
 		public ChannelTypeContext channelType() {
-		    return getRuleContext(ChannelTypeContext.class,0);
+			return getRuleContext(ChannelTypeContext.class,0);
 		}
 		public InterfaceTypeContext interfaceType() {
-		    return getRuleContext(InterfaceTypeContext.class,0);
+			return getRuleContext(InterfaceTypeContext.class,0);
 		}
 		public FunctionTypeContext functionType() {
-		    return getRuleContext(FunctionTypeContext.class,0);
+			return getRuleContext(FunctionTypeContext.class,0);
 		}
 		public ArrayTypeContext arrayType() {
-		    return getRuleContext(ArrayTypeContext.class,0);
+			return getRuleContext(ArrayTypeContext.class,0);
 		}
 		public StructTypeContext structType() {
-		    return getRuleContext(StructTypeContext.class,0);
+			return getRuleContext(StructTypeContext.class,0);
 		}
 		public SliceTypeContext sliceType() {
-		    return getRuleContext(SliceTypeContext.class,0);
+			return getRuleContext(SliceTypeContext.class,0);
 		}
 		public MapTypeContext mapType() {
-		    return getRuleContext(MapTypeContext.class,0);
+			return getRuleContext(MapTypeContext.class,0);
 		}
 		public TypeLiteralContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -407,10 +406,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ArrayTypeContext extends ParserRuleContext<Token> {
 		public ArrayLengthContext arrayLength() {
-		    return getRuleContext(ArrayLengthContext.class,0);
+			return getRuleContext(ArrayLengthContext.class,0);
 		}
 		public ElementTypeContext elementType() {
-		    return getRuleContext(ElementTypeContext.class,0);
+			return getRuleContext(ElementTypeContext.class,0);
 		}
 		public ArrayTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -457,7 +456,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ArrayLengthContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ArrayLengthContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -501,7 +500,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ElementTypeContext extends ParserRuleContext<Token> {
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public ElementTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -545,7 +544,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class SliceTypeContext extends ParserRuleContext<Token> {
 		public ElementTypeContext elementType() {
-		    return getRuleContext(ElementTypeContext.class,0);
+			return getRuleContext(ElementTypeContext.class,0);
 		}
 		public SliceTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -591,10 +590,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class StructTypeContext extends ParserRuleContext<Token> {
 		public FieldDeclContext fieldDecl(int i) {
-		    return getRuleContext(FieldDeclContext.class,i);
+			return getRuleContext(FieldDeclContext.class,i);
 		}
 		public List<? extends FieldDeclContext> fieldDecl() {
-		    return getRuleContexts(FieldDeclContext.class);
+			return getRuleContexts(FieldDeclContext.class);
 		}
 		public StructTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -666,16 +665,16 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class FieldDeclContext extends ParserRuleContext<Token> {
 		public TagContext tag() {
-		    return getRuleContext(TagContext.class,0);
+			return getRuleContext(TagContext.class,0);
 		}
 		public AnonymousFieldContext anonymousField() {
-		    return getRuleContext(AnonymousFieldContext.class,0);
+			return getRuleContext(AnonymousFieldContext.class,0);
 		}
 		public IdentifierListContext identifierList() {
-		    return getRuleContext(IdentifierListContext.class,0);
+			return getRuleContext(IdentifierListContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public FieldDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -744,7 +743,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class AnonymousFieldContext extends ParserRuleContext<Token> {
 		public Token ptr;
 		public TypeNameContext typeName() {
-		    return getRuleContext(TypeNameContext.class,0);
+			return getRuleContext(TypeNameContext.class,0);
 		}
 		public AnonymousFieldContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -840,7 +839,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class PointerTypeContext extends ParserRuleContext<Token> {
 		public Token ptr;
 		public BaseTypeContext baseType() {
-		    return getRuleContext(BaseTypeContext.class,0);
+			return getRuleContext(BaseTypeContext.class,0);
 		}
 		public PointerTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -885,7 +884,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class BaseTypeContext extends ParserRuleContext<Token> {
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public BaseTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -929,7 +928,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class FunctionTypeContext extends ParserRuleContext<Token> {
 		public SignatureContext signature() {
-		    return getRuleContext(SignatureContext.class,0);
+			return getRuleContext(SignatureContext.class,0);
 		}
 		public FunctionTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -974,10 +973,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class SignatureContext extends ParserRuleContext<Token> {
 		public ResultContext result() {
-		    return getRuleContext(ResultContext.class,0);
+			return getRuleContext(ResultContext.class,0);
 		}
 		public ParametersContext parameters() {
-		    return getRuleContext(ParametersContext.class,0);
+			return getRuleContext(ParametersContext.class,0);
 		}
 		public SignatureContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1030,10 +1029,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ResultContext extends ParserRuleContext<Token> {
 		public ParametersContext parameters() {
-		    return getRuleContext(ParametersContext.class,0);
+			return getRuleContext(ParametersContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public ResultContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1090,7 +1089,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ParametersContext extends ParserRuleContext<Token> {
 		public ParameterListContext parameterList() {
-		    return getRuleContext(ParameterListContext.class,0);
+			return getRuleContext(ParameterListContext.class,0);
 		}
 		public ParametersContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1153,10 +1152,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ParameterListContext extends ParserRuleContext<Token> {
 		public List<? extends ParameterDeclContext> parameterDecl() {
-		    return getRuleContexts(ParameterDeclContext.class);
+			return getRuleContexts(ParameterDeclContext.class);
 		}
 		public ParameterDeclContext parameterDecl(int i) {
-		    return getRuleContext(ParameterDeclContext.class,i);
+			return getRuleContext(ParameterDeclContext.class,i);
 		}
 		public ParameterListContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1218,10 +1217,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class ParameterDeclContext extends ParserRuleContext<Token> {
 		public Token ellip;
 		public IdentifierListContext identifierList() {
-		    return getRuleContext(IdentifierListContext.class,0);
+			return getRuleContext(IdentifierListContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public ParameterDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1283,10 +1282,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class InterfaceTypeContext extends ParserRuleContext<Token> {
 		public MethodSpecContext methodSpec(int i) {
-		    return getRuleContext(MethodSpecContext.class,i);
+			return getRuleContext(MethodSpecContext.class,i);
 		}
 		public List<? extends MethodSpecContext> methodSpec() {
-		    return getRuleContexts(MethodSpecContext.class);
+			return getRuleContexts(MethodSpecContext.class);
 		}
 		public InterfaceTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1367,13 +1366,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class MethodSpecContext extends ParserRuleContext<Token> {
 		public MethodNameContext methodName() {
-		    return getRuleContext(MethodNameContext.class,0);
+			return getRuleContext(MethodNameContext.class,0);
 		}
 		public SignatureContext signature() {
-		    return getRuleContext(SignatureContext.class,0);
+			return getRuleContext(SignatureContext.class,0);
 		}
 		public InterfaceTypeNameContext interfaceTypeName() {
-		    return getRuleContext(InterfaceTypeNameContext.class,0);
+			return getRuleContext(InterfaceTypeNameContext.class,0);
 		}
 		public MethodSpecContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1473,7 +1472,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class InterfaceTypeNameContext extends ParserRuleContext<Token> {
 		public TypeNameContext typeName() {
-		    return getRuleContext(TypeNameContext.class,0);
+			return getRuleContext(TypeNameContext.class,0);
 		}
 		public InterfaceTypeNameContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1517,10 +1516,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class MapTypeContext extends ParserRuleContext<Token> {
 		public KeyTypeContext keyType() {
-		    return getRuleContext(KeyTypeContext.class,0);
+			return getRuleContext(KeyTypeContext.class,0);
 		}
 		public ElementTypeContext elementType() {
-		    return getRuleContext(ElementTypeContext.class,0);
+			return getRuleContext(ElementTypeContext.class,0);
 		}
 		public MapTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1568,7 +1567,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class KeyTypeContext extends ParserRuleContext<Token> {
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public KeyTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1614,7 +1613,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public Token send;
 		public Token recv;
 		public ElementTypeContext elementType() {
-		    return getRuleContext(ElementTypeContext.class,0);
+			return getRuleContext(ElementTypeContext.class,0);
 		}
 		public ChannelTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1683,10 +1682,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class BlockContext extends ParserRuleContext<Token> {
 		public List<? extends StatementContext> statement() {
-		    return getRuleContexts(StatementContext.class);
+			return getRuleContexts(StatementContext.class);
 		}
 		public StatementContext statement(int i) {
-		    return getRuleContext(StatementContext.class,i);
+			return getRuleContext(StatementContext.class,i);
 		}
 		public BlockContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1766,13 +1765,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class DeclarationContext extends ParserRuleContext<Token> {
 		public ConstDeclContext constDecl() {
-		    return getRuleContext(ConstDeclContext.class,0);
+			return getRuleContext(ConstDeclContext.class,0);
 		}
 		public TypeDeclContext typeDecl() {
-		    return getRuleContext(TypeDeclContext.class,0);
+			return getRuleContext(TypeDeclContext.class,0);
 		}
 		public VarDeclContext varDecl() {
-		    return getRuleContext(VarDeclContext.class,0);
+			return getRuleContext(VarDeclContext.class,0);
 		}
 		public DeclarationContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1836,13 +1835,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TopLevelDeclContext extends ParserRuleContext<Token> {
 		public DeclarationContext declaration() {
-		    return getRuleContext(DeclarationContext.class,0);
+			return getRuleContext(DeclarationContext.class,0);
 		}
 		public MethodDeclContext methodDecl() {
-		    return getRuleContext(MethodDeclContext.class,0);
+			return getRuleContext(MethodDeclContext.class,0);
 		}
 		public FunctionDeclContext functionDecl() {
-		    return getRuleContext(FunctionDeclContext.class,0);
+			return getRuleContext(FunctionDeclContext.class,0);
 		}
 		public TopLevelDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1906,10 +1905,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ConstDeclContext extends ParserRuleContext<Token> {
 		public List<? extends ConstSpecContext> constSpec() {
-		    return getRuleContexts(ConstSpecContext.class);
+			return getRuleContexts(ConstSpecContext.class);
 		}
 		public ConstSpecContext constSpec(int i) {
-		    return getRuleContext(ConstSpecContext.class,i);
+			return getRuleContext(ConstSpecContext.class,i);
 		}
 		public ConstDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2004,13 +2003,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ConstSpecContext extends ParserRuleContext<Token> {
 		public ExpressionListContext expressionList() {
-		    return getRuleContext(ExpressionListContext.class,0);
+			return getRuleContext(ExpressionListContext.class,0);
 		}
 		public IdentifierListContext identifierList() {
-		    return getRuleContext(IdentifierListContext.class,0);
+			return getRuleContext(IdentifierListContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public ConstSpecContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2073,7 +2072,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class IdentifierListContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> IDENTIFIER(int i) {
-		    return getToken(AbstractGoParser.IDENTIFIER, i);
+			return getToken(AbstractGoParser.IDENTIFIER, i);
 		}
 		public List<? extends TerminalNode<Token>> IDENTIFIER() { return getTokens(AbstractGoParser.IDENTIFIER); }
 		public IdentifierListContext(ParserRuleContext<Token> parent, int invokingState) {
@@ -2135,10 +2134,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ExpressionListContext extends ParserRuleContext<Token> {
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public ExpressionListContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2199,10 +2198,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TypeDeclContext extends ParserRuleContext<Token> {
 		public List<? extends TypeSpecContext> typeSpec() {
-		    return getRuleContexts(TypeSpecContext.class);
+			return getRuleContexts(TypeSpecContext.class);
 		}
 		public TypeSpecContext typeSpec(int i) {
-		    return getRuleContext(TypeSpecContext.class,i);
+			return getRuleContext(TypeSpecContext.class,i);
 		}
 		public TypeDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2298,7 +2297,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class TypeSpecContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public TypeSpecContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2343,10 +2342,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class VarDeclContext extends ParserRuleContext<Token> {
 		public VarSpecContext varSpec(int i) {
-		    return getRuleContext(VarSpecContext.class,i);
+			return getRuleContext(VarSpecContext.class,i);
 		}
 		public List<? extends VarSpecContext> varSpec() {
-		    return getRuleContexts(VarSpecContext.class);
+			return getRuleContexts(VarSpecContext.class);
 		}
 		public VarDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2441,16 +2440,16 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class VarSpecContext extends ParserRuleContext<Token> {
 		public List<? extends ExpressionListContext> expressionList() {
-		    return getRuleContexts(ExpressionListContext.class);
+			return getRuleContexts(ExpressionListContext.class);
 		}
 		public ExpressionListContext expressionList(int i) {
-		    return getRuleContext(ExpressionListContext.class,i);
+			return getRuleContext(ExpressionListContext.class,i);
 		}
 		public IdentifierListContext identifierList() {
-		    return getRuleContext(IdentifierListContext.class,0);
+			return getRuleContext(IdentifierListContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public VarSpecContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2520,10 +2519,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ShortVarDeclContext extends ParserRuleContext<Token> {
 		public ExpressionListContext expressionList() {
-		    return getRuleContext(ExpressionListContext.class,0);
+			return getRuleContext(ExpressionListContext.class,0);
 		}
 		public IdentifierListContext identifierList() {
-		    return getRuleContext(IdentifierListContext.class,0);
+			return getRuleContext(IdentifierListContext.class,0);
 		}
 		public ShortVarDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2569,11 +2568,11 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class FunctionDeclContext extends ParserRuleContext<Token> {
 		public BodyContext body() {
-		    return getRuleContext(BodyContext.class,0);
+			return getRuleContext(BodyContext.class,0);
 		}
 		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public SignatureContext signature() {
-		    return getRuleContext(SignatureContext.class,0);
+			return getRuleContext(SignatureContext.class,0);
 		}
 		public FunctionDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2628,7 +2627,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class BodyContext extends ParserRuleContext<Token> {
 		public BlockContext block() {
-		    return getRuleContext(BlockContext.class,0);
+			return getRuleContext(BlockContext.class,0);
 		}
 		public BodyContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2672,16 +2671,16 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class MethodDeclContext extends ParserRuleContext<Token> {
 		public BodyContext body() {
-		    return getRuleContext(BodyContext.class,0);
+			return getRuleContext(BodyContext.class,0);
 		}
 		public ReceiverContext receiver() {
-		    return getRuleContext(ReceiverContext.class,0);
+			return getRuleContext(ReceiverContext.class,0);
 		}
 		public MethodNameContext methodName() {
-		    return getRuleContext(MethodNameContext.class,0);
+			return getRuleContext(MethodNameContext.class,0);
 		}
 		public SignatureContext signature() {
-		    return getRuleContext(SignatureContext.class,0);
+			return getRuleContext(SignatureContext.class,0);
 		}
 		public MethodDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2738,7 +2737,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class ReceiverContext extends ParserRuleContext<Token> {
 		public Token ptr;
 		public BaseTypeNameContext baseTypeName() {
-		    return getRuleContext(BaseTypeNameContext.class,0);
+			return getRuleContext(BaseTypeNameContext.class,0);
 		}
 		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public ReceiverContext(ParserRuleContext<Token> parent, int invokingState) {
@@ -2845,16 +2844,16 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class OperandContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public QualifiedIdentifierContext qualifiedIdentifier() {
-		    return getRuleContext(QualifiedIdentifierContext.class,0);
+			return getRuleContext(QualifiedIdentifierContext.class,0);
 		}
 		public MethodExprContext methodExpr() {
-		    return getRuleContext(MethodExprContext.class,0);
+			return getRuleContext(MethodExprContext.class,0);
 		}
 		public LiteralContext literal() {
-		    return getRuleContext(LiteralContext.class,0);
+			return getRuleContext(LiteralContext.class,0);
 		}
 		public OperandContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -2927,13 +2926,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class LiteralContext extends ParserRuleContext<Token> {
 		public BasicLiteralContext basicLiteral() {
-		    return getRuleContext(BasicLiteralContext.class,0);
+			return getRuleContext(BasicLiteralContext.class,0);
 		}
 		public CompositeLiteralContext compositeLiteral() {
-		    return getRuleContext(CompositeLiteralContext.class,0);
+			return getRuleContext(CompositeLiteralContext.class,0);
 		}
 		public FunctionLiteralContext functionLiteral() {
-		    return getRuleContext(FunctionLiteralContext.class,0);
+			return getRuleContext(FunctionLiteralContext.class,0);
 		}
 		public LiteralContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3051,7 +3050,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class QualifiedIdentifierContext extends ParserRuleContext<Token> {
 		public Token dot;
 		public PackageNameContext packageName() {
-		    return getRuleContext(PackageNameContext.class,0);
+			return getRuleContext(PackageNameContext.class,0);
 		}
 		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public QualifiedIdentifierContext(ParserRuleContext<Token> parent, int invokingState) {
@@ -3109,10 +3108,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class MethodExprContext extends ParserRuleContext<Token> {
 		public Token dot;
 		public ReceiverTypeContext receiverType() {
-		    return getRuleContext(ReceiverTypeContext.class,0);
+			return getRuleContext(ReceiverTypeContext.class,0);
 		}
 		public MethodNameContext methodName() {
-		    return getRuleContext(MethodNameContext.class,0);
+			return getRuleContext(MethodNameContext.class,0);
 		}
 		public MethodExprContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3159,7 +3158,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class ReceiverTypeContext extends ParserRuleContext<Token> {
 		public Token ptr;
 		public TypeNameContext typeName() {
-		    return getRuleContext(TypeNameContext.class,0);
+			return getRuleContext(TypeNameContext.class,0);
 		}
 		public ReceiverTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3219,10 +3218,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class CompositeLiteralContext extends ParserRuleContext<Token> {
 		public LiteralTypeContext literalType() {
-		    return getRuleContext(LiteralTypeContext.class,0);
+			return getRuleContext(LiteralTypeContext.class,0);
 		}
 		public LiteralValueContext literalValue() {
-		    return getRuleContext(LiteralValueContext.class,0);
+			return getRuleContext(LiteralValueContext.class,0);
 		}
 		public CompositeLiteralContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3267,22 +3266,22 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class LiteralTypeContext extends ParserRuleContext<Token> {
 		public TypeNameContext typeName() {
-		    return getRuleContext(TypeNameContext.class,0);
+			return getRuleContext(TypeNameContext.class,0);
 		}
 		public ArrayTypeContext arrayType() {
-		    return getRuleContext(ArrayTypeContext.class,0);
+			return getRuleContext(ArrayTypeContext.class,0);
 		}
 		public StructTypeContext structType() {
-		    return getRuleContext(StructTypeContext.class,0);
+			return getRuleContext(StructTypeContext.class,0);
 		}
 		public SliceTypeContext sliceType() {
-		    return getRuleContext(SliceTypeContext.class,0);
+			return getRuleContext(SliceTypeContext.class,0);
 		}
 		public ElementTypeContext elementType() {
-		    return getRuleContext(ElementTypeContext.class,0);
+			return getRuleContext(ElementTypeContext.class,0);
 		}
 		public MapTypeContext mapType() {
-		    return getRuleContext(MapTypeContext.class,0);
+			return getRuleContext(MapTypeContext.class,0);
 		}
 		public LiteralTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3370,7 +3369,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class LiteralValueContext extends ParserRuleContext<Token> {
 		public ElementListContext elementList() {
-		    return getRuleContext(ElementListContext.class,0);
+			return getRuleContext(ElementListContext.class,0);
 		}
 		public LiteralValueContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3433,10 +3432,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ElementListContext extends ParserRuleContext<Token> {
 		public List<? extends ElementContext> element() {
-		    return getRuleContexts(ElementContext.class);
+			return getRuleContexts(ElementContext.class);
 		}
 		public ElementContext element(int i) {
-		    return getRuleContext(ElementContext.class,i);
+			return getRuleContext(ElementContext.class,i);
 		}
 		public ElementListContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3497,10 +3496,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ElementContext extends ParserRuleContext<Token> {
 		public ValueContext value() {
-		    return getRuleContext(ValueContext.class,0);
+			return getRuleContext(ValueContext.class,0);
 		}
 		public KeyContext key() {
-		    return getRuleContext(KeyContext.class,0);
+			return getRuleContext(KeyContext.class,0);
 		}
 		public ElementContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3554,10 +3553,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class KeyContext extends ParserRuleContext<Token> {
 		public ElementIndexContext elementIndex() {
-		    return getRuleContext(ElementIndexContext.class,0);
+			return getRuleContext(ElementIndexContext.class,0);
 		}
 		public FieldNameContext fieldName() {
-		    return getRuleContext(FieldNameContext.class,0);
+			return getRuleContext(FieldNameContext.class,0);
 		}
 		public KeyContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3656,7 +3655,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ElementIndexContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ElementIndexContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3700,10 +3699,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ValueContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public LiteralValueContext literalValue() {
-		    return getRuleContext(LiteralValueContext.class,0);
+			return getRuleContext(LiteralValueContext.class,0);
 		}
 		public ValueContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3760,10 +3759,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class FunctionLiteralContext extends ParserRuleContext<Token> {
 		public BodyContext body() {
-		    return getRuleContext(BodyContext.class,0);
+			return getRuleContext(BodyContext.class,0);
 		}
 		public FunctionTypeContext functionType() {
-		    return getRuleContext(FunctionTypeContext.class,0);
+			return getRuleContext(FunctionTypeContext.class,0);
 		}
 		public FunctionLiteralContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -3824,10 +3823,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class MultExprContext extends ExpressionContext {
 		public Token op;
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public MultExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3846,10 +3845,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public static class AndExprContext extends ExpressionContext {
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public AndExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3868,7 +3867,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public static class ConversionOrCallExprContext extends ExpressionContext {
 		public ConversionContext conversion() {
-		    return getRuleContext(ConversionContext.class,0);
+			return getRuleContext(ConversionContext.class,0);
 		}
 		public ConversionOrCallExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3889,10 +3888,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public Token lp;
 		public Token rp;
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ArgumentListContext argumentList() {
-		    return getRuleContext(ArgumentListContext.class,0);
+			return getRuleContext(ArgumentListContext.class,0);
 		}
 		public CallExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3914,10 +3913,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public Token lp;
 		public Token rp;
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public TypeAssertionExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3937,10 +3936,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class CompareExprContext extends ExpressionContext {
 		public Token op;
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public CompareExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3959,10 +3958,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public static class OrExprContext extends ExpressionContext {
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public OrExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -3982,7 +3981,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class SelectorExprContext extends ExpressionContext {
 		public Token dot;
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public SelectorExprContext(ExpressionContext ctx) { copyFrom(ctx); }
@@ -4004,10 +4003,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public ExpressionContext from;
 		public ExpressionContext to;
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public SliceExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -4027,7 +4026,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class UnaryExprContext extends ExpressionContext {
 		public Token op;
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public UnaryExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -4046,7 +4045,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public static class OperandExprContext extends ExpressionContext {
 		public OperandContext operand() {
-		    return getRuleContext(OperandContext.class,0);
+			return getRuleContext(OperandContext.class,0);
 		}
 		public OperandExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -4066,10 +4065,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class AddExprContext extends ExpressionContext {
 		public Token op;
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public AddExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -4088,7 +4087,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public static class BuiltinCallExprContext extends ExpressionContext {
 		public BuiltinCallContext builtinCall() {
-		    return getRuleContext(BuiltinCallContext.class,0);
+			return getRuleContext(BuiltinCallContext.class,0);
 		}
 		public BuiltinCallExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -4107,10 +4106,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public static class IndexExprContext extends ExpressionContext {
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public IndexExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -4411,7 +4410,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class ArgumentListContext extends ParserRuleContext<Token> {
 		public Token ellip;
 		public ExpressionListContext expressionList() {
-		    return getRuleContext(ExpressionListContext.class,0);
+			return getRuleContext(ExpressionListContext.class,0);
 		}
 		public ArgumentListContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -4464,10 +4463,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ConversionContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public ConversionContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -4514,49 +4513,49 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class StatementContext extends ParserRuleContext<Token> {
 		public GotoStmtContext gotoStmt() {
-		    return getRuleContext(GotoStmtContext.class,0);
+			return getRuleContext(GotoStmtContext.class,0);
 		}
 		public DeclarationContext declaration() {
-		    return getRuleContext(DeclarationContext.class,0);
+			return getRuleContext(DeclarationContext.class,0);
 		}
 		public ForStmtContext forStmt() {
-		    return getRuleContext(ForStmtContext.class,0);
+			return getRuleContext(ForStmtContext.class,0);
 		}
 		public SimpleStmtContext simpleStmt() {
-		    return getRuleContext(SimpleStmtContext.class,0);
+			return getRuleContext(SimpleStmtContext.class,0);
 		}
 		public ReturnStmtContext returnStmt() {
-		    return getRuleContext(ReturnStmtContext.class,0);
+			return getRuleContext(ReturnStmtContext.class,0);
 		}
 		public BlockContext block() {
-		    return getRuleContext(BlockContext.class,0);
+			return getRuleContext(BlockContext.class,0);
 		}
 		public SelectStmtContext selectStmt() {
-		    return getRuleContext(SelectStmtContext.class,0);
+			return getRuleContext(SelectStmtContext.class,0);
 		}
 		public BreakStmtContext breakStmt() {
-		    return getRuleContext(BreakStmtContext.class,0);
+			return getRuleContext(BreakStmtContext.class,0);
 		}
 		public FallthroughStmtContext fallthroughStmt() {
-		    return getRuleContext(FallthroughStmtContext.class,0);
+			return getRuleContext(FallthroughStmtContext.class,0);
 		}
 		public ContinueStmtContext continueStmt() {
-		    return getRuleContext(ContinueStmtContext.class,0);
+			return getRuleContext(ContinueStmtContext.class,0);
 		}
 		public LabeledStmtContext labeledStmt() {
-		    return getRuleContext(LabeledStmtContext.class,0);
+			return getRuleContext(LabeledStmtContext.class,0);
 		}
 		public DeferStmtContext deferStmt() {
-		    return getRuleContext(DeferStmtContext.class,0);
+			return getRuleContext(DeferStmtContext.class,0);
 		}
 		public IfStmtContext ifStmt() {
-		    return getRuleContext(IfStmtContext.class,0);
+			return getRuleContext(IfStmtContext.class,0);
 		}
 		public GoStmtContext goStmt() {
-		    return getRuleContext(GoStmtContext.class,0);
+			return getRuleContext(GoStmtContext.class,0);
 		}
 		public SwitchStmtContext switchStmt() {
-		    return getRuleContext(SwitchStmtContext.class,0);
+			return getRuleContext(SwitchStmtContext.class,0);
 		}
 		public StatementContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -4704,22 +4703,22 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class SimpleStmtContext extends ParserRuleContext<Token> {
 		public ShortVarDeclContext shortVarDecl() {
-		    return getRuleContext(ShortVarDeclContext.class,0);
+			return getRuleContext(ShortVarDeclContext.class,0);
 		}
 		public AssignmentContext assignment() {
-		    return getRuleContext(AssignmentContext.class,0);
+			return getRuleContext(AssignmentContext.class,0);
 		}
 		public ExpressionStmtContext expressionStmt() {
-		    return getRuleContext(ExpressionStmtContext.class,0);
+			return getRuleContext(ExpressionStmtContext.class,0);
 		}
 		public SendStmtContext sendStmt() {
-		    return getRuleContext(SendStmtContext.class,0);
+			return getRuleContext(SendStmtContext.class,0);
 		}
 		public IncDecStmtContext incDecStmt() {
-		    return getRuleContext(IncDecStmtContext.class,0);
+			return getRuleContext(IncDecStmtContext.class,0);
 		}
 		public EmptyStmtContext emptyStmt() {
-		    return getRuleContext(EmptyStmtContext.class,0);
+			return getRuleContext(EmptyStmtContext.class,0);
 		}
 		public SimpleStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -4844,10 +4843,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class LabeledStmtContext extends ParserRuleContext<Token> {
 		public StatementContext statement() {
-		    return getRuleContext(StatementContext.class,0);
+			return getRuleContext(StatementContext.class,0);
 		}
 		public LabelContext label() {
-		    return getRuleContext(LabelContext.class,0);
+			return getRuleContext(LabelContext.class,0);
 		}
 		public LabeledStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -4935,7 +4934,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ExpressionStmtContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ExpressionStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -4979,10 +4978,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class SendStmtContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ChannelContext channel() {
-		    return getRuleContext(ChannelContext.class,0);
+			return getRuleContext(ChannelContext.class,0);
 		}
 		public SendStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5028,7 +5027,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ChannelContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ChannelContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5073,7 +5072,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class IncDecStmtContext extends ParserRuleContext<Token> {
 		public Token op;
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public IncDecStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5127,13 +5126,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public ExpressionListContext targets;
 		public ExpressionListContext values;
 		public AssignOpContext assignOp() {
-		    return getRuleContext(AssignOpContext.class,0);
+			return getRuleContext(AssignOpContext.class,0);
 		}
 		public List<? extends ExpressionListContext> expressionList() {
-		    return getRuleContexts(ExpressionListContext.class);
+			return getRuleContexts(ExpressionListContext.class);
 		}
 		public ExpressionListContext expressionList(int i) {
-		    return getRuleContext(ExpressionListContext.class,i);
+			return getRuleContext(ExpressionListContext.class,i);
 		}
 		public AssignmentContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5179,10 +5178,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class AssignOpContext extends ParserRuleContext<Token> {
 		public AddAssignOpContext addAssignOp() {
-		    return getRuleContext(AddAssignOpContext.class,0);
+			return getRuleContext(AddAssignOpContext.class,0);
 		}
 		public MulAssignOpContext mulAssignOp() {
-		    return getRuleContext(MulAssignOpContext.class,0);
+			return getRuleContext(MulAssignOpContext.class,0);
 		}
 		public AssignOpContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5342,19 +5341,19 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class IfStmtContext extends ParserRuleContext<Token> {
 		public BlockContext block(int i) {
-		    return getRuleContext(BlockContext.class,i);
+			return getRuleContext(BlockContext.class,i);
 		}
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public SimpleStmtContext simpleStmt() {
-		    return getRuleContext(SimpleStmtContext.class,0);
+			return getRuleContext(SimpleStmtContext.class,0);
 		}
 		public List<? extends BlockContext> block() {
-		    return getRuleContexts(BlockContext.class);
+			return getRuleContexts(BlockContext.class);
 		}
 		public IfStmtContext ifStmt() {
-		    return getRuleContext(IfStmtContext.class,0);
+			return getRuleContext(IfStmtContext.class,0);
 		}
 		public IfStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5434,10 +5433,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class SwitchStmtContext extends ParserRuleContext<Token> {
 		public TypeSwitchStmtContext typeSwitchStmt() {
-		    return getRuleContext(TypeSwitchStmtContext.class,0);
+			return getRuleContext(TypeSwitchStmtContext.class,0);
 		}
 		public ExprSwitchStmtContext exprSwitchStmt() {
-		    return getRuleContext(ExprSwitchStmtContext.class,0);
+			return getRuleContext(ExprSwitchStmtContext.class,0);
 		}
 		public SwitchStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5494,16 +5493,16 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ExprSwitchStmtContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ExprCaseClauseContext exprCaseClause(int i) {
-		    return getRuleContext(ExprCaseClauseContext.class,i);
+			return getRuleContext(ExprCaseClauseContext.class,i);
 		}
 		public SimpleStmtContext simpleStmt() {
-		    return getRuleContext(SimpleStmtContext.class,0);
+			return getRuleContext(SimpleStmtContext.class,0);
 		}
 		public List<? extends ExprCaseClauseContext> exprCaseClause() {
-		    return getRuleContexts(ExprCaseClauseContext.class);
+			return getRuleContexts(ExprCaseClauseContext.class);
 		}
 		public ExprSwitchStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5584,13 +5583,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ExprCaseClauseContext extends ParserRuleContext<Token> {
 		public List<? extends StatementContext> statement() {
-		    return getRuleContexts(StatementContext.class);
+			return getRuleContexts(StatementContext.class);
 		}
 		public ExprSwitchCaseContext exprSwitchCase() {
-		    return getRuleContext(ExprSwitchCaseContext.class,0);
+			return getRuleContext(ExprSwitchCaseContext.class,0);
 		}
 		public StatementContext statement(int i) {
-		    return getRuleContext(StatementContext.class,i);
+			return getRuleContext(StatementContext.class,i);
 		}
 		public ExprCaseClauseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5670,7 +5669,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ExprSwitchCaseContext extends ParserRuleContext<Token> {
 		public ExpressionListContext expressionList() {
-		    return getRuleContext(ExpressionListContext.class,0);
+			return getRuleContext(ExpressionListContext.class,0);
 		}
 		public ExprSwitchCaseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5728,16 +5727,16 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TypeSwitchStmtContext extends ParserRuleContext<Token> {
 		public TypeCaseClauseContext typeCaseClause(int i) {
-		    return getRuleContext(TypeCaseClauseContext.class,i);
+			return getRuleContext(TypeCaseClauseContext.class,i);
 		}
 		public List<? extends TypeCaseClauseContext> typeCaseClause() {
-		    return getRuleContexts(TypeCaseClauseContext.class);
+			return getRuleContexts(TypeCaseClauseContext.class);
 		}
 		public SimpleStmtContext simpleStmt() {
-		    return getRuleContext(SimpleStmtContext.class,0);
+			return getRuleContext(SimpleStmtContext.class,0);
 		}
 		public TypeSwitchGuardContext typeSwitchGuard() {
-		    return getRuleContext(TypeSwitchGuardContext.class,0);
+			return getRuleContext(TypeSwitchGuardContext.class,0);
 		}
 		public TypeSwitchStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5812,7 +5811,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public Token defeq;
 		public Token dot;
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public TypeSwitchGuardContext(ParserRuleContext<Token> parent, int invokingState) {
@@ -5871,13 +5870,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TypeCaseClauseContext extends ParserRuleContext<Token> {
 		public List<? extends StatementContext> statement() {
-		    return getRuleContexts(StatementContext.class);
+			return getRuleContexts(StatementContext.class);
 		}
 		public StatementContext statement(int i) {
-		    return getRuleContext(StatementContext.class,i);
+			return getRuleContext(StatementContext.class,i);
 		}
 		public TypeSwitchCaseContext typeSwitchCase() {
-		    return getRuleContext(TypeSwitchCaseContext.class,0);
+			return getRuleContext(TypeSwitchCaseContext.class,0);
 		}
 		public TypeCaseClauseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -5957,7 +5956,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TypeSwitchCaseContext extends ParserRuleContext<Token> {
 		public TypeListContext typeList() {
-		    return getRuleContext(TypeListContext.class,0);
+			return getRuleContext(TypeListContext.class,0);
 		}
 		public TypeSwitchCaseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6015,10 +6014,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class TypeListContext extends ParserRuleContext<Token> {
 		public TypeContext type(int i) {
-		    return getRuleContext(TypeContext.class,i);
+			return getRuleContext(TypeContext.class,i);
 		}
 		public List<? extends TypeContext> type() {
-		    return getRuleContexts(TypeContext.class);
+			return getRuleContexts(TypeContext.class);
 		}
 		public TypeListContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6079,16 +6078,16 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ForStmtContext extends ParserRuleContext<Token> {
 		public ConditionContext condition() {
-		    return getRuleContext(ConditionContext.class,0);
+			return getRuleContext(ConditionContext.class,0);
 		}
 		public BlockContext block() {
-		    return getRuleContext(BlockContext.class,0);
+			return getRuleContext(BlockContext.class,0);
 		}
 		public RangeClauseContext rangeClause() {
-		    return getRuleContext(RangeClauseContext.class,0);
+			return getRuleContext(RangeClauseContext.class,0);
 		}
 		public ForClauseContext forClause() {
-		    return getRuleContext(ForClauseContext.class,0);
+			return getRuleContext(ForClauseContext.class,0);
 		}
 		public ForStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6154,7 +6153,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ConditionContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ConditionContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6198,13 +6197,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ForClauseContext extends ParserRuleContext<Token> {
 		public PostStmtContext postStmt() {
-		    return getRuleContext(PostStmtContext.class,0);
+			return getRuleContext(PostStmtContext.class,0);
 		}
 		public ConditionContext condition() {
-		    return getRuleContext(ConditionContext.class,0);
+			return getRuleContext(ConditionContext.class,0);
 		}
 		public InitStmtContext initStmt() {
-		    return getRuleContext(InitStmtContext.class,0);
+			return getRuleContext(InitStmtContext.class,0);
 		}
 		public ForClauseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6276,7 +6275,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class InitStmtContext extends ParserRuleContext<Token> {
 		public SimpleStmtContext simpleStmt() {
-		    return getRuleContext(SimpleStmtContext.class,0);
+			return getRuleContext(SimpleStmtContext.class,0);
 		}
 		public InitStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6320,7 +6319,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class PostStmtContext extends ParserRuleContext<Token> {
 		public SimpleStmtContext simpleStmt() {
-		    return getRuleContext(SimpleStmtContext.class,0);
+			return getRuleContext(SimpleStmtContext.class,0);
 		}
 		public PostStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6369,10 +6368,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public Token defeq;
 		public ExpressionContext e;
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public RangeClauseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6443,7 +6442,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class GoStmtContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public GoStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6488,10 +6487,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class SelectStmtContext extends ParserRuleContext<Token> {
 		public CommClauseContext commClause(int i) {
-		    return getRuleContext(CommClauseContext.class,i);
+			return getRuleContext(CommClauseContext.class,i);
 		}
 		public List<? extends CommClauseContext> commClause() {
-		    return getRuleContexts(CommClauseContext.class);
+			return getRuleContexts(CommClauseContext.class);
 		}
 		public SelectStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6553,13 +6552,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class CommClauseContext extends ParserRuleContext<Token> {
 		public List<? extends StatementContext> statement() {
-		    return getRuleContexts(StatementContext.class);
+			return getRuleContexts(StatementContext.class);
 		}
 		public StatementContext statement(int i) {
-		    return getRuleContext(StatementContext.class,i);
+			return getRuleContext(StatementContext.class,i);
 		}
 		public CommCaseContext commCase() {
-		    return getRuleContext(CommCaseContext.class,0);
+			return getRuleContext(CommCaseContext.class,0);
 		}
 		public CommClauseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6639,10 +6638,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class CommCaseContext extends ParserRuleContext<Token> {
 		public RecvStmtContext recvStmt() {
-		    return getRuleContext(RecvStmtContext.class,0);
+			return getRuleContext(RecvStmtContext.class,0);
 		}
 		public SendStmtContext sendStmt() {
-		    return getRuleContext(SendStmtContext.class,0);
+			return getRuleContext(SendStmtContext.class,0);
 		}
 		public CommCaseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6718,13 +6717,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public Token eq;
 		public Token defeq;
 		public List<? extends ExpressionContext> expression() {
-		    return getRuleContexts(ExpressionContext.class);
+			return getRuleContexts(ExpressionContext.class);
 		}
 		public RecvExprContext recvExpr() {
-		    return getRuleContext(RecvExprContext.class,0);
+			return getRuleContext(RecvExprContext.class,0);
 		}
 		public ExpressionContext expression(int i) {
-		    return getRuleContext(ExpressionContext.class,i);
+			return getRuleContext(ExpressionContext.class,i);
 		}
 		public RecvStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6802,7 +6801,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class RecvExprContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public RecvExprContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6846,7 +6845,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ReturnStmtContext extends ParserRuleContext<Token> {
 		public ExpressionListContext expressionList() {
-		    return getRuleContext(ExpressionListContext.class,0);
+			return getRuleContext(ExpressionListContext.class,0);
 		}
 		public ReturnStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6899,7 +6898,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class BreakStmtContext extends ParserRuleContext<Token> {
 		public LabelContext label() {
-		    return getRuleContext(LabelContext.class,0);
+			return getRuleContext(LabelContext.class,0);
 		}
 		public BreakStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -6952,7 +6951,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ContinueStmtContext extends ParserRuleContext<Token> {
 		public LabelContext label() {
-		    return getRuleContext(LabelContext.class,0);
+			return getRuleContext(LabelContext.class,0);
 		}
 		public ContinueStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7005,7 +7004,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class GotoStmtContext extends ParserRuleContext<Token> {
 		public LabelContext label() {
-		    return getRuleContext(LabelContext.class,0);
+			return getRuleContext(LabelContext.class,0);
 		}
 		public GotoStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7091,7 +7090,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class DeferStmtContext extends ParserRuleContext<Token> {
 		public ExpressionContext expression() {
-		    return getRuleContext(ExpressionContext.class,0);
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public DeferStmtContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7136,7 +7135,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class BuiltinCallContext extends ParserRuleContext<Token> {
 		public BuiltinArgsContext builtinArgs() {
-		    return getRuleContext(BuiltinArgsContext.class,0);
+			return getRuleContext(BuiltinArgsContext.class,0);
 		}
 		public TerminalNode<Token> IDENTIFIER() { return getToken(AbstractGoParser.IDENTIFIER, 0); }
 		public BuiltinCallContext(ParserRuleContext<Token> parent, int invokingState) {
@@ -7201,10 +7200,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class BuiltinArgsContext extends ParserRuleContext<Token> {
 		public ExpressionListContext expressionList() {
-		    return getRuleContext(ExpressionListContext.class,0);
+			return getRuleContext(ExpressionListContext.class,0);
 		}
 		public TypeContext type() {
-		    return getRuleContext(TypeContext.class,0);
+			return getRuleContext(TypeContext.class,0);
 		}
 		public BuiltinArgsContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7271,19 +7270,19 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class SourceFileBodyContext extends ParserRuleContext<Token> {
 		public List<? extends ImportDeclContext> importDecl() {
-		    return getRuleContexts(ImportDeclContext.class);
+			return getRuleContexts(ImportDeclContext.class);
 		}
 		public List<? extends TopLevelDeclContext> topLevelDecl() {
-		    return getRuleContexts(TopLevelDeclContext.class);
+			return getRuleContexts(TopLevelDeclContext.class);
 		}
 		public ImportDeclContext importDecl(int i) {
-		    return getRuleContext(ImportDeclContext.class,i);
+			return getRuleContext(ImportDeclContext.class,i);
 		}
 		public PackageClauseContext packageClause() {
-		    return getRuleContext(PackageClauseContext.class,0);
+			return getRuleContext(PackageClauseContext.class,0);
 		}
 		public TopLevelDeclContext topLevelDecl(int i) {
-		    return getRuleContext(TopLevelDeclContext.class,i);
+			return getRuleContext(TopLevelDeclContext.class,i);
 		}
 		public SourceFileBodyContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7370,7 +7369,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class SourceFileContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> EOF() { return getToken(AbstractGoParser.EOF, 0); }
 		public SourceFileBodyContext sourceFileBody() {
-		    return getRuleContext(SourceFileBodyContext.class,0);
+			return getRuleContext(SourceFileBodyContext.class,0);
 		}
 		public SourceFileContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7416,7 +7415,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static class PackageClauseContext extends ParserRuleContext<Token> {
 		public PackageNameContext packageName;
 		public PackageNameContext packageName() {
-		    return getRuleContext(PackageNameContext.class,0);
+			return getRuleContext(PackageNameContext.class,0);
 		}
 		public PackageClauseContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7504,10 +7503,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 
 	public static class ImportDeclContext extends ParserRuleContext<Token> {
 		public List<? extends ImportSpecContext> importSpec() {
-		    return getRuleContexts(ImportSpecContext.class);
+			return getRuleContexts(ImportSpecContext.class);
 		}
 		public ImportSpecContext importSpec(int i) {
-		    return getRuleContext(ImportSpecContext.class,i);
+			return getRuleContext(ImportSpecContext.class,i);
 		}
 		public ImportDeclContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -7605,10 +7604,10 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public PackageNameContext packageName;
 		public ImportPathContext importPath;
 		public PackageNameContext packageName() {
-		    return getRuleContext(PackageNameContext.class,0);
+			return getRuleContext(PackageNameContext.class,0);
 		}
 		public ImportPathContext importPath() {
-		    return getRuleContext(ImportPathContext.class,0);
+			return getRuleContext(ImportPathContext.class,0);
 		}
 		public ImportSpecContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
