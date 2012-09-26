@@ -31,7 +31,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
@@ -59,7 +58,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
 
         if (requestedData.contains(GoParserDataDefinitions.ANNOTATED_PARSE_TREE)) {
             synchronized (lock) {
-                Future<ParserData<GoAnnotatedParseTree>> futureParseTreeResult = taskManager.getData(snapshot, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE));
+                Future<ParserData<GoAnnotatedParseTree>> futureParseTreeResult = taskManager.getData(snapshot, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
                 ParserData<GoAnnotatedParseTree> parseTreeResult = futureParseTreeResult != null ? futureParseTreeResult.get() : null;
                 if (parseTreeResult != null) {
                     results.addResult(parseTreeResult);
@@ -68,7 +67,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
 
                 ParserRuleContext<Token> referenceParseTree = null;
                 try {
-                    Future<ParserData<CompiledModel>> futureRefParseTreeData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL);
+                    Future<ParserData<CompiledModel>> futureRefParseTreeData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
                     ParserData<CompiledModel> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
                     CompiledModel compiledModel = refParseTreeData != null ? refParseTreeData.getData() : null;
                     CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;

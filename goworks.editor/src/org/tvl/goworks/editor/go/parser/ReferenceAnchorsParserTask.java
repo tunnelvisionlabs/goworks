@@ -36,7 +36,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.openide.util.Exceptions;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
@@ -64,9 +63,9 @@ public class ReferenceAnchorsParserTask implements ParserTask {
     @Override
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
-            Future<ParserData<List<Anchor>>> futureAnchorPointsResult = taskManager.getData(snapshot, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            Future<ParserData<List<Anchor>>> futureAnchorPointsResult = taskManager.getData(snapshot, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<List<Anchor>> anchorPointsResult = futureAnchorPointsResult != null ? futureAnchorPointsResult.get() : null;
-            Future<ParserData<FileModel>> futureFileModelResult = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            Future<ParserData<FileModel>> futureFileModelResult = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<FileModel> fileModelResult = futureFileModelResult != null ? futureFileModelResult.get() : null;
             if (anchorPointsResult == null || fileModelResult == null) {
                 Future<ParserData<CompiledModel>> futureCompiledModelData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL);
@@ -96,20 +95,17 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                         }
                         fileModelResult = new BaseParserData<FileModel>(context, GoParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
                     } catch (RuntimeException ex) {
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            Exceptions.printStackTrace(ex);
-                        }
-                        throw ex;
+                        LOGGER.log(Level.WARNING, "An exception occurred while analyzing reference anchors.", ex);
                     } catch (Error ex) {
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            Exceptions.printStackTrace(ex);
-                        }
-                        throw ex;
+                        LOGGER.log(Level.WARNING, "An error occurred while analyzing reference anchors.", ex);
                     }
                 }
             }
 
-            results.addResult(fileModelResult);
+            if (fileModelResult != null) {
+                results.addResult(fileModelResult);
+            }
+
             if (anchorPointsResult != null) {
                 results.addResult(anchorPointsResult);
             }

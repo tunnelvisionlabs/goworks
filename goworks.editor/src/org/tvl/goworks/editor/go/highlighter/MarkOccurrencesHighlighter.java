@@ -123,12 +123,11 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         FileModel fileModel = null;
         GoAnnotatedParseTree annotatedParseTree = null;
         try {
-            Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.FILE_MODEL);
-            Future<ParserData<GoAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.ANNOTATED_PARSE_TREE);
+            Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
+            ParserData<FileModel> fileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
+            fileModel = fileModelData != null ? fileModelData.getData() : null;
 
-            ParserData<FileModel> annotatedFileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
-            fileModel = annotatedFileModelData != null ? annotatedFileModelData.getData() : null;
-
+            Future<ParserData<GoAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<GoAnnotatedParseTree> annotatedParseTreeData = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get() : null;
             annotatedParseTree = annotatedParseTreeData != null ? annotatedParseTreeData.getData() : null;
         } catch (InterruptedException ex) {
@@ -216,7 +215,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         DocumentSnapshot snapshot = position.getSnapshot();
         int offset = position.getOffset();
-        Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+        Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
         if (futureTokensData == null) {
             return null;
         }

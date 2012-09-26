@@ -77,7 +77,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
                 return;
             }
 
-            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT);
+            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<Description> parserData = futureData != null ? futureData.get() : null;
             if (parserData == null) {
                 return;
@@ -85,7 +85,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
 
             Description root = parserData.getData();
 
-            Future<ParserData<CurrentDeclarationContextData>> futureContextData = taskManager.getData(snapshot, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            Future<ParserData<CurrentDeclarationContextData>> futureContextData = taskManager.getData(snapshot, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<CurrentDeclarationContextData> parserContextData = futureContextData != null ? futureContextData.get() : null;
             CurrentDeclarationContextData context = null;
             if (parserContextData != null) {

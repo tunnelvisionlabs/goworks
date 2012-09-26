@@ -54,7 +54,7 @@ import org.tvl.goworks.editor.go.semantics.NodeType;
  *
  * @author Sam Harwell
  */
-public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, CompiledModel> {
+public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, GoAnnotatedParseTree> {
     // -J-Dorg.tvl.goworks.editor.go.highlighter.SemanticHighlighter.level=FINE
     private static final Logger LOGGER = Logger.getLogger(SemanticHighlighter.class.getName());
 
@@ -144,7 +144,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     private final AttributeSet unresolvedIdentifierAttributes;
 
     private SemanticHighlighter(@NonNull StyledDocument document) {
-        super(document, GoParserDataDefinitions.COMPILED_MODEL);
+        super(document, GoParserDataDefinitions.ANNOTATED_PARSE_TREE);
 
         Lookup lookup = MimeLookup.getLookup(MimePath.parse(GoEditorKit.GO_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
@@ -185,14 +185,14 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected SemanticAnalyzerListener createListener(ParserData<? extends CompiledModel> parserData) {
+    protected SemanticAnalyzerListener createListener(ParserData<? extends GoAnnotatedParseTree> parserData) {
         FileModel fileModel = null;
         GoAnnotatedParseTree annotatedParseTree = null;
         try {
             Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.FILE_MODEL);
-            Future<ParserData<GoAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.ANNOTATED_PARSE_TREE);
-            fileModel = futureFileModelData != null ? futureFileModelData.get().getData() : null;
-            annotatedParseTree = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get().getData() : null;
+            ParserData<FileModel> fileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
+            fileModel = fileModelData != null ? fileModelData.getData() : null;
+            annotatedParseTree = parserData != null ? parserData.getData() : null;
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
         } catch (ExecutionException ex) {
@@ -207,11 +207,9 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected ParseTree<Token> getParseTree(ParserData<? extends CompiledModel> parserData) {
-        CompiledModel compiledModel = parserData != null ? parserData.getData() : null;
-        CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;
-        ParseTree<Token> result = compiledFileModel != null ? compiledFileModel.getResult() : null;
-        return result;
+    protected ParseTree<Token> getParseTree(ParserData<? extends GoAnnotatedParseTree> parserData) {
+        GoAnnotatedParseTree annotatedParseTree = parserData != null ? parserData.getData() : null;
+        return annotatedParseTree != null ? annotatedParseTree.getParseTree() : null;
     }
 
     private final Set<Token> resolvedTokens = new HashSet<Token>();

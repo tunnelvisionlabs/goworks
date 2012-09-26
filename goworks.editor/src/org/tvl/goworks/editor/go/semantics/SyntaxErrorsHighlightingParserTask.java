@@ -11,6 +11,7 @@ package org.tvl.goworks.editor.go.semantics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -23,6 +24,7 @@ import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
+import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
@@ -60,10 +62,9 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
             return;
         }
 
-        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
+        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
         ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
-        CompiledModel model = parserData.getData();
-        assert model != null;
+        CompiledModel model = parserData != null ? parserData.getData() : null;
         if (model == null) {
             return;
         }

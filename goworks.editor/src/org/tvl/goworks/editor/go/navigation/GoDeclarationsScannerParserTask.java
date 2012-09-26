@@ -50,16 +50,24 @@ public class GoDeclarationsScannerParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
+        boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getScheduler().getClass());
         if (requestedData.contains(GoParserDataDefinitions.NAVIGATOR_ROOT)) {
             synchronized (lock) {
-                Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE));
+                Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
                 ParserData<Description> data = futureData != null ? futureData.get() : null;
                 if (data != null) {
                     results.addResult(data);
                     return;
                 }
 
-                Future<ParserData<CompiledModel>> futureParserData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL);
+                EnumSet<ParserDataOptions> options;
+                if (explicitRequest) {
+                    options = EnumSet.of(ParserDataOptions.SYNCHRONOUS);
+                } else {
+                    options = EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS);
+                }
+
+                Future<ParserData<CompiledModel>> futureParserData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL, options);
                 ParserData<CompiledModel> parserData = futureParserData != null ? futureParserData.get() : null;
                 CompiledModel model = parserData != null ? parserData.getData() : null;
                 if (model != null) {

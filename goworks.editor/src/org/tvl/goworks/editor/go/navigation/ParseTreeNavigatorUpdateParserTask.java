@@ -67,16 +67,16 @@ public class ParseTreeNavigatorUpdateParserTask implements ParserTask {
                 return;
             }
 
-            Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE));
-            ParserData<CompiledModel> parserData = futureData.get();
+            Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
+            ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
             if (parserData == null) {
                 return;
             }
 
             CompiledModel compiledModel = parserData.getData();
 
-            Future<ParserData<CurrentDeclarationContextData>> futureContextData = taskManager.getData(snapshot, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE));
-            ParserData<CurrentDeclarationContextData> parserContextData = futureContextData.get();
+            Future<ParserData<CurrentDeclarationContextData>> futureContextData = taskManager.getData(snapshot, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
+            ParserData<CurrentDeclarationContextData> parserContextData = futureContextData != null ? futureContextData.get() : null;
             CurrentDeclarationContextData context = null;
             if (parserContextData != null) {
                 context = parserContextData.getData();
