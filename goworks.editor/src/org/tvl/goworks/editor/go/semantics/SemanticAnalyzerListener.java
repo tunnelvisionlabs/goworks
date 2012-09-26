@@ -1817,7 +1817,8 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
     })
     public void exitOperandExpr(OperandExprContext ctx) {
-        assert ctx.getChildCount() == 0 || (ctx.getChildCount() == 1 && ctx.operand() != null);
+        // this isn't true in some parse error scenarios
+        //assert ctx.getChildCount() == 0 || (ctx.getChildCount() == 1 && ctx.operand() != null);
         if (ctx.operand() != null) {
             treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, treeDecorator.getProperty(ctx.operand(), GoAnnotations.EXPR_TYPE));
         } else {
