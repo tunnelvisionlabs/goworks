@@ -41,7 +41,17 @@ public class CodeModelCacheImpl implements CodeModelCache {
     @Override
     @NonNull
     public Collection<? extends PackageModel> getPackages(Project project) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        CodeModelProjectCache cache = getProjectCache(project, false);
+        if (cache == null) {
+            return Collections.emptyList();
+        }
+
+        Collection<PackageModelImpl> packages = cache.getPackages();
+        if (packages instanceof List) {
+            return Collections.unmodifiableList((List<PackageModelImpl>)packages);
+        }
+
+        return Collections.unmodifiableCollection(cache.getPackages());
     }
 
     @NonNull
