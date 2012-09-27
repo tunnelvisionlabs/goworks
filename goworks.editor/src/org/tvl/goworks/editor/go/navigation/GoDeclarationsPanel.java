@@ -15,9 +15,8 @@ import org.openide.util.NbBundle;
 import org.tvl.goworks.editor.GoEditorKit;
 
 @NbBundle.Messages({
-    "LBL_templates=Templates",
-    "HINT_templates=Templates",
-    "LBL_declarations=Declarations"
+    "LBL_declarations=Declarations",
+    "HINT_declarations=Declarations",
 })
 @Registration(mimeType = GoEditorKit.GO_MIME_TYPE, position = 100, displayName = "#LBL_declarations")
 public class GoDeclarationsPanel implements NavigatorPanel {
@@ -28,12 +27,12 @@ public class GoDeclarationsPanel implements NavigatorPanel {
 
     @Override
     public String getDisplayName() {
-        return Bundle.LBL_templates();
+        return Bundle.LBL_declarations();
     }
 
     @Override
     public String getDisplayHint() {
-        return Bundle.HINT_templates();
+        return Bundle.HINT_declarations();
     }
 
     @Override
