@@ -106,7 +106,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
     private static final class Definition extends ParserTaskDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
-                GoParserDataDefinitions.COMPILED_MODEL,
+                GoParserDataDefinitions.NAVIGATOR_ROOT,
                 GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT);
 
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
