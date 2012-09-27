@@ -26,7 +26,7 @@ import org.tvl.goworks.editor.GoEditorKit;
 @NbBundle.Messages({
     "LBL_ParseTreeDefinition=Parse Tree (Development)"
 })
-@NavigatorPanel.Registration(mimeType=GoEditorKit.GO_MIME_TYPE, position = 100, displayName = "#LBL_ParseTreeDefinition")
+@NavigatorPanel.Registration(mimeType=GoEditorKit.GO_MIME_TYPE, position = 9999, displayName = "#LBL_ParseTreeDefinition")
 public class GoParseTreeNavigatorPanel extends TreeNavigatorPanel {
 
     private static volatile GoParseTreeNavigatorPanel INSTANCE;
