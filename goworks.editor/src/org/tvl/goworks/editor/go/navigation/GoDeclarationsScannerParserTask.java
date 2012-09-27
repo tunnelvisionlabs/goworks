@@ -51,6 +51,11 @@ public class GoDeclarationsScannerParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getScheduler().getClass());
+        if (!explicitRequest && snapshot.getVersionedDocument().getDocument() == null) {
+            // no update for background parsed document unless specifically requested
+            return;
+        }
+
         if (requestedData.contains(GoParserDataDefinitions.NAVIGATOR_ROOT)) {
             synchronized (lock) {
                 Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
@@ -95,7 +100,7 @@ public class GoDeclarationsScannerParserTask implements ParserTask {
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("Go Declarations Scanner", INPUTS, OUTPUTS, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
+            super("Go Declarations Scanner", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
         }
     }
 
