@@ -49,7 +49,10 @@ public class ConversionOrCallResultReference extends CodeElementReference {
                 }
             } else if (model instanceof TypeModelImpl) {
                 // this was actually a type cast
-                result.add(model);
+                Collection<AbstractCodeElementModel> resultValues = new ArrayList<AbstractCodeElementModel>();
+                resultValues.add((AbstractCodeElementModel)model);
+                resultValues.add((AbstractCodeElementModel)BuiltinTypeReference.BOOL.resolve());
+                result.add(new BundledReturnTypeModel(resultValues));
             }
         }
 

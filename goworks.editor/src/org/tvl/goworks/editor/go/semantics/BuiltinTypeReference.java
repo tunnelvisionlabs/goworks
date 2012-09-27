@@ -14,6 +14,7 @@ import java.util.Map;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
  *
@@ -48,9 +49,13 @@ public class BuiltinTypeReference extends CodeElementReference {
         this.name = name;
     }
 
+    public final TypeModel resolve() {
+        return IntrinsicTypeModels.getIntrinsicType(name);
+    }
+
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
-        CodeElementModel type = IntrinsicTypeModels.getIntrinsicType(name);
+        CodeElementModel type = resolve();
         if (type == null) {
             return Collections.emptyList();
         }
