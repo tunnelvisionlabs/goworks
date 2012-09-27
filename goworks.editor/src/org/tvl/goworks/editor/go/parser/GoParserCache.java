@@ -8,6 +8,7 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -38,14 +39,69 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
     @Override
     public GoParser getParser(TokenStream<? extends Token> input) {
         GoParser result = super.getParser(input);
-        result.getInterpreter().disable_global_context = false;
-        result.getInterpreter().force_global_context = false;
-        result.getInterpreter().always_try_local_context = true;
-        result.setBuildParseTree(false);
-        result.setErrorHandler(new DefaultErrorStrategy<Token>());
-        result.removeErrorListeners();
-        result.addErrorListener(DescriptiveErrorListener.INSTANCE);
+        configureParser(result, ParserConfiguration.PRECISE);
         return result;
+    }
+
+    public GoParser getParser(TokenStream<? extends Token> input, ParserConfiguration configuration) {
+        GoParser result = super.getParser(input);
+        configureParser(result, configuration);
+        return result;
+    }
+
+    private static void configureParser(Parser<? extends Token> parser, ParserConfiguration configuration) {
+        ParserATNSimulator<?> interpreter = parser.getInterpreter();
+
+        // common configuration
+        interpreter.force_global_context = false;
+        interpreter.always_try_local_context = true;
+        interpreter.optimize_hidden_conflicted_configs = true;
+        interpreter.optimize_tail_calls = true;
+        parser.setBuildParseTree(true);
+        parser.removeErrorListeners();
+
+        switch (configuration) {
+        case FASTEST:
+            interpreter.disable_global_context = true;
+            interpreter.tail_call_preserves_sll = false;
+            interpreter.treat_sllk1_conflict_as_ambiguity = true;
+            parser.setErrorHandler(new BailErrorStrategy<Token>());
+            break;
+
+        case SLL:
+            throw new UnsupportedOperationException("The tail_call_preserves_sll flag cannot change within a single ATN instance.");
+            //interpreter.disable_global_context = true;
+            //interpreter.tail_call_preserves_sll = true;
+            //interpreter.treat_sllk1_conflict_as_ambiguity = true;
+            //parser.setErrorHandler(new BailErrorStrategy<Token>());
+            //break;
+
+        case HYBRID:
+            interpreter.disable_global_context = false;
+            interpreter.tail_call_preserves_sll = false;
+            interpreter.treat_sllk1_conflict_as_ambiguity = true;
+            parser.setErrorHandler(new BailErrorStrategy<Token>());
+            break;
+
+        case HYBRID_SLL:
+            throw new UnsupportedOperationException("The tail_call_preserves_sll flag cannot change within a single ATN instance.");
+            //interpreter.disable_global_context = false;
+            //interpreter.tail_call_preserves_sll = true;
+            //interpreter.treat_sllk1_conflict_as_ambiguity = true;
+            //parser.setErrorHandler(new BailErrorStrategy<Token>());
+            //break;
+
+        case PRECISE:
+            interpreter.disable_global_context = false;
+            interpreter.tail_call_preserves_sll = false;
+            interpreter.treat_sllk1_conflict_as_ambiguity = false;
+            parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+            parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+            break;
+
+        default:
+            throw new IllegalArgumentException("Invalid configuration.");
+        }
     }
 
     private final class GoParserWrapper extends GoParser {

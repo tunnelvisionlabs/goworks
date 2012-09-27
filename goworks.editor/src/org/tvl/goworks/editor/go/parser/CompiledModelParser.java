@@ -22,9 +22,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
-import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
@@ -87,22 +85,35 @@ public class CompiledModelParser {
                 Tagger<TokenTag<Token>> tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
                 TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
                 CommonTokenStream tokenStream = new CommonTokenStream(tokenSource);
-                final GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream);
+                GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream, ParserConfiguration.FASTEST);
                 try {
                     SyntaxErrorListener syntaxErrorListener = new SyntaxErrorListener(snapshot);
                     SourceFileContext sourceFileContext;
                     try {
-                        parser.setBuildParseTree(true);
-                        parser.getInterpreter().disable_global_context = true;
-                        parser.setErrorHandler(new BailErrorStrategy<Token>());
-                        parser.removeErrorListeners();
-                        sourceFileContext = parser.sourceFile();
+                        try {
+                            sourceFileContext = parser.sourceFile();
+                        } catch (RuntimeException ex) {
+                            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                                GoParserCache.DEFAULT.putParser(parser);
+                                parser = null;
+
+                                // retry with hybrid parser
+                                tokenStream.reset();
+                                parser = GoParserCache.DEFAULT.getParser(tokenStream, ParserConfiguration.HYBRID);
+                                sourceFileContext = parser.sourceFile();
+                            } else {
+                                throw ex;
+                            }
+                        }
                     } catch (RuntimeException ex) {
                         if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
-                            // retry with default error handler
+                            GoParserCache.DEFAULT.putParser(parser);
+                            parser = null;
+
+                            // retry with precise parser and default error handler
                             tokenStream.reset();
-                            parser.getInterpreter().disable_global_context = false;
-                            parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+                            parser = GoParserCache.DEFAULT.getParser(tokenStream, ParserConfiguration.PRECISE);
+                            parser.removeErrorListeners();
                             parser.addErrorListener(syntaxErrorListener);
                             sourceFileContext = parser.sourceFile();
                         } else {
@@ -126,9 +137,11 @@ public class CompiledModelParser {
                     lastException = null;
                     return null;
                 } finally {
-                    GoParserCache.DEFAULT.putParser(parser);
+                    if (parser != null) {
+                        GoParserCache.DEFAULT.putParser(parser);
+                    }
                 }
-            } catch (Exception ex) {
+            } catch (Throwable ex) {
                 lastSnapshot = snapshot;
                 lastResult = null;
                 lastException = ex;
