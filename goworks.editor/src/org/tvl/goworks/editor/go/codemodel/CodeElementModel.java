@@ -21,6 +21,7 @@ public interface CodeElementModel {
 
     PackageModel getPackage();
 
+    @NonNull
     String getName();
 
     @NonNull

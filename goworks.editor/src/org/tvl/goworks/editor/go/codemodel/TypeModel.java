@@ -20,8 +20,10 @@ public interface TypeModel extends CodeElementModel {
     @NonNull
     Collection<? extends TypeModel> resolve();
 
+    @NonNull
     String getSimpleName();
 
+    @NonNull
     TypeKind getKind();
 
     @NonNull
