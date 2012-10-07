@@ -8,12 +8,15 @@
  */
 package org.tvl.goworks.editor.go.codemodel;
 
+import org.netbeans.api.annotations.common.NonNull;
+
 /**
  *
  * @author Sam Harwell
  */
 public interface TypeWrapperModel extends TypeModel {
 
+    @NonNull
     TypeModel getElementType();
 
 }

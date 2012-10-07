@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.editor.go.codemodel.impl;
 
+import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.TypeWrapperModel;
 
 /**
@@ -18,8 +20,9 @@ public abstract class TypeWrapperModelImpl extends TypeModelImpl implements Type
 
     private final TypeModelImpl elementType;
 
-    public TypeWrapperModelImpl(String name, TypeModelImpl elementType) {
+    public TypeWrapperModelImpl(String name, @NonNull TypeModelImpl elementType) {
         super(name, elementType.getFile(), null, null);
+        Parameters.notNull("elementType", elementType);
         this.elementType = elementType;
     }
 
