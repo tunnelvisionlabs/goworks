@@ -13,10 +13,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.impl.AbstractCodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.impl.FunctionModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeFunctionModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 
 /**
  *
@@ -35,9 +38,20 @@ public class ConversionOrCallResultReference extends CodeElementReference {
         Collection<? extends CodeElementModel> methods = typeOrMethod.resolve(annotatedParseTree, currentPackage, resolvedPackages);
         List<CodeElementModel> result = new ArrayList<CodeElementModel>();
         for (CodeElementModel model : methods) {
-            if (model instanceof FunctionModelImpl) {
-                FunctionModelImpl functionModel = (FunctionModelImpl)model;
-                Collection<? extends AbstractCodeElementModel> returnValues = functionModel.getReturnValues();
+            if (model instanceof VarModelImpl) {
+                model = ((VarModelImpl)model).getVarType();
+            }
+
+            if (model instanceof FunctionModel) {
+                Collection<? extends AbstractCodeElementModel> returnValues;
+                if (model instanceof FunctionModelImpl) {
+                    returnValues = ((FunctionModelImpl)model).getReturnValues();
+                } else if (model instanceof TypeFunctionModelImpl) {
+                    returnValues = ((TypeFunctionModelImpl)model).getReturnValues();
+                } else {
+                    continue;
+                }
+
                 if (returnValues.isEmpty()) {
                     continue;
                 }
