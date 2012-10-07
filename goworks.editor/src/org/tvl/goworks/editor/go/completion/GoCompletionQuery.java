@@ -1268,11 +1268,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 public void enterRangeClause(RangeClauseContext ctx) {
                     if (ctx.defeq != null) {
                         if (ctx.e1 != null && ctx.e1.start != null) {
-                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)null, 0));
+                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)ctx.e, 0));
                         }
 
                         if (ctx.e2 != null && ctx.e2.start != null) {
-                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)null, 1));
+                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)ctx.e, 1));
                         }
                     }
                 }
@@ -1308,11 +1308,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 public void enterRecvStmt(RecvStmtContext ctx) {
                     if (ctx.defeq != null) {
                         if (ctx.e1 != null && ctx.e1.start != null) {
-                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)null, 0));
+                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)ctx.recvExpr(), 0));
                         }
 
                         if (ctx.e2 != null && ctx.e2.start != null) {
-                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)null, 1));
+                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)ctx.recvExpr(), 1));
                         }
                     }
                 }
