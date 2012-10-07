@@ -108,47 +108,78 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BasicLiteralContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BlockContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinArgsContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CallExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.CommClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionOrCallExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.DeclarationContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ElementTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExprCaseClauseContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExprSwitchStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ForClauseContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ForStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.IfStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.InitStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.IdentifierListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.LabelContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LabeledStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LiteralTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParametersContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PointerTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PostStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.QualifiedIdentifierContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.RangeClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ReceiverContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.RecvStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SelectStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SelectorExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SimpleStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SignatureContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileBodyContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.StatementContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeAssertionExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeCaseClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSwitchGuardContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSwitchStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.UnaryExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 import org.tvl.goworks.editor.go.parser.GoLexer;
 import org.tvl.goworks.editor.go.parser.GoParser;
@@ -944,10 +975,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                             ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                                             if (functionContext != null) {
-                                                addVars(VarKind.RECEIVER, localsAnalyzer.getReceiverParameters(functionContext), intermediateResults);
-                                                addVars(VarKind.PARAMETER, localsAnalyzer.getParameters(functionContext), intermediateResults);
-                                                addVars(VarKind.RETURN, localsAnalyzer.getReturnParameters(functionContext), intermediateResults);
-                                                addVars(VarKind.LOCAL, localsAnalyzer.getLocals(functionContext), intermediateResults);
+                                                addVars(VarKind.RECEIVER, finalContext, localsAnalyzer.getReceiverParameters(functionContext), intermediateResults);
+                                                addVars(VarKind.PARAMETER, finalContext, localsAnalyzer.getParameters(functionContext), intermediateResults);
+                                                addVars(VarKind.RETURN, finalContext, localsAnalyzer.getReturnParameters(functionContext), intermediateResults);
+                                                addVars(VarKind.LOCAL, finalContext, localsAnalyzer.getLocals(functionContext), intermediateResults);
 
                                                 constants.addAll(localsAnalyzer.getConstants(functionContext));
                                             }
@@ -1101,10 +1132,13 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
         }
 
-        private void addVars(VarKind varKind, Collection<? extends Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer>> vars, Map<String, ? super VarReferenceCompletionItem> intermediateResults) {
+        private void addVars(VarKind varKind, ParseTree<? extends Token> finalContext, Collection<? extends Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer>> vars, Map<String, ? super VarReferenceCompletionItem> intermediateResults) {
             for (Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer> varEntry : vars) {
                 String name = varEntry.getItem1().getText();
-                if (intermediateResults.containsKey(name)) {
+
+                // make sure the item is visible in the final context
+                ParseTree<?> scopeContext = ScopeContextVisitor.INSTANCE.visit(varEntry.getItem1());
+                if (!ParseTrees.isAncestorOf(scopeContext, finalContext)) {
                     continue;
                 }
 
@@ -2452,6 +2486,415 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             return annotatedParseTree;
+        }
+    }
+
+    private static class ScopeContextVisitor extends GoParserBaseVisitor<ParseTree<Token>> {
+        public static ScopeContextVisitor INSTANCE = new ScopeContextVisitor();
+        private static ScopeContextVisitorHelper HELPER_INSTANCE = new ScopeContextVisitorHelper();
+
+        protected ScopeContextVisitor() {
+        }
+
+        @Override
+        public ParseTree<Token> visitTerminal(TerminalNode<? extends Token> node) {
+            return visit(node.getParent());
+        }
+
+        @Override
+        protected ParseTree<Token> defaultResult() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0)
+        public ParseTree<Token> visitBaseTypeName(BaseTypeNameContext ctx) {
+            // this is not a declaration
+            return null;
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0)
+        public ParseTree<Token> visitBuiltinCall(BuiltinCallContext ctx) {
+            // this is not a declaration
+            return null;
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldName, version=0)
+        public ParseTree<Token> visitFieldName(FieldNameContext ctx) {
+            // this is not a declaration
+            return null;
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0),
+        })
+        public ParseTree<Token> visitFunctionDecl(FunctionDeclContext ctx) {
+            return HELPER_INSTANCE.visit((TopLevelDeclContext)ctx.getParent());
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_declaration, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varDecl, version=0),
+        })
+        public ParseTree<Token> visitIdentifierList(IdentifierListContext ctx) {
+            switch (ctx.getParent().getRuleIndex()) {
+            case GoParser.RULE_constSpec:
+                ConstDeclContext constDeclContext = (ConstDeclContext)ctx.getParent();
+                return HELPER_INSTANCE.visit((DeclarationContext)constDeclContext.getParent());
+
+            case GoParser.RULE_fieldDecl:
+                return (StructTypeContext)((FieldDeclContext)ctx.getParent()).getParent();
+
+            case GoParser.RULE_parameterDecl:
+                return HELPER_INSTANCE.visit((ParameterDeclContext)ctx.getParent());
+
+            case GoParser.RULE_shortVarDecl:
+                return HELPER_INSTANCE.visit((ShortVarDeclContext)ctx.getParent());
+
+            case GoParser.RULE_varSpec:
+                VarSpecContext varSpecContext = (VarSpecContext)ctx.getParent();
+                VarDeclContext varDeclContext = (VarDeclContext)varSpecContext.getParent();
+                return HELPER_INSTANCE.visit((DeclarationContext)varDeclContext.getParent());
+
+            default:
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_label, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0),
+        })
+        public ParseTree<Token> visitLabel(LabelContext ctx) {
+            if (ctx.getParent().getRuleIndex() != GoParser.RULE_labeledStmt) {
+                // not a declaration
+                return null;
+            }
+
+            return HELPER_INSTANCE.visit((LabeledStmtContext)ctx.getParent());
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
+        })
+        public ParseTree<Token> visitMethodName(MethodNameContext ctx) {
+            switch (ctx.getParent().getRuleIndex()) {
+            case GoParser.RULE_methodDecl:
+                return HELPER_INSTANCE.visit((MethodDeclContext)ctx.getParent());
+
+            case GoParser.RULE_methodSpec:
+                return HELPER_INSTANCE.visit((MethodSpecContext)ctx.getParent());
+
+            case GoParser.RULE_methodExpr:
+                // this isn't a declaration
+                return null;
+
+            default:
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_importSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_importDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageClause, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+        })
+        public ParseTree<Token> visitPackageName(PackageNameContext ctx) {
+            switch (ctx.getParent().getRuleIndex()) {
+            case GoParser.RULE_importSpec:
+                ImportSpecContext importSpecContext = (ImportSpecContext)ctx.getParent();
+                ImportDeclContext importDeclContext = (ImportDeclContext)importSpecContext.getParent();
+                return (SourceFileBodyContext)importDeclContext.getParent();
+
+            case GoParser.RULE_packageClause:
+                return (SourceFileBodyContext)((PackageClauseContext)ctx.getParent()).getParent();
+
+            case GoParser.RULE_qualifiedIdentifier:
+                // not a declaration
+                return null;
+
+            default:
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_forStmt, version=0),
+        })
+        public ParseTree<Token> visitQualifiedIdentifier(QualifiedIdentifierContext ctx) {
+            if (ctx.getParent().getRuleIndex() != GoParser.RULE_operand) {
+                // not a declaration
+                return null;
+            }
+
+            OperandContext operandContext = (OperandContext)ctx.getParent();
+            OperandExprContext operandExprContext = (OperandExprContext)operandContext.getParent();
+            if (operandExprContext.getParent().getRuleIndex() != GoParser.RULE_rangeClause) {
+                // not a declaration
+                return null;
+            }
+
+            RangeClauseContext rangeClauseContext = (RangeClauseContext)operandExprContext.getParent();
+            // just check eq... both operators missing is an ambig situation
+            if (rangeClauseContext.eq != null) {
+                // not a declaration
+                return null;
+            }
+
+            if (operandExprContext != rangeClauseContext.e1 && operandExprContext != rangeClauseContext.e2) {
+                // not a declaration
+                return null;
+            }
+
+            return (ForStmtContext)rangeClauseContext.getParent();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+        })
+        public ParseTree<Token> visitReceiver(ReceiverContext ctx) {
+            return (MethodDeclContext)ctx.getParent();
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+        public ParseTree<Token> visitSelectorExpr(SelectorExprContext ctx) {
+            // this isn't a declaration
+            return null;
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeDecl, version=0),
+        })
+        public ParseTree<Token> visitTypeSpec(TypeSpecContext ctx) {
+            return HELPER_INSTANCE.visit((TypeDeclContext)ctx.getParent());
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchStmt, version=0),
+        })
+        public ParseTree<Token> visitTypeSwitchGuard(TypeSwitchGuardContext ctx) {
+            return (TypeSwitchStmtContext)ctx.getParent();
+        }
+
+        private static class ScopeContextVisitorHelper extends ScopeContextVisitor {
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0),
+            })
+            public ParseTree<Token> visitTopLevelDecl(TopLevelDeclContext ctx) {
+                return (SourceFileBodyContext)ctx.getParent();
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0),
+            })
+            public ParseTree<Token> visitMethodDecl(MethodDeclContext ctx) {
+                return visit((TopLevelDeclContext)ctx.getParent());
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
+            })
+            public ParseTree<Token> visitMethodSpec(MethodSpecContext ctx) {
+                return (InterfaceTypeContext)ctx.getParent();
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_declaration, version=0),
+            })
+            public ParseTree<Token> visitTypeDecl(TypeDeclContext ctx) {
+                return visit((DeclarationContext)ctx.getParent());
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_declaration, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_statement, version=0),
+            })
+            public ParseTree<Token> visitDeclaration(DeclarationContext ctx) {
+                switch (ctx.getParent().getRuleIndex()) {
+                case GoParser.RULE_topLevelDecl:
+                    return visit((TopLevelDeclContext)ctx.getParent());
+
+                case GoParser.RULE_statement:
+                    return visit((StatementContext)ctx.getParent());
+
+                default:
+                    throw new UnsupportedOperationException();
+                }
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_simpleStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_statement, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_ifStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_exprSwitchStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_initStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_forClause, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_forStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_postStmt, version=0),
+            })
+            public ParseTree<Token> visitShortVarDecl(ShortVarDeclContext ctx) {
+                SimpleStmtContext simpleStmtContext = (SimpleStmtContext)ctx.getParent();
+                switch (simpleStmtContext.getParent().getRuleIndex()) {
+                case GoParser.RULE_statement:
+                    return HELPER_INSTANCE.visit((StatementContext)simpleStmtContext.getParent());
+
+                case GoParser.RULE_ifStmt:
+                    return (IfStmtContext)simpleStmtContext.getParent();
+
+                case GoParser.RULE_exprSwitchStmt:
+                    return (ExprSwitchStmtContext)simpleStmtContext.getParent();
+
+                case GoParser.RULE_typeSwitchStmt:
+                    return (TypeSwitchStmtContext)simpleStmtContext.getParent();
+
+                case GoParser.RULE_initStmt:
+                    InitStmtContext initStmtContext = (InitStmtContext)simpleStmtContext.getParent();
+                    ForClauseContext forClauseContext = (ForClauseContext)initStmtContext.getParent();
+                    return (ForStmtContext)forClauseContext.getParent();
+
+                case GoParser.RULE_postStmt:
+                    PostStmtContext postStmtContext = (PostStmtContext)simpleStmtContext.getParent();
+                    forClauseContext = (ForClauseContext)postStmtContext.getParent();
+                    return (ForStmtContext)forClauseContext.getParent();
+
+                default:
+                    throw new UnsupportedOperationException();
+                }
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterList, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameters, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_signature, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+            })
+            public ParseTree<Token> visitParameterDecl(ParameterDeclContext ctx) {
+                ParameterListContext parameterListContext = (ParameterListContext)ctx.getParent();
+                ParametersContext parametersContext = (ParametersContext)parameterListContext.getParent();
+
+                SignatureContext signatureContext;
+                if (parametersContext.getParent().getRuleIndex() == GoParser.RULE_signature) {
+                    signatureContext = (SignatureContext)parametersContext.getParent();
+                } else {
+                    ResultContext resultContext = (ResultContext)parametersContext.getParent();
+                    signatureContext = (SignatureContext)resultContext.getParent();
+                }
+
+                switch (signatureContext.getParent().getRuleIndex()) {
+                case GoParser.RULE_functionType:
+                    return (FunctionTypeContext)signatureContext.getParent();
+
+                case GoParser.RULE_methodSpec:
+                    return (MethodSpecContext)signatureContext.getParent();
+
+                case GoParser.RULE_functionDecl:
+                    return (FunctionDeclContext)signatureContext.getParent();
+
+                case GoParser.RULE_methodDecl:
+                    return (MethodDeclContext)signatureContext.getParent();
+
+                default:
+                    throw new UnsupportedOperationException();
+                }
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_statement, version=0),
+            })
+            public ParseTree<Token> visitLabeledStmt(LabeledStmtContext ctx) {
+                return visit((StatementContext)ctx.getParent());
+            }
+
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_statement, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_block, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_commClause, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_selectStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_exprCaseClause, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_exprSwitchStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeCaseClause, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchStmt, version=0),
+            })
+            public ParseTree<Token> visitStatement(StatementContext ctx) {
+                switch (ctx.getParent().getRuleIndex()) {
+                case GoParser.RULE_block:
+                    return (BlockContext)ctx.getParent();
+
+                case GoParser.RULE_labeledStmt:
+                    return visit((LabeledStmtContext)ctx.getParent());
+
+                case GoParser.RULE_commClause:
+                    return (SelectStmtContext)((CommClauseContext)ctx.getParent()).getParent();
+
+                case GoParser.RULE_exprCaseClause:
+                    return (ExprSwitchStmtContext)((ExprCaseClauseContext)ctx.getParent()).getParent();
+
+                case GoParser.RULE_typeCaseClause:
+                    return (TypeSwitchStmtContext)((TypeCaseClauseContext)ctx.getParent()).getParent();
+
+                default:
+                    throw new UnsupportedOperationException();
+                }
+            }
+
         }
     }
 
