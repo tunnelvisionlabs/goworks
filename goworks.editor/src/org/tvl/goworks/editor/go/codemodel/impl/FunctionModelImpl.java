@@ -113,7 +113,22 @@ public class FunctionModelImpl extends AbstractCodeElementModel implements Funct
         if (returnValues.size() == 1 && returnValues.iterator().next().getName().equals("_")) {
             builder.append(" ").append(returnValues.iterator().next().getVarType());
         } else if (!returnValues.isEmpty()) {
-            builder.append(" (").append(Utils.join(returnValues.iterator(), ", ")).append(")");
+            builder.append(" (");
+            boolean first = true;
+            for (ParameterModel parameter : returnValues) {
+                if (first) {
+                    first = false;
+                } else {
+                    builder.append(", ");
+                }
+
+                if (!"_".equals(parameter.getName())) {
+                    builder.append(parameter.getName()).append(' ');
+                }
+
+                builder.append(parameter.getVarType());
+            }
+            builder.append(')');
         }
 
         return builder.toString();
