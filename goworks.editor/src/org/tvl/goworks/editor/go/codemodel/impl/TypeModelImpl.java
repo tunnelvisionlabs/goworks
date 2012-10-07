@@ -15,6 +15,7 @@ import java.util.List;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
@@ -104,7 +105,7 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
 
         TypeModel other = (TypeModel)obj;
         return getKind().equals(other.getKind())
-            && getPackage().equals(other.getPackage())
+            && Utils.equals(getPackage(), other.getPackage())
             && getName().equals(other.getName());
     }
 
