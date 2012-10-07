@@ -1091,12 +1091,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 for (CodeElementModel model : varTypes) {
-                    TypeModel typeModel;
-                    if (model instanceof TypeModel) {
-                        typeModel = (TypeModel)model;
-                    } else if (model instanceof VarModel) {
+                    TypeModelImpl typeModel;
+                    if (model instanceof TypeModelImpl) {
+                        typeModel = (TypeModelImpl)model;
+                    } else if (model instanceof VarModelImpl) {
                         // this could be an implicit reference to the return value of a function
-                        VarModel varModel = (VarModel)model;
+                        VarModelImpl varModel = (VarModelImpl)model;
                         if (varModel.getVarKind() != VarKind.RETURN) {
                             continue;
                         }
@@ -1822,7 +1822,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             }
 
                             // TODO: use proper var kind
-                            VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModel)varType, (FileModelImpl)getFileModel(), entry.getKey(), entry.getValue());
+                            VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModelImpl)varType, (FileModelImpl)getFileModel(), entry.getKey(), entry.getValue());
                             members.add(varModel);
                         }
                     }
