@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -250,6 +251,50 @@ public final class ParseTrees {
         return findTopContext((ParserRuleContext<T>)context.parent, values, true);
     }
 
+    @CheckForNull
+    public static <Symbol extends Token> TerminalNode<Symbol> findTerminalNode(@NonNull ParseTree<Symbol> node, Symbol symbol) {
+        if (node instanceof TerminalNode) {
+            TerminalNode<Symbol> terminalNode = (TerminalNode<Symbol>)node;
+            if (Utils.equals(terminalNode.getSymbol(), symbol)) {
+                return terminalNode;
+            }
+
+            return null;
+        }
+
+        for (int i = 0; i < node.getChildCount(); i++) {
+            ParseTree<Symbol> child = node.getChild(i);
+            TerminalNode<Symbol> stopNode = ParseTrees.getStopNode(child);
+            if (stopNode == null) {
+                continue;
+            }
+
+            Symbol stopSymbol = stopNode.getSymbol();
+            if (stopSymbol.getStopIndex() < symbol.getStartIndex()) {
+                continue;
+            }
+
+            TerminalNode<Symbol> startNode = ParseTrees.getStartNode(child);
+            assert startNode != null;
+
+            stopSymbol = startNode.getSymbol();
+            if (stopSymbol.getStartIndex() > symbol.getStopIndex()) {
+                break;
+            }
+
+            if (stopSymbol.equals(symbol)) {
+                return startNode;
+            }
+
+            TerminalNode<Symbol> terminalNode = findTerminalNode(child, symbol);
+            if (terminalNode != null) {
+                return terminalNode;
+            }
+        }
+
+        return null;
+    }
+
     public static <Symbol> TerminalNode<Symbol> findTerminalNode(Collection<? extends ParseTree<Symbol>> children, Symbol symbol) {
         for (ParseTree<Symbol> element : children) {
             if (!(element instanceof TerminalNode<?>)) {
@@ -469,8 +514,8 @@ public final class ParseTrees {
      * @param b The second tree.
      * @return {@code true} if {@code a} is an ancestor of or is equal to {@code b}, otherwise {@code false}.
      */
-    public static boolean isAncestorOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
-        for (ParseTree<? extends Token> current = b; current != null; current = current.getParent()) {
+    public static boolean isAncestorOf(@NonNull ParseTree<?> a, @NonNull ParseTree<?> b) {
+        for (ParseTree<?> current = b; current != null; current = current.getParent()) {
             if (current.equals(a)) {
                 return true;
             }
