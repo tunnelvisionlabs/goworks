@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Utils;
 import org.tvl.goworks.editor.go.codemodel.TypeFunctionModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -112,6 +113,25 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
     @Override
     public ParameterModelImpl getReceiverParameter() {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("func(");
+        for (int i = 0; i < getParameters().size(); i++) {
+            result.append(Utils.join(getParameters(), ", "));
+        }
+        result.append(')');
+
+        if (!getReturnValues().isEmpty()) {
+            if (getReturnValues().size() == 1 && "_".equals(getReturnValues().get(0).getName())) {
+                result.append(' ').append(getReturnValues().get(0).getVarType().getSimpleName());
+            } else {
+                result.append(" (").append(Utils.join(getParameters(), ", ")).append(')');
+            }
+        }
+
+        return result.toString();
     }
 
     @Override

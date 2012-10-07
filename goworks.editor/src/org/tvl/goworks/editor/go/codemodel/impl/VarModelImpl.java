@@ -72,7 +72,7 @@ public class VarModelImpl extends AbstractCodeElementModel implements VarModel {
 
     @Override
     public String toString() {
-        return String.format("%s : %s", getName(), getVarType());
+        return String.format("%s %s", getName(), getVarType());
     }
 
 }

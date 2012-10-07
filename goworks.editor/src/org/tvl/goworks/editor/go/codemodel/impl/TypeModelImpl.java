@@ -120,7 +120,7 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
 
     @Override
     public String toString() {
-        return getName();
+        return getSimpleName();
     }
 
 }
