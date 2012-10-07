@@ -20,6 +20,10 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
@@ -51,6 +55,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinArgsContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
@@ -92,6 +97,23 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 public class CodeModelBuilderListener extends GoParserBaseListener {
     // -J-Dorg.tvl.goworks.editor.go.parser.CodeModelBuilderListener.level=FINE
     private static final Logger LOGGER = Logger.getLogger(CodeModelBuilderListener.class.getName());
+
+    public static final ParseTreeWalker PARSE_TREE_WALKER = new ParseTreeWalker() {
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0)
+        public <Symbol extends Token> void walk(ParseTreeListener<? super Symbol> listener, ParseTree<Symbol> t) {
+            if (t instanceof RuleNode) {
+                RuleNode<Symbol> ruleNode = (RuleNode<Symbol>)t;
+                if (ruleNode.getRuleContext() instanceof BodyContext) {
+                    return;
+                }
+            }
+
+            super.walk(listener, t);
+        }
+
+    };
 
     private final Project project;
     private final DocumentSnapshot snapshot;

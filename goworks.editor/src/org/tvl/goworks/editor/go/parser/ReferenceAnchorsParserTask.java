@@ -87,7 +87,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                     try {
                         CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokens);
                         if (parseResult != null) {
-                            ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
+                            CodeModelBuilderListener.PARSE_TREE_WALKER.walk(codeModelBuilderListener, parseResult);
                         }
                         FileModelImpl fileModel = codeModelBuilderListener.getFileModel();
                         if (fileModel != null) {
