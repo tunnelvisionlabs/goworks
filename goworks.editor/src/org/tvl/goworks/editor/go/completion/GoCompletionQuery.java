@@ -66,6 +66,7 @@ import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionErrorStrategy;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionTokenSource;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
@@ -193,20 +194,23 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         return getTopContext(parser, context.parent, values, false);
     }
 
-    public static ParserRuleContext<?> getTopContext(ParserRuleContext<?> context, IntervalSet values) {
+    @CheckForNull
+    public static <Symbol> ParseTree<Symbol> getTopContext(@NonNull ParseTree<Symbol> context, @NonNull IntervalSet values) {
         return getTopContext(context, values, true);
     }
 
-    public static ParserRuleContext<?> getTopContext(ParserRuleContext<?> context, IntervalSet values, boolean checkTop) {
-        if (checkTop && values.contains(context.getRuleIndex())) {
+    @CheckForNull
+    public static <Symbol> ParseTree<Symbol> getTopContext(@NonNull ParseTree<Symbol> context, @NonNull IntervalSet values, boolean checkTop) {
+        if (checkTop && context instanceof RuleNode && values.contains(((RuleNode<?>)context).getRuleContext().getRuleIndex())) {
             return context;
         }
 
-        if (context.isEmpty()) {
+        ParseTree<Symbol> parent = context.getParent();
+        if (parent == null) {
             return null;
         }
 
-        return getTopContext((ParserRuleContext<?>)context.parent, values, true);
+        return getTopContext(parent, values, true);
     }
 
     @Override
