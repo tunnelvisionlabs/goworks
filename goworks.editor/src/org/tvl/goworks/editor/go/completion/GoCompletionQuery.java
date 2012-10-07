@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +52,8 @@ import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple3;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -245,11 +246,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         return new DeclarationCompletionItem(document, applicableTo);
     }
 
-    private static final ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> ATTR_CONSTANTS = new ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>>("constants");
-    private static final ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> ATTR_LOCALS = new ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>>("locals");
-    private static final ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> ATTR_PARAMETER = new ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>>("parameter");
-    private static final ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> ATTR_RECEIVER_PARAMETER = new ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>>("receiver-parameter");
-    private static final ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> ATTR_RETURN_PARAMETER = new ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>>("return-parameter");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_CONSTANTS = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("constants");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_LOCALS = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("locals");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_PARAMETER = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("parameter");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_RECEIVER_PARAMETER = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("receiver-parameter");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_RETURN_PARAMETER = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("return-parameter");
 
     private static final ObjectProperty<Collection<? extends CodeElementModel>> ATTR_TARGET = new ObjectProperty<Collection<? extends CodeElementModel>>("target");
 
@@ -921,7 +922,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
 
                                             LOGGER.log(Level.FINE, "TODO: proper block scope for vars");
-                                            Map<TerminalNode<Token>, ParserRuleContext<Token>> constants = Collections.emptyMap();
+                                            Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> constants = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
 
                                             ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                                             if (functionContext != null) {
@@ -930,7 +931,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                 addVars(VarKind.RETURN, localsAnalyzer.getReturnParameters(functionContext), intermediateResults);
                                                 addVars(VarKind.LOCAL, localsAnalyzer.getLocals(functionContext), intermediateResults);
 
-                                                constants.putAll(localsAnalyzer.getConstants(functionContext));
+                                                constants.addAll(localsAnalyzer.getConstants(functionContext));
                                             }
 
                                             LOGGER.log(Level.FINE, "TODO: local constants");
@@ -1082,14 +1083,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
         }
 
-        private void addVars(VarKind varKind, Map<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>> vars, Map<String, ? super VarReferenceCompletionItem> intermediateResults) {
-            for (Map.Entry<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>> varEntry : vars.entrySet()) {
-                String name = varEntry.getKey().getText();
+        private void addVars(VarKind varKind, Collection<? extends Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer>> vars, Map<String, ? super VarReferenceCompletionItem> intermediateResults) {
+            for (Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer> varEntry : vars) {
+                String name = varEntry.getItem1().getText();
                 if (intermediateResults.containsKey(name)) {
                     continue;
                 }
 
-                Collection<? extends CodeElementModel> varTypes = targetAnalyzer.resolveTarget(varEntry.getValue());
+                Collection<? extends CodeElementModel> varTypes = targetAnalyzer.resolveTarget(varEntry.getItem2());
                 if (varTypes.isEmpty()) {
                     varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
                 }
@@ -1110,7 +1111,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         continue;
                     }
 
-                    VarModelImpl varModel = new VarModelImpl(name, varKind, typeModel, (FileModelImpl)getFileModel(), varEntry.getKey(), varEntry.getValue());
+                    VarModelImpl varModel = new VarModelImpl(name, varKind, typeModel, (FileModelImpl)getFileModel(), varEntry.getItem1(), varEntry.getItem2());
                     intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
                     break;
                 }
@@ -1141,33 +1142,33 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
 //            private final List<Token> labels = new ArrayList<Token>();
 
-            public Map<TerminalNode<Token>, ParserRuleContext<Token>> getLocals(@NonNull ParseTree<Token> context) {
+            public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getLocals(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_LOCALS);
             }
 
-            public Map<TerminalNode<Token>, ParserRuleContext<Token>> getConstants(@NonNull ParseTree<Token> context) {
+            public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getConstants(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_CONSTANTS);
             }
 
-            public Map<TerminalNode<Token>, ParserRuleContext<Token>> getReceiverParameters(@NonNull ParseTree<Token> context) {
+            public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getReceiverParameters(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_RECEIVER_PARAMETER);
             }
 
-            public Map<TerminalNode<Token>, ParserRuleContext<Token>> getParameters(@NonNull ParseTree<Token> context) {
+            public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getParameters(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_PARAMETER);
             }
 
-            public Map<TerminalNode<Token>, ParserRuleContext<Token>> getReturnParameters(@NonNull ParseTree<Token> context) {
+            public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getReturnParameters(@NonNull ParseTree<Token> context) {
                 Parameters.notNull("context", context);
                 return getLocals(context, ATTR_RETURN_PARAMETER);
             }
 
-            private Map<TerminalNode<Token>, ParserRuleContext<Token>> getLocals(ParseTree<Token> context, ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> property) {
-                Map<TerminalNode<Token>, ParserRuleContext<Token>> result = getLocalsProperty(context, property);
+            private Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getLocals(ParseTree<Token> context, ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> property) {
+                Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> result = getLocalsProperty(context, property);
                 if (result != null) {
                     return result;
                 }
@@ -1185,15 +1186,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     LOGGER.log(Level.FINE, "TODO: resolve locals");
                 }
 
-                return result != null ? result : Collections.<TerminalNode<Token>, ParserRuleContext<Token>>emptyMap();
+                if (result == null) {
+                    return Collections.emptyList();
+                }
+
+                return result;
             }
 
 //            public List<Token> getLabels() {
 //                return labels;
 //            }
 
-            private Map<TerminalNode<Token>, ParserRuleContext<Token>> getLocalsProperty(ParseTree<Token> context, ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> property) {
-                Map<TerminalNode<Token>, ParserRuleContext<Token>> result = annotations.getProperty(context, property);
+            private Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getLocalsProperty(ParseTree<Token> context, ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> property) {
+                Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> result = annotations.getProperty(context, property);
                 if (result != null) {
                     return result;
                 }
@@ -1201,35 +1206,35 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 return null;
             }
 
-            private void setLocalsProperty(ParseTree<Token> context, ObjectProperty<Map<TerminalNode<Token>, ParserRuleContext<Token>>> property, @NonNull Map<TerminalNode<Token>, ParserRuleContext<Token>> locals) {
+            private void setLocalsProperty(ParseTree<Token> context, ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> property, @NonNull Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> locals) {
                 Parameters.notNull("locals", locals);
                 annotations.putProperty(context, property, locals);
             }
 
             private class Listener extends GoParserBaseListener {
-                private final Map<TerminalNode<Token>, ParserRuleContext<Token>> locals = new IdentityHashMap<TerminalNode<Token>, ParserRuleContext<Token>>();
-                private final Map<TerminalNode<Token>, ParserRuleContext<Token>> receiverParameters = new IdentityHashMap<TerminalNode<Token>, ParserRuleContext<Token>>();
-                private final Map<TerminalNode<Token>, ParserRuleContext<Token>> parameters = new IdentityHashMap<TerminalNode<Token>, ParserRuleContext<Token>>();
-                private final Map<TerminalNode<Token>, ParserRuleContext<Token>> returnParameters = new IdentityHashMap<TerminalNode<Token>, ParserRuleContext<Token>>();
-                private final Map<TerminalNode<Token>, ParserRuleContext<Token>> constants = new IdentityHashMap<TerminalNode<Token>, ParserRuleContext<Token>>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> locals = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> receiverParameters = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> parameters = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> returnParameters = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> constants = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
 
-                public Map<TerminalNode<Token>, ParserRuleContext<Token>> getLocals() {
+                public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getLocals() {
                     return locals;
                 }
 
-                public Map<TerminalNode<Token>, ParserRuleContext<Token>> getConstants() {
+                public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getConstants() {
                     return constants;
                 }
 
-                public Map<TerminalNode<Token>, ParserRuleContext<Token>> getReceiverParameters() {
+                public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getReceiverParameters() {
                     return receiverParameters;
                 }
 
-                public Map<TerminalNode<Token>, ParserRuleContext<Token>> getParameters() {
+                public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getParameters() {
                     return parameters;
                 }
 
-                public Map<TerminalNode<Token>, ParserRuleContext<Token>> getReturnParameters() {
+                public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getReturnParameters() {
                     return returnParameters;
                 }
 
@@ -1263,11 +1268,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 public void enterRangeClause(RangeClauseContext ctx) {
                     if (ctx.defeq != null) {
                         if (ctx.e1 != null && ctx.e1.start != null) {
-                            locals.put(getStartNode(ctx.e1), null);
+                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)null, 0));
                         }
 
                         if (ctx.e2 != null && ctx.e2.start != null) {
-                            locals.put(getStartNode(ctx.e2), null);
+                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)null, 1));
                         }
                     }
                 }
@@ -1291,7 +1296,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0)
                 public void enterTypeSwitchGuard(TypeSwitchGuardContext ctx) {
                     if (ctx.IDENTIFIER() != null) {
-                        locals.put(ctx.IDENTIFIER(), null);
+                        locals.add(Tuple.create(ctx.IDENTIFIER(), (ParserRuleContext<Token>)null, 0));
                     }
                 }
 
@@ -1303,11 +1308,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 public void enterRecvStmt(RecvStmtContext ctx) {
                     if (ctx.defeq != null) {
                         if (ctx.e1 != null && ctx.e1.start != null) {
-                            locals.put(getStartNode(ctx.e1), null);
+                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)null, 0));
                         }
 
                         if (ctx.e2 != null && ctx.e2.start != null) {
-                            locals.put(getStartNode(ctx.e2), null);
+                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)null, 1));
                         }
                     }
                 }
@@ -1319,7 +1324,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 })
                 public void enterReceiver(ReceiverContext ctx) {
                     if (ctx.IDENTIFIER() != null) {
-                        receiverParameters.put(ctx.IDENTIFIER(), ctx.baseTypeName());
+                        receiverParameters.add(Tuple.create(ctx.IDENTIFIER(), (ParserRuleContext<Token>)ctx.baseTypeName(), 0));
                     }
                 }
 
@@ -1333,7 +1338,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 public void enterParameterDecl(ParameterDeclContext ctx) {
                     if (ctx.identifierList() != null) {
                         GoParser.ParametersContext parametersContext = (GoParser.ParametersContext)getTopContext(parser, ctx, IntervalSet.of(GoParser.RULE_parameters));
-                        Map<TerminalNode<Token>, ParserRuleContext<Token>> map = parametersContext.parent instanceof GoParser.ResultContext ? returnParameters : parameters;
+                        Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> map = parametersContext.parent instanceof GoParser.ResultContext ? returnParameters : parameters;
                         addVars(map, ctx.identifierList(), ctx.type(), null);
                     }
                 }
@@ -1355,7 +1360,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
-                private void addVars(@NonNull Map<TerminalNode<Token>, ParserRuleContext<Token>> map,
+                private void addVars(@NonNull Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> map,
                                      @NullAllowed GoParser.IdentifierListContext idList,
                                      @NullAllowed GoParser.TypeContext explicitType,
                                      @NullAllowed GoParser.ExpressionListContext exprList) {
@@ -1368,11 +1373,20 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     for (int i = 0; i < idList.IDENTIFIER().size(); i++) {
                         TerminalNode<Token> name = idList.IDENTIFIER(i);
                         ParserRuleContext<Token> type = explicitType;
-                        if (type == null && expressions != null && i < expressions.size()) {
-                            type = expressions.get(i);
+                        if (type == null && expressions != null) {
+                            if (i < expressions.size()) {
+                                type = expressions.get(i);
+                            } else if (expressions.size() == 1) {
+                                type = expressions.get(0);
+                            }
                         }
 
-                        map.put(name, type);
+                        if (type == null) {
+                            LOGGER.log(Level.FINE, "Couldn't resolve expression type.");
+                            continue;
+                        }
+
+                        map.add(Tuple.create(name, type, i));
                     }
                 }
             }
@@ -1765,7 +1779,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
             })
             public void enterQualifiedIdentifier(QualifiedIdentifierContext ctx) {
-                Map<TerminalNode<Token>, ParserRuleContext<Token>> vars = Collections.emptyMap();
+                Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars = Collections.emptyList();
                 List<CodeElementModel> contextModels = new ArrayList<CodeElementModel>();
                 List<ImportDeclarationModel> possibleImports = new ArrayList<ImportDeclarationModel>();
                 if (ctx.packageName() == null) {
@@ -1778,12 +1792,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                     ParseTree<Token> functionContext = getTopContext(parser, ctx, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                     if (functionContext != null) {
-                        vars = new IdentityHashMap<TerminalNode<Token>, ParserRuleContext<Token>>();
-                        vars.putAll(localsAnalyzer.getReceiverParameters(functionContext));
-                        vars.putAll(localsAnalyzer.getParameters(functionContext));
-                        vars.putAll(localsAnalyzer.getReturnParameters(functionContext));
-                        vars.putAll(localsAnalyzer.getConstants(functionContext));
-                        vars.putAll(localsAnalyzer.getLocals(functionContext));
+                        vars = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                        vars.addAll(localsAnalyzer.getReceiverParameters(functionContext));
+                        vars.addAll(localsAnalyzer.getParameters(functionContext));
+                        vars.addAll(localsAnalyzer.getReturnParameters(functionContext));
+                        vars.addAll(localsAnalyzer.getConstants(functionContext));
+                        vars.addAll(localsAnalyzer.getLocals(functionContext));
                     }
                 } else {
                     String pkgName = ctx.packageName().IDENTIFIER().getSymbol().getText();
@@ -1814,19 +1828,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         members.addAll(model.getMembers(name));
                     }
 
-                    for (Map.Entry<TerminalNode<Token>, ParserRuleContext<Token>> entry : vars.entrySet()) {
-                        if (!name.equals(entry.getKey().getText())) {
+                    for (Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer> entry : vars) {
+                        if (!name.equals(entry.getItem1().getText())) {
                             continue;
                         }
 
-                        Collection<? extends CodeElementModel> varTypes = resolveTarget(entry.getValue());
+                        Collection<? extends CodeElementModel> varTypes = resolveTarget(entry.getItem2());
                         for (CodeElementModel varType : varTypes) {
                             if (!(varType instanceof TypeModel)) {
                                 continue;
                             }
 
                             // TODO: use proper var kind
-                            VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModelImpl)varType, (FileModelImpl)getFileModel(), entry.getKey(), entry.getValue());
+                            VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModelImpl)varType, (FileModelImpl)getFileModel(), entry.getItem1(), entry.getItem2());
                             members.add(varModel);
                         }
                     }
