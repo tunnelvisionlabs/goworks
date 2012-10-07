@@ -1944,7 +1944,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             ObjectDecorator<Tree> treeDecorator = annotatedParseTree.getTreeDecorator();
-            ObjectDecorator<Token> tokenDecorator = annotatedParseTree.getTokenDecorator();
             Collection<? extends CodeElementModel> resolvedQualifier = treeDecorator.getProperty(qualifier, GoAnnotations.MODELS);
             if (resolvedQualifier == null) {
                 CodeElementReference qualifierCodeClass = treeDecorator.getProperty(qualifier, GoAnnotations.CODE_CLASS);
@@ -1968,9 +1967,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         return Collections.emptyList();
                     }
 
-                    Token unqualifiedLink = treeDecorator.getProperty(qualifier, GoAnnotations.UNQUALIFIED_LINK);
+                    TerminalNode<Token> unqualifiedLink = treeDecorator.getProperty(qualifier, GoAnnotations.UNQUALIFIED_LINK);
                     if (unqualifiedLink != null) {
-                        Map<? extends ObjectProperty<?>, ?> properties = tokenDecorator.getProperties(unqualifiedLink);
+                        Map<? extends ObjectProperty<?>, ?> properties = treeDecorator.getProperties(unqualifiedLink);
 //                        treeDecorator.putProperties(qualifier, properties);
                         qualifierNodeType = treeDecorator.getProperty(qualifier, GoAnnotations.NODE_TYPE);
                         if (qualifierNodeType == NodeType.UNDEFINED) {
@@ -2007,15 +2006,15 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 } else if (qualifierNodeType == NodeType.VAR_REF) {
                     // must be referring to something within the current file since it's resolved internally
-                    Token target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
-                    assert target != null && tokenDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
-                    ParserRuleContext<Token> explicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE) : null;
+                    TerminalNode<Token> target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
+                    assert target != null && treeDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
+                    ParserRuleContext<Token> explicitType = target != null ? treeDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE) : null;
                     if (explicitType != null) {
                         LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier);
                         resolvedQualifier = Collections.emptyList();
                     } else {
-                        ParserRuleContext<Token> implicitType = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE) : null;
-                        int implicitIndex = target != null ? tokenDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX) : -1;
+                        ParserRuleContext<Token> implicitType = target != null ? treeDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE) : null;
+                        int implicitIndex = target != null ? treeDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX) : -1;
                         LOGGER.log(Level.WARNING, "Unable to resolve implicit type for qualifier: {0}", qualifier);
                         resolvedQualifier = Collections.emptyList();
                     }

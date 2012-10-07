@@ -30,7 +30,6 @@ import org.openide.util.Parameters;
 public class AnnotatedParseTree {
 
     private final ObjectDecorator<Tree> treeAnnotations = new ObjectDecorator<Tree>(new IdentityHashMap<Tree, Map<ObjectProperty<?>, Object>>());
-    private final ObjectDecorator<Token> tokenAnnotations = new ObjectDecorator<Token>();
     private ParseTree<Token> parseTree;
 
     public AnnotatedParseTree(@NonNull ParseTree<Token> parseTree) {
@@ -46,10 +45,6 @@ public class AnnotatedParseTree {
 
     public final ObjectDecorator<Tree> getTreeDecorator() {
         return treeAnnotations;
-    }
-
-    public final ObjectDecorator<Token> getTokenDecorator() {
-        return tokenAnnotations;
     }
 
     public final void setParseTree(@NonNull ParseTree<Token> parseTree) {

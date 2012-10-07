@@ -31,19 +31,19 @@ public class GoAnnotatedParseTree extends AnnotatedParseTree {
     }
 
     public NodeType getNodeType(TerminalNode<? extends Token> node) {
-        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.NODE_TYPE);
+        return getTreeDecorator().getProperty(node, GoAnnotations.NODE_TYPE);
     }
 
     public VarKind getVarType(TerminalNode<? extends Token> node) {
-        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.VAR_TYPE);
+        return getTreeDecorator().getProperty(node, GoAnnotations.VAR_TYPE);
     }
 
     public TypeKind getTypeKind(TerminalNode<? extends Token> node) {
-        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.TYPE_KIND);
+        return getTreeDecorator().getProperty(node, GoAnnotations.TYPE_KIND);
     }
 
     public boolean isGlobal(TerminalNode<? extends Token> node) {
-        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.GLOBAL);
+        return getTreeDecorator().getProperty(node, GoAnnotations.GLOBAL);
     }
 
     public boolean isDeclaration(TerminalNode<? extends Token> node) {
@@ -51,13 +51,13 @@ public class GoAnnotatedParseTree extends AnnotatedParseTree {
     }
 
     public boolean isResolved(TerminalNode<? extends Token> node) {
-        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.RESOLVED)
+        return getTreeDecorator().getProperty(node, GoAnnotations.RESOLVED)
             || isDeclaration(node)
             || isBuiltin(node);
     }
 
     public boolean isBuiltin(TerminalNode<? extends Token> node) {
-        return getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.BUILTIN);
+        return getTreeDecorator().getProperty(node, GoAnnotations.BUILTIN);
     }
 
 }

@@ -18,6 +18,7 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
@@ -60,20 +61,20 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
 
             return results;
         } else if (context.IDENTIFIER() != null) {
-            Collection<? extends CodeElementModel> result = annotatedParseTree.getTokenDecorator().getProperty(context.IDENTIFIER().getSymbol(), GoAnnotations.MODELS);
+            Collection<? extends CodeElementModel> result = annotatedParseTree.getTreeDecorator().getProperty(context.IDENTIFIER(), GoAnnotations.MODELS);
             if (result != null) {
                 return result;
             }
 
-            Token decl = annotatedParseTree.getTokenDecorator().getProperty(context.IDENTIFIER().getSymbol(), GoAnnotations.LOCAL_TARGET);
+            TerminalNode<? extends Token> decl = annotatedParseTree.getTreeDecorator().getProperty(context.IDENTIFIER(), GoAnnotations.LOCAL_TARGET);
             if (decl != null) {
-                result = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.MODELS);
+                result = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.MODELS);
                 if (result != null) {
                     return result;
                 }
             }
 
-            if (decl == null || annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.NODE_TYPE) == NodeType.TYPE_DECL) {
+            if (decl == null || annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.NODE_TYPE) == NodeType.TYPE_DECL) {
                 result = currentPackage.getMembers(context.IDENTIFIER().getSymbol().getText());
                 Collection<PackageModel> mergePackages = resolvedPackages.get("");
                 if (mergePackages != null && !mergePackages.isEmpty()) {
@@ -94,16 +95,16 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
             switch (nodeType) {
             case VAR_REF:
             {
-                CodeElementReference varType = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.EXPR_TYPE);
+                CodeElementReference varType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.EXPR_TYPE);
                 if (varType == CodeElementReference.MISSING) {
-                    ParseTree<Token> explicitType = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.EXPLICIT_TYPE);
+                    ParseTree<Token> explicitType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.EXPLICIT_TYPE);
                     if (explicitType != null) {
                         varType = annotatedParseTree.getTreeDecorator().getProperty(explicitType, GoAnnotations.CODE_CLASS);
-                        if (annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.VARIADIC)) {
+                        if (annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.VARIADIC)) {
                             varType = new VariadicParameterTypeReference(varType);
                         }
                     } else {
-                        ParseTree<Token> implicitType = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.IMPLICIT_TYPE);
+                        ParseTree<Token> implicitType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.IMPLICIT_TYPE);
                         if (implicitType == null) {
                             LOGGER.log(Level.FINE, "Unable to find an explicit or implicit type for the tree.");
                             return Collections.emptyList();
@@ -117,12 +118,12 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
                         return Collections.emptyList();
                     }
 
-                    annotatedParseTree.getTokenDecorator().putProperty(decl, GoAnnotations.EXPR_TYPE, varType);
+                    annotatedParseTree.getTreeDecorator().putProperty(decl, GoAnnotations.EXPR_TYPE, varType);
                 }
 
                 Collection<? extends CodeElementModel> resolved = varType.resolve(annotatedParseTree, currentPackage, resolvedPackages);
 
-                int implicitIndex = annotatedParseTree.getTokenDecorator().getProperty(decl, GoAnnotations.IMPLICIT_INDEX);
+                int implicitIndex = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.IMPLICIT_INDEX);
                 if (implicitIndex >= 0) {
                     Collection<CodeElementModel> unwrapped = new ArrayList<CodeElementModel>();
                     for (CodeElementModel model : resolved) {

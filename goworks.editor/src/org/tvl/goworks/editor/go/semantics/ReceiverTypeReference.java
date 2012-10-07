@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotToken;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
@@ -27,22 +28,25 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
  */
 public class ReceiverTypeReference extends CodeElementReference {
 
-    private final Token name;
+    private final TerminalNode<? extends Token> name;
     private final boolean pointer;
 
-    public ReceiverTypeReference(Token name, boolean pointer) {
+    public ReceiverTypeReference(TerminalNode<? extends Token> name, boolean pointer) {
         this.name = name;
         this.pointer = pointer;
     }
 
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
-        Token localTarget = annotatedParseTree.getTokenDecorator().getProperty(name, GoAnnotations.LOCAL_TARGET);
+        TerminalNode<? extends Token> localTarget = annotatedParseTree.getTreeDecorator().getProperty(name, GoAnnotations.LOCAL_TARGET);
 
         Collection<? extends CodeElementModel> types = currentPackage.getTypes(name.getText());
+        if (localTarget == null) {
+            return types;
+        }
 
-        if (localTarget instanceof DocumentSnapshotToken) {
-            DocumentSnapshotToken snapshotToken = (DocumentSnapshotToken)localTarget;
+        if (localTarget.getSymbol() instanceof DocumentSnapshotToken) {
+            DocumentSnapshotToken snapshotToken = (DocumentSnapshotToken)localTarget.getSymbol();
             boolean foundCurrentDefinition = false;
             boolean foundCurrentFile = false;
             for (CodeElementModel model : types) {
@@ -56,7 +60,7 @@ public class ReceiverTypeReference extends CodeElementReference {
                 }
 
                 foundCurrentFile = true;
-                foundCurrentDefinition |= seek.getOffsetRegion().getStart() == localTarget.getStartIndex();
+                foundCurrentDefinition |= seek.getOffsetRegion().getStart() == localTarget.getSymbol().getStartIndex();
                 if (foundCurrentDefinition) {
                     break;
                 }

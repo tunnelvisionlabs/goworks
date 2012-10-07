@@ -41,7 +41,6 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Tuple;
 import org.antlr.v4.runtime.misc.Tuple2;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
@@ -303,9 +302,10 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         private final List<Token> markedOccurrences = new ArrayList<Token>();
 
         private final Token currentToken;
+        private final TerminalNode<? extends Token> currentNode;
 
         @NullAllowed
-        private final Token referencedToken;
+        private final TerminalNode<? extends Token> referencedToken;
         @NonNull
         private final Collection<? extends CodeElementModel> referencedElements;
 
@@ -314,10 +314,10 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             this.annotatedParseTree = annotatedParseTree;
 
             this.currentToken = getContext(position);
+            this.currentNode = ParseTrees.findTerminalNode(annotatedParseTree.getParseTree(), currentToken);
 
-            TerminalNode<Token> currentNode = findNodeForToken(annotatedParseTree.getParseTree(), currentToken);
             this.referencedToken = currentNode != null ? findReferencedToken(currentNode) : null;
-            this.referencedElements = currentNode != null ? findReferencedElements(currentToken) : Collections.<CodeElementModel>emptyList();
+            this.referencedElements = currentNode != null ? findReferencedElements(currentNode) : Collections.<CodeElementModel>emptyList();
         }
 
         @NonNull
@@ -328,7 +328,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         @Override
         public void visitTerminal(TerminalNode<? extends Token> node) {
             Token symbol = node.getSymbol();
-            Token otherReferenced = findReferencedToken(node);
+            TerminalNode<? extends Token> otherReferenced = findReferencedToken(node);
             if (referencedToken != null && otherReferenced != null) {
                 if (referencedToken.equals(otherReferenced)) {
                     markedOccurrences.add(symbol);
@@ -348,7 +348,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
                 return;
             }
 
-            Collection<? extends CodeElementModel> currentElements = findReferencedElements(symbol);
+            Collection<? extends CodeElementModel> currentElements = findReferencedElements(node);
             for (CodeElementModel i : referencedElements) {
                 for (CodeElementModel j : currentElements) {
                     if (i.equals(j)) {
@@ -360,71 +360,27 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @CheckForNull
-        private Token findReferencedToken(TerminalNode<? extends Token> node) {
-            Token target = annotatedParseTree.getTokenDecorator().getProperty(node.getSymbol(), GoAnnotations.LOCAL_TARGET);
+        private TerminalNode<? extends Token> findReferencedToken(TerminalNode<? extends Token> node) {
+            TerminalNode<? extends Token> target = annotatedParseTree.getTreeDecorator().getProperty(node, GoAnnotations.LOCAL_TARGET);
             if (target != null) {
                 return target;
             }
 
             if (annotatedParseTree.isDeclaration(node)) {
-                return node.getSymbol();
+                return node;
             }
 
             return null;
         }
 
         @NonNull
-        private Collection<? extends CodeElementModel> findReferencedElements(Token symbol) {
-            Collection<? extends CodeElementModel> models = annotatedParseTree.getTokenDecorator().getProperty(symbol, GoAnnotations.MODELS);
+        private Collection<? extends CodeElementModel> findReferencedElements(TerminalNode<? extends Token> symbol) {
+            Collection<? extends CodeElementModel> models = annotatedParseTree.getTreeDecorator().getProperty(symbol, GoAnnotations.MODELS);
             if (models == null) {
                 return Collections.emptyList();
             }
 
             return models;
-        }
-
-        private static TerminalNode<Token> findNodeForToken(ParseTree<Token> parseTree, Token currentToken) {
-            if (parseTree instanceof TerminalNode<?>) {
-                TerminalNode<Token> node = (TerminalNode<Token>)parseTree;
-                Token symbol = node.getSymbol();
-                if (symbol.equals(currentToken)) {
-                    return node;
-                }
-
-                return null;
-            }
-
-            for (int i = 0; i < parseTree.getChildCount(); i++) {
-                ParseTree<Token> child = parseTree.getChild(i);
-                TerminalNode<Token> stopNode = ParseTrees.getStopNode(child);
-                if (stopNode == null) {
-                    continue;
-                }
-
-                Token symbol = stopNode.getSymbol();
-                if (symbol.getStopIndex() < currentToken.getStartIndex()) {
-                    continue;
-                }
-
-                TerminalNode<Token> startNode = ParseTrees.getStartNode(child);
-                assert startNode != null;
-
-                symbol = startNode.getSymbol();
-                if (symbol.getStartIndex() > currentToken.getStopIndex()) {
-                    break;
-                }
-
-                if (symbol.equals(currentToken)) {
-                    return startNode;
-                }
-
-                TerminalNode<Token> node = findNodeForToken(child, currentToken);
-                if (node != null) {
-                    return node;
-                }
-            }
-
-            return null;
         }
 
     }
