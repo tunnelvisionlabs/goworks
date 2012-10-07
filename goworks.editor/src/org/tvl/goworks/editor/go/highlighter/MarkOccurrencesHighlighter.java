@@ -220,10 +220,10 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             return null;
         }
 
-        Tagger<TokenTag<Token>> tagger;
+        ParserData<Tagger<TokenTag<Token>>> tokensData;
         try {
-            tagger = futureTokensData.get().getData();
-            if (tagger == null) {
+            tokensData = futureTokensData.get();
+            if (tokensData == null) {
                 return null;
             }
         } catch (InterruptedException ex) {
@@ -231,6 +231,11 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             return null;
         } catch (ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
+            return null;
+        }
+
+        Tagger<TokenTag<Token>> tagger = tokensData.getData();
+        if (tagger == null) {
             return null;
         }
 
