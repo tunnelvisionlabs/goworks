@@ -137,6 +137,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 import org.tvl.goworks.editor.go.parser.GoLexer;
 import org.tvl.goworks.editor.go.parser.GoParser;
 import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.GoParserBaseVisitor;
 import org.tvl.goworks.editor.go.semantics.CodeElementReference;
 import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
 import org.tvl.goworks.editor.go.semantics.GoAnnotations;
@@ -817,7 +818,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         }
 
                                         // first resolve the type of the containing compositeLiteral
-                                        Collection<? extends CodeElementModel> models = targetAnalyzer.resolveTarget(compositeLiteralContext.literalType());
+                                        Collection<? extends CodeElementModel> models = targetAnalyzer.visit(compositeLiteralContext.literalType());
                                         if (literalValueContexts.size() > 1) {
                                             LOGGER.log(Level.FINE, "TODO: resolve nested values - need type of the innermost value.");
                                             models = Collections.emptyList();
@@ -1090,7 +1091,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     continue;
                 }
 
-                Collection<? extends CodeElementModel> varTypes = targetAnalyzer.resolveTarget(varEntry.getItem2());
+                Collection<? extends CodeElementModel> varTypes = targetAnalyzer.visit(varEntry.getItem2());
                 if (varTypes.isEmpty()) {
                     varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
                 }
@@ -1392,26 +1393,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
         }
 
-        private class TargetAnalyzer extends GoParserBaseListener {
+        private class TargetAnalyzer extends GoParserBaseVisitor<Collection<? extends CodeElementModel>> {
 
-            @NonNull
-            public Collection<? extends CodeElementModel> resolveTarget(@NullAllowed ParseTree<Token> context) {
-                if (context == null) {
-                    return Collections.emptyList();
-                }
-
-                Collection<? extends CodeElementModel> result = getTargetProperty(context);
-                if (result != null) {
-                    return result;
-                }
-
-                SingleElementParseTreeWalker.SINGLE_ELEMENT_WALKER.walk(this, context);
-                result = getTargetProperty(context);
-                if (result == null) {
-                    LOGGER.log(Level.FINE, "TODO: resolve selector target");
-                }
-
-                return result != null ? result : Collections.<CodeElementModel>emptyList();
+            @Override
+            public Collection<? extends CodeElementModel> visitChildren(RuleNode<? extends Token> node) {
+                LOGGER.log(Level.WARNING, "Context {0} is not supported by this visitor.", node.getClass());
+                return Collections.emptyList();
             }
 
             @Override
@@ -1419,14 +1406,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageClause, version=0),
             })
-            public void enterPackageName(PackageNameContext ctx) {
+            public Collection<? extends CodeElementModel> visitPackageName(PackageNameContext ctx) {
                 FileModel fileModel = getFileModel();
                 if (ctx.IDENTIFIER() == null || fileModel == null) {
-                    return;
+                    return Collections.emptyList();
                 }
 
                 if (ctx.getParent() instanceof GoParser.PackageClauseContext) {
-                    setTargetProperty(ctx, Collections.singletonList(fileModel.getPackage()));
+                    Collection<? extends CodeElementModel> resolved = Collections.singletonList(fileModel.getPackage());
+                    setTargetProperty(ctx, resolved);
+                    return resolved;
                 } else {
                     // look up the package by import
                     CodeModelCache cache = CodeModelCacheImpl.getInstance();
@@ -1439,6 +1428,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
 
                     setTargetProperty(ctx, resolved);
+                    return resolved;
                 }
             }
 
@@ -1447,47 +1437,48 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
             })
-            public void enterOperandExpr(OperandExprContext ctx) {
+            public Collection<? extends CodeElementModel> visitOperandExpr(OperandExprContext ctx) {
                 OperandContext operandContext = ctx.operand();
                 if (operandContext != null) {
-                    annotations.putProperty(ctx, ATTR_TARGET, resolveTarget(operandContext));
+                    Collection<? extends CodeElementModel> resolved = visit(operandContext);
+                    setTargetProperty(ctx, resolved);
+                    return resolved;
                 } else {
                     LOGGER.log(Level.FINE, "TODO: handle other expressions.");
+                    return Collections.emptyList();
                 }
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
-            public void enterBuiltinCallExpr(BuiltinCallExprContext ctx) {
+            public Collection<? extends CodeElementModel> visitBuiltinCallExpr(BuiltinCallExprContext ctx) {
                 LOGGER.log(Level.FINE, "TODO: handle other expressions.");
+                return Collections.emptyList();
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
-            public void enterSelectorExpr(SelectorExprContext ctx) {
+            public Collection<? extends CodeElementModel> visitSelectorExpr(SelectorExprContext ctx) {
                 if (ctx.IDENTIFIER() == null) {
-                    annotations.putProperty(ctx, ATTR_TARGET, null);
-                    return;
+                    setTargetProperty(ctx, Collections.<CodeElementModel>emptyList());
+                    return Collections.emptyList();
                 }
 
                 String name = ctx.IDENTIFIER().getSymbol().getText();
                 if (name == null || name.isEmpty()) {
-                    annotations.putProperty(ctx, ATTR_TARGET, null);
-                    return;
+                    setTargetProperty(ctx, Collections.<CodeElementModel>emptyList());
+                    return Collections.emptyList();
                 }
 
-                Collection<? extends CodeElementModel> targets = resolveTarget(ctx.expression());
-                if (targets == null) {
-                    annotations.putProperty(ctx, ATTR_TARGET, null);
-                    return;
-                }
+                Collection<? extends CodeElementModel> targets = visit(ctx.expression());
 
                 List<CodeElementModel> members = new ArrayList<CodeElementModel>();
                 for (CodeElementModel target : targets) {
                     members.addAll(target.getMembers(name));
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, members);
+                setTargetProperty(ctx, members);
+                return members;
             }
 
             @Override
@@ -1496,28 +1487,30 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
             })
-            public void enterType(TypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitType(TypeContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 if (ctx.typeName() != null) {
-                    result = resolveTarget(ctx.typeName());
+                    result = visit(ctx.typeName());
                 } else if (ctx.typeLiteral() != null) {
-                    result = resolveTarget(ctx.typeLiteral());
+                    result = visit(ctx.typeLiteral());
                 } else if (ctx.type() != null) {
-                    result = resolveTarget(ctx.type());
+                    result = visit(ctx.type());
                 } else {
                     LOGGER.log(Level.FINE, "Unknown type syntax.");
-                    result = null;
+                    result = Collections.emptyList();
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0)
-            public void enterTypeLiteral(TypeLiteralContext ctx) {
+            public Collection<? extends CodeElementModel> visitTypeLiteral(TypeLiteralContext ctx) {
                 assert ctx.getChildCount() <= 1 : "Unknown typeLiteral syntax.";
-                Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                Collection<? extends CodeElementModel> result = visit(ctx.getChild(0));
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -1525,10 +1518,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
-            public void enterArrayType(ArrayTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitArrayType(ArrayTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.elementType() != null) {
-                    result.addAll(resolveTarget(ctx.elementType()));
+                    result.addAll(visit(ctx.elementType()));
                 }
 
                 for (int i = result.size() - 1; i >= 0; i--) {
@@ -1540,7 +1533,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result.set(i, new TypeArrayModelImpl((TypeModelImpl)result.get(i)));
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -1548,21 +1542,23 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
             })
-            public void enterElementType(ElementTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitElementType(ElementTypeContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 if (ctx.type() != null) {
-                    result = resolveTarget(ctx.type());
+                    result = visit(ctx.type());
                 } else {
                     result = Collections.emptyList();
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
-            public void enterStructType(StructTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitStructType(StructTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+                return Collections.emptyList();
             }
 
             @Override
@@ -1570,10 +1566,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0),
             })
-            public void enterPointerType(PointerTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitPointerType(PointerTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.baseType() != null) {
-                    result.addAll(resolveTarget(ctx.baseType()));
+                    result.addAll(visit(ctx.baseType()));
                 }
 
                 for (int i = result.size() - 1; i >= 0; i--) {
@@ -1585,31 +1581,35 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result.set(i, new TypePointerModelImpl((TypeModelImpl)result.get(i)));
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0)
-            public void enterBaseType(BaseTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitBaseType(BaseTypeContext ctx) {
                 if (ctx.getChildCount() != 1) {
                     LOGGER.log(Level.FINE, "Unknown baseType syntax.");
-                    return;
+                    return Collections.emptyList();
                 }
 
-                Collection<? extends CodeElementModel> result = resolveTarget(ctx.type());
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                Collection<? extends CodeElementModel> result = visit(ctx.type());
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0)
-            public void enterFunctionType(FunctionTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitFunctionType(FunctionTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+                return Collections.emptyList();
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
-            public void enterInterfaceType(InterfaceTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitInterfaceType(InterfaceTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+                return Collections.emptyList();
             }
 
             @Override
@@ -1617,10 +1617,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
-            public void enterSliceType(SliceTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitSliceType(SliceTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.elementType() != null) {
-                    result.addAll(resolveTarget(ctx.elementType()));
+                    result.addAll(visit(ctx.elementType()));
                 }
 
                 for (int i = result.size() - 1; i >= 0; i--) {
@@ -1632,13 +1632,15 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result.set(i, new TypeSliceModelImpl((TypeModelImpl)result.get(i)));
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0)
-            public void enterMapType(MapTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitMapType(MapTypeContext ctx) {
                 LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+                return Collections.emptyList();
             }
 
             @Override
@@ -1646,10 +1648,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
-            public void enterChannelType(ChannelTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitChannelType(ChannelTypeContext ctx) {
                 List<CodeElementModel> result = new ArrayList<CodeElementModel>();
                 if (ctx.elementType() != null) {
-                    result.addAll(resolveTarget(ctx.elementType()));
+                    result.addAll(visit(ctx.elementType()));
                 }
 
                 ChannelKind channelKind = ChannelKind.SendReceive;
@@ -1668,7 +1670,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result.set(i, new TypeChannelModelImpl((TypeModelImpl)result.get(i), channelKind));
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -1676,23 +1679,25 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
-            public void enterLiteralType(LiteralTypeContext ctx) {
+            public Collection<? extends CodeElementModel> visitLiteralType(LiteralTypeContext ctx) {
                 if (ctx.elementType() != null) {
                     LOGGER.log(Level.FINE, "TODO: resolve implicit array creation.");
-                    return;
+                    return Collections.emptyList();
                 }
 
                 assert ctx.getChildCount() <= 1 : "Unknown literalType syntax.";
-                Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                Collection<? extends CodeElementModel> result = visit(ctx.getChild(0));
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0)
-            public void enterTypeName(TypeNameContext ctx) {
+            public Collection<? extends CodeElementModel> visitTypeName(TypeNameContext ctx) {
                 assert ctx.getChildCount() <= 1 : "Unknown typeName syntax.";
-                Collection<? extends CodeElementModel> result = resolveTarget(ctx.getChild(0));
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                Collection<? extends CodeElementModel> result = visit(ctx.getChild(0));
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -1700,7 +1705,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0),
             })
-            public void enterBaseTypeName(BaseTypeNameContext ctx) {
+            public Collection<? extends CodeElementModel> visitBaseTypeName(BaseTypeNameContext ctx) {
                 // must be a type in the current package
                 PackageModel currentPackage = getFileModel().getPackage();
                 Collection<? extends TypeModel> types = currentPackage.getTypes(ctx.IDENTIFIER().getSymbol().getText());
@@ -1722,7 +1727,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result.addAll(types);
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -1733,32 +1739,33 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
             })
-            public void enterOperand(OperandContext ctx) {
+            public Collection<? extends CodeElementModel> visitOperand(OperandContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 if (ctx.literal() != null) {
-                    result = resolveTarget(ctx.literal());
+                    result = visit(ctx.literal());
                 } else if (ctx.qualifiedIdentifier() != null) {
-                    result = resolveTarget(ctx.qualifiedIdentifier());
+                    result = visit(ctx.qualifiedIdentifier());
                 } else if (ctx.methodExpr() != null) {
-                    result = resolveTarget(ctx.methodExpr());
+                    result = visit(ctx.methodExpr());
                 } else if (ctx.expression() != null) {
-                    result = resolveTarget(ctx.expression());
+                    result = visit(ctx.expression());
                 } else {
                     LOGGER.log(Level.FINE, "TODO: unknown typeName syntax.");
-                    result = null;
+                    result = Collections.emptyList();
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
-            public void enterCallExpr(CallExprContext ctx) {
+            public Collection<? extends CodeElementModel> visitCallExpr(CallExprContext ctx) {
                 if (ctx.expression() == null) {
-                    return;
+                    return Collections.emptyList();
                 }
 
-                Collection<? extends CodeElementModel> methodResults = resolveTarget(ctx.expression());
+                Collection<? extends CodeElementModel> methodResults = visit(ctx.expression());
                 List<CodeElementModel> results = new ArrayList<CodeElementModel>();
                 for (CodeElementModel model : methodResults) {
                     if (!(model instanceof FunctionModel)) {
@@ -1768,7 +1775,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     results.addAll(((FunctionModel)model).getReturnValues());
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, results);
+                setTargetProperty(ctx, results);
+                return results;
             }
 
             @Override
@@ -1778,7 +1786,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
             })
-            public void enterQualifiedIdentifier(QualifiedIdentifierContext ctx) {
+            public Collection<? extends CodeElementModel> visitQualifiedIdentifier(QualifiedIdentifierContext ctx) {
                 Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars = Collections.emptyList();
                 List<CodeElementModel> contextModels = new ArrayList<CodeElementModel>();
                 List<ImportDeclarationModel> possibleImports = new ArrayList<ImportDeclarationModel>();
@@ -1833,7 +1841,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             continue;
                         }
 
-                        Collection<? extends CodeElementModel> varTypes = resolveTarget(entry.getItem2());
+                        Collection<? extends CodeElementModel> varTypes = visit(entry.getItem2());
                         for (CodeElementModel varType : varTypes) {
                             if (!(varType instanceof TypeModel)) {
                                 continue;
@@ -1846,7 +1854,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, members);
+                setTargetProperty(ctx, members);
+                return members;
             }
 
             @Override
@@ -1856,24 +1865,25 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0),
             })
-            public void enterLiteral(LiteralContext ctx) {
+            public Collection<? extends CodeElementModel> visitLiteral(LiteralContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 if (ctx.basicLiteral() != null) {
-                    result = resolveTarget(ctx.basicLiteral());
+                    result = visit(ctx.basicLiteral());
                 } else if (ctx.compositeLiteral() != null) {
-                    result = resolveTarget(ctx.compositeLiteral());
+                    result = visit(ctx.compositeLiteral());
                 } else if (ctx.functionLiteral() != null) {
-                    result = resolveTarget(ctx.functionLiteral());
+                    result = visit(ctx.functionLiteral());
                 } else {
                     result = Collections.emptyList();
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_basicLiteral, version=0)
-            public void enterBasicLiteral(BasicLiteralContext ctx) {
+            public Collection<? extends CodeElementModel> visitBasicLiteral(BasicLiteralContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 if (ctx.INT_LITERAL() != null) {
                     result = Collections.singletonList(IntrinsicTypeModels.INT);
@@ -1889,7 +1899,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result = Collections.emptyList();
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -1903,23 +1914,23 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
-            public void enterCompositeLiteral(CompositeLiteralContext ctx) {
+            public Collection<? extends CodeElementModel> visitCompositeLiteral(CompositeLiteralContext ctx) {
                 Collection<? extends CodeElementModel> result;
                 LiteralTypeContext literalType = ctx.literalType();
                 if (literalType != null) {
                     if (literalType.structType() != null) {
-                        result = resolveTarget(literalType.structType());
+                        result = visit(literalType.structType());
                     } else if (literalType.arrayType() != null) {
-                        result = resolveTarget(literalType.arrayType());
+                        result = visit(literalType.arrayType());
                     } else if (literalType.sliceType() != null) {
-                        result = resolveTarget(literalType.sliceType());
+                        result = visit(literalType.sliceType());
                     } else if (literalType.mapType() != null) {
-                        result = resolveTarget(literalType.mapType());
+                        result = visit(literalType.mapType());
                     } else if (literalType.typeName() != null) {
-                        result = resolveTarget(literalType.typeName());
+                        result = visit(literalType.typeName());
                     } else if (literalType.elementType() != null) {
                         List<CodeElementModel> arrayElementType = new ArrayList<CodeElementModel>();
-                        arrayElementType.addAll(resolveTarget(literalType.elementType()));
+                        arrayElementType.addAll(visit(literalType.elementType()));
                         for (int i = 0; i < arrayElementType.size(); i++) {
                             CodeElementModel elementType = arrayElementType.get(i);
                             if (elementType instanceof TypeModelImpl) {
@@ -1936,11 +1947,13 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result = Collections.emptyList();
                 }
 
-                annotations.putProperty(ctx, ATTR_TARGET, result);
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
-            public void enterFunctionLiteral(FunctionLiteralContext ctx) {
+            public Collection<? extends CodeElementModel> visitFunctionLiteral(FunctionLiteralContext ctx) {
+                return Collections.emptyList();
             }
 
             private Collection<? extends CodeElementModel> getTargetProperty(ParseTree<Token> context) {
@@ -2066,26 +2079,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             return annotatedParseTree;
         }
-    }
-
-    private static class SingleElementParseTreeWalker extends ParseTreeWalker {
-        public static final SingleElementParseTreeWalker SINGLE_ELEMENT_WALKER = new SingleElementParseTreeWalker();
-
-        @Override
-        public <Symbol extends Token> void walk(@NonNull ParseTreeListener<? super Symbol> listener, @NonNull ParseTree<Symbol> t) {
-            Parameters.notNull("listener", listener);
-            Parameters.notNull("t", t);
-
-            if (t instanceof RuleNode) {
-                RuleNode<Symbol> r = (RuleNode<Symbol>)t;
-                enterRule(listener, r);
-                exitRule(listener, r);
-                return;
-            }
-
-            super.walk(listener, t);
-        }
-
     }
 
     public static class UnknownTypeModelImpl extends TypeModelImpl {
