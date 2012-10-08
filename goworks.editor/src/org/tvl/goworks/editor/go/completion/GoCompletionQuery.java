@@ -2223,10 +2223,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 TerminalNode<Token> nameNode = ctx.IDENTIFIER();
                 if (nameNode != null) {
                     String name = nameNode.getSymbol().getText();
-                    for (CodeElementModel model : contextModels) {
-                        members.addAll(model.getMembers(name));
-                    }
-
                     for (Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer> entry : vars) {
                         if (!name.equals(entry.getItem1().getText())) {
                             continue;
@@ -2258,6 +2254,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             // TODO: use proper var kind
                             VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModelImpl)varType, (FileModelImpl)getFileModel(), entry.getItem1(), entry.getItem2());
                             members.add(varModel);
+                        }
+                    }
+
+                    if (members.isEmpty()) {
+                        for (CodeElementModel model : contextModels) {
+                            members.addAll(model.getMembers(name));
                         }
                     }
                 }
