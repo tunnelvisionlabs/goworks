@@ -77,6 +77,7 @@ import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.ChannelKind;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
+import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.CodeModelCache;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
@@ -1160,6 +1161,17 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (varTypes == null || varTypes.isEmpty()) {
+                    Object existing = intermediateResults.get(name);
+                    if (existing instanceof VarReferenceCompletionItem) {
+                        VarModel existingModel = ((VarReferenceCompletionItem)existing).getCodeElementModel();
+                        CodeElementPositionRegion seek = existingModel.getSeek();
+                        if (seek != null && seek.getFileObject().equals(((FileModelImpl)getFileModel()).getFileObject())) {
+                            if (seek.getOffsetRegion().getStart() == varEntry.getItem1().getSymbol().getStartIndex()) {
+                                continue;
+                            }
+                        }
+                    }
+
                     varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
                 }
 
