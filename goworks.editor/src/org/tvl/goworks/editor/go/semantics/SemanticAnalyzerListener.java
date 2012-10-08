@@ -507,7 +507,11 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 // must be referring to something within the current file since it's resolved internally
                 TerminalNode<Token> target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
                 assert target != null && treeDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
-                ParserRuleContext<Token> explicitType = target != null ? treeDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE) : null;
+                ParserRuleContext<Token> explicitType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPLICIT_TYPE);
+                if (explicitType == null && target != null) {
+                    explicitType = treeDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE);
+                }
+
                 if (explicitType != null) {
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier.toString(Arrays.asList(GoParser.ruleNames)));
@@ -1118,13 +1122,26 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+    })
     public void enterTypeSwitchGuard(TypeSwitchGuardContext ctx) {
+        if (ctx.IDENTIFIER() != null) {
+            treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
+            treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.VAR_TYPE, VarKind.LOCAL);
+            if (ctx.expression() != null) {
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EXPLICIT_TYPE, ctx.expression());
+            }
+
+            pendingVisibleLocals.peek().put(ctx.IDENTIFIER().getText(), ctx.IDENTIFIER());
+        }
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0)
     public void exitTypeSwitchGuard(TypeSwitchGuardContext ctx) {
+        applyPendingVars();
     }
 
     @Override
@@ -1898,6 +1915,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchStmt, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeCaseClause, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchCase, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void enterQualifiedIdentifier(QualifiedIdentifierContext ctx) {
         if (ctx.packageName() != null) {
@@ -1938,6 +1961,22 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 if (varType != VarKind.UNDEFINED) {
                     treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.VAR_TYPE, varType);
                 }
+
+                if (local.getParent().getRuleContext() instanceof TypeSwitchGuardContext) {
+                    TypeSwitchGuardContext typeSwitchGuardContext = (TypeSwitchGuardContext)local.getParent().getRuleContext();
+                    TypeSwitchStmtContext typeSwitchStmtContext = (TypeSwitchStmtContext)typeSwitchGuardContext.getParent();
+                    for (TypeCaseClauseContext typeCaseClauseContext : typeSwitchStmtContext.typeCaseClause()) {
+                        if (ParseTrees.isAncestorOf(typeCaseClauseContext, ctx)) {
+                            TypeListContext typeListContext = typeCaseClauseContext.typeSwitchCase() != null ? typeCaseClauseContext.typeSwitchCase().typeList() : null;
+                            if (typeListContext != null && typeListContext.type().size() == 1) {
+                                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EXPLICIT_TYPE, typeListContext.type(0));
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
                 return;
             }
 

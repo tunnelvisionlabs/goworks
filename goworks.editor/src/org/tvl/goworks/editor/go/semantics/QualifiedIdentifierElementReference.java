@@ -66,7 +66,13 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
                 return result;
             }
 
-            TerminalNode<? extends Token> decl = annotatedParseTree.getTreeDecorator().getProperty(context.IDENTIFIER(), GoAnnotations.LOCAL_TARGET);
+            TerminalNode<? extends Token> decl;
+            if (annotatedParseTree.getTreeDecorator().getProperty(context.IDENTIFIER(), GoAnnotations.EXPLICIT_TYPE) != null) {
+                decl = context.IDENTIFIER();
+            } else {
+                decl = annotatedParseTree.getTreeDecorator().getProperty(context.IDENTIFIER(), GoAnnotations.LOCAL_TARGET);
+            }
+
             if (decl != null) {
                 result = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.MODELS);
                 if (result != null) {

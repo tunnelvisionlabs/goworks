@@ -185,9 +185,11 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeAssertionExprContex
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeCaseClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSwitchCaseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSwitchGuardContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSwitchStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.UnaryExprContext;
@@ -1965,12 +1967,38 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeCaseClause, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchCase, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeList, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+            })
             public Collection<? extends CodeElementModel> visitTypeSwitchGuard(TypeSwitchGuardContext ctx) {
                 if (ctx.expression() == null) {
                     return Collections.emptyList();
                 }
 
-                return visit(ctx.expression());
+                TypeSwitchStmtContext typeSwitchStmtContext = (TypeSwitchStmtContext)ctx.getParent();
+                List<? extends TypeCaseClauseContext> typeCaseClauseContexts = typeSwitchStmtContext.typeCaseClause();
+                if (typeCaseClauseContexts.isEmpty()) {
+                    return visit(ctx.expression());
+                }
+
+                TypeCaseClauseContext lastContext = typeCaseClauseContexts.get(typeCaseClauseContexts.size() - 1);
+                TypeSwitchCaseContext typeSwitchCaseContext = lastContext.typeSwitchCase();
+                if (typeSwitchCaseContext == null) {
+                    return visit(ctx.expression());
+                }
+
+                TypeListContext typeListContext = typeSwitchCaseContext.typeList();
+                if (typeListContext == null || typeListContext.type().size() != 1) {
+                    return visit(ctx.expression());
+                }
+
+                return visit(typeListContext.type(0));
             }
 
             @RuleDependencies({
@@ -2667,7 +2695,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     // must be referring to something within the current file since it's resolved internally
                     TerminalNode<Token> target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
                     assert target != null && treeDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
-                    ParserRuleContext<Token> explicitType = target != null ? treeDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE) : null;
+                    ParserRuleContext<Token> explicitType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPLICIT_TYPE);
+                    if (explicitType == null && target != null) {
+                        explicitType = treeDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE);
+                    }
                     if (explicitType != null) {
                         LOGGER.log(Level.WARNING, "Unable to resolve explicit type for qualifier: {0}", qualifier);
                         resolvedQualifier = Collections.emptyList();
