@@ -2224,6 +2224,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 if (nameNode != null) {
                     String name = nameNode.getSymbol().getText();
                     for (Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer> entry : vars) {
+                        if (ParseTrees.isAncestorOf(entry.getItem2(), nameNode)) {
+                            // prevent stack overflow from redeclaration of a variable
+                            continue;
+                        }
+
                         if (!name.equals(entry.getItem1().getText())) {
                             continue;
                         }
