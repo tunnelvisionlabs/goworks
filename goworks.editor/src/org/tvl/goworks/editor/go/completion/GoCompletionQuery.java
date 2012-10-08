@@ -97,6 +97,7 @@ import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.codemodel.VarModel;
 import org.tvl.goworks.editor.go.codemodel.impl.AbstractCodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.impl.CodeModelCacheImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FunctionModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.ParameterModelImpl;
@@ -982,36 +983,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                             }
 
                                             LOGGER.log(Level.FINE, "TODO: proper block scope for vars");
-                                            Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> constants = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
-
                                             ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                                             if (functionContext != null) {
                                                 addVars(VarKind.RECEIVER, finalContext, localsAnalyzer.getReceiverParameters(functionContext), intermediateResults);
                                                 addVars(VarKind.PARAMETER, finalContext, localsAnalyzer.getParameters(functionContext), intermediateResults);
                                                 addVars(VarKind.RETURN, finalContext, localsAnalyzer.getReturnParameters(functionContext), intermediateResults);
                                                 addVars(VarKind.LOCAL, finalContext, localsAnalyzer.getLocals(functionContext), intermediateResults);
-
-                                                constants.addAll(localsAnalyzer.getConstants(functionContext));
+                                                addVars(VarKind.LOCAL, finalContext, localsAnalyzer.getConstants(functionContext), intermediateResults);
                                             }
-
-                                            LOGGER.log(Level.FINE, "TODO: local constants");
-    //                                        for (Map.Entry<Token, ParserRuleContext<Token>> constEntry : constants.entrySet()) {
-    //                                            String name = constEntry.getKey().getText();
-    //                                            if (intermediateResults.containsKey(name)) {
-    //                                                continue;
-    //                                            }
-    //
-    //                                            Collection<? extends CodeElementModel> varTypes = targetAnalyzer.resolveTarget(constEntry.getValue());
-    //                                            for (CodeElementModel varType : varTypes) {
-    //                                                if (!(varType instanceof TypeModel)) {
-    //                                                    continue;
-    //                                                }
-    //
-    //                                                VarModelImpl varModel = new VarModelImpl(name, (TypeModel)varType, (FileModelImpl)getFileModel());
-    //                                                intermediateResults.put(name, new VarReferenceCompletionItem(varModel));
-    //                                                break;
-    //                                            }
-    //                                        }
                                         }
                                     } else if (finalContext instanceof GoParser.BaseTypeNameContext) {
                                         // this is the name of a type in the current package
@@ -1143,7 +1122,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
         }
 
-        private void addVars(VarKind varKind, ParseTree<? extends Token> finalContext, Collection<? extends Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer>> vars, Map<String, ? super VarReferenceCompletionItem> intermediateResults) {
+        private void addVars(VarKind varKind, ParseTree<? extends Token> finalContext, Collection<? extends Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer>> vars, Map<String, ? super GoCompletionItem> intermediateResults) {
             for (Tuple3<? extends TerminalNode<? extends Token>, ? extends ParserRuleContext<Token>, Integer> varEntry : vars) {
                 String name = varEntry.getItem1().getText();
 
@@ -1153,16 +1132,21 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     continue;
                 }
 
+                int index = varEntry.getItem3();
+                if (index < 0) {
+                    index = -index - 1;
+                }
+
                 Collection<? extends CodeElementModel> varTypes = targetAnalyzer.visit(varEntry.getItem2());
-                if (varTypes != null) {
+                if (varTypes != null && index >= 0) {
                     ArrayList<CodeElementModel> unbundledTypes = new ArrayList<CodeElementModel>();
                     for (CodeElementModel varType : varTypes) {
                         if (varType instanceof BundledReturnTypeModel) {
                             List<? extends CodeElementModel> returnValues = ((BundledReturnTypeModel)varType).getReturnValues();
-                            if (returnValues.size() > varEntry.getItem3()) {
-                                unbundledTypes.add(((BundledReturnTypeModel)varType).getReturnValues().get(varEntry.getItem3()));
+                            if (returnValues.size() > index) {
+                                unbundledTypes.add(((BundledReturnTypeModel)varType).getReturnValues().get(index));
                             }
-                        } else if (varEntry.getItem3() == 0) {
+                        } else if (index == 0) {
                             unbundledTypes.add(varType);
                         }
                     }
@@ -1185,22 +1169,31 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
                 }
 
-                for (CodeElementModel model : varTypes) {
-                    TypeModelImpl typeModel;
-                    if (model instanceof TypeModelImpl) {
-                        typeModel = (TypeModelImpl)model;
-                    } else if (model instanceof VarModelImpl) {
-                        // this could be an implicit reference to a field or the return value of a function
-                        VarModelImpl varModel = (VarModelImpl)model;
-                        typeModel = varModel.getVarType();
-                    } else {
-                        LOGGER.log(Level.WARNING, "Unsupported code model: {0}", model.getClass());
-                        continue;
-                    }
+                if (varEntry.getItem3() < 0) {
+                    ConstModelImpl constModel = new ConstModelImpl(name, (FileModelImpl)getFileModel(), varEntry.getItem1(), varEntry.getItem2());
+                    intermediateResults.put(name, new ConstReferenceCompletionItem(constModel, true));
+                } else {
+                    for (CodeElementModel model : varTypes) {
+                        TypeModelImpl typeModel;
+                        if (model instanceof TypeModelImpl) {
+                            typeModel = (TypeModelImpl)model;
+                        } else if (model instanceof VarModelImpl) {
+                            // this could be an implicit reference to a field or the return value of a function
+                            VarModelImpl varModel = (VarModelImpl)model;
+                            typeModel = varModel.getVarType();
+                        } else if (model instanceof ConstModel) {
+                            intermediateResults.put(name, new ConstReferenceCompletionItem((ConstModel)model, true));
+                            continue;
+                        } else {
+                            LOGGER.log(Level.WARNING, "Unsupported code model: {0}", model.getClass());
+                            continue;
+                        }
 
-                    VarModelImpl varModel = new VarModelImpl(name, varKind, typeModel, (FileModelImpl)getFileModel(), varEntry.getItem1(), varEntry.getItem2());
-                    intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
-                    break;
+                            VarModelImpl varModel = new VarModelImpl(name, varKind, typeModel, (FileModelImpl)getFileModel(), varEntry.getItem1(), varEntry.getItem2());
+                            intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
+
+                        break;
+                    }
                 }
             }
         }
@@ -1446,6 +1439,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
                 })
                 private void addVars(@NonNull Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars,
                                      @NullAllowed GoParser.IdentifierListContext idList,
@@ -1473,6 +1467,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         if (type == null) {
                             LOGGER.log(Level.FINE, "Couldn't resolve expression type.");
                             continue;
+                        }
+
+                        if (idList.getParent() instanceof ConstSpecContext) {
+                            index = -index - 1;
                         }
 
                         vars.add(Tuple.create(name, type, index));
@@ -2774,7 +2772,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         public ParseTree<Token> visitIdentifierList(IdentifierListContext ctx) {
             switch (ctx.getParent().getRuleIndex()) {
             case GoParser.RULE_constSpec:
-                ConstDeclContext constDeclContext = (ConstDeclContext)ctx.getParent();
+                ConstDeclContext constDeclContext = (ConstDeclContext)((ConstSpecContext)ctx.getParent()).getParent();
                 return HELPER_INSTANCE.visit((DeclarationContext)constDeclContext.getParent());
 
             case GoParser.RULE_fieldDecl:
