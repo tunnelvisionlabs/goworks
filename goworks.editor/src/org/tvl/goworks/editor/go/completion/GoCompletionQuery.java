@@ -1168,12 +1168,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     if (model instanceof TypeModelImpl) {
                         typeModel = (TypeModelImpl)model;
                     } else if (model instanceof VarModelImpl) {
-                        // this could be an implicit reference to the return value of a function
+                        // this could be an implicit reference to a field or the return value of a function
                         VarModelImpl varModel = (VarModelImpl)model;
-                        if (varModel.getVarKind() != VarKind.RETURN) {
-                            continue;
-                        }
-
                         typeModel = varModel.getVarType();
                     } else {
                         LOGGER.log(Level.WARNING, "Unsupported code model: {0}", model.getClass());
