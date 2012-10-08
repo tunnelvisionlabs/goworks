@@ -233,6 +233,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
     private final Deque<Map<String, TerminalNode<Token>>> visibleFunctions = new ArrayDeque<Map<String, TerminalNode<Token>>>();
     private final Deque<Map<String, TerminalNode<Token>>> visibleTypes = new ArrayDeque<Map<String, TerminalNode<Token>>>();
 
+    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleLocals = new ArrayDeque<Map<String, TerminalNode<Token>>>();
+    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleConstants = new ArrayDeque<Map<String, TerminalNode<Token>>>();
+
     private final List<TerminalNode<Token>> unresolvedIdentifiers = new ArrayList<TerminalNode<Token>>();
     private final List<TerminalNode<Token>> unresolvedQualifiedIdentifiers = new ArrayList<TerminalNode<Token>>();
 
@@ -1212,8 +1215,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0)
     public void exitConstSpec(ConstSpecContext ctx) {
+        applyPendingVars();
     }
 
     @Override
@@ -1283,8 +1287,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0)
     public void exitShortVarDecl(ShortVarDeclContext ctx) {
+        applyPendingVars();
     }
 
     @Override
@@ -1444,8 +1449,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0)
     public void exitFieldDecl(FieldDeclContext ctx) {
+        applyPendingVars();
     }
 
     @Override
@@ -1497,8 +1503,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0)
     public void exitParameterDecl(ParameterDeclContext ctx) {
+        applyPendingVars();
     }
 
     @Override
@@ -1797,8 +1804,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0)
     public void exitVarSpec(VarSpecContext ctx) {
+        applyPendingVars();
     }
 
     @Override
@@ -2540,11 +2548,11 @@ public class SemanticAnalyzerListener implements GoParserListener {
             Token token = terminalNode.getSymbol();
             if (nodeType == NodeType.VAR_DECL) {
                 if (varType != VarKind.FIELD) {
-                    visibleLocals.peek().put(token.getText(), terminalNode);
+                    pendingVisibleLocals.peek().put(token.getText(), terminalNode);
                 }
             } else {
                 assert nodeType == NodeType.CONST_DECL;
-                visibleConstants.peek().put(token.getText(), terminalNode);
+                pendingVisibleConstants.peek().put(token.getText(), terminalNode);
             }
 
             treeDecorator.putProperty(terminalNode, GoAnnotations.NODE_TYPE, nodeType);
@@ -2757,7 +2765,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             if (ctx.e1 != null && ctx.e1.start == ParseTrees.getStopSymbol(ctx.e1)) {
                 Token token = ctx.e1.start;
                 TerminalNode<Token> startNode = ParseTrees.getStartNode(ctx.e1);
-                visibleLocals.peek().put(token.getText(), startNode);
+                pendingVisibleLocals.peek().put(token.getText(), startNode);
                 treeDecorator.putProperty(startNode, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
                 treeDecorator.putProperty(startNode, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
                 treeDecorator.putProperty(startNode, GoAnnotations.IMPLICIT_TYPE, ctx);
@@ -2767,7 +2775,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             if (ctx.e2 != null && ctx.e2.start == ParseTrees.getStopSymbol(ctx.e2)) {
                 Token token = ctx.e2.start;
                 TerminalNode<Token> startNode = ParseTrees.getStartNode(ctx.e2);
-                visibleLocals.peek().put(token.getText(), startNode);
+                pendingVisibleLocals.peek().put(token.getText(), startNode);
                 treeDecorator.putProperty(startNode, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
                 treeDecorator.putProperty(startNode, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
                 treeDecorator.putProperty(startNode, GoAnnotations.IMPLICIT_TYPE, ctx);
@@ -2788,6 +2796,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         }
 
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, exprType);
+        applyPendingVars();
     }
 
     @Override
@@ -3035,6 +3044,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
         visibleConstants.push(new HashMap<String, TerminalNode<Token>>());
         visibleFunctions.push(new HashMap<String, TerminalNode<Token>>());
         visibleTypes.push(new HashMap<String, TerminalNode<Token>>());
+
+        pendingVisibleLocals.push(new HashMap<String, TerminalNode<Token>>());
+        pendingVisibleConstants.push(new HashMap<String, TerminalNode<Token>>());
     }
 
     private void popVarScope() {
@@ -3042,8 +3054,20 @@ public class SemanticAnalyzerListener implements GoParserListener {
         visibleConstants.pop();
         visibleFunctions.pop();
         visibleTypes.pop();
+
+        assert pendingVisibleLocals.peek().isEmpty();
+        assert pendingVisibleConstants.peek().isEmpty();
+        pendingVisibleLocals.pop();
+        pendingVisibleConstants.pop();
     }
 
+    private void applyPendingVars() {
+        visibleLocals.peek().putAll(pendingVisibleLocals.peek());
+        pendingVisibleLocals.peek().clear();
+
+        visibleConstants.peek().putAll(pendingVisibleConstants.peek());
+        pendingVisibleConstants.peek().clear();
+    }
     private TerminalNode<Token> getVisibleDeclaration(TerminalNode<Token> reference) {
         TerminalNode<Token> result = getVisibleLocal(reference);
         result = result != null ? result : getVisibleConstant(reference);
