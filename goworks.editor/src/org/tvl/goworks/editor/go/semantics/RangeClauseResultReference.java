@@ -84,7 +84,7 @@ public class RangeClauseResultReference extends CodeElementReference {
                 elements.add(new BundledReturnTypeModel(Arrays.asList(firstValue, secondValue)));
             } else if (model instanceof TypeIntrinsicModel) {
                 if (((TypeIntrinsicModel)model).getIntrinsicKind() == IntrinsicKind.STRING) {
-                    elements.add(new BundledReturnTypeModel(Arrays.asList((AbstractCodeElementModel)IntrinsicTypeModels.INT, (AbstractCodeElementModel)IntrinsicTypeModels.INT)));
+                    elements.add(new BundledReturnTypeModel(Arrays.asList((AbstractCodeElementModel)IntrinsicTypeModels.INT, (AbstractCodeElementModel)IntrinsicTypeModels.RUNE)));
                 }
             } else {
                 CodeElementModel unwrappedModel = model;
