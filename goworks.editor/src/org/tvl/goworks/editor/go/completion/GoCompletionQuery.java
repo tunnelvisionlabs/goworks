@@ -1437,7 +1437,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
-                private void addVars(@NonNull Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> map,
+                private void addVars(@NonNull Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars,
                                      @NullAllowed GoParser.IdentifierListContext idList,
                                      @NullAllowed GoParser.TypeContext explicitType,
                                      @NullAllowed GoParser.ExpressionListContext exprList) {
@@ -1450,9 +1450,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     for (int i = 0; i < idList.IDENTIFIER().size(); i++) {
                         TerminalNode<Token> name = idList.IDENTIFIER(i);
                         ParserRuleContext<Token> type = explicitType;
+                        int index = type != null ? 0 : i;
                         if (type == null && expressions != null) {
                             if (i < expressions.size()) {
                                 type = expressions.get(i);
+                                index = 0;
                             } else if (expressions.size() == 1) {
                                 type = expressions.get(0);
                             }
@@ -1463,7 +1465,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             continue;
                         }
 
-                        map.add(Tuple.create(name, type, i));
+                        vars.add(Tuple.create(name, type, index));
                     }
                 }
             }
