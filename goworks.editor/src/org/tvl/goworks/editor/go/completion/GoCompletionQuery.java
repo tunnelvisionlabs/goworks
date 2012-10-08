@@ -1586,7 +1586,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     setTargetProperty(ctx, resolved);
                     return resolved;
                 } else {
-                    LOGGER.log(Level.FINE, "TODO: handle other expressions.");
+                    LOGGER.log(Level.WARNING, "TODO: handle other expressions.");
                     return Collections.emptyList();
                 }
             }
@@ -1601,7 +1601,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 if (builtinCallContext == null) {
                     return Collections.emptyList();
                 }
-                
+
                 Collection<? extends CodeElementModel> result = visit(builtinCallContext);
                 setTargetProperty(ctx, result);
                 return result;
@@ -1697,7 +1697,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 } else if (ctx.type() != null) {
                     result = visit(ctx.type());
                 } else {
-                    LOGGER.log(Level.FINE, "Unknown type syntax.");
+                    LOGGER.log(Level.WARNING, "Unknown type syntax.");
                     result = Collections.emptyList();
                 }
 
@@ -1758,7 +1758,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
             public Collection<? extends CodeElementModel> visitStructType(StructTypeContext ctx) {
-                LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
+                LOGGER.log(Level.WARNING, "Target resolution for context {0} is not implemented.", ctx.getClass());
                 return Collections.emptyList();
             }
 
@@ -1790,7 +1790,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0)
             public Collection<? extends CodeElementModel> visitBaseType(BaseTypeContext ctx) {
                 if (ctx.getChildCount() != 1) {
-                    LOGGER.log(Level.FINE, "Unknown baseType syntax.");
+                    LOGGER.log(Level.WARNING, "Unknown baseType syntax.");
                     return Collections.emptyList();
                 }
 
@@ -1967,7 +1967,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             })
             public Collection<? extends CodeElementModel> visitLiteralType(LiteralTypeContext ctx) {
                 if (ctx.elementType() != null) {
-                    LOGGER.log(Level.FINE, "TODO: resolve implicit array creation.");
+                    LOGGER.log(Level.WARNING, "TODO: resolve implicit array creation.");
                     return Collections.emptyList();
                 }
 
@@ -2036,7 +2036,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 } else if (ctx.expression() != null) {
                     result = visit(ctx.expression());
                 } else {
-                    LOGGER.log(Level.FINE, "TODO: unknown typeName syntax.");
+                    LOGGER.log(Level.WARNING, "TODO: unknown typeName syntax.");
                     result = Collections.emptyList();
                 }
 
