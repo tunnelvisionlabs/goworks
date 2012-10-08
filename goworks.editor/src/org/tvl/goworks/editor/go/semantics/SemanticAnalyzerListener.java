@@ -1941,6 +1941,14 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 return;
             }
 
+            TerminalNode<Token> constant = getVisibleConstant(ctx.IDENTIFIER());
+            if (constant != null) {
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, constant);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
+                return;
+            }
+
             // check built-ins
             if (SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.IDENTIFIER().getSymbol().getText())) {
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.FUNC_REF);
