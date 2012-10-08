@@ -4134,7 +4134,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		ExpressionContext _localctx = new ExpressionContext(_ctx, _parentState, _p);
 		ExpressionContext _prevctx = _localctx;
 		int _startState = 118;
-		pushNewRecursionContext(_localctx, 118, RULE_expression);
+		enterRecursionRule(_localctx, RULE_expression);
 		int _la;
 		try {
 			int _alt;
@@ -4195,7 +4195,6 @@ public abstract class AbstractGoParser extends Parser<Token> {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
-					_prevctx.stop = _input.LT(-1);
 					{
 					setState(670);
 					//_errHandler.sync(this);
@@ -4203,9 +4202,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 1:
 							{
 							_localctx = new MultExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(622);
 							if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
 							setState(623);
@@ -4222,9 +4219,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 2:
 							{
 							_localctx = new AddExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(625);
 							if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
 							setState(626);
@@ -4241,9 +4236,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 3:
 							{
 							_localctx = new CompareExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(628);
 							if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
 							setState(629);
@@ -4260,9 +4253,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 4:
 							{
 							_localctx = new AndExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(631);
 							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
 							setState(632); match(And);
@@ -4273,9 +4264,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 5:
 							{
 							_localctx = new OrExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(634);
 							if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "1 >= $_p");
 							setState(635); match(Or);
@@ -4286,9 +4275,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 6:
 							{
 							_localctx = new SelectorExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(637);
 							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
 							setState(638); ((SelectorExprContext)_localctx).dot = match(Dot);
@@ -4299,9 +4286,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 7:
 							{
 							_localctx = new IndexExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(640);
 							if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
 							setState(641); match(LeftBrack);
@@ -4313,9 +4298,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 8:
 							{
 							_localctx = new SliceExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(645);
 							if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
 							setState(646); match(LeftBrack);
@@ -4345,9 +4328,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 9:
 							{
 							_localctx = new TypeAssertionExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(655);
 							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
 							setState(656); ((TypeAssertionExprContext)_localctx).dot = match(Dot);
@@ -4360,9 +4341,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						case 10:
 							{
 							_localctx = new CallExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							_localctx.addChild(_prevctx);
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							_localctx.start = _prevctx.start;
 							setState(661);
 							if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "7 >= $_p");
 							setState(662); ((CallExprContext)_localctx).lp = match(LeftParen);
@@ -4402,7 +4381,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			_errHandler.recover(this, re);
 		}
 		finally {
-			unrollRecursionContexts(_parentctx, _parentState);
+			unrollRecursionContexts(_parentctx);
 		}
 		return _localctx;
 	}
@@ -8127,20 +8106,17 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		"\u0406\u0407\3\u00deo\0\u0407\u0408\6n\uffff\0\u0408\u040d\1\0\0\0\u0409"+
 		"\u040a\3\u00deo\0\u040a\u040b\6n\uffff\0\u040b\u040d\1\0\0\0\u040c\u0403"+
 		"\1\0\0\0\u040c\u0405\1\0\0\0\u040c\u0409\1\0\0\0\u040d\u00dd\1\0\0\0\u040e"+
-		"\u040f\5R\0\0\u040f\u00df\1\0\0\0v\u00e6\1\u00f2\1\u0108\1\u010c\1\u0114"+
-		"\1\u0117\1\u011a\1\u012a\1\u012e\1\u0133\1\u0135\1\u013e\1\u0142\1\u0145"+
-		"\1\u0150\1\u0154\1\u0156\1\u015e\1\u016e\1\u0172\1\u017c\1\u0180\1\u0182"+
-		"\1\u0189\1\u018e\1\u0198\1\u019c\1\u019e\1\u01a1\1\u01a5\1\u01a9\1\u01b0"+
-		"\1\u01b8\1\u01c3\1\u01c7\1\u01c9\1\u01cc\1\u01d9\1\u01dd\1\u01df\1\u01e2"+
-		"\1\u01e8\1\u01ec\1\u01f6\1\u01ff\1\u0203\1\u0206\1\u0214\1\u0219\1\u0221"+
-		"\1\u022f\1\u023d\1\u0242\1\u0244\1\u024d\1\u0253\1\u0259\1\u0261\1\u026c"+
-		"\1\u0288\1\u028c\1\u0299\1\u029b\1\u029e\1\u02a0\1\u02a5\1\u02bb\1\u02c3"+
-		"\1\u02df\1\u02e9\1\u02f0\1\u02f2\1\u02f6\1\u02fc\1\u02ff\1\u0305\1\u0311"+
-		"\1\u0315\1\u0317\1\u031c\1\u0322\1\u0329\1\u0330\1\u033f\1\u0343\1\u0345"+
-		"\1\u034a\1\u0351\1\u0358\1\u035f\1\u0363\1\u0367\1\u0370\1\u0374\1\u0381"+
-		"\1\u038d\1\u0391\1\u0393\1\u0398\1\u039b\1\u03a0\1\u03a4\1\u03a6\1\u03ae"+
-		"\1\u03b2\1\u03b6\1\u03c4\1\u03c6\1\u03cd\1\u03d0\1\u03d5\1\u03dc\1\u03e4"+
-		"\1\u03f8\1\u03fc\1\u03fe\1\u0401\1\u040c\1";
+		"\u040f\5R\0\0\u040f\u00df\1\0\0\0v\u00e6\u00f2\u0108\u010c\u0114\u0117"+
+		"\u011a\u012a\u012e\u0133\u0135\u013e\u0142\u0145\u0150\u0154\u0156\u015e"+
+		"\u016e\u0172\u017c\u0180\u0182\u0189\u018e\u0198\u019c\u019e\u01a1\u01a5"+
+		"\u01a9\u01b0\u01b8\u01c3\u01c7\u01c9\u01cc\u01d9\u01dd\u01df\u01e2\u01e8"+
+		"\u01ec\u01f6\u01ff\u0203\u0206\u0214\u0219\u0221\u022f\u023d\u0242\u0244"+
+		"\u024d\u0253\u0259\u0261\u026c\u0288\u028c\u0299\u029b\u029e\u02a0\u02a5"+
+		"\u02bb\u02c3\u02df\u02e9\u02f0\u02f2\u02f6\u02fc\u02ff\u0305\u0311\u0315"+
+		"\u0317\u031c\u0322\u0329\u0330\u033f\u0343\u0345\u034a\u0351\u0358\u035f"+
+		"\u0363\u0367\u0370\u0374\u0381\u038d\u0391\u0393\u0398\u039b\u03a0\u03a4"+
+		"\u03a6\u03ae\u03b2\u03b6\u03c4\u03c6\u03cd\u03d0\u03d5\u03dc\u03e4\u03f8"+
+		"\u03fc\u03fe\u0401\u040c";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
