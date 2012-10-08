@@ -66,7 +66,9 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
 
     @Override
     public String getToolTipText() {
-        if (constModel != null) {
+        if (localScope) {
+            return "(Local constant) " + constModel;
+        } else if (constModel != null) {
             return constModel.toString();
         }
 
