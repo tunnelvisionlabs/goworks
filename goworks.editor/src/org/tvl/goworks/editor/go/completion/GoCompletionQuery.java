@@ -85,10 +85,14 @@ import org.tvl.goworks.editor.go.codemodel.FunctionModel;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
-import org.tvl.goworks.editor.go.codemodel.ParameterModel;
+import org.tvl.goworks.editor.go.codemodel.TypeAliasModel;
+import org.tvl.goworks.editor.go.codemodel.TypeArrayModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
+import org.tvl.goworks.editor.go.codemodel.TypeMapModel;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.codemodel.TypePointerModel;
+import org.tvl.goworks.editor.go.codemodel.TypeSliceModel;
+import org.tvl.goworks.editor.go.codemodel.TypeWrapperModel;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.codemodel.VarModel;
 import org.tvl.goworks.editor.go.codemodel.impl.AbstractCodeElementModel;
@@ -100,9 +104,11 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeArrayModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeChannelModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeFunctionModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeInterfaceModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeMapModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.TypeWrapperModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
@@ -125,6 +131,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.DeclarationContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ElementTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExprCaseClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExprSwitchStmtContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ForClauseContext;
@@ -137,7 +144,9 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InitStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.IdentifierListContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.IndexExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.KeyTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LabelContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LabeledStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.LiteralContext;
@@ -165,6 +174,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.SelectorExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SimpleStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SignatureContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileBodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.StatementContext;
@@ -1345,11 +1355,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 public void enterRangeClause(RangeClauseContext ctx) {
                     if (ctx.defeq != null) {
                         if (ctx.e1 != null && ctx.e1.start != null) {
-                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)ctx.e, 0));
+                            locals.add(Tuple.create(getStartNode(ctx.e1), (ParserRuleContext<Token>)ctx, 0));
                         }
 
                         if (ctx.e2 != null && ctx.e2.start != null) {
-                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)ctx.e, 1));
+                            locals.add(Tuple.create(getStartNode(ctx.e2), (ParserRuleContext<Token>)ctx, 1));
                         }
                     }
                 }
@@ -1373,7 +1383,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0)
                 public void enterTypeSwitchGuard(TypeSwitchGuardContext ctx) {
                     if (ctx.IDENTIFIER() != null) {
-                        locals.add(Tuple.create(ctx.IDENTIFIER(), (ParserRuleContext<Token>)null, 0));
+                        locals.add(Tuple.create(ctx.IDENTIFIER(), (ParserRuleContext<Token>)ctx, 0));
                     }
                 }
 
@@ -1415,8 +1425,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 public void enterParameterDecl(ParameterDeclContext ctx) {
                     if (ctx.identifierList() != null) {
                         GoParser.ParametersContext parametersContext = (GoParser.ParametersContext)getTopContext(parser, ctx, IntervalSet.of(GoParser.RULE_parameters));
-                        Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> map = parametersContext.parent instanceof GoParser.ResultContext ? returnParameters : parameters;
-                        addVars(map, ctx.identifierList(), ctx.type(), null);
+                        Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars = parametersContext.parent instanceof GoParser.ResultContext ? returnParameters : parameters;
+                        addVars(vars, ctx.identifierList(), ctx.type(), null);
                     }
                 }
 
@@ -1523,28 +1533,14 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     Collection<? extends CodeElementModel> pointerTypes = visit(ctx.expression());
                     Collection<CodeElementModel> result = new ArrayList<CodeElementModel>();
                     for (CodeElementModel model : pointerTypes) {
-                        TypeModel typeModel;
-                        if (model instanceof TypeModel) {
-                            typeModel = (TypeModel)model;
-                        } else if (model instanceof VarModel) {
-                            typeModel = ((VarModel)model).getVarType();
-                        } else if (model instanceof FunctionModel) {
-                            Collection<? extends ParameterModel> returnValues = ((FunctionModel)model).getReturnValues();
-                            if (returnValues.isEmpty()) {
+                        for (TypeModelImpl typeModel : resolveType(model, true, false)) {
+                            if (!(typeModel instanceof TypePointerModel)) {
+                                LOGGER.log(Level.WARNING, "Cannot dereference expression of type {0}.", typeModel);
                                 continue;
                             }
 
-                            typeModel = returnValues.iterator().next().getVarType();
-                        } else {
-                            LOGGER.log(Level.WARNING, "Cannot deference expression model of {0}.", model.getClass());
-                            continue;
+                            result.add(((TypePointerModel)typeModel).getElementType());
                         }
-
-                        if (!(typeModel instanceof TypePointerModel)) {
-                            continue;
-                        }
-
-                        result.add(((TypePointerModel)typeModel).getElementType());
                     }
 
                     setTargetProperty(ctx, result);
@@ -1560,13 +1556,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             typeModel = (TypeModel)model;
                         } else if (model instanceof VarModel) {
                             typeModel = ((VarModel)model).getVarType();
-                        } else if (model instanceof FunctionModel) {
-                            Collection<? extends ParameterModel> returnValues = ((FunctionModel)model).getReturnValues();
-                            if (returnValues.isEmpty()) {
-                                continue;
-                            }
-
-                            typeModel = returnValues.iterator().next().getVarType();
                         } else {
                             LOGGER.log(Level.WARNING, "Cannot deference expression model of {0}.", model.getClass());
                             continue;
@@ -1586,6 +1575,60 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     LOGGER.log(Level.WARNING, "Unary operator {0} is not supported by this visitor.", ctx.op.getText());
                     return Collections.emptyList();
                 }
+            }
+
+            @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            public Collection<? extends CodeElementModel> visitIndexExpr(IndexExprContext ctx) {
+                List<? extends ExpressionContext> expressions = ctx.expression();
+                if (expressions.isEmpty()) {
+                    return Collections.emptyList();
+                }
+
+                Collection<? extends CodeElementModel> target = visit(expressions.get(0));
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                for (CodeElementModel model : target) {
+                    for (TypeModelImpl type : resolveType(model, true, true)) {
+                        if (type instanceof TypeArrayModel || type instanceof TypeSliceModel) {
+                            result.add(((TypeWrapperModel)type).getElementType());
+                        } else if (type instanceof TypeMapModel) {
+                            result.add(new BundledReturnTypeModel(Arrays.asList((TypeModelImpl)((TypeMapModel)type).getValueType(), (TypeModelImpl)IntrinsicTypeModels.BOOL)));
+                        } else if (IntrinsicTypeModels.STRING.equals(type)) {
+                            result.add(IntrinsicTypeModels.BYTE);
+                        } else {
+                            LOGGER.log(Level.WARNING, "Cannot resolve index expression for source model {0}.", type.getClass());
+                        }
+                    }
+                }
+
+                setTargetProperty(ctx, result);
+                return result;
+            }
+
+            @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            public Collection<? extends CodeElementModel> visitSliceExpr(SliceExprContext ctx) {
+                List<? extends ExpressionContext> expressions = ctx.expression();
+                if (expressions.isEmpty()) {
+                    return Collections.emptyList();
+                }
+
+                Collection<? extends CodeElementModel> target = visit(expressions.get(0));
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                for (CodeElementModel model : target) {
+                    for (TypeModelImpl type : resolveType(model, true, true)) {
+                        if (type instanceof TypeArrayModel) {
+                            result.add(new TypeSliceModelImpl(((TypeArrayModelImpl)type).getElementType()));
+                        } else if (type instanceof TypeSliceModel || IntrinsicTypeModels.STRING.equals(type)) {
+                            result.add(type);
+                        } else {
+                            LOGGER.log(Level.WARNING, "Unsupported type in slice expression: {0}", model.getClass());
+                        }
+                    }
+                }
+
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -1768,6 +1811,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_keyType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+            })
+            public Collection<? extends CodeElementModel> visitKeyType(KeyTypeContext ctx) {
+                if (ctx.type() == null) {
+                    return Collections.emptyList();
+                }
+
+                return visit(ctx.type());
+            }
+
+            @Override
+            @RuleDependencies({
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
             })
@@ -1875,6 +1931,50 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 return Collections.singletonList(functionType);
             }
 
+            @Override
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+            })
+            public Collection<? extends CodeElementModel> visitRangeClause(RangeClauseContext ctx) {
+                if (ctx.e == null) {
+                    return Collections.emptyList();
+                }
+
+                // this will be a bundled return type
+                Collection<? extends CodeElementModel> expressionModel = visit(ctx.e);
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                for (CodeElementModel model : expressionModel) {
+                    for (TypeModelImpl type : resolveType(model, true, true)) {
+                        if (type instanceof TypeArrayModelImpl || type instanceof TypeSliceModelImpl) {
+                            TypeWrapperModelImpl wrapperModel = (TypeWrapperModelImpl)type;
+                            result.add(new BundledReturnTypeModel(Arrays.asList((TypeModelImpl)IntrinsicTypeModels.INT, wrapperModel.getElementType())));
+                        } else if (type instanceof TypeMapModelImpl) {
+                            TypeMapModelImpl mapModel = (TypeMapModelImpl)type;
+                            result.add(new BundledReturnTypeModel(Arrays.asList(mapModel.getKeyType(), mapModel.getValueType())));
+                        } else if (IntrinsicTypeModels.STRING.equals(type)) {
+                            result.add(new BundledReturnTypeModel(Arrays.asList((TypeModelImpl)IntrinsicTypeModels.INT, (TypeModelImpl)IntrinsicTypeModels.RUNE)));
+                        } else if (type instanceof TypeChannelModelImpl) {
+                            result.add(((TypeChannelModelImpl)type).getElementType());
+                        } else {
+                            LOGGER.log(Level.WARNING, "Unsupported type model {0} in range clause.", type.getClass());
+                        }
+                    }
+                }
+
+                setTargetProperty(ctx, result);
+                return result;
+            }
+
+            @Override
+            public Collection<? extends CodeElementModel> visitTypeSwitchGuard(TypeSwitchGuardContext ctx) {
+                if (ctx.expression() == null) {
+                    return Collections.emptyList();
+                }
+
+                return visit(ctx.expression());
+            }
+
             @RuleDependencies({
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameters, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterList, version=0),
@@ -1951,10 +2051,44 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0)
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_keyType, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
+            })
             public Collection<? extends CodeElementModel> visitMapType(MapTypeContext ctx) {
-                LOGGER.log(Level.FINE, "Target resolution for context {0} is not implemented.", ctx.getClass());
-                return Collections.emptyList();
+                Collection<? extends CodeElementModel> keyTypes = null;
+                Collection<? extends CodeElementModel> valueTypes = null;
+                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+
+                if (ctx.keyType() != null) {
+                    keyTypes = visit(ctx.keyType());
+                }
+
+                if (ctx.elementType() != null) {
+                    valueTypes = visit(ctx.elementType());
+                }
+
+                if (keyTypes == null || keyTypes.isEmpty()) {
+                    keyTypes = Collections.singletonList(new UnknownTypeModelImpl((FileModelImpl)fileModel));
+                }
+
+                if (valueTypes == null || valueTypes.isEmpty()) {
+                    valueTypes = Collections.singletonList(new UnknownTypeModelImpl((FileModelImpl)fileModel));
+                }
+
+                for (CodeElementModel keyTypeModel : keyTypes) {
+                    for (TypeModelImpl keyType : resolveType(keyTypeModel, false, false)) {
+                        for (CodeElementModel valueTypeModel : valueTypes) {
+                            for (TypeModelImpl valueType : resolveType(valueTypeModel, false, false)) {
+                                result.add(new TypeMapModelImpl(keyType, valueType));
+                            }
+                        }
+                    }
+                }
+
+                setTargetProperty(ctx, result);
+                return result;
             }
 
             @Override
@@ -2134,25 +2268,36 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 Collection<? extends CodeElementModel> methodResults = visit(ctx.expression());
                 List<CodeElementModel> results = new ArrayList<CodeElementModel>();
                 for (CodeElementModel model : methodResults) {
-                    if (model instanceof FunctionModel) {
-                        Collection<? extends AbstractCodeElementModel> returnValues;
-                        if (model instanceof FunctionModelImpl) {
-                            returnValues = ((FunctionModelImpl)model).getReturnValues();
-                        } else if (model instanceof TypeFunctionModelImpl) {
-                            returnValues = ((TypeFunctionModelImpl)model).getReturnValues();
+                    Collection<? extends CodeElementModel> resolvedModels;
+                    if (model instanceof VarModel) {
+                        resolvedModels = resolveType(model, true, false);
+                    } else {
+                        resolvedModels = Collections.singletonList(model);
+                    }
+
+                    for (CodeElementModel resolvedModel : resolvedModels) {
+                        if (resolvedModel instanceof FunctionModel) {
+                            Collection<? extends AbstractCodeElementModel> returnValues;
+                            if (resolvedModel instanceof FunctionModelImpl) {
+                                returnValues = ((FunctionModelImpl)resolvedModel).getReturnValues();
+                            } else if (resolvedModel instanceof TypeFunctionModelImpl) {
+                                returnValues = ((TypeFunctionModelImpl)resolvedModel).getReturnValues();
+                            } else {
+                                LOGGER.log(Level.WARNING, "Unsupported {0} implementation: {1}.", new Object[] { FunctionModel.class.getSimpleName(), resolvedModel.getClass().getSimpleName() } );
+                                continue;
+                            }
+
+                            if (returnValues.size() > 1) {
+                                returnValues = Collections.singletonList(new BundledReturnTypeModel(returnValues));
+                            }
+
+                            results.addAll(returnValues);
+                        } else if (model instanceof TypeModel) {
+                            // conversion operations look like calls
+                            results.add(resolvedModel);
                         } else {
-                            LOGGER.log(Level.WARNING, "Unsupported {0} implementation: {1}.", new Object[] { FunctionModel.class.getSimpleName(), model.getClass().getSimpleName() } );
-                            continue;
+                            LOGGER.log(Level.WARNING, "Unsupported target for call expression: {0}", resolvedModel.getClass());
                         }
-
-                        if (returnValues.size() > 1) {
-                            returnValues = Collections.singletonList(new BundledReturnTypeModel(returnValues));
-                        }
-
-                        results.addAll(returnValues);
-                    } else if (model instanceof TypeModel) {
-                        // conversion operations look like calls
-                        results.add(model);
                     }
                 }
 
@@ -2251,14 +2396,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
                         }
 
-                        for (CodeElementModel varType : varTypes) {
-                            if (!(varType instanceof TypeModelImpl)) {
-                                continue;
+                        for (CodeElementModel unresolvedVarType : varTypes) {
+                            for (TypeModelImpl varType : resolveType(unresolvedVarType, false, false)) {
+                                // TODO: use proper var kind
+                                VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, varType, (FileModelImpl)getFileModel(), entry.getItem1(), entry.getItem2());
+                                members.add(varModel);
                             }
-
-                            // TODO: use proper var kind
-                            VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, (TypeModelImpl)varType, (FileModelImpl)getFileModel(), entry.getItem1(), entry.getItem2());
-                            members.add(varModel);
                         }
                     }
 
@@ -2391,8 +2534,56 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0)
             public Collection<? extends CodeElementModel> visitFunctionLiteral(FunctionLiteralContext ctx) {
                 return Collections.emptyList();
+            }
+
+            @NonNull
+            private Collection<? extends TypeModelImpl> resolveType(@NonNull CodeElementModel model, boolean lookThroughAliases, boolean dereferenceArrayPointers) {
+                TypeModelImpl type;
+                if (model instanceof TypeModelImpl) {
+                    type = (TypeModelImpl)model;
+                } else if (model instanceof VarModelImpl) {
+                    type = ((VarModelImpl)model).getVarType();
+                } else {
+                    LOGGER.log(Level.WARNING, "Cannot resolve target type from model {0}.", model.getClass());
+                    return Collections.emptyList();
+                }
+
+                Collection<? extends TypeModelImpl> resolved = type.resolve();
+                if (lookThroughAliases) {
+                    List<TypeModelImpl> result = new ArrayList<TypeModelImpl>();
+                    for (TypeModelImpl typeModelImpl : resolved) {
+                        if (typeModelImpl instanceof TypeAliasModel) {
+                            result.addAll(resolveType(((TypeAliasModel)typeModelImpl).getType(), lookThroughAliases, dereferenceArrayPointers));
+                        } else {
+                            result.add(typeModelImpl);
+                        }
+                    }
+
+                    resolved = result;
+                }
+
+                if (dereferenceArrayPointers) {
+                    List<TypeModelImpl> result = new ArrayList<TypeModelImpl>();
+                    for (TypeModelImpl typeModelImpl : resolved) {
+                        if (typeModelImpl instanceof TypePointerModel) {
+                            Collection<? extends TypeModelImpl> dereferences = resolveType(((TypePointerModel)typeModelImpl).getElementType(), lookThroughAliases, false);
+                            for (TypeModelImpl dereference : dereferences) {
+                                if (dereference instanceof TypeArrayModel) {
+                                    result.add(dereference);
+                                }
+                            }
+                        } else {
+                            result.add(typeModelImpl);
+                        }
+                    }
+
+                    resolved = result;
+                }
+
+                return resolved;
             }
 
             private Collection<? extends CodeElementModel> getTargetProperty(ParseTree<Token> context) {
