@@ -1640,12 +1640,23 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 BuiltinArgsContext args = ctx.builtinArgs();
                 TypeContext type = args != null ? args.type() : null;
-                if ("make".equals(name)) {
+                if ("append".equals(name) || "make".equals(name)) {
                     if (type == null) {
                         return Collections.emptyList();
                     }
 
                     return visit(type);
+                } else if ("cap".equals(name) || "copy".equals(name) || "len".equals(name)) {
+                    return Collections.singletonList(IntrinsicTypeModels.INT);
+                } else if ("close".equals(name) || "delete".equals(name) || "panic".equals(name) || "print".equals(name) || "println".equals(name)) {
+                    // no return value
+                    return Collections.emptyList();
+                } else if ("complex".equals(name)) {
+                    LOGGER.log(Level.FINE, "TODO: separate complex64 and complex128 types.");
+                    return Collections.singletonList(IntrinsicTypeModels.COMPLEX128);
+                } else if ("imag".equals(name) || "real".equals(name)) {
+                    LOGGER.log(Level.FINE, "TODO: separate float32 and float64 types.");
+                    return Collections.singletonList(IntrinsicTypeModels.FLOAT64);
                 } else if ("new".equals(name)) {
                     if (type == null) {
                         return Collections.emptyList();
@@ -1665,8 +1676,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                     setTargetProperty(ctx, pointers);
                     return pointers;
+                } else if ("recover".equals(name)) {
+                    TypeInterfaceModelImpl result = new TypeInterfaceModelImpl("_", (FileModelImpl)fileModel, ctx);
+                    result.freeze();
+                    return Collections.singletonList(result);
                 } else {
-                    LOGGER.log(Level.WARNING, "TODO: handle built-in call {0}.", name);
                     return Collections.emptyList();
                 }
             }
