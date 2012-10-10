@@ -9,6 +9,7 @@
 package org.tvl.goworks.project;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ProjectFactory;
 import org.netbeans.spi.project.ProjectState;
@@ -23,13 +24,29 @@ import org.openide.util.lookup.ServiceProvider;
 public class GoProjectFactory implements ProjectFactory {
 
     public static final String PROJECT_DIR = "nbgoproject";
+    public static final String SRC_DIR = "src";
 
     //Specifies when a project is a project, i.e.,
     //if the project directory "texts" is present:
     @Override
     public boolean isProject(FileObject projectDirectory) {
         FileObject goprojectDir = projectDirectory.getFileObject(PROJECT_DIR);
-        return goprojectDir != null && goprojectDir.isFolder();
+        if (goprojectDir != null && goprojectDir.isFolder()) {
+            return true;
+        }
+
+        FileObject goSrcDir = projectDirectory.getFileObject(SRC_DIR);
+        if (goSrcDir != null && goSrcDir.isFolder()) {
+            // check for a Go file underneath this folder
+            for (Enumeration<? extends FileObject> enumeration = goSrcDir.getChildren(true); enumeration.hasMoreElements(); ) {
+                FileObject child = enumeration.nextElement();
+                if (!child.isFolder() && child.hasExt("go")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     //Specifies when the project will be opened, i.e.,
@@ -42,11 +59,6 @@ public class GoProjectFactory implements ProjectFactory {
     @Override
     public void saveProject(final Project project) throws IOException, ClassCastException {
         FileObject projectRoot = project.getProjectDirectory();
-        if (projectRoot.getFileObject(PROJECT_DIR) == null) {
-            throw new IOException("Project dir " + projectRoot.getPath() +
-                    " deleted," +
-                    " cannot save project");
-        }
 
         //Force creation of the texts dir if it was deleted:
         ((GoProject) project).getProjectDataFolder(true);
