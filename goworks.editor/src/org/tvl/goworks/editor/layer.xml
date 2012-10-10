@@ -210,8 +210,8 @@
         </folder>
     </folder>
     <folder name="Templates">
-        <folder name="Other">
-            <file name="GoTemplate.g" url="go/GoTemplate.go">
+        <folder name="Go">
+            <file name="GoTemplate.go" url="go/GoTemplate.go">
                 <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#Templates/Other/GoTemplate.go"/>
                 <attr name="template" boolvalue="true"/>
             </file>
