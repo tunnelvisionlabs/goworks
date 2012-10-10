@@ -78,7 +78,7 @@ public class GoProject implements Project {
         if (lkp == null) {
             lkp = Lookups.fixed(new Object[]{
                         state, //allow outside code to mark the project as needing saving
-                        new ActionProviderImpl(), //Provides standard actions like Build and Clean
+                        new GoActionProvider(this), //Provides standard actions like Build and Clean
                         new GoDeleteOperation(),
                         new GoCopyOperation(this),
                         new Info(), //Project information implementation
@@ -88,40 +88,6 @@ public class GoProject implements Project {
                     });
         }
         return lkp;
-    }
-
-    private final class ActionProviderImpl implements ActionProvider {
-
-        private String[] supported = new String[]{
-            ActionProvider.COMMAND_DELETE,
-            ActionProvider.COMMAND_COPY,
-        };
-
-        @Override
-        public String[] getSupportedActions() {
-            return supported;
-        }
-
-        @Override
-        public void invokeAction(String string, Lookup lookup) throws IllegalArgumentException {
-            if (string.equalsIgnoreCase(ActionProvider.COMMAND_DELETE)) {
-                DefaultProjectOperations.performDefaultDeleteOperation(GoProject.this);
-            }
-            if (string.equalsIgnoreCase(ActionProvider.COMMAND_COPY)) {
-                DefaultProjectOperations.performDefaultCopyOperation(GoProject.this);
-            }
-        }
-
-        @Override
-        public boolean isActionEnabled(String command, Lookup lookup) throws IllegalArgumentException {
-            if ((command.equals(ActionProvider.COMMAND_DELETE))) {
-                return true;
-            } else if ((command.equals(ActionProvider.COMMAND_COPY))) {
-                return true;
-            } else {
-                throw new IllegalArgumentException(command);
-            }
-        }
     }
 
     private final class GoDeleteOperation implements DeleteOperationImplementation {

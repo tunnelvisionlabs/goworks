@@ -12,8 +12,10 @@ import java.awt.Image;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
+import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
+import org.netbeans.spi.project.ui.support.ProjectSensitiveActions;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObjectNotFoundException;
@@ -23,6 +25,7 @@ import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ProxyLookup;
 
@@ -30,6 +33,16 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author Sam Harwell
  */
+@NbBundle.Messages({
+    "LBL_BuildAction_Name=Build",
+    "LBL_CleanBuildAction_Name=Clean and Build",
+    "LBL_CleanAction_Name=Clean",
+    "LBL_InstallAction_Name=Install",
+    "LBL_RunAction_Name=Run",
+    "LBL_DebugAction_Name=Debug",
+    "LBL_ProfileAction_Name=Profile",
+    "LBL_TestAction_Name=Test",
+})
 public class GoProjectLogicalView implements LogicalViewProvider {
     // -J-Dorg.tvl.goworks.project.GoProjectLogicalView.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoProjectLogicalView.class.getName());
@@ -84,6 +97,17 @@ public class GoProjectLogicalView implements LogicalViewProvider {
         public Action[] getActions(boolean arg0) {
             Action[] nodeActions = {
                 CommonProjectActions.newFileAction(),
+                null,
+                ProjectSensitiveActions.projectCommandAction(ActionProvider.COMMAND_BUILD, Bundle.LBL_BuildAction_Name(), null),
+                ProjectSensitiveActions.projectCommandAction(ActionProvider.COMMAND_REBUILD, Bundle.LBL_CleanBuildAction_Name(), null),
+                ProjectSensitiveActions.projectCommandAction(ActionProvider.COMMAND_CLEAN, Bundle.LBL_CleanAction_Name(), null),
+                ProjectSensitiveActions.projectCommandAction(GoActionProvider.COMMAND_INSTALL, Bundle.LBL_InstallAction_Name(), null),
+                null,
+                ProjectSensitiveActions.projectCommandAction(ActionProvider.COMMAND_RUN, Bundle.LBL_RunAction_Name(), null),
+                ProjectSensitiveActions.projectCommandAction(ActionProvider.COMMAND_DEBUG, Bundle.LBL_DebugAction_Name(), null),
+                ProjectSensitiveActions.projectCommandAction(ActionProvider.COMMAND_PROFILE, Bundle.LBL_ProfileAction_Name(), null),
+                ProjectSensitiveActions.projectCommandAction(ActionProvider.COMMAND_TEST, Bundle.LBL_TestAction_Name(), null),
+                null,
                 CommonProjectActions.copyProjectAction(),
                 CommonProjectActions.deleteProjectAction(),
                 CommonProjectActions.setAsMainProjectAction(),
