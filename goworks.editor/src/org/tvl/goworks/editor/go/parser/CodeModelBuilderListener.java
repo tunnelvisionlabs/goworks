@@ -195,7 +195,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
     })
     public void exitImportSpec(ImportSpecContext ctx) {
-        if (ctx.importPath() == null && ctx.importPath().StringLiteral() == null) {
+        if (ctx.importPath() == null || ctx.importPath().StringLiteral() == null) {
             return;
         }
 
