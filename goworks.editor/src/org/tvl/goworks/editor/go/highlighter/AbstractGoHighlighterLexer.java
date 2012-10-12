@@ -809,7 +809,7 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2U\u02e9\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4"+
+		"\2U\u02e8\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4"+
 		"\7\4\2\5\7\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2\13\7\13\2\f\7\f"+
 		"\2\r\7\r\2\16\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22\7\22\2\23\7\23\2"+
 		"\24\7\24\2\25\7\25\2\26\7\26\2\27\7\27\2\30\7\30\2\31\7\31\2\32\7\32\2"+
@@ -850,7 +850,7 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 		"_\u029e\b_\n_\f_\u02a1\t_\1_\1_\1`\1`\1a\1a\1b\1b\1c\1c\1d\1d\1e\1e\1"+
 		"f\1f\3f\u02b3\bf\1g\1g\1h\1h\1i\1i\1j\1j\1k\1k\1k\1k\1l\4l\u02c2\bl\13"+
 		"l\fl\u02c3\1l\1l\1m\1m\1m\1m\1m\1n\1n\1n\1n\1o\1o\1o\1o\1p\1p\1p\1p\1"+
-		"q\1q\5q\u02db\bq\nq\fq\u02de\tq\1q\1q\1r\1r\1r\1r\1s\1s\1s\1st\3\1\uffff"+
+		"q\1q\4q\u02db\bq\13q\fq\u02dc\1q\1q\1r\1r\1r\1r\1s\1s\1s\1st\3\1\uffff"+
 		"\5\2\uffff\7\3\uffff\t\4\uffff\13\5\uffff\r\6\uffff\17\7\uffff\21\b\uffff"+
 		"\23\t\uffff\25\n\uffff\27\13\uffff\31\f\uffff\33\r\uffff\35\16\uffff\37"+
 		"\17\uffff!\20\uffff#\21\uffff%\22\uffff\'\23\uffff)\24\uffff+\25\uffff"+
@@ -871,7 +871,7 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 		"\u00df\0\5\u00e1\0\6\u00e3\0\7\u00e5\0\b\u00e7\0\t\u00e9\0\n\3\0\1\2\r"+
 		"\2\t\t  \2\n\n\r\r\2XXxx\2EEee\2++--\t\"\"\'\'\\\\abffnnrrttvv\3\n\n\'"+
 		"\'\\\\\3\n\n\"\"\\\\\2\n\n``\3AZaz\u0101\u0101\2\609\u0660\u0660\3\60"+
-		"9AFaf\3\n\n\r\r**\u02ef\0\3\1\0\0\0\0\5\1\0\0\0\0\7\1\0\0\0\0\t\1\0\0"+
+		"9AFaf\3\n\n\r\r**\u02ee\0\3\1\0\0\0\0\5\1\0\0\0\0\7\1\0\0\0\0\t\1\0\0"+
 		"\0\0\13\1\0\0\0\0\r\1\0\0\0\0\17\1\0\0\0\0\21\1\0\0\0\0\23\1\0\0\0\0\25"+
 		"\1\0\0\0\0\27\1\0\0\0\0\31\1\0\0\0\0\33\1\0\0\0\0\35\1\0\0\0\0\37\1\0"+
 		"\0\0\0!\1\0\0\0\0#\1\0\0\0\0%\1\0\0\0\0\'\1\0\0\0\0)\1\0\0\0\0+\1\0\0"+
@@ -916,8 +916,8 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 		"\u02ac\1\0\0\0\u00cd\u02ae\1\0\0\0\u00cf\u02b2\1\0\0\0\u00d1\u02b4\1\0"+
 		"\0\0\u00d3\u02b6\1\0\0\0\u00d5\u02b8\1\0\0\0\u00d7\u02ba\1\0\0\0\u00d9"+
 		"\u02bc\1\0\0\0\u00db\u02c1\1\0\0\0\u00dd\u02c7\1\0\0\0\u00df\u02cc\1\0"+
-		"\0\0\u00e1\u02d0\1\0\0\0\u00e3\u02d4\1\0\0\0\u00e5\u02dc\1\0\0\0\u00e7"+
-		"\u02e1\1\0\0\0\u00e9\u02e5\1\0\0\0\u00eb\u00ec\5b\0\0\u00ec\u00ed\5r\0"+
+		"\0\0\u00e1\u02d0\1\0\0\0\u00e3\u02d4\1\0\0\0\u00e5\u02da\1\0\0\0\u00e7"+
+		"\u02e0\1\0\0\0\u00e9\u02e4\1\0\0\0\u00eb\u00ec\5b\0\0\u00ec\u00ed\5r\0"+
 		"\0\u00ed\u00ee\5e\0\0\u00ee\u00ef\5a\0\0\u00ef\u00f0\5k\0\0\u00f0\4\1"+
 		"\0\0\0\u00f1\u00f2\5c\0\0\u00f2\u00f3\5a\0\0\u00f3\u00f4\5s\0\0\u00f4"+
 		"\u00f5\5e\0\0\u00f5\6\1\0\0\0\u00f6\u00f7\5c\0\0\u00f7\u00f8\5h\0\0\u00f8"+
@@ -1061,14 +1061,13 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 		"\u00e0\1\0\0\0\u02d0\u02d1\t\0\0\0\u02d1\u02d2\1\0\0\0\u02d2\u02d3\6o"+
 		"\6\0\u02d3\u00e2\1\0\0\0\u02d4\u02d5\3\u0097J\0\u02d5\u02d6\1\0\0\0\u02d6"+
 		"\u02d7\6p\7\0\u02d7\u00e4\1\0\0\0\u02d8\u02db\3\u00c9c\0\u02d9\u02db\3"+
-		"\u00c3`\0\u02da\u02d8\1\0\0\0\u02da\u02d9\1\0\0\0\u02db\u02de\1\0\0\0"+
-		"\u02dc\u02da\1\0\0\0\u02dc\u02dd\1\0\0\0\u02dd\u02df\1\0\0\0\u02de\u02dc"+
-		"\1\0\0\0\u02df\u02e0\6q\b\0\u02e0\u00e6\1\0\0\0\u02e1\u02e2\5`\0\0\u02e2"+
-		"\u02e3\1\0\0\0\u02e3\u02e4\6r\t\0\u02e4\u00e8\1\0\0\0\u02e5\u02e6\t\0"+
-		"\0\0\u02e6\u02e7\1\0\0\0\u02e7\u02e8\6s\n\0\u02e8\u00ea\1\0\0\0\35\0\1"+
-		"\2\u0203\u0205\u020b\u020e\u0218\u0223\u0229\u0230\u0238\u023c\u0243\u0246"+
-		"\u024e\u0250\u0255\u0259\u0260\u0268\u026e\u0272\u029d\u029f\u02b2\u02c3"+
-		"\u02da\u02dc";
+		"\u00c3`\0\u02da\u02d8\1\0\0\0\u02da\u02d9\1\0\0\0\u02db\u02dc\1\0\0\0"+
+		"\u02dc\u02da\1\0\0\0\u02dc\u02dd\1\0\0\0\u02dd\u02de\1\0\0\0\u02de\u02df"+
+		"\6q\b\0\u02df\u00e6\1\0\0\0\u02e0\u02e1\5`\0\0\u02e1\u02e2\1\0\0\0\u02e2"+
+		"\u02e3\6r\t\0\u02e3\u00e8\1\0\0\0\u02e4\u02e5\t\0\0\0\u02e5\u02e6\1\0"+
+		"\0\0\u02e6\u02e7\6s\n\0\u02e7\u00ea\1\0\0\0\35\0\1\2\u0203\u0205\u020b"+
+		"\u020e\u0218\u0223\u0229\u0230\u0238\u023c\u0243\u0246\u024e\u0250\u0255"+
+		"\u0259\u0260\u0268\u026e\u0272\u029d\u029f\u02b2\u02c3\u02da\u02dc";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

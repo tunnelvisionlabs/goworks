@@ -289,7 +289,7 @@ mode RawLiteralMode;
         ;
 
     ContinueRawLiteral
-        :   (UNICODE_CHAR_NOBTICK | NEWLINE_CHAR)*  -> type(RawStringLiteral)
+        :   (UNICODE_CHAR_NOBTICK | NEWLINE_CHAR)+  -> type(RawStringLiteral)
         ;
 
     EndRawLiteral
