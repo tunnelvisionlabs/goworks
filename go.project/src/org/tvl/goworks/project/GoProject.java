@@ -22,13 +22,12 @@ import org.netbeans.api.java.classpath.ClassPath;
 import org.netbeans.api.java.classpath.GlobalPathRegistry;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
-import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.CopyOperationImplementation;
 import org.netbeans.spi.project.DeleteOperationImplementation;
 import org.netbeans.spi.project.ProjectState;
 import org.netbeans.spi.project.ui.ProjectOpenedHook;
-import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
@@ -45,12 +44,22 @@ public class GoProject implements Project {
     public static final String SOURCE = "go/classpath/source";
 
     private final FileObject projectDir;
+    private final boolean isStandardLibrary;
     private final ProjectState state;
     private Lookup lkp;
 
     public GoProject(FileObject projectDir, ProjectState state) {
         this.projectDir = projectDir;
         this.state = state;
+
+        String goroot = System.getenv("GOROOT");
+        if (goroot != null) {
+            File gorootFile = new File(goroot);
+            FileObject gorootFileObject = FileUtil.toFileObject(gorootFile);
+            isStandardLibrary = projectDir.equals(gorootFileObject);
+        } else {
+            isStandardLibrary = false;
+        }
     }
 
     @Override
@@ -59,7 +68,15 @@ public class GoProject implements Project {
     }
 
     public FileObject getSourceRoot() {
-        return getProjectDirectory().getFileObject("src");
+        if (isStandardLibrary()) {
+            return getProjectDirectory().getFileObject("src/pkg");
+        } else {
+            return getProjectDirectory().getFileObject("src");
+        }
+    }
+
+    public boolean isStandardLibrary() {
+        return isStandardLibrary;
     }
 
     FileObject getProjectDataFolder(boolean create) {
