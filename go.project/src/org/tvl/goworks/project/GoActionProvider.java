@@ -609,26 +609,28 @@ public final class GoActionProvider implements ActionProvider {
 
     @Override
     public boolean isActionEnabled(String command, Lookup lookup) throws IllegalArgumentException {
+        GoProject project = lookup.lookup(GoProject.class);
         if (command.equals(ActionProvider.COMMAND_BUILD)) {
-            return true;
+            return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_REBUILD)) {
+            //return project != null && !project.isStandardLibrary();
             return false;
         } else if (command.equals(ActionProvider.COMMAND_CLEAN)) {
-            return true;
+            return project != null && !project.isStandardLibrary();
         } else if (command.equals(COMMAND_INSTALL)) {
-            return true;
+            return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_RUN)) {
-            return true;
+            return false;
         } else if (command.equals(ActionProvider.COMMAND_DEBUG)) {
             return false;
         } else if (command.equals(ActionProvider.COMMAND_PROFILE)) {
             return false;
         } else if (command.equals(ActionProvider.COMMAND_TEST)) {
-            return true;
+            return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_DELETE)) {
-            return true;
+            return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_COPY)) {
-            return true;
+            return project != null && !project.isStandardLibrary();
         } else {
             throw new IllegalArgumentException(command);
         }
