@@ -146,11 +146,10 @@
         </folder>
     </folder>
     <folder name="Templates">
-        <folder name="Go">
-            <file name="GoTemplate.go" url="go/GoTemplate.go">
-                <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#Templates/Other/GoTemplate.go"/>
-                <attr name="template" boolvalue="true"/>
-            </file>
+        <folder name="Code">
+            <attr name="displayName" bundlevalue="org.tvl.goworks.editor.go.Bundle#Templates/Code"/>
+            <attr name="position" intvalue="900"/>
+            <attr name="templateWizardURL" urlvalue="nbresloc:/org/tvl/goworks/editor/go/resources/Code.html"/>
         </folder>
     </folder>
 </filesystem>

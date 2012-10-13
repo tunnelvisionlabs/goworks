@@ -1,0 +1,17 @@
+<#assign licenseFirst = "/*">
+<#assign licensePrefix = " * ">
+<#assign licenseLast = " */">
+<#include "../Licenses/license-${project.license}.txt">
+
+<#if package?? && package != "">
+package ${package}
+
+</#if>
+import "testing"
+
+func TestSqrt(t *testing.T) {
+	const in, out = 4, 2
+	if x := Sqrt(in); x != out {
+		t.Errorf("Sqrt(%v) = %v, want %v", in, x, out)
+	}
+}
