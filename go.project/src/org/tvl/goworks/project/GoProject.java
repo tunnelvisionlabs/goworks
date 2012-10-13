@@ -13,13 +13,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.netbeans.api.java.classpath.ClassPath;
 import org.netbeans.api.java.classpath.GlobalPathRegistry;
+import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
 import org.netbeans.spi.project.CopyOperationImplementation;
@@ -43,6 +46,8 @@ public class GoProject implements Project {
 
     public static final String SOURCE = "go/classpath/source";
     public static final String PLATFORM = "go/classpath/platform";
+
+    public static final String GO_PROJECT_ID = "org-tvl-goworks-go-project";
 
     private final FileObject projectDir;
     private final boolean isStandardLibrary;
@@ -80,6 +85,26 @@ public class GoProject implements Project {
         return isStandardLibrary;
     }
 
+    public List<? extends GoProject> getLibraryProjects() {
+        if (isStandardLibrary) {
+            return Collections.emptyList();
+        }
+
+        Set<GoProject> projects = new HashSet<GoProject>();
+        Set<? extends ClassPath> platformPaths = GlobalPathRegistry.getDefault().getPaths(PLATFORM);
+        for (ClassPath path : platformPaths) {
+            for (FileObject root : path.getRoots()) {
+                Project project = FileOwnerQuery.getOwner(root);
+                if (project instanceof GoProject) {
+                    projects.add((GoProject)project);
+                }
+            }
+        }
+
+        projects.remove(this);
+        return new ArrayList<GoProject>(projects);
+    }
+
     FileObject getProjectDataFolder(boolean create) {
         FileObject result =
                 projectDir.getFileObject(GoProjectFactory.PROJECT_DIR);
@@ -108,6 +133,7 @@ public class GoProject implements Project {
                         new GoProjectLogicalView(this), //Logical view of project implementation
                         new ProjectOpenedHookImpl(),
                         new ClassPathProviderImpl(this),
+                        new GoSourcesImpl(this),
                     });
         }
         return lkp;

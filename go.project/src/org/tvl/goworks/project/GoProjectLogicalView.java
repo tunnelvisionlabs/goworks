@@ -16,19 +16,17 @@ import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
+import org.netbeans.spi.project.ui.support.NodeFactorySupport;
 import org.netbeans.spi.project.ui.support.ProjectSensitiveActions;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
-import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 import org.openide.util.ImageUtilities;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.Lookups;
-import org.openide.util.lookup.ProxyLookup;
 
 /**
  *
@@ -43,6 +41,7 @@ import org.openide.util.lookup.ProxyLookup;
     "LBL_DebugAction_Name=Debug",
     "LBL_ProfileAction_Name=Profile",
     "LBL_TestAction_Name=Test",
+    "LBL_SourcePackages=Source Packages",
 })
 public class GoProjectLogicalView implements LogicalViewProvider {
     // -J-Dorg.tvl.goworks.project.GoProjectLogicalView.level=FINE
@@ -82,18 +81,13 @@ public class GoProjectLogicalView implements LogicalViewProvider {
     }
 
     /** This is the node you actually see in the project tab for the project */
-    private static final class TextNode extends FilterNode {
+    private static final class TextNode extends AbstractNode {
 
         final GoProject project;
 
         public TextNode(Node node, GoProject project) throws DataObjectNotFoundException {
-            super(node, new FilterNode.Children(node),
-                    //The projects system wants the project in the Node's lookup.
-                    //NewAction and friends want the original Node's lookup.
-                    //Make a merge of both
-                    new ProxyLookup(new Lookup[]{Lookups.singleton(project),
-                        node.getLookup()
-                    }));
+            super(NodeFactorySupport.createCompositeChildren(project, "Projects/" + GoProject.GO_PROJECT_ID + "/Nodes"),
+                Lookups.singleton(project));
             this.project = project;
         }
 
