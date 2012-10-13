@@ -58,6 +58,10 @@ public class GoProject implements Project {
         return projectDir;
     }
 
+    public FileObject getSourceRoot() {
+        return getProjectDirectory().getFileObject("src");
+    }
+
     FileObject getProjectDataFolder(boolean create) {
         FileObject result =
                 projectDir.getFileObject(GoProjectFactory.PROJECT_DIR);
@@ -182,16 +186,26 @@ public class GoProject implements Project {
         @Override
         protected void projectOpened() {
             // register project's classpaths to GlobalPathRegistry
-            ClassPath sourceRoot = ClassPath.getClassPath(projectDir, SOURCE);
-            GlobalPathRegistry.getDefault().register(GoProject.SOURCE, new ClassPath[] { sourceRoot });
+            FileObject sourceRoot = getSourceRoot();
+            if (sourceRoot != null && sourceRoot.isFolder()) {
+                ClassPath sourceRootClassPath = ClassPath.getClassPath(sourceRoot, SOURCE);
+                if (sourceRootClassPath != null) {
+                    GlobalPathRegistry.getDefault().register(GoProject.SOURCE, new ClassPath[] { sourceRootClassPath });
+                }
+            }
         }
 
         @Override
         protected void projectClosed() {
-            ClassPath sourceRoot = ClassPath.getClassPath(projectDir, SOURCE);
-            GlobalPathRegistry.getDefault().unregister(GoProject.SOURCE, new ClassPath[] { sourceRoot });
+            FileObject sourceRoot = getSourceRoot();
+            if (sourceRoot != null && sourceRoot.isFolder()) {
+                ClassPath sourceRootClassPath = ClassPath.getClassPath(sourceRoot, SOURCE);
+                if (sourceRootClassPath != null) {
+                    GlobalPathRegistry.getDefault().unregister(GoProject.SOURCE, new ClassPath[] { sourceRootClassPath });
+                }
+            }
         }
-        
+
     }
 
 }

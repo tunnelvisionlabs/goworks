@@ -307,11 +307,11 @@ public class SemanticAnalyzerListener implements GoParserListener {
     private static String getCurrentPackagePath(GoProject project, VersionedDocument document) {
         FileObject documentFileObject = document.getFileObject();
         FileObject packageFolder = documentFileObject != null ? documentFileObject.getParent() : null;
-        FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
+        FileObject sourceRoot = project != null ? project.getSourceRoot() : null;
 
         String packagePath;
-        if (projectFolder != null) {
-            packagePath = FileUtil.getRelativePath(projectFolder, packageFolder);
+        if (sourceRoot != null) {
+            packagePath = FileUtil.getRelativePath(sourceRoot, packageFolder);
         } else {
             packagePath = packageFolder.getNameExt();
         }

@@ -14,6 +14,7 @@ import org.netbeans.api.java.classpath.ClassPath;
 import org.netbeans.spi.java.classpath.ClassPathFactory;
 import org.netbeans.spi.java.classpath.ClassPathProvider;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 
 /**
  *
@@ -34,7 +35,7 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
     }
 
     private final GoProject project;
-    private final FileObject projectDirectory;
+    private final FileObject sourceRoot;
 
     // GuardedBy(cache)
     private final Map<ClassPathCache, ClassPath> cache = new EnumMap<ClassPathCache, ClassPath>(ClassPathCache.class);
@@ -42,8 +43,8 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
     public ClassPathProviderImpl(GoProject project) {
         assert project != null;
         this.project = project;
-        this.projectDirectory = project.getProjectDirectory();
-        assert projectDirectory != null;
+        this.sourceRoot = project.getSourceRoot();
+        assert sourceRoot != null;
     }
 
     private ClassPath getSourcePath(FileObject file) {
@@ -51,7 +52,7 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
         synchronized (cache) {
             cp = cache.get(ClassPathCache.SOURCE);
             if (cp == null) {
-                cp = ClassPathFactory.createClassPath(new SourcePathImplementation(project, projectDirectory));
+                cp = ClassPathFactory.createClassPath(new SourcePathImplementation(project, sourceRoot));
                 cache.put(ClassPathCache.SOURCE, cp);
             }
         }
@@ -61,6 +62,10 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
     @Override
     public ClassPath findClassPath(FileObject file, String type) {
         if (GoProject.SOURCE.equals(type)) {
+            if (FileUtil.getRelativePath(sourceRoot, file) == null) {
+                return null;
+            }
+
             return getSourcePath(file);
         }
 
