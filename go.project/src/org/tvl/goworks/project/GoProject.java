@@ -77,6 +77,7 @@ public class GoProject implements Project {
     public Lookup getLookup() {
         if (lkp == null) {
             lkp = Lookups.fixed(new Object[]{
+                        this,
                         state, //allow outside code to mark the project as needing saving
                         new GoActionProvider(this), //Provides standard actions like Build and Clean
                         new GoDeleteOperation(),
