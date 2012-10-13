@@ -124,14 +124,15 @@ public final class GoActionProvider implements ActionProvider {
         String buildCommand = "go";
         String args = "build";
 
+        String projectName = ProjectUtils.getInformation(_project).getDisplayName();
         InputOutput tab;
-        tab = IOProvider.getDefault().getIO("build", false);
+        tab = IOProvider.getDefault().getIO(projectName + " (build)", false);
         tab.closeInputOutput();
 
         Action[] actions = new Action[] {
         };
 
-        tab = IOProvider.getDefault().getIO("build", actions);
+        tab = IOProvider.getDefault().getIO(projectName + " (build)", actions);
         try {
             tab.getOut().reset();
         } catch (IOException ex) {
@@ -139,7 +140,7 @@ public final class GoActionProvider implements ActionProvider {
 
         final InputOutput ioTab = tab;
 
-        progressHandle = ProgressHandleFactory.createHandle("build", new Cancellable() {
+        progressHandle = ProgressHandleFactory.createHandle(projectName + " (build)", new Cancellable() {
 
             @Override
             public boolean cancel() {
