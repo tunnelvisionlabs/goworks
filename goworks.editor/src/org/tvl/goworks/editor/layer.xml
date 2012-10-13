@@ -4,7 +4,7 @@
     <folder name="Editors">
         <folder name="text">
             <folder name="x-go">
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.tvl.goworks.editor.Bundle"/>
+                <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#Editors/text/x-go"/>
 
                 <folder name="FontsColors">
                     <folder name="NetBeans">
@@ -29,7 +29,7 @@
                 <folder name="Popup">
                     <folder name="goto">
                         <attr name="position" intvalue="500"/>
-                        <attr name="SystemFileSystem.localizingBundle" stringvalue="org.tvl.goworks.editor.Bundle"/>
+                        <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#Editors/text/x-go/Popup/goto"/>
                         <file name="goto-declaration">
                             <attr name="position" intvalue="200"/>
                         </file>
