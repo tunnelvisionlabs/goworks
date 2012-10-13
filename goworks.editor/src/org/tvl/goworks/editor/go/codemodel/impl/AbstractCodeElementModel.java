@@ -22,11 +22,11 @@ import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -36,7 +36,7 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
     @NonNull
     private final String name;
     @NullAllowed
-    private final Project project;
+    private final GoProject project;
     @NonNull
     private final String packagePath;
     @NullAllowed
@@ -44,7 +44,7 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
 
     private boolean frozen;
 
-    public AbstractCodeElementModel(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
+    public AbstractCodeElementModel(@NonNull String name, @NullAllowed GoProject project, @NonNull String packagePath) {
         this(name, project, packagePath, null);
     }
 
@@ -52,7 +52,7 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
         this(name, file.getProject(), file.getPackagePath(), file);
     }
 
-    private AbstractCodeElementModel(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath, @NullAllowed FileModelImpl file) {
+    private AbstractCodeElementModel(@NonNull String name, @NullAllowed GoProject project, @NonNull String packagePath, @NullAllowed FileModelImpl file) {
         Parameters.notNull("name", name);
         Parameters.notNull("packagePath", packagePath);
 
@@ -109,7 +109,7 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
         return CodeModelCacheImpl.findElementsByName(getMembers(), name);
     }
 
-    public Project getProject() {
+    public GoProject getProject() {
         return project;
     }
 

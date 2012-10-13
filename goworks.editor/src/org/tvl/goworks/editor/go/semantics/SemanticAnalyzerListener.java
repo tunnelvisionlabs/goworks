@@ -186,6 +186,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 import org.tvl.goworks.editor.go.parser.GoParser;
 import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
 import org.tvl.goworks.editor.go.parser.GoParserListener;
+import org.tvl.goworks.project.GoProject;
 
 /* TODO for QUALIFIED_EXPR and UNQUALIFIED_LINK
  *   +qualifiedIdentifier
@@ -257,8 +258,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     public void resolveReferences() {
         CodeModelCacheImpl codeModelCache = CodeModelCacheImpl.getInstance();
         Project project = FileOwnerQuery.getOwner(document.getFileObject());
-        String currentPackagePath = getCurrentPackagePath(project, document);
-        PackageModel currentPackage = codeModelCache.getUniquePackage(project, currentPackagePath);
+        if (!(project instanceof GoProject)) {
+            throw new UnsupportedOperationException("Unsupported project type.");
+        }
+
+        String currentPackagePath = getCurrentPackagePath((GoProject)project, document);
+        PackageModel currentPackage = codeModelCache.getUniquePackage((GoProject)project, currentPackagePath);
 
         Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
         for (Map.Entry<String, List<TerminalNode<Token>>> entry : importedPackages.entrySet()) {
@@ -299,7 +304,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         } while (updatedResolution);
     }
 
-    private static String getCurrentPackagePath(Project project, VersionedDocument document) {
+    private static String getCurrentPackagePath(GoProject project, VersionedDocument document) {
         FileObject documentFileObject = document.getFileObject();
         FileObject packageFolder = documentFileObject != null ? documentFileObject.getParent() : null;
         FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
@@ -1609,7 +1614,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
         if (target != null) {
             Project currentProject = FileOwnerQuery.getOwner(document.getFileObject());
-            Collection<? extends PackageModel> packages = CodeModelCacheImpl.getInstance().getPackages(currentProject, path);
+            Collection<? extends PackageModel> packages = CodeModelCacheImpl.getInstance().getPackages((GoProject)currentProject, path);
             treeDecorator.putProperty(target, GoAnnotations.MODELS, packages);
             if (!packages.isEmpty()) {
                 treeDecorator.putProperty(target, GoAnnotations.RESOLVED, true);

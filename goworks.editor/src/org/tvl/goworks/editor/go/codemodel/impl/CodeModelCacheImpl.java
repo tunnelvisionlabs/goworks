@@ -17,7 +17,6 @@ import java.util.WeakHashMap;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.netbeans.api.project.Project;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.openide.util.lookup.ServiceProvider;
@@ -25,6 +24,7 @@ import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.CodeModelCache;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -35,12 +35,12 @@ public class CodeModelCacheImpl implements CodeModelCache {
     private static CodeModelCacheImpl instance;
 
     private CodeModelProjectCache defaultProjectCache;
-    private final Map<Project, CodeModelProjectCache> projectCaches =
-        new WeakHashMap<Project, CodeModelProjectCache>();
+    private final Map<GoProject, CodeModelProjectCache> projectCaches =
+        new WeakHashMap<GoProject, CodeModelProjectCache>();
 
     @Override
     @NonNull
-    public Collection<? extends PackageModel> getPackages(Project project) {
+    public Collection<? extends PackageModel> getPackages(GoProject project) {
         CodeModelProjectCache cache = getProjectCache(project, false);
         if (cache == null) {
             return Collections.emptyList();
@@ -56,7 +56,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
 
     @NonNull
     @Override
-    public Collection<? extends PackageModelImpl> getPackages(Project project, String path) {
+    public Collection<? extends PackageModelImpl> getPackages(GoProject project, String path) {
         CodeModelProjectCache cache = getProjectCache(project, false);
         if (cache == null) {
             return Collections.emptyList();
@@ -71,7 +71,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
     }
 
     @CheckForNull
-    public PackageModelImpl getUniquePackage(Project project, String path) {
+    public PackageModelImpl getUniquePackage(GoProject project, String path) {
         CodeModelProjectCache cache = getProjectCache(project, false);
         if (cache == null) {
             return null;
@@ -82,7 +82,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
 
     @NonNull
     public Collection<? extends PackageModelImpl> resolvePackages(ImportDeclarationModel importModel) {
-        Project project = importModel.getPackage().getProject();
+        GoProject project = importModel.getPackage().getProject();
         CodeModelProjectCache projectCache = getProjectCache(project, false);
         PackageModelImpl unique = projectCache != null ? projectCache.getUniquePackage(importModel.getPath()) : null;
         if (unique == null) {
@@ -93,7 +93,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
     }
 
     @CheckForNull
-    public CodeModelProjectCache getProjectCache(@NullAllowed Project project, boolean create) {
+    public CodeModelProjectCache getProjectCache(@NullAllowed GoProject project, boolean create) {
         synchronized (projectCaches) {
             CodeModelProjectCache cache = project != null ? projectCaches.get(project) : defaultProjectCache;
             if (cache == null && create) {
@@ -110,7 +110,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
     }
 
     @NonNull
-    public final CodeModelProjectCache getOrCreateProjectCache(@NullAllowed Project project) {
+    public final CodeModelProjectCache getOrCreateProjectCache(@NullAllowed GoProject project) {
         CodeModelProjectCache cache = getProjectCache(project, true);
         if (cache == null) {
             throw new IllegalStateException("getProjectCache should not return null when 'create' is true.");
@@ -121,7 +121,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
 
     public void updateFile(@NonNull FileModelImpl fileModel) {
         assert fileModel.isFrozen();
-        Project project = fileModel.getProject();
+        GoProject project = fileModel.getProject();
         CodeModelProjectCache projectCache = getOrCreateProjectCache(project);
         projectCache.updateFile(fileModel);
     }

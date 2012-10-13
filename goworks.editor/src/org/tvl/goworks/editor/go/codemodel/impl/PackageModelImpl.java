@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.project.Project;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -25,7 +25,7 @@ import org.tvl.goworks.editor.go.codemodel.PackageModel;
 public class PackageModelImpl extends AbstractCodeElementModel implements PackageModel {
     private final Map<String, FileModelImpl> files = new HashMap<String, FileModelImpl>();
 
-    public PackageModelImpl(String name, Project project, String path) {
+    public PackageModelImpl(String name, GoProject project, String path) {
         super(name, project, path);
     }
 

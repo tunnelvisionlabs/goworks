@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.netbeans.api.project.Project;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -35,7 +35,7 @@ public class CodeModelProjectCache {
     private static final Logger LOGGER = Logger.getLogger(CodeModelProjectCache.class.getName());
 
     @NullAllowed
-    private final Project project;
+    private final GoProject project;
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -48,11 +48,11 @@ public class CodeModelProjectCache {
     private final Map<String, Collection<PackageModelImpl>> packagesByName =
         new HashMap<String, Collection<PackageModelImpl>>();
 
-    public CodeModelProjectCache(@NullAllowed Project project) {
+    public CodeModelProjectCache(@NullAllowed GoProject project) {
         this.project = project;
     }
 
-    public Project getProject() {
+    public GoProject getProject() {
         return project;
     }
 

@@ -10,7 +10,7 @@ package org.tvl.goworks.editor.go.codemodel;
 
 import java.util.Collection;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.project.Project;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -18,7 +18,7 @@ import org.netbeans.api.project.Project;
  */
 public interface PackageModel extends CodeElementModel {
 
-    Project getProject();
+    GoProject getProject();
 
     @NonNull
     Collection<? extends FileModel> getFiles();

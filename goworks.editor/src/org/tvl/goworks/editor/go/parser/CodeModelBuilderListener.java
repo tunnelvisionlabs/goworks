@@ -89,6 +89,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -115,7 +116,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
 
     };
 
-    private final Project project;
+    private final GoProject project;
     private final DocumentSnapshot snapshot;
     private final Token[] tokens;
 
@@ -133,7 +134,12 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     private final Deque<FunctionModel> functionModelStack = new ArrayDeque<FunctionModel>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, Token[] tokens) {
-        this.project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
+        Project project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
+        if (!(project instanceof GoProject)) {
+            throw new UnsupportedOperationException("Unsupported project type.");
+        }
+
+        this.project = (GoProject)project;
         this.snapshot = snapshot;
         this.tokens = tokens;
     }

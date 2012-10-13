@@ -13,10 +13,10 @@ import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -33,12 +33,12 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @SuppressWarnings("unchecked")
     private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<AbstractCodeElementModel>(packageDeclarations, importDeclarations, types, constants, vars, functions);
 
-    public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed Project project, @NonNull String packagePath) {
+    public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed GoProject project, @NonNull String packagePath) {
         super(fileObject.getNameExt(), project, packagePath);
         this.fileObject = fileObject;
     }
 
-    public FileModelImpl(@NonNull String name, @NullAllowed Project project, @NonNull String packagePath) {
+    public FileModelImpl(@NonNull String name, @NullAllowed GoProject project, @NonNull String packagePath) {
         super(name, project, packagePath);
         this.fileObject = null;
     }
