@@ -9,6 +9,9 @@
 package org.tvl.goworks.editor.go;
 
 import java.io.IOException;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
+import org.openide.awt.ActionReferences;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
@@ -30,7 +33,19 @@ import org.tvl.goworks.editor.GoEditorKit;
     displayName="#GoLoader_Name",
     mimeType=GoEditorKit.GO_MIME_TYPE,
     position=99999)
+@ActionReferences({
+    @ActionReference(id = @ActionID(category = "System", id = "org.openide.actions.OpenAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 100, separatorAfter = 200),
+    @ActionReference(id = @ActionID(category = "Edit", id = "org.openide.actions.CutAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 300),
+    @ActionReference(id = @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 400, separatorAfter = 500),
+    @ActionReference(id = @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 600),
+    @ActionReference(id = @ActionID(category = "System", id = "org.openide.actions.RenameAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 700, separatorAfter = 800),
+    @ActionReference(id = @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 900, separatorAfter = 1000),
+    @ActionReference(id = @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 1100, separatorAfter = 1200),
+    @ActionReference(id = @ActionID(category = "System", id = "org.openide.actions.ToolsAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 1300),
+    @ActionReference(id = @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"), path = GoDataLoader.ACTIONS_CONTEXT, position = 1400),
+})
 public class GoDataLoader extends UniFileLoader {
+    public static final String ACTIONS_CONTEXT = "Loaders/" + GoEditorKit.GO_MIME_TYPE + "/Actions";
 
     public GoDataLoader() {
         super("org.tvl.goworks.editor.go.GoDataObject");
@@ -47,7 +62,7 @@ public class GoDataLoader extends UniFileLoader {
 
     @Override
     protected String actionsContext() {
-        return "Loaders/" + GoEditorKit.GO_MIME_TYPE + "/Actions/";
+        return ACTIONS_CONTEXT;
     }
 
     @Override
