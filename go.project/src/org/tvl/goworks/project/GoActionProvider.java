@@ -42,11 +42,14 @@ import org.netbeans.modules.nativeexecution.api.execution.PostMessageDisplayer;
 import org.netbeans.modules.nativeexecution.spi.ExecutionEnvironmentFactoryService;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NotImplementedException;
 import org.openide.util.RequestProcessor;
+import org.openide.util.Utilities;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -252,7 +255,31 @@ public final class GoActionProvider implements ActionProvider {
 //        }
 
         final ProcessChangeListener processChangeListener = new ProcessChangeListener(listener, outputListener, convertor, io);
-        String executable = "C:\\Go\\bin\\go.exe";
+
+        File goroot = new File(System.getenv("GOROOT"));
+        if (!goroot.isDirectory()) {
+            throw new UnsupportedOperationException("Couldn't determine GOROOT.");
+        }
+
+        FileObject gorootObject = FileUtil.toFileObject(goroot);
+        if (gorootObject == null || !gorootObject.isFolder()) {
+            throw new UnsupportedOperationException("Couldn't determine GOROOT.");
+        }
+
+        FileObject binFolder = gorootObject.getFileObject("bin");
+        if (binFolder == null || !binFolder.isFolder()) {
+            throw new UnsupportedOperationException("Couldn't determine Go bin directory.");
+        }
+
+        FileObject executable = binFolder.getFileObject("go", "");
+        if (executable == null && Utilities.isWindows()) {
+            executable = binFolder.getFileObject("go", "exe");
+        }
+
+        if (executable == null || !executable.isData()) {
+            throw new UnsupportedOperationException("Couldn't find the Go tool.");
+        }
+
         List<String> args = new ArrayList<String>();
         if (COMMAND_BUILD.equals(commandName) || COMMAND_REBUILD.equals(commandName)) {
             args.add("build");
@@ -284,12 +311,13 @@ public final class GoActionProvider implements ActionProvider {
             .setStatusEx(statusEx)
             .addNativeProcessListener(processChangeListener);
 
-        nativeProcessBuilder.setExecutable(executable).setArguments(args.toArray(new String[args.size()]));
+        nativeProcessBuilder.setExecutable(executable.getPath()).setArguments(args.toArray(new String[args.size()]));
         nativeProcessBuilder.getEnvironment().put("GOPATH", workingDirectory);
 
-        io.getOut().print(executable);
-        io.getOut().print(" ");
-        io.getOut().print(args);
+        io.getOut().print(executable.getPath());
+        for (String arg : args) {
+            io.getOut().print(" " + arg);
+        }
         io.getOut().print("\n");
 
         nativeProcessBuilder.redirectError();
