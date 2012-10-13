@@ -42,6 +42,7 @@ public class GoProject implements Project {
     private static final Logger LOGGER = Logger.getLogger(GoProject.class.getName());
 
     public static final String SOURCE = "go/classpath/source";
+    public static final String PLATFORM = "go/classpath/platform";
 
     private final FileObject projectDir;
     private final boolean isStandardLibrary;
@@ -210,6 +211,21 @@ public class GoProject implements Project {
                     GlobalPathRegistry.getDefault().register(GoProject.SOURCE, new ClassPath[] { sourceRootClassPath });
                 }
             }
+
+            String goroot = System.getenv("GOROOT");
+            if (goroot != null) {
+                File gorootFile = new File(goroot);
+                if (gorootFile.isDirectory()) {
+                    FileObject stdlibRootFile = FileUtil.toFileObject(gorootFile);
+                    final FileObject stdlibSourceRoot = stdlibRootFile.getFileObject("src/pkg");
+                    if (stdlibSourceRoot != null && stdlibSourceRoot.isFolder()) {
+                        ClassPath stdLibRoot = ClassPath.getClassPath(stdlibSourceRoot, PLATFORM);
+                        if (stdLibRoot != null) {
+                            GlobalPathRegistry.getDefault().register(PLATFORM, new ClassPath[] { stdLibRoot });
+                        }
+                    }
+                }
+            }
         }
 
         @Override
@@ -219,6 +235,21 @@ public class GoProject implements Project {
                 ClassPath sourceRootClassPath = ClassPath.getClassPath(sourceRoot, SOURCE);
                 if (sourceRootClassPath != null) {
                     GlobalPathRegistry.getDefault().unregister(GoProject.SOURCE, new ClassPath[] { sourceRootClassPath });
+                }
+            }
+
+            String goroot = System.getenv("GOROOT");
+            if (goroot != null) {
+                File gorootFile = new File(goroot);
+                if (gorootFile.isDirectory()) {
+                    FileObject stdlibRootFile = FileUtil.toFileObject(gorootFile);
+                    final FileObject stdlibSourceRoot = stdlibRootFile.getFileObject("src/pkg");
+                    if (stdlibSourceRoot != null && stdlibSourceRoot.isFolder()) {
+                        ClassPath stdLibRoot = ClassPath.getClassPath(stdlibSourceRoot, PLATFORM);
+                        if (stdLibRoot != null) {
+                            GlobalPathRegistry.getDefault().unregister(PLATFORM, new ClassPath[] { stdLibRoot });
+                        }
+                    }
                 }
             }
         }

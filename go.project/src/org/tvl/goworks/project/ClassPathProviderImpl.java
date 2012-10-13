@@ -35,6 +35,7 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
     }
 
     private final GoProject project;
+    private final boolean isStandardLibrary;
     private final FileObject sourceRoot;
 
     // GuardedBy(cache)
@@ -43,6 +44,7 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
     public ClassPathProviderImpl(GoProject project) {
         assert project != null;
         this.project = project;
+        this.isStandardLibrary = project.isStandardLibrary();
         this.sourceRoot = project.getSourceRoot();
         assert sourceRoot != null;
     }
@@ -59,14 +61,32 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
         return cp;
     }
 
+    private ClassPath getPlatformPath(FileObject file) {
+        ClassPath cp = null;
+        synchronized (cache) {
+            cp = cache.get(ClassPathCache.PLATFORM);
+            if (cp == null) {
+                cp = ClassPathFactory.createClassPath(new SourcePathImplementation(project, sourceRoot));
+                cache.put(ClassPathCache.PLATFORM, cp);
+            }
+        }
+        return cp;
+    }
+
     @Override
     public ClassPath findClassPath(FileObject file, String type) {
         if (GoProject.SOURCE.equals(type)) {
-            if (FileUtil.getRelativePath(sourceRoot, file) == null) {
+            if (isStandardLibrary || FileUtil.getRelativePath(sourceRoot, file) == null) {
                 return null;
             }
 
             return getSourcePath(file);
+        } else if (GoProject.PLATFORM.equals(type)) {
+            if (!isStandardLibrary || FileUtil.getRelativePath(sourceRoot, file) == null) {
+                return null;
+            }
+
+            return getPlatformPath(file);
         }
 
         return null;
