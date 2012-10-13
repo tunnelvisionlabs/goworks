@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
+import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
@@ -46,6 +47,9 @@ import org.openide.util.lookup.ProxyLookup;
 public class GoProjectLogicalView implements LogicalViewProvider {
     // -J-Dorg.tvl.goworks.project.GoProjectLogicalView.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoProjectLogicalView.class.getName());
+
+    @StaticResource
+    private static final String PROJECT_ICON = "org/tvl/goworks/project/ui/resources/icon1.png";
 
     private final GoProject project;
 
@@ -118,12 +122,12 @@ public class GoProjectLogicalView implements LogicalViewProvider {
 
         @Override
         public Image getIcon(int type) {
-            return ImageUtilities.loadImage("org/tvl/goworks/project/ui/resources/icon1.png");
+            return ImageUtilities.loadImage(PROJECT_ICON);
         }
 
         @Override
         public Image getOpenedIcon(int type) {
-            return getIcon(type);
+            return ImageUtilities.loadImage(PROJECT_ICON);
         }
 
         @Override
