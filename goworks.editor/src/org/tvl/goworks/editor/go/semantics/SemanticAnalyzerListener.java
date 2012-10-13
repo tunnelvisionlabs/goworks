@@ -1614,9 +1614,21 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
         if (target != null) {
             Project currentProject = FileOwnerQuery.getOwner(document.getFileObject());
+            if (!(currentProject instanceof GoProject)) {
+                return;
+            }
+
             Collection<? extends PackageModel> packages = CodeModelCacheImpl.getInstance().getPackages((GoProject)currentProject, path);
-            treeDecorator.putProperty(target, GoAnnotations.MODELS, packages);
-            if (!packages.isEmpty()) {
+            Set<PackageModel> libraryPackages = new HashSet<PackageModel>();
+            for (GoProject importedProject : ((GoProject)currentProject).getLibraryProjects()) {
+                libraryPackages.addAll(CodeModelCacheImpl.getInstance().getPackages(importedProject, path));
+            }
+
+            List<PackageModel> visiblePackages = new ArrayList<PackageModel>(packages);
+            visiblePackages.addAll(libraryPackages);
+
+            treeDecorator.putProperty(target, GoAnnotations.MODELS, visiblePackages);
+            if (!visiblePackages.isEmpty()) {
                 treeDecorator.putProperty(target, GoAnnotations.RESOLVED, true);
             }
 

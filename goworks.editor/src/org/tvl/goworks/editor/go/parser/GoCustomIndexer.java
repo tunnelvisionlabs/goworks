@@ -132,7 +132,7 @@ public class GoCustomIndexer extends CustomIndexer {
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=CustomIndexerFactory.class)
-    @PathRecognizerRegistration(sourcePathIds={ GoProject.SOURCE }, binaryLibraryPathIds={}, libraryPathIds={}, mimeTypes={ GoEditorKit.GO_MIME_TYPE })
+    @PathRecognizerRegistration(sourcePathIds={ GoProject.SOURCE }, binaryLibraryPathIds={}, libraryPathIds={ GoProject.PLATFORM }, mimeTypes={ GoEditorKit.GO_MIME_TYPE })
     public static class Factory extends CustomIndexerFactory {
 
         public Factory() {

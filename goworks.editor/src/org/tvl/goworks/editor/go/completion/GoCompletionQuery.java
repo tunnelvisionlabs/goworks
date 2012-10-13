@@ -205,6 +205,7 @@ import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
 import org.tvl.goworks.editor.go.semantics.GoAnnotations;
 import org.tvl.goworks.editor.go.semantics.NodeType;
 import org.tvl.goworks.editor.go.semantics.SemanticAnalyzer;
+import org.tvl.goworks.project.GoProject;
 
 /**
  *
@@ -762,6 +763,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         }
 
                                         packages.addAll(CodeModelCacheImpl.getInstance().getPackages(getFileModel().getPackage().getProject(), importDeclarationModel.getPath()));
+                                        GoProject mainProject = getFileModel().getPackage().getProject();
+                                        for (GoProject library : mainProject.getLibraryProjects()) {
+                                            packages.addAll(CodeModelCacheImpl.getInstance().getPackages(library, importDeclarationModel.getPath()));
+                                        }
                                     }
 
                                     Collection<? extends CodeElementModel> models = resolveSelectorTarget(selectorTarget, annotatedParseTree, currentPackage, resolvedPackages);
