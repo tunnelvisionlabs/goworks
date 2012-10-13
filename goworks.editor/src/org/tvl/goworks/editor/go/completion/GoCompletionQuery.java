@@ -2027,6 +2027,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
 
                     IdentifierListContext identifierListContext = parameterDeclContext.identifierList();
+                    if (identifierListContext == null) {
+                        continue;
+                    }
+
                     for (TerminalNode<Token> identifier : identifierListContext.IDENTIFIER()) {
                         String name = identifier.getText();
                         if (name == null || name.isEmpty()) {
