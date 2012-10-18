@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.project;
 
+import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,9 +46,13 @@ import org.netbeans.modules.nativeexecution.api.execution.PostMessageDisplayer;
 import org.netbeans.modules.nativeexecution.spi.ExecutionEnvironmentFactoryService;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
+import org.openide.awt.StatusDisplayer;
+import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
+import org.openide.text.Line;
 import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -54,6 +61,8 @@ import org.openide.util.RequestProcessor;
 import org.openide.util.Utilities;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
+import org.openide.windows.OutputEvent;
+import org.openide.windows.OutputListener;
 
 /**
  *
@@ -308,9 +317,7 @@ public final class GoActionProvider implements ActionProvider {
                     } else {
                         Matcher matcher = BUILD_ERROR_PATTERN.matcher(line);
                         if (matcher.matches()) {
-                            String filePath = workingDirectory + File.separatorChar + matcher.group("file").replace('/', File.separatorChar);
-                            String result = filePath + ':' + matcher.group("line") + ": error: " + matcher.group("message");
-                            return Collections.singletonList(ConvertedLine.forText(result, null));
+                            return Collections.singletonList(ConvertedLine.forText(line, new BuildErrorOutputListener()));
                         }
                     }
                 }
@@ -757,4 +764,76 @@ public final class GoActionProvider implements ActionProvider {
         }
     }
 
+    private class BuildErrorOutputListener implements OutputListener {
+
+        @Override
+        public void outputLineSelected(OutputEvent ev) {
+        }
+
+        @Override
+        public void outputLineAction(OutputEvent ev) {
+            Matcher matcher = BUILD_ERROR_PATTERN.matcher(ev.getLine());
+            if (!matcher.matches()) {
+                return;
+            }
+
+            final String workingDirectory = _project.getProjectDirectory().getPath().replace('/', File.separatorChar);
+            String filePath = workingDirectory + File.separatorChar + matcher.group("file").replace('/', File.separatorChar);
+            String message = matcher.group("message");
+            int line = Integer.parseInt(matcher.group("line"));
+            final int column = -1;
+
+            FileObject file = FileUtil.toFileObject(new File(filePath));
+            if (file == null) { // #13115
+                Toolkit.getDefaultToolkit().beep();
+                return;
+            }
+            try {
+                DataObject dob = DataObject.find(file);
+                EditorCookie ed = dob.getLookup().lookup(EditorCookie.class);
+                if (ed != null && /* not true e.g. for *_ja.properties */file == dob.getPrimaryFile()) {
+                    if (line <= 0) {
+                        // OK, just open it.
+                        ed.open();
+                    } else {
+                        ed.openDocument(); // XXX getLineSet does not do it for you!
+                        LOGGER.log(Level.FINE, "opened document for {0}", file);
+                        try {
+                            Line.Set lines = ed.getLineSet();
+                            final Line editorLine = lines.getOriginal(line - 1);
+                            if (!editorLine.isDeleted()) {
+                                EventQueue.invokeLater(new Runnable() {
+                                    public @Override void run() {
+                                        editorLine.show(Line.ShowOpenType.REUSE, Line.ShowVisibilityType.FOCUS, column);
+                                    }
+                                });
+                            }
+                        } catch (IndexOutOfBoundsException ioobe) {
+                            // Probably harmless. Bogus line number.
+                            ed.open();
+                        }
+                    }
+                } else {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+            } catch (DataObjectNotFoundException donfe) {
+                LOGGER.log(Level.WARNING, donfe.getLocalizedMessage(), donfe);
+            }
+            catch (IOException ioe) {
+                // XXX see above, should not be necessary to call openDocument at all
+                LOGGER.log(Level.WARNING, ioe.getLocalizedMessage(), ioe);
+            }
+
+            if (message != null) {
+                // Try to do after opening the file, since opening a new file
+                // clears the current status message.
+                StatusDisplayer.getDefault().setStatusText(message);
+            }
+        }
+
+        @Override
+        public void outputLineCleared(OutputEvent ev) {
+        }
+
+    }
 }
