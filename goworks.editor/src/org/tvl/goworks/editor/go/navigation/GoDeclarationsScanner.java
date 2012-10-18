@@ -225,7 +225,8 @@ public class GoDeclarationsScanner {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0)
         public void enterFunctionDecl(FunctionDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
-            String signature = String.format("%s", ctx.IDENTIFIER().getSymbol().getText());
+            String name = ctx.IDENTIFIER() != null ? ctx.IDENTIFIER().getText() : "?";
+            String signature = name;
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FUNCTION);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
@@ -268,7 +269,11 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0)
         public void enterTypeSpec(TypeSpecContext ctx) {
-            typeNameStack.push(ctx.IDENTIFIER().getSymbol().getText());
+            if (ctx.IDENTIFIER() != null) {
+                typeNameStack.push(ctx.IDENTIFIER().getSymbol().getText());
+            } else {
+                typeNameStack.push("?");
+            }
         }
 
         @Override

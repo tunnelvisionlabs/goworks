@@ -1586,6 +1586,10 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
     })
     public void enterImportSpec(ImportSpecContext ctx) {
+        if (ctx.importPath() == null || ctx.importPath().StringLiteral() == null) {
+            return;
+        }
+
         String name = null;
         String path = null;
         TerminalNode<Token> target = null;

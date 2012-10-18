@@ -53,6 +53,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
+import org.tvl.goworks.editor.go.completion.GoCompletionQuery.UnknownTypeModelImpl;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
@@ -355,10 +356,28 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_keyType, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
+    })
     public void exitMapType(MapTypeContext ctx) {
-        TypeModelImpl valueType = typeModelStack.pop();
-        TypeModelImpl keyType = typeModelStack.pop();
+        TypeModelImpl valueType;
+        if (ctx.elementType() != null) {
+            valueType = typeModelStack.pop();
+        }
+        else {
+            valueType = new UnknownTypeModelImpl(fileModel);
+        }
+
+        TypeModelImpl keyType;
+        if (ctx.keyType() != null) {
+            keyType = typeModelStack.pop();
+        }
+        else {
+            keyType = new UnknownTypeModelImpl(fileModel);
+        }
+
         typeModelStack.push(new TypeMapModelImpl(keyType, valueType));
         if (typeModelStack.isEmpty()) {
             throw new IllegalStateException();
@@ -383,14 +402,24 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+    })
     public void exitTypeSpec(TypeSpecContext ctx) {
         String name = "?";
         if (ctx.IDENTIFIER() != null) {
             name = ctx.IDENTIFIER().getSymbol().getText();
         }
 
-        TypeModelImpl type = typeModelStack.pop();
+        TypeModelImpl type;
+        if (ctx.type() != null) {
+            type = typeModelStack.pop();
+        }
+        else {
+            type = new UnknownTypeModelImpl(fileModel);
+        }
+
         TypeModelImpl model = new TypeAliasModelImpl(name, type, fileModel, ctx.IDENTIFIER(), ctx);
         typeContainerStack.peek().add(model);
     }
@@ -524,8 +553,13 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0)
     public void enterFunctionDecl(FunctionDeclContext ctx) {
         TerminalNode<Token> nameNode = ctx.IDENTIFIER();
-        FunctionModelImpl model = new FunctionModelImpl(nameNode.getSymbol().getText(), fileModel, nameNode, ctx);
-        functionContainerStack.peek().add(model);
+        String name = nameNode != null ? nameNode.getText() : "?";
+        FunctionModelImpl model = new FunctionModelImpl(name, fileModel, nameNode, ctx);
+
+        if (nameNode != null) {
+            functionContainerStack.peek().add(model);
+        }
+
         functionModelStack.push(model);
         parameterContainerStack.push(model.getParameters());
     }
