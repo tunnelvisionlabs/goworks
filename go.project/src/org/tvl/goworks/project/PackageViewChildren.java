@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.api.fileinfo.NonRecursiveFolder;
+import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.ProjectManager;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.queries.VisibilityQuery;
@@ -658,6 +659,8 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
             super( dataFolder.getNodeDelegate(),
                    empty ? FilterNode.Children.LEAF : dataFolder.createNodeChildren( NO_FOLDERS_FILTER ),
                    new ProxyLookup(
+                        Lookups.singleton(new GoActionProvider((GoProject)FileOwnerQuery.getOwner(root))),
+                        Lookups.singleton(FileOwnerQuery.getOwner(root)),
                         Lookups.singleton(new NoFoldersContainer (dataFolder)),
                         dataFolder.getNodeDelegate().getLookup(),
                         Lookups.singleton(SearchInfoDefinitionFactory.createFlatSearchInfo(

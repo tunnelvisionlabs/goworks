@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
@@ -44,6 +45,7 @@ import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataObject;
 import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -58,10 +60,14 @@ import org.openide.windows.InputOutput;
  * @author Sam Harwell
  */
 public final class GoActionProvider implements ActionProvider {
+    // -J-Dorg.tvl.goworks.project.GoActionProvider.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(GoActionProvider.class.getName());
+
     public static final String COMMAND_INSTALL = "build.install";
 
     private static final String[] supported = new String[] {
         ActionProvider.COMMAND_BUILD,
+        ActionProvider.COMMAND_COMPILE_SINGLE,
         ActionProvider.COMMAND_REBUILD,
         ActionProvider.COMMAND_CLEAN,
         COMMAND_INSTALL,
@@ -93,6 +99,9 @@ public final class GoActionProvider implements ActionProvider {
     public void invokeAction(String string, Lookup lookup) throws IllegalArgumentException {
         if (string.equals(COMMAND_BUILD)) {
             handleBuildAction(lookup);
+        }
+        else if (string.equals(COMMAND_COMPILE_SINGLE)) {
+            handleBuildPackageAction(lookup);
         }
         else if (string.equals(COMMAND_REBUILD)) {
             handleRebuildAction(lookup);
@@ -165,7 +174,69 @@ public final class GoActionProvider implements ActionProvider {
         execute("build", ioTab);
    }
 
-    public void execute(final String commandName, final InputOutput io) {
+    private void handleBuildPackageAction(Lookup lookup) throws IllegalArgumentException {
+        String buildCommand = "go";
+        String args = "build";
+
+        String projectName = ProjectUtils.getInformation(_project).getDisplayName();
+        InputOutput tab;
+        tab = IOProvider.getDefault().getIO(projectName + " (compile-single)", false);
+        tab.closeInputOutput();
+
+        Action[] actions = new Action[] {
+        };
+
+        tab = IOProvider.getDefault().getIO(projectName + " (compile-single)", actions);
+        try {
+            tab.getOut().reset();
+        } catch (IOException ex) {
+        }
+
+        final InputOutput ioTab = tab;
+
+        progressHandle = ProgressHandleFactory.createHandle(projectName + " (compile-single)", new Cancellable() {
+
+            @Override
+            public boolean cancel() {
+                return false;
+            }
+
+        }, new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ioTab.select();
+            }
+
+        });
+
+        progressHandle.setInitialDelay(0);
+        progressHandle.start();
+
+        DataObject dataFolder = lookup.lookup(DataObject.class);
+        if (dataFolder == null) {
+            return;
+        }
+
+        FileObject fileObject = dataFolder.getPrimaryFile();
+        if (fileObject == null || !fileObject.isFolder()) {
+            return;
+        }
+
+        FileObject sourceRoot = _project.getSourceRoot();
+        String relativePath = FileUtil.getRelativePath(sourceRoot, fileObject);
+        if (relativePath == null) {
+            return;
+        }
+
+        execute("build", ioTab, relativePath.replace(File.separatorChar, '/'));
+   }
+
+    public void execute(String commandName, InputOutput io) {
+        execute(commandName, io, "./...");
+    }
+
+    public void execute(final String commandName, final InputOutput io, final String packageName) {
         final ExecutionListener listener = new ExecutionListener() {
 
             @Override
@@ -189,7 +260,7 @@ public final class GoActionProvider implements ActionProvider {
             @Override
             public void run() {
                 try {
-                    executeImpl(commandName, io, listener);
+                    executeImpl(commandName, packageName, io, listener);
                 } catch (Throwable throwable) {
                     try {
                         io.getErr().println("Internal error occurred. Please report a bug.", null, true);
@@ -215,7 +286,7 @@ public final class GoActionProvider implements ActionProvider {
     private static final Pattern PACKAGE_NAME_PATTERN = Pattern.compile(PACKAGE_NAME_PATTERN_STRING);
     private static final Pattern BUILD_ERROR_PATTERN = Pattern.compile("(?<file>\\w+(?:[\\\\/]\\w+)*[\\\\/]\\w+\\.go):(?<line>\\d+):\\s*(?<message>.*)");
 
-    private void executeImpl(final String commandName, final InputOutput io, final ExecutionListener listener) {
+    private void executeImpl(final String commandName, final String packageName, final InputOutput io, final ExecutionListener listener) {
         ExecutionEnvironmentFactoryService executionEnvironmentFactoryService =
             Lookup.getDefault().lookup(ExecutionEnvironmentFactoryService.class);
 
@@ -230,8 +301,8 @@ public final class GoActionProvider implements ActionProvider {
 
             @Override
             public List<ConvertedLine> convert(String line) {
-                if (COMMAND_BUILD.equals(commandName) || COMMAND_INSTALL.equals(commandName)) {
-                    String action = COMMAND_BUILD.equals(commandName) ? "Building" : "Installing";
+                if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName) || COMMAND_INSTALL.equals(commandName)) {
+                    String action = COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName) ? "Building" : "Installing";
                     if (PACKAGE_NAME_PATTERN.matcher(line).matches()) {
                         return Collections.singletonList(ConvertedLine.forText(action + " package " + line, null));
                     } else {
@@ -281,7 +352,7 @@ public final class GoActionProvider implements ActionProvider {
         }
 
         List<String> args = new ArrayList<String>();
-        if (COMMAND_BUILD.equals(commandName) || COMMAND_REBUILD.equals(commandName)) {
+        if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName) || COMMAND_REBUILD.equals(commandName)) {
             args.add("build");
             args.add("-v");
 
@@ -289,20 +360,20 @@ public final class GoActionProvider implements ActionProvider {
                 args.add("-a");
             }
 
-            args.add("./...");
+            args.add(packageName);
         } else if (COMMAND_CLEAN.equals(commandName)) {
             args.add("clean");
             args.add("-i");
             args.add("-x");
-            args.add("./...");
+            args.add(packageName);
         } else if (COMMAND_INSTALL.equals(commandName)) {
             args.add("install");
             args.add("-v");
-            args.add("./...");
+            args.add(packageName);
         } else if (COMMAND_TEST.equals(commandName)) {
             args.add("test");
             args.add("-v");
-            args.add("./...");
+            args.add(packageName);
         }
 
         NativeProcessBuilder nativeProcessBuilder = NativeProcessBuilder.newProcessBuilder(executionEnvironment)
@@ -640,6 +711,28 @@ public final class GoActionProvider implements ActionProvider {
         GoProject project = lookup.lookup(GoProject.class);
         if (command.equals(ActionProvider.COMMAND_BUILD)) {
             return project != null && !project.isStandardLibrary();
+        } else if (command.equals(ActionProvider.COMMAND_COMPILE_SINGLE)) {
+            if (project == null || project.isStandardLibrary()) {
+                return false;
+            }
+
+            DataObject dataFolder = lookup.lookup(DataObject.class);
+            if (dataFolder == null) {
+                return false;
+            }
+
+            FileObject fileObject = dataFolder.getPrimaryFile();
+            if (fileObject == null || !fileObject.isFolder()) {
+                return false;
+            }
+
+            FileObject sourceRoot = _project.getSourceRoot();
+            String relativePath = FileUtil.getRelativePath(sourceRoot, fileObject);
+            if (relativePath == null) {
+                return false;
+            }
+
+            return true;
         } else if (command.equals(ActionProvider.COMMAND_REBUILD)) {
             //return project != null && !project.isStandardLibrary();
             return false;
