@@ -328,7 +328,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         private final DocumentSnapshot snapshot;
         private final ParserTaskManager taskManager;
 
-        private FileModel fileModel;
+        private FileModelImpl fileModel;
         private boolean fileModelDataFailed = false;
 
         private CodeCompletionGoParser parser;
@@ -1166,18 +1166,18 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     if (existing instanceof VarReferenceCompletionItem) {
                         VarModel existingModel = ((VarReferenceCompletionItem)existing).getCodeElementModel();
                         CodeElementPositionRegion seek = existingModel.getSeek();
-                        if (seek != null && seek.getFileObject().equals(((FileModelImpl)getFileModel()).getFileObject())) {
+                        if (seek != null && seek.getFileObject().equals(getFileModel().getFileObject())) {
                             if (seek.getOffsetRegion().getStart() == varEntry.getItem1().getSymbol().getStartIndex()) {
                                 continue;
                             }
                         }
                     }
 
-                    varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
+                    varTypes = Collections.singleton(new UnknownTypeModelImpl(getFileModel()));
                 }
 
                 if (varEntry.getItem3() < 0) {
-                    ConstModelImpl constModel = new ConstModelImpl(name, (FileModelImpl)getFileModel(), null, null, null, varEntry.getItem1(), varEntry.getItem2());
+                    ConstModelImpl constModel = new ConstModelImpl(name, getFileModel(), null, null, null, varEntry.getItem1(), varEntry.getItem2());
                     intermediateResults.put(name, new ConstReferenceCompletionItem(constModel, true));
                 } else {
                     for (CodeElementModel model : varTypes) {
@@ -1196,20 +1196,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             continue;
                         }
 
-                            VarModelImpl varModel = new VarModelImpl(name, varKind, typeModel, (FileModelImpl)getFileModel(), varEntry.getItem1(), varEntry.getItem2());
-                            intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
-
+                        VarModelImpl varModel = new VarModelImpl(name, varKind, typeModel, getFileModel(), varEntry.getItem1(), varEntry.getItem2());
+                        intermediateResults.put(name, new VarReferenceCompletionItem(varModel, true));
                         break;
                     }
                 }
             }
         }
 
-        private FileModel getFileModel() {
+        private FileModelImpl getFileModel() {
             if (fileModel == null && !fileModelDataFailed) {
                 Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GoParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
                 try {
-                    fileModel = futureFileModelData != null ? futureFileModelData.get().getData() : null;
+                    fileModel = futureFileModelData != null ? (FileModelImpl)futureFileModelData.get().getData() : null;
                     fileModelDataFailed = fileModel != null;
                 } catch (InterruptedException ex) {
                     LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
@@ -1725,7 +1724,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     setTargetProperty(ctx, pointers);
                     return pointers;
                 } else if ("recover".equals(name)) {
-                    TypeInterfaceModelImpl result = new TypeInterfaceModelImpl("_", (FileModelImpl)fileModel, ctx);
+                    TypeInterfaceModelImpl result = new TypeInterfaceModelImpl("_", fileModel, ctx);
                     result.freeze();
                     return Collections.singletonList(result);
                 } else {
@@ -1897,7 +1896,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
             })
             public Collection<? extends CodeElementModel> visitFunctionType(FunctionTypeContext ctx) {
-                TypeFunctionModelImpl functionType = new TypeFunctionModelImpl("func", (FileModelImpl)fileModel, ctx);
+                TypeFunctionModelImpl functionType = new TypeFunctionModelImpl("func", fileModel, ctx);
 
                 List<ParameterModelImpl> parameters = functionType.getParameters();
                 List<ParameterModelImpl> returnValues = functionType.getReturnValues();
@@ -1924,10 +1923,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             if (resolved.size() == 1) {
                                 returnType = (TypeModelImpl)resolved.iterator().next();
                             } else {
-                                returnType = new UnknownTypeModelImpl((FileModelImpl)fileModel);
+                                returnType = new UnknownTypeModelImpl(fileModel);
                             }
 
-                            returnValues.add(new ParameterModelImpl("_", VarKind.RETURN, returnType, (FileModelImpl)fileModel, ParseTrees.getStartNode(typeContext), typeContext));
+                            returnValues.add(new ParameterModelImpl("_", VarKind.RETURN, returnType, fileModel, ParseTrees.getStartNode(typeContext), typeContext));
                         }
                     }
                 }
@@ -2028,7 +2027,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     if (resolved.size() == 1) {
                         returnType = (TypeModelImpl)resolved.iterator().next();
                     } else {
-                        returnType = new UnknownTypeModelImpl((FileModelImpl)fileModel);
+                        returnType = new UnknownTypeModelImpl(fileModel);
                     }
 
                     IdentifierListContext identifierListContext = parameterDeclContext.identifierList();
@@ -2042,7 +2041,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             name = "_";
                         }
 
-                        ParameterModelImpl parameter = new ParameterModelImpl(name, kind, returnType, (FileModelImpl)fileModel, identifier, parameterDeclContext);
+                        ParameterModelImpl parameter = new ParameterModelImpl(name, kind, returnType, fileModel, identifier, parameterDeclContext);
                         parameters.add(parameter);
                     }
                 }
@@ -2058,7 +2057,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     LOGGER.log(Level.WARNING, "Target resolution for non-empty anonymous interfaces is not implemented.");
                 }
 
-                return Collections.singletonList(new TypeInterfaceModelImpl("_", (FileModelImpl)fileModel, ctx));
+                return Collections.singletonList(new TypeInterfaceModelImpl("_", fileModel, ctx));
             }
 
             @Override
@@ -2105,11 +2104,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (keyTypes == null || keyTypes.isEmpty()) {
-                    keyTypes = Collections.singletonList(new UnknownTypeModelImpl((FileModelImpl)fileModel));
+                    keyTypes = Collections.singletonList(new UnknownTypeModelImpl(fileModel));
                 }
 
                 if (valueTypes == null || valueTypes.isEmpty()) {
-                    valueTypes = Collections.singletonList(new UnknownTypeModelImpl((FileModelImpl)fileModel));
+                    valueTypes = Collections.singletonList(new UnknownTypeModelImpl(fileModel));
                 }
 
                 for (CodeElementModel keyTypeModel : keyTypes) {
@@ -2428,13 +2427,13 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                         varTypes = unbundledTypes;
                         if (varTypes.isEmpty()) {
-                            varTypes = Collections.singleton(new UnknownTypeModelImpl((FileModelImpl)getFileModel()));
+                            varTypes = Collections.singleton(new UnknownTypeModelImpl(getFileModel()));
                         }
 
                         for (CodeElementModel unresolvedVarType : varTypes) {
                             for (TypeModelImpl varType : resolveType(unresolvedVarType, false, false)) {
                                 // TODO: use proper var kind
-                                VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, varType, (FileModelImpl)getFileModel(), entry.getItem1(), entry.getItem2());
+                                VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, varType, getFileModel(), entry.getItem1(), entry.getItem2());
                                 members.add(varModel);
                             }
                         }
