@@ -11,6 +11,8 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 import java.util.Collection;
 import java.util.Collections;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.tvl.goworks.editor.go.codemodel.InterfaceModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 
@@ -22,7 +24,7 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
     private final FreezableArrayList<FunctionModelImpl> interfaceMethods = new FreezableArrayList<FunctionModelImpl>();
     private final FreezableArrayList<TypeModelImpl> implementedInterfaces = new FreezableArrayList<TypeModelImpl>();
 
-    public TypeInterfaceModelImpl(String name, FileModelImpl fileModel, ParserRuleContext<?> span) {
+    public TypeInterfaceModelImpl(@NonNull String name, @NonNull FileModelImpl fileModel, @NullAllowed ParserRuleContext<?> span) {
         super(name, fileModel, null, span);
     }
 
