@@ -1236,7 +1236,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             return fileModel;
         }
 
-        private ObjectDecorator<ParseTree<Token>> annotations = new ObjectDecorator<ParseTree<Token>>();
+        private final ObjectDecorator<ParseTree<Token>> annotations = new ObjectDecorator<ParseTree<Token>>();
 
         private class LocalsAnalyzer {
 
@@ -2678,11 +2678,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                     TerminalNode<Token> unqualifiedLink = treeDecorator.getProperty(qualifier, GoAnnotations.UNQUALIFIED_LINK);
                     if (unqualifiedLink != null) {
-                        Map<? extends ObjectProperty<?>, ?> properties = treeDecorator.getProperties(unqualifiedLink);
-//                        treeDecorator.putProperties(qualifier, properties);
                         qualifierNodeType = treeDecorator.getProperty(qualifier, GoAnnotations.NODE_TYPE);
                         if (qualifierNodeType == NodeType.UNDEFINED) {
-//                            treeDecorator.putProperty(qualifier, GoAnnotations.NODE_TYPE, NodeType.UNKNOWN);
                             qualifierNodeType = NodeType.UNKNOWN;
                         }
                     } else {
