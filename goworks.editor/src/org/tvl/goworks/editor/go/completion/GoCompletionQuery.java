@@ -430,681 +430,679 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                if (true) {
-                    Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                    Tagger<TokenTag<Token>> tagger = null;
-                    try {
-                        tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
-                    } catch (InterruptedException ex) {
-                        LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
-                    } catch (ExecutionException ex) {
-                        LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
+                Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                Tagger<TokenTag<Token>> tagger = null;
+                try {
+                    tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
+                } catch (InterruptedException ex) {
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
+                } catch (ExecutionException ex) {
+                    LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
+                }
+
+                int regionStart;
+                if (enclosing != null) {
+                    regionStart = enclosing.getSpan().getStartPosition(snapshot).getOffset();
+                } else if (previous != null) {
+                    regionStart = previous.getSpan().getStartPosition(snapshot).getOffset();
+                } else {
+                    regionStart = 0;
+                }
+
+                int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
+                OffsetRegion region = OffsetRegion.fromBounds(regionStart, regionEnd);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, "Code completion from {0}: {1}.", new Object[] { enclosing != null || previous != null ? "anchor region" : "top of File", region });
+                }
+
+                TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
+                TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
+                CommonTokenStream tokens = new CommonTokenStream(tokenSource);
+
+                parser = ParserCache.DEFAULT.getParser(tokens);
+                try {
+                    parser.setBuildParseTree(true);
+                    parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
+                    @SuppressWarnings("LocalVariableHidesMemberVariable")
+                    FileModel fileModel = getFileModel();
+                    if (fileModel != null) {
+                        Set<String> packageNames = new HashSet<String>();
+                        for (ImportDeclarationModel model : fileModel.getImportDeclarations()) {
+                            String name = model.getName();
+                            if (!name.isEmpty() && !name.equals(".")) {
+                                packageNames.add(name);
+                            }
+                        }
+
+                        parser.setCheckPackageNames(true);
+                        parser.setPackageNames(packageNames);
                     }
 
-                    int regionStart;
+                    int anchorRule;
                     if (enclosing != null) {
-                        regionStart = enclosing.getSpan().getStartPosition(snapshot).getOffset();
+                        anchorRule = enclosing.getRule();
                     } else if (previous != null) {
-                        regionStart = previous.getSpan().getStartPosition(snapshot).getOffset();
+                        anchorRule = previous.getRule();
                     } else {
-                        regionStart = 0;
+                        anchorRule = GoParser.RULE_topLevelDecl;
                     }
 
-                    int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
-                    OffsetRegion region = OffsetRegion.fromBounds(regionStart, regionEnd);
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE, "Code completion from {0}: {1}.", new Object[] { enclosing != null || previous != null ? "anchor region" : "top of File", region });
+                    switch (anchorRule) {
+                    case GoParser.RULE_topLevelDecl:
+                        parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
+                        annotatedParseTrees = new HashMap<ParseTree<Token>, GoAnnotatedParseTree>();
+                        break;
+
+                    default:
+                        parseTrees = null;
+                        annotatedParseTrees = null;
+                        break;
                     }
 
-                    TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
-                    TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
-                    CommonTokenStream tokens = new CommonTokenStream(tokenSource);
+                    if (parseTrees != null) {
+                        possibleDeclaration = false;
+                        possibleReference = false;
 
-                    parser = ParserCache.DEFAULT.getParser(tokens);
-                    try {
-                        parser.setBuildParseTree(true);
-                        parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
-                        @SuppressWarnings("LocalVariableHidesMemberVariable")
-                        FileModel fileModel = getFileModel();
-                        if (fileModel != null) {
-                            Set<String> packageNames = new HashSet<String>();
-                            for (ImportDeclarationModel model : fileModel.getImportDeclarations()) {
-                                String name = model.getName();
-                                if (!name.isEmpty() && !name.equals(".")) {
-                                    packageNames.add(name);
-                                }
+                        declarationOrReferenceLoop:
+                        for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+                            CaretReachedException ex = entry.getValue();
+                            if (ex == null || ex.getTransitions() == null) {
+                                continue;
                             }
 
-                            parser.setCheckPackageNames(true);
-                            parser.setPackageNames(packageNames);
-                        }
+                            if (ex.getCaretToken() != null) {
+                                caretToken = ex.getCaretToken();
+                            }
 
-                        int anchorRule;
-                        if (enclosing != null) {
-                            anchorRule = enclosing.getRule();
-                        } else if (previous != null) {
-                            anchorRule = previous.getRule();
-                        } else {
-                            anchorRule = GoParser.RULE_topLevelDecl;
-                        }
+                            Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
+                            for (Map.Entry<ATNConfig, List<Transition>> transitionEntry : transitions.entrySet()) {
+                                for (Transition t : transitionEntry.getValue()) {
+                                    IntervalSet label = t.label();
+                                    if (label == null || !label.contains(GoParser.IDENTIFIER)) {
+                                        continue;
+                                    }
 
-                        switch (anchorRule) {
-                        case GoParser.RULE_topLevelDecl:
-                            parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
-                            annotatedParseTrees = new HashMap<ParseTree<Token>, GoAnnotatedParseTree>();
-                            break;
-
-                        default:
-                            parseTrees = null;
-                            annotatedParseTrees = null;
-                            break;
-                        }
-
-                        if (parseTrees != null) {
-                            possibleDeclaration = false;
-                            possibleReference = false;
-
-                            declarationOrReferenceLoop:
-                            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
-                                CaretReachedException ex = entry.getValue();
-                                if (ex == null || ex.getTransitions() == null) {
-                                    continue;
-                                }
-
-                                if (ex.getCaretToken() != null) {
-                                    caretToken = ex.getCaretToken();
-                                }
-
-                                Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                                for (Map.Entry<ATNConfig, List<Transition>> transitionEntry : transitions.entrySet()) {
-                                    for (Transition t : transitionEntry.getValue()) {
-                                        IntervalSet label = t.label();
-                                        if (label == null || !label.contains(GoParser.IDENTIFIER)) {
-                                            continue;
-                                        }
-
-                                        int ruleIndex = t.target.ruleIndex;
-                                        switch (ruleIndex) {
-                                        case GoParser.RULE_methodName:
-                                            {
-                                                int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
-                                                if (invokingRule == GoParser.RULE_methodSpec || invokingRule == GoParser.RULE_methodDecl) {
-                                                    possibleDeclaration = true;
-                                                } else {
-                                                    possibleReference = true;
-                                                }
-                                            }
-                                            break;
-
-                                        case GoParser.RULE_label:
-                                            {
-                                                int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
-                                                if (invokingRule == GoParser.RULE_labeledStmt) {
-                                                    possibleDeclaration = true;
-                                                } else {
-                                                    possibleReference = true;
-                                                }
-                                            }
-                                            break;
-
-                                        case GoParser.RULE_packageName:
-                                            if (isInContext(parser, entry.getValue().getFinalContext(), IntervalSet.of(GoParser.RULE_packageClause))) {
+                                    int ruleIndex = t.target.ruleIndex;
+                                    switch (ruleIndex) {
+                                    case GoParser.RULE_methodName:
+                                        {
+                                            int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
+                                            if (invokingRule == GoParser.RULE_methodSpec || invokingRule == GoParser.RULE_methodDecl) {
                                                 possibleDeclaration = true;
                                             } else {
                                                 possibleReference = true;
                                             }
+                                        }
+                                        break;
 
-                                            break;
+                                    case GoParser.RULE_label:
+                                        {
+                                            int invokingRule = ParseTrees.getInvokingRule(parser.getATN(), entry.getValue().getFinalContext());
+                                            if (invokingRule == GoParser.RULE_labeledStmt) {
+                                                possibleDeclaration = true;
+                                            } else {
+                                                possibleReference = true;
+                                            }
+                                        }
+                                        break;
 
-                                        case GoParser.RULE_baseTypeName:
-                                        case GoParser.RULE_builtinCall: // only happens for builtin method name
-                                        case GoParser.RULE_expression:  // only happens for selector
-                                        case GoParser.RULE_fieldName:
-                                        case GoParser.RULE_qualifiedIdentifier:
-                                            possibleReference = true;
-                                            break;
-
-                                        case GoParser.RULE_identifierList:
-                                        case GoParser.RULE_functionDecl:
-                                        case GoParser.RULE_receiver:
-                                        case GoParser.RULE_typeSpec:
-                                        case GoParser.RULE_typeSwitchGuard:
+                                    case GoParser.RULE_packageName:
+                                        if (isInContext(parser, entry.getValue().getFinalContext(), IntervalSet.of(GoParser.RULE_packageClause))) {
                                             possibleDeclaration = true;
-                                            break;
-
-                                        default:
-                                            break;
+                                        } else {
+                                            possibleReference = true;
                                         }
 
-                                        if (possibleDeclaration && possibleReference) {
-                                            break;
+                                        break;
+
+                                    case GoParser.RULE_baseTypeName:
+                                    case GoParser.RULE_builtinCall: // only happens for builtin method name
+                                    case GoParser.RULE_expression:  // only happens for selector
+                                    case GoParser.RULE_fieldName:
+                                    case GoParser.RULE_qualifiedIdentifier:
+                                        possibleReference = true;
+                                        break;
+
+                                    case GoParser.RULE_identifierList:
+                                    case GoParser.RULE_functionDecl:
+                                    case GoParser.RULE_receiver:
+                                    case GoParser.RULE_typeSpec:
+                                    case GoParser.RULE_typeSwitchGuard:
+                                        possibleDeclaration = true;
+                                        break;
+
+                                    default:
+                                        break;
+                                    }
+
+                                    if (possibleDeclaration && possibleReference) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
+                    if (parseTrees != null) {
+                        /*
+                        * KEYWORD ANALYSIS
+                        */
+                        boolean canContinue = false;
+                        boolean canBreak = false;
+                        boolean canDefaultOrCase = false;
+
+                        IntervalSet allowedKeywords = new IntervalSet();
+                        IntervalSet remainingKeywords = new IntervalSet(KeywordCompletionItem.KEYWORD_TYPES);
+
+                        for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+                            CaretReachedException caretReachedException = entry.getValue();
+                            if (caretReachedException == null || caretReachedException.getTransitions() == null) {
+                                continue;
+                            }
+
+                            Map<ATNConfig, List<Transition>> transitions = caretReachedException.getTransitions();
+                            for (List<Transition> transitionList : transitions.values()) {
+                                for (Transition transition : transitionList) {
+                                    if (transition.isEpsilon() || transition instanceof WildcardTransition || transition instanceof NotSetTransition) {
+                                        continue;
+                                    }
+
+                                    IntervalSet label = transition.label();
+                                    if (label == null) {
+                                        continue;
+                                    }
+
+                                    if (!canContinue && label.contains(GoLexer.Continue)) {
+                                        canContinue = isInContext(parser, caretReachedException.getFinalContext(), CONTINUE_SCOPES);
+                                        if (canContinue) {
+                                            canBreak = true;
+                                        }
+                                    }
+
+                                    if (!canBreak && label.contains(GoLexer.Break)) {
+                                        canBreak = isInContext(parser, caretReachedException.getFinalContext(), BREAK_SCOPES);
+                                    }
+
+                                    if (!canDefaultOrCase && label.contains(GoLexer.Default)) {
+                                        if (caretReachedException.getFinalContext() instanceof ParserRuleContext<?>) {
+                                            int currentRule = caretReachedException.getFinalContext().getRuleIndex();
+                                            canDefaultOrCase =
+                                                currentRule == GoParser.RULE_typeSwitchCase
+                                                || currentRule == GoParser.RULE_exprSwitchCase
+                                                || currentRule == GoParser.RULE_commCase;
+                                        } else {
+                                            canDefaultOrCase = true;
+                                        }
+                                    }
+
+                                    for (int keyword : remainingKeywords.toArray()) {
+                                        if (label.contains(keyword)) {
+                                            remainingKeywords.remove(keyword);
+                                            allowedKeywords.add(keyword);
                                         }
                                     }
                                 }
                             }
                         }
 
-                        Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
-                        if (parseTrees != null) {
-                            /*
-                            * KEYWORD ANALYSIS
-                            */
-                            boolean canContinue = false;
-                            boolean canBreak = false;
-                            boolean canDefaultOrCase = false;
+                        if (!canContinue) {
+                            allowedKeywords.remove(GoLexer.Continue);
+                        }
 
-                            IntervalSet allowedKeywords = new IntervalSet();
-                            IntervalSet remainingKeywords = new IntervalSet(KeywordCompletionItem.KEYWORD_TYPES);
+                        if (!canBreak) {
+                            allowedKeywords.remove(GoLexer.Break);
+                        }
 
-                            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
-                                CaretReachedException caretReachedException = entry.getValue();
-                                if (caretReachedException == null || caretReachedException.getTransitions() == null) {
+                        if (!canDefaultOrCase) {
+                            allowedKeywords.remove(GoLexer.Case);
+                            allowedKeywords.remove(GoLexer.Default);
+                        }
+
+                        for (int keyword : allowedKeywords.toArray()) {
+                            KeywordCompletionItem item = new KeywordCompletionItem(GoLexer.tokenNames[keyword].substring(1, GoLexer.tokenNames[keyword].length() - 1));
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                        }
+
+                        /*
+                        * EXPRESSION ANALYSIS
+                        */
+
+                        boolean addedPackages = false;
+                        boolean addedTypes = false;
+                        boolean addedVars = false;
+                        boolean addedFunctions = false;
+
+                        for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+                            RuleContext<Token> finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                            if (finalContext == null) {
+                                continue;
+                            }
+
+                            Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
+                            assert transitions != null;
+                            assert transitions.size() == 1;
+                            List<Transition> singleTransitionList = transitions.values().iterator().next();
+                            assert singleTransitionList.size() == 1;
+                            Transition transition = singleTransitionList.get(0);
+                            // only interested in identifiers
+                            IntervalSet label = transition.label();
+                            if (label == null || !label.contains(GoParser.IDENTIFIER)) {
+                                continue;
+                            }
+
+                            // if selectorExpressionRoot is not null, then we are on the right hand side of a '.'
+                            ParseTree<Token> selectorExpressionRoot = null;
+                            ParserRuleContext<Token> selectorTarget = null;
+                            boolean isTypeSwitchGuard = false;
+
+                            List<ParseTree<Token>> pathToRoot = new ArrayList<ParseTree<Token>>(ParseTrees.getAncestors(finalContext));
+                            pathToRoot.add(finalContext);
+                            Collections.reverse(pathToRoot);
+                            for (ParseTree<Token> tree : pathToRoot) {
+                                if (tree instanceof GoParser.SelectorExprContext) {
+                                    GoParser.SelectorExprContext context = (GoParser.SelectorExprContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = tree;
+                                        selectorTarget = context.expression();
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParser.TypeSwitchGuardContext) {
+                                    GoParser.TypeSwitchGuardContext context = (GoParser.TypeSwitchGuardContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = tree;
+                                        selectorTarget = context.expression();
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParser.TypeAssertionExprContext) {
+                                    GoParser.TypeAssertionExprContext context = (GoParser.TypeAssertionExprContext)tree;
+                                    if (context.dot != null && context.lp == null) {
+                                        selectorExpressionRoot = tree;
+                                        selectorTarget = context.expression();
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParser.MethodExprContext) {
+                                    GoParser.MethodExprContext context = (GoParser.MethodExprContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = tree;
+                                        selectorTarget = context.receiverType();
+                                        break;
+                                    }
+                                } else if (tree instanceof GoParser.QualifiedIdentifierContext) {
+                                    GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)tree;
+                                    if (context.dot != null) {
+                                        selectorExpressionRoot = tree;
+                                        selectorTarget = context.packageName();
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (selectorExpressionRoot != null) {
+                                /*
+                                * SELECTOR EXPRESSION
+                                */
+                                if (isTypeSwitchGuard) {
+                                    intermediateResults.put("(type)", new KeywordCompletionItem("(type)"));
                                     continue;
                                 }
 
-                                Map<ATNConfig, List<Transition>> transitions = caretReachedException.getTransitions();
-                                for (List<Transition> transitionList : transitions.values()) {
-                                    for (Transition transition : transitionList) {
-                                        if (transition.isEpsilon() || transition instanceof WildcardTransition || transition instanceof NotSetTransition) {
-                                            continue;
-                                        }
-
-                                        IntervalSet label = transition.label();
-                                        if (label == null) {
-                                            continue;
-                                        }
-
-                                        if (!canContinue && label.contains(GoLexer.Continue)) {
-                                            canContinue = isInContext(parser, caretReachedException.getFinalContext(), CONTINUE_SCOPES);
-                                            if (canContinue) {
-                                                canBreak = true;
-                                            }
-                                        }
-
-                                        if (!canBreak && label.contains(GoLexer.Break)) {
-                                            canBreak = isInContext(parser, caretReachedException.getFinalContext(), BREAK_SCOPES);
-                                        }
-
-                                        if (!canDefaultOrCase && label.contains(GoLexer.Default)) {
-                                            if (caretReachedException.getFinalContext() instanceof ParserRuleContext<?>) {
-                                                int currentRule = caretReachedException.getFinalContext().getRuleIndex();
-                                                canDefaultOrCase =
-                                                    currentRule == GoParser.RULE_typeSwitchCase
-                                                    || currentRule == GoParser.RULE_exprSwitchCase
-                                                    || currentRule == GoParser.RULE_commCase;
-                                            } else {
-                                                canDefaultOrCase = true;
-                                            }
-                                        }
-
-                                        for (int keyword : remainingKeywords.toArray()) {
-                                            if (label.contains(keyword)) {
-                                                remainingKeywords.remove(keyword);
-                                                allowedKeywords.add(keyword);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (!canContinue) {
-                                allowedKeywords.remove(GoLexer.Continue);
-                            }
-
-                            if (!canBreak) {
-                                allowedKeywords.remove(GoLexer.Break);
-                            }
-
-                            if (!canDefaultOrCase) {
-                                allowedKeywords.remove(GoLexer.Case);
-                                allowedKeywords.remove(GoLexer.Default);
-                            }
-
-                            for (int keyword : allowedKeywords.toArray()) {
-                                KeywordCompletionItem item = new KeywordCompletionItem(GoLexer.tokenNames[keyword].substring(1, GoLexer.tokenNames[keyword].length() - 1));
-                                intermediateResults.put(item.getInsertPrefix().toString(), item);
-                            }
-
-                            /*
-                            * EXPRESSION ANALYSIS
-                            */
-
-                            boolean addedPackages = false;
-                            boolean addedTypes = false;
-                            boolean addedVars = false;
-                            boolean addedFunctions = false;
-
-                            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
-                                RuleContext<Token> finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
-                                if (finalContext == null) {
+                                if (getFileModel() == null) {
                                     continue;
                                 }
 
-                                Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                                assert transitions != null;
-                                assert transitions.size() == 1;
-                                List<Transition> singleTransitionList = transitions.values().iterator().next();
-                                assert singleTransitionList.size() == 1;
-                                Transition transition = singleTransitionList.get(0);
-                                // only interested in identifiers
-                                IntervalSet label = transition.label();
-                                if (label == null || !label.contains(GoParser.IDENTIFIER)) {
+                                final boolean INCLUDE_EXPRESSION = false;
+                                if (INCLUDE_EXPRESSION) {
+                                    String text = tokens.getText(selectorTarget.start, selectorTarget.stop);
+                                    if (text != null && !text.isEmpty()) {
+                                        intermediateResults.put(text, new KeywordCompletionItem(text));
+                                    }
+                                }
+
+                                if (annotatedParseTrees == null) {
                                     continue;
                                 }
 
-                                // if selectorExpressionRoot is not null, then we are on the right hand side of a '.'
-                                ParseTree<Token> selectorExpressionRoot = null;
-                                ParserRuleContext<Token> selectorTarget = null;
-                                boolean isTypeSwitchGuard = false;
+                                GoAnnotatedParseTree annotatedParseTree = getAnnotatedParseTree(snapshot.getVersionedDocument(), entry.getKey(), annotatedParseTrees);
+                                PackageModel currentPackage = getFileModel().getPackage();
+                                Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
+                                for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
+                                    Collection<PackageModel> packages = resolvedPackages.get(importDeclarationModel.getName());
+                                    if (packages == null) {
+                                        packages = new ArrayList<PackageModel>();
+                                        resolvedPackages.put(importDeclarationModel.getName(), packages);
+                                    }
 
-                                List<ParseTree<Token>> pathToRoot = new ArrayList<ParseTree<Token>>(ParseTrees.getAncestors(finalContext));
-                                pathToRoot.add(finalContext);
-                                Collections.reverse(pathToRoot);
-                                for (ParseTree<Token> tree : pathToRoot) {
-                                    if (tree instanceof GoParser.SelectorExprContext) {
-                                        GoParser.SelectorExprContext context = (GoParser.SelectorExprContext)tree;
-                                        if (context.dot != null) {
-                                            selectorExpressionRoot = tree;
-                                            selectorTarget = context.expression();
-                                            break;
-                                        }
-                                    } else if (tree instanceof GoParser.TypeSwitchGuardContext) {
-                                        GoParser.TypeSwitchGuardContext context = (GoParser.TypeSwitchGuardContext)tree;
-                                        if (context.dot != null) {
-                                            selectorExpressionRoot = tree;
-                                            selectorTarget = context.expression();
-                                            break;
-                                        }
-                                    } else if (tree instanceof GoParser.TypeAssertionExprContext) {
-                                        GoParser.TypeAssertionExprContext context = (GoParser.TypeAssertionExprContext)tree;
-                                        if (context.dot != null && context.lp == null) {
-                                            selectorExpressionRoot = tree;
-                                            selectorTarget = context.expression();
-                                            break;
-                                        }
-                                    } else if (tree instanceof GoParser.MethodExprContext) {
-                                        GoParser.MethodExprContext context = (GoParser.MethodExprContext)tree;
-                                        if (context.dot != null) {
-                                            selectorExpressionRoot = tree;
-                                            selectorTarget = context.receiverType();
-                                            break;
-                                        }
-                                    } else if (tree instanceof GoParser.QualifiedIdentifierContext) {
-                                        GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)tree;
-                                        if (context.dot != null) {
-                                            selectorExpressionRoot = tree;
-                                            selectorTarget = context.packageName();
-                                            break;
-                                        }
+                                    packages.addAll(CodeModelCacheImpl.getInstance().getPackages(getFileModel().getPackage().getProject(), importDeclarationModel.getPath()));
+                                    GoProject mainProject = getFileModel().getPackage().getProject();
+                                    for (GoProject library : mainProject.getLibraryProjects()) {
+                                        packages.addAll(CodeModelCacheImpl.getInstance().getPackages(library, importDeclarationModel.getPath()));
                                     }
                                 }
 
-                                if (selectorExpressionRoot != null) {
-                                    /*
-                                    * SELECTOR EXPRESSION
-                                    */
-                                    if (isTypeSwitchGuard) {
-                                        intermediateResults.put("(type)", new KeywordCompletionItem("(type)"));
-                                        continue;
-                                    }
-
-                                    if (getFileModel() == null) {
-                                        continue;
-                                    }
-
-                                    final boolean INCLUDE_EXPRESSION = false;
-                                    if (INCLUDE_EXPRESSION) {
-                                        String text = tokens.getText(selectorTarget.start, selectorTarget.stop);
-                                        if (text != null && !text.isEmpty()) {
-                                            intermediateResults.put(text, new KeywordCompletionItem(text));
-                                        }
-                                    }
-
-                                    if (annotatedParseTrees == null) {
-                                        continue;
-                                    }
-
-                                    GoAnnotatedParseTree annotatedParseTree = getAnnotatedParseTree(snapshot.getVersionedDocument(), entry.getKey(), annotatedParseTrees);
-                                    PackageModel currentPackage = getFileModel().getPackage();
-                                    Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
-                                    for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
-                                        Collection<PackageModel> packages = resolvedPackages.get(importDeclarationModel.getName());
-                                        if (packages == null) {
-                                            packages = new ArrayList<PackageModel>();
-                                            resolvedPackages.put(importDeclarationModel.getName(), packages);
-                                        }
-
-                                        packages.addAll(CodeModelCacheImpl.getInstance().getPackages(getFileModel().getPackage().getProject(), importDeclarationModel.getPath()));
-                                        GoProject mainProject = getFileModel().getPackage().getProject();
-                                        for (GoProject library : mainProject.getLibraryProjects()) {
-                                            packages.addAll(CodeModelCacheImpl.getInstance().getPackages(library, importDeclarationModel.getPath()));
-                                        }
-                                    }
-
-                                    Collection<? extends CodeElementModel> models = resolveSelectorTarget(selectorTarget, annotatedParseTree, currentPackage, resolvedPackages);
-                                    assert models != null;
-                                    for (CodeElementModel model : models) {
-                                        Collection<? extends CodeElementModel> selected = SemanticAnalyzer.getSelectableMembers(model);
-                                        for (CodeElementModel selectedModel : selected) {
-                                            if (selectedModel instanceof FunctionModel) {
-                                                FunctionModel function = (FunctionModel)selectedModel;
-                                                intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
-                                            } else if (selectedModel instanceof ConstModel) {
-                                                ConstModel function = (ConstModel)selectedModel;
-                                                intermediateResults.put(function.getName(), new ConstReferenceCompletionItem(function, false));
-                                            } else if (selectedModel instanceof VarModel) {
-                                                VarModel function = (VarModel)selectedModel;
-                                                intermediateResults.put(function.getName(), new VarReferenceCompletionItem(function, false));
-                                            } else if (selectedModel instanceof TypeModel) {
-                                                TypeModel function = (TypeModel)selectedModel;
-                                                intermediateResults.put(function.getName(), new TypeReferenceCompletionItem(function));
-                                            } else {
-                                                LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
-                                            }
-                                        }
-
-                                        //if (model instanceof PackageModel) {
-                                        //    PackageModel packageModel = (PackageModel)model;
-                                        //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
-                                        //        continue;
-                                        //    }
-                                        //
-                                        //    for (FunctionModel function : packageModel.getFunctions()) {
-                                        //        intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
-                                        //    }
-                                        //
-                                        //    for (ConstModel constant : packageModel.getConstants()) {
-                                        //        intermediateResults.put(constant.getName(), new ConstReferenceCompletionItem(constant, false));
-                                        //    }
-                                        //
-                                        //    for (VarModel var : packageModel.getVars()) {
-                                        //        intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
-                                        //    }
-                                        //
-                                        //    for (TypeModel type : packageModel.getTypes()) {
-                                        //        intermediateResults.put(type.getName(), new TypeReferenceCompletionItem(type));
-                                        //    }
-                                        //} else if (model instanceof TypeModel) {
-                                        //    TypeModel typeModel = (TypeModel)model;
-                                        //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
-                                        //        for (FunctionModel method : typeModel.getMethods()) {
-                                        //            intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
-                                        //        }
-                                        //        continue;
-                                        //    }
-                                        //
-                                        //    // TODO: any other possibilities?
-                                        //} else if (model instanceof VarModel) {
-                                        //    VarModel varModel = (VarModel)model;
-                                        //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
-                                        //        continue;
-                                        //    }
-                                        //
-                                        //    TypeModel varType = varModel.getVarType();
-                                        //    for (FunctionModel method : varType.getMethods()) {
-                                        //        intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
-                                        //    }
-                                        //
-                                        //    for (VarModel var : varType.getFields()) {
-                                        //        intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
-                                        //    }
-                                        //} else {
-                                        //    LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
-                                        //}
-                                    }
-                                } else if (finalContext instanceof GoParser.PackageNameContext) {
-                                    /* AVAILABLE PACKAGES
-                                    */
-                                    if (getFileModel() == null || addedPackages) {
-                                        continue;
-                                    }
-
-                                    addedPackages = true;
-                                    Collection<? extends ImportDeclarationModel> imports = getFileModel().getImportDeclarations();
-                                    for (ImportDeclarationModel model : imports) {
-                                        if (intermediateResults.containsKey(model.getName())) {
-                                            continue;
-                                        }
-
-                                        intermediateResults.put(model.getName(), new PackageReferenceCompletionItem(model.getName()));
-                                    }
-                                } else {
-                                    /*
-                                    * UNQUALIFIED EXPRESSION. Identifier could reference any visible:
-                                    *  - type
-                                    *  - var
-                                    *  - function
-                                    *  - method
-                                    *
-                                    * Visible means located in any of the following:
-                                    *  - the current package
-                                    *  - any packages imported with alias '.'
-                                    *  - built-in elements
-                                    */
-                                    RuleContext<Token> compositeLiteralRuleContext = getTopContext(parser, finalContext, IntervalSet.of(GoParser.RULE_compositeLiteral));
-                                    GoParser.CompositeLiteralContext compositeLiteralContext = (GoParser.CompositeLiteralContext)compositeLiteralRuleContext;
-                                    if (finalContext instanceof GoParser.FieldNameContext) {
-                                        assert compositeLiteralContext != null && compositeLiteralContext.literalType() != null;
-
-                                        List<GoParser.LiteralValueContext> literalValueContexts = new ArrayList<GoParser.LiteralValueContext>();
-                                        for (RuleContext<Token> context = finalContext; context != null; context = context.parent) {
-                                            if (context instanceof GoParser.LiteralValueContext) {
-                                                literalValueContexts.add((GoParser.LiteralValueContext)context);
-                                            } else if (context instanceof GoParser.CompositeLiteralContext) {
-                                                // stop at the containing compositeLiteral
-                                                break;
-                                            }
-                                        }
-
-                                        // first resolve the type of the containing compositeLiteral
-                                        Collection<? extends CodeElementModel> models = targetAnalyzer.visit(compositeLiteralContext.literalType());
-                                        if (literalValueContexts.size() > 1) {
-                                            LOGGER.log(Level.FINE, "TODO: resolve nested values - need type of the innermost value.");
-                                            models = Collections.emptyList();
-                                        }
-
-                                        if (!models.isEmpty()) {
-                                            for (CodeElementModel model : models) {
-                                                if (!(model instanceof TypeModel)) {
-                                                    continue;
-                                                }
-
-                                                TypeModel typeModel = (TypeModel)model;
-                                                for (VarModel field : typeModel.getFields()) {
-                                                    String key = field.getName() + ":";
-                                                    if (intermediateResults.containsKey(key)) {
-                                                        continue;
-                                                    }
-
-                                                    intermediateResults.put(key, new FieldReferenceKeyCompletionItem(field));
-                                                }
-                                            }
-                                        }
-                                    } else if (finalContext instanceof GoParser.QualifiedIdentifierContext) {
-                                        GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)finalContext;
-                                        if (context.packageName() != null) {
-                                            continue;
-                                        }
-
-                                        if (compositeLiteralContext != null && compositeLiteralContext.literalValue() != null) {
-                                            LOGGER.log(Level.FINE, "TODO: is there any other work to do for this case?");
-                                        }
-
-                                        // add items from the current package and imported "mergeWithLocal" packages
-                                        List<PackageModel> visiblePackages = new ArrayList<PackageModel>();
-                                        visiblePackages.add(getFileModel().getPackage());
-                                        for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
-                                            if (importDeclarationModel.isMergeWithLocal()) {
-                                                Collection<? extends PackageModel> resolved = CodeModelCacheImpl.getInstance().resolvePackages(importDeclarationModel);
-                                                if (resolved != null) {
-                                                    visiblePackages.addAll(resolved);
-                                                }
-                                            }
-                                        }
-
-                                        if (finalContext.getParent() instanceof GoParser.TypeNameContext) {
-                                            for (String builtin : SemanticHighlighter.PREDEFINED_TYPES) {
-                                                if (intermediateResults.containsKey(builtin)) {
-                                                    continue;
-                                                }
-
-                                                intermediateResults.put(builtin, new TypeReferenceCompletionItem(builtin));
-                                            }
-
-                                            for (PackageModel packageModel : visiblePackages) {
-                                                Collection<? extends TypeModel> types = packageModel.getTypes();
-                                                for (TypeModel model : types) {
-                                                    if (intermediateResults.containsKey(model.getName())) {
-                                                        continue;
-                                                    }
-
-                                                    intermediateResults.put(model.getName(), new TypeReferenceCompletionItem(model));
-                                                }
-                                            }
+                                Collection<? extends CodeElementModel> models = resolveSelectorTarget(selectorTarget, annotatedParseTree, currentPackage, resolvedPackages);
+                                assert models != null;
+                                for (CodeElementModel model : models) {
+                                    Collection<? extends CodeElementModel> selected = SemanticAnalyzer.getSelectableMembers(model);
+                                    for (CodeElementModel selectedModel : selected) {
+                                        if (selectedModel instanceof FunctionModel) {
+                                            FunctionModel function = (FunctionModel)selectedModel;
+                                            intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
+                                        } else if (selectedModel instanceof ConstModel) {
+                                            ConstModel function = (ConstModel)selectedModel;
+                                            intermediateResults.put(function.getName(), new ConstReferenceCompletionItem(function, false));
+                                        } else if (selectedModel instanceof VarModel) {
+                                            VarModel function = (VarModel)selectedModel;
+                                            intermediateResults.put(function.getName(), new VarReferenceCompletionItem(function, false));
+                                        } else if (selectedModel instanceof TypeModel) {
+                                            TypeModel function = (TypeModel)selectedModel;
+                                            intermediateResults.put(function.getName(), new TypeReferenceCompletionItem(function));
                                         } else {
-                                            assert finalContext.getParent() instanceof GoParser.OperandContext;
-                                            // add builtin items
-                                            for (String builtin : SemanticHighlighter.PREDEFINED_CONSTANTS) {
-                                                if (intermediateResults.containsKey(builtin)) {
+                                            LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
+                                        }
+                                    }
+
+                                    //if (model instanceof PackageModel) {
+                                    //    PackageModel packageModel = (PackageModel)model;
+                                    //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
+                                    //        continue;
+                                    //    }
+                                    //
+                                    //    for (FunctionModel function : packageModel.getFunctions()) {
+                                    //        intermediateResults.put(function.getName(), new FunctionReferenceCompletionItem(function));
+                                    //    }
+                                    //
+                                    //    for (ConstModel constant : packageModel.getConstants()) {
+                                    //        intermediateResults.put(constant.getName(), new ConstReferenceCompletionItem(constant, false));
+                                    //    }
+                                    //
+                                    //    for (VarModel var : packageModel.getVars()) {
+                                    //        intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
+                                    //    }
+                                    //
+                                    //    for (TypeModel type : packageModel.getTypes()) {
+                                    //        intermediateResults.put(type.getName(), new TypeReferenceCompletionItem(type));
+                                    //    }
+                                    //} else if (model instanceof TypeModel) {
+                                    //    TypeModel typeModel = (TypeModel)model;
+                                    //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
+                                    //        for (FunctionModel method : typeModel.getMethods()) {
+                                    //            intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
+                                    //        }
+                                    //        continue;
+                                    //    }
+                                    //
+                                    //    // TODO: any other possibilities?
+                                    //} else if (model instanceof VarModel) {
+                                    //    VarModel varModel = (VarModel)model;
+                                    //    if (selectorExpressionRoot instanceof GoParser.methodExprContext) {
+                                    //        continue;
+                                    //    }
+                                    //
+                                    //    TypeModel varType = varModel.getVarType();
+                                    //    for (FunctionModel method : varType.getMethods()) {
+                                    //        intermediateResults.put(method.getName(), new FunctionReferenceCompletionItem(method));
+                                    //    }
+                                    //
+                                    //    for (VarModel var : varType.getFields()) {
+                                    //        intermediateResults.put(var.getName(), new VarReferenceCompletionItem(var, false));
+                                    //    }
+                                    //} else {
+                                    //    LOGGER.log(Level.FINE, "TODO: Unknown model '{0}'.", model.getClass().getSimpleName());
+                                    //}
+                                }
+                            } else if (finalContext instanceof GoParser.PackageNameContext) {
+                                /* AVAILABLE PACKAGES
+                                */
+                                if (getFileModel() == null || addedPackages) {
+                                    continue;
+                                }
+
+                                addedPackages = true;
+                                Collection<? extends ImportDeclarationModel> imports = getFileModel().getImportDeclarations();
+                                for (ImportDeclarationModel model : imports) {
+                                    if (intermediateResults.containsKey(model.getName())) {
+                                        continue;
+                                    }
+
+                                    intermediateResults.put(model.getName(), new PackageReferenceCompletionItem(model.getName()));
+                                }
+                            } else {
+                                /*
+                                * UNQUALIFIED EXPRESSION. Identifier could reference any visible:
+                                *  - type
+                                *  - var
+                                *  - function
+                                *  - method
+                                *
+                                * Visible means located in any of the following:
+                                *  - the current package
+                                *  - any packages imported with alias '.'
+                                *  - built-in elements
+                                */
+                                RuleContext<Token> compositeLiteralRuleContext = getTopContext(parser, finalContext, IntervalSet.of(GoParser.RULE_compositeLiteral));
+                                GoParser.CompositeLiteralContext compositeLiteralContext = (GoParser.CompositeLiteralContext)compositeLiteralRuleContext;
+                                if (finalContext instanceof GoParser.FieldNameContext) {
+                                    assert compositeLiteralContext != null && compositeLiteralContext.literalType() != null;
+
+                                    List<GoParser.LiteralValueContext> literalValueContexts = new ArrayList<GoParser.LiteralValueContext>();
+                                    for (RuleContext<Token> context = finalContext; context != null; context = context.parent) {
+                                        if (context instanceof GoParser.LiteralValueContext) {
+                                            literalValueContexts.add((GoParser.LiteralValueContext)context);
+                                        } else if (context instanceof GoParser.CompositeLiteralContext) {
+                                            // stop at the containing compositeLiteral
+                                            break;
+                                        }
+                                    }
+
+                                    // first resolve the type of the containing compositeLiteral
+                                    Collection<? extends CodeElementModel> models = targetAnalyzer.visit(compositeLiteralContext.literalType());
+                                    if (literalValueContexts.size() > 1) {
+                                        LOGGER.log(Level.FINE, "TODO: resolve nested values - need type of the innermost value.");
+                                        models = Collections.emptyList();
+                                    }
+
+                                    if (!models.isEmpty()) {
+                                        for (CodeElementModel model : models) {
+                                            if (!(model instanceof TypeModel)) {
+                                                continue;
+                                            }
+
+                                            TypeModel typeModel = (TypeModel)model;
+                                            for (VarModel field : typeModel.getFields()) {
+                                                String key = field.getName() + ":";
+                                                if (intermediateResults.containsKey(key)) {
                                                     continue;
                                                 }
 
-                                                intermediateResults.put(builtin, new ConstReferenceCompletionItem(builtin, false));
-                                            }
-
-                                            for (PackageModel packageModel : visiblePackages) {
-                                                Collection<? extends ConstModel> constants = packageModel.getConstants();
-                                                for (ConstModel model : constants) {
-                                                    if (intermediateResults.containsKey(model.getName())) {
-                                                        continue;
-                                                    }
-
-                                                    intermediateResults.put(model.getName(), new ConstReferenceCompletionItem(model, false));
-                                                }
-
-                                                Collection<? extends VarModel> vars = packageModel.getVars();
-                                                for (VarModel model : vars) {
-                                                    if (intermediateResults.containsKey(model.getName())) {
-                                                        continue;
-                                                    }
-
-                                                    intermediateResults.put(model.getName(), new VarReferenceCompletionItem(model, false));
-                                                }
-
-                                                Collection<? extends FunctionModel> functions = packageModel.getFunctions();
-                                                for (FunctionModel model : functions) {
-                                                    if (model.getReceiverParameter() != null || intermediateResults.containsKey(model.getName())) {
-                                                        continue;
-                                                    }
-
-                                                    intermediateResults.put(model.getName(), new FunctionReferenceCompletionItem(model));
-                                                }
-                                            }
-
-                                            LOGGER.log(Level.FINE, "TODO: proper block scope for vars");
-                                            ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
-                                            if (functionContext != null) {
-                                                addVars(VarKind.RECEIVER, finalContext, localsAnalyzer.getReceiverParameters(functionContext), intermediateResults);
-                                                addVars(VarKind.PARAMETER, finalContext, localsAnalyzer.getParameters(functionContext), intermediateResults);
-                                                addVars(VarKind.RETURN, finalContext, localsAnalyzer.getReturnParameters(functionContext), intermediateResults);
-                                                addVars(VarKind.LOCAL, finalContext, localsAnalyzer.getLocals(functionContext), intermediateResults);
-                                                addVars(VarKind.LOCAL, finalContext, localsAnalyzer.getConstants(functionContext), intermediateResults);
+                                                intermediateResults.put(key, new FieldReferenceKeyCompletionItem(field));
                                             }
                                         }
-                                    } else if (finalContext instanceof GoParser.BaseTypeNameContext) {
-                                        // this is the name of a type in the current package
-                                        if (getFileModel() == null) {
-                                            continue;
-                                        }
+                                    }
+                                } else if (finalContext instanceof GoParser.QualifiedIdentifierContext) {
+                                    GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)finalContext;
+                                    if (context.packageName() != null) {
+                                        continue;
+                                    }
 
-                                        PackageModel packageModel = getFileModel().getPackage();
-                                        Collection<? extends TypeModel> types = packageModel.getTypes();
-                                        for (TypeModel typeModel : types) {
-                                            if (intermediateResults.containsKey(typeModel.getName())) {
-                                                continue;
+                                    if (compositeLiteralContext != null && compositeLiteralContext.literalValue() != null) {
+                                        LOGGER.log(Level.FINE, "TODO: is there any other work to do for this case?");
+                                    }
+
+                                    // add items from the current package and imported "mergeWithLocal" packages
+                                    List<PackageModel> visiblePackages = new ArrayList<PackageModel>();
+                                    visiblePackages.add(getFileModel().getPackage());
+                                    for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
+                                        if (importDeclarationModel.isMergeWithLocal()) {
+                                            Collection<? extends PackageModel> resolved = CodeModelCacheImpl.getInstance().resolvePackages(importDeclarationModel);
+                                            if (resolved != null) {
+                                                visiblePackages.addAll(resolved);
                                             }
-
-                                            intermediateResults.put(typeModel.getName(), new TypeReferenceCompletionItem(typeModel));
                                         }
-                                    } else if (finalContext instanceof GoParser.LabelContext) {
-                                        if (finalContext.getParent() instanceof GoParser.LabeledStmtContext) {
-                                            continue;
-                                        }
+                                    }
 
-                                        final List<Token> labels = new ArrayList<Token>();
-                                        ParseTreeListener<Token> listener = new GoParserBaseListener() {
-
-                                            @Override
-                                            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0)
-                                            public void enterLabeledStmt(LabeledStmtContext ctx) {
-                                                if (ctx.label() != null && ctx.label().IDENTIFIER() != null) {
-                                                    labels.add(ctx.label().IDENTIFIER().getSymbol());
-                                                }
-                                            }
-
-                                        };
-
-                                        ParseTreeWalker.DEFAULT.walk(listener, entry.getKey());
-                                        for (Token token : labels) {
-                                            if (intermediateResults.containsKey(token.getText())) {
-                                                continue;
-                                            }
-
-                                            intermediateResults.put(token.getText(), new LabelReferenceCompletionItem(token.getText()));
-                                        }
-
-                                        LOGGER.log(Level.FINE, "TODO: Also include labels for the current function as obtained from the FunctionModel.");
-                                    } else if (finalContext instanceof GoParser.BuiltinCallContext) {
-                                        // this is easy - just add the names of built in methods
-                                        for (String builtin : SemanticHighlighter.PREDEFINED_FUNCTIONS) {
+                                    if (finalContext.getParent() instanceof GoParser.TypeNameContext) {
+                                        for (String builtin : SemanticHighlighter.PREDEFINED_TYPES) {
                                             if (intermediateResults.containsKey(builtin)) {
                                                 continue;
                                             }
 
-                                            intermediateResults.put(builtin, new FunctionReferenceCompletionItem(builtin));
+                                            intermediateResults.put(builtin, new TypeReferenceCompletionItem(builtin));
                                         }
-                                    } else if (finalContext instanceof GoParser.MethodNameContext) {
-                                        // This block only handles non-dotted identifiers, which means this can't be a methodExpr
-                                        // and is therefore always a declaration (never a reference).
-                                        continue;
-                                    } else if (finalContext instanceof GoParser.ReceiverContext) {
-                                        // this is a declaration not a reference
-                                        continue;
-                                    } else if (finalContext instanceof GoParser.FunctionDeclContext) {
-                                        // this is a declaration not a reference
-                                        continue;
-                                    } else if (finalContext instanceof GoParser.TypeSpecContext) {
-                                        // this is a declaration not a reference
-                                        continue;
-                                    } else if (finalContext instanceof GoParser.IdentifierListContext) {
-                                        // this is a declaration not a reference
-                                        continue;
-                                    } else if (finalContext instanceof GoParser.TypeSwitchGuardContext) {
-                                        // this is a declaration not a reference
+
+                                        for (PackageModel packageModel : visiblePackages) {
+                                            Collection<? extends TypeModel> types = packageModel.getTypes();
+                                            for (TypeModel model : types) {
+                                                if (intermediateResults.containsKey(model.getName())) {
+                                                    continue;
+                                                }
+
+                                                intermediateResults.put(model.getName(), new TypeReferenceCompletionItem(model));
+                                            }
+                                        }
+                                    } else {
+                                        assert finalContext.getParent() instanceof GoParser.OperandContext;
+                                        // add builtin items
+                                        for (String builtin : SemanticHighlighter.PREDEFINED_CONSTANTS) {
+                                            if (intermediateResults.containsKey(builtin)) {
+                                                continue;
+                                            }
+
+                                            intermediateResults.put(builtin, new ConstReferenceCompletionItem(builtin, false));
+                                        }
+
+                                        for (PackageModel packageModel : visiblePackages) {
+                                            Collection<? extends ConstModel> constants = packageModel.getConstants();
+                                            for (ConstModel model : constants) {
+                                                if (intermediateResults.containsKey(model.getName())) {
+                                                    continue;
+                                                }
+
+                                                intermediateResults.put(model.getName(), new ConstReferenceCompletionItem(model, false));
+                                            }
+
+                                            Collection<? extends VarModel> vars = packageModel.getVars();
+                                            for (VarModel model : vars) {
+                                                if (intermediateResults.containsKey(model.getName())) {
+                                                    continue;
+                                                }
+
+                                                intermediateResults.put(model.getName(), new VarReferenceCompletionItem(model, false));
+                                            }
+
+                                            Collection<? extends FunctionModel> functions = packageModel.getFunctions();
+                                            for (FunctionModel model : functions) {
+                                                if (model.getReceiverParameter() != null || intermediateResults.containsKey(model.getName())) {
+                                                    continue;
+                                                }
+
+                                                intermediateResults.put(model.getName(), new FunctionReferenceCompletionItem(model));
+                                            }
+                                        }
+
+                                        LOGGER.log(Level.FINE, "TODO: proper block scope for vars");
+                                        ParseTree<Token> functionContext = getTopContext(parser, finalContext, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
+                                        if (functionContext != null) {
+                                            addVars(VarKind.RECEIVER, finalContext, localsAnalyzer.getReceiverParameters(functionContext), intermediateResults);
+                                            addVars(VarKind.PARAMETER, finalContext, localsAnalyzer.getParameters(functionContext), intermediateResults);
+                                            addVars(VarKind.RETURN, finalContext, localsAnalyzer.getReturnParameters(functionContext), intermediateResults);
+                                            addVars(VarKind.LOCAL, finalContext, localsAnalyzer.getLocals(functionContext), intermediateResults);
+                                            addVars(VarKind.LOCAL, finalContext, localsAnalyzer.getConstants(functionContext), intermediateResults);
+                                        }
+                                    }
+                                } else if (finalContext instanceof GoParser.BaseTypeNameContext) {
+                                    // this is the name of a type in the current package
+                                    if (getFileModel() == null) {
                                         continue;
                                     }
-                                }
-                            }
 
-                            for (Iterator<Map.Entry<String, CompletionItem>> it = intermediateResults.entrySet().iterator(); it.hasNext(); ) {
-                                Map.Entry<String, CompletionItem> entry = it.next();
-                                if (entry.getValue() instanceof GoCompletionItem) {
-                                    CodeElementModel codeElementModel = ((GoCompletionItem)entry.getValue()).getCodeElementModel();
-                                    if (codeElementModel != null
-                                        && codeElementModel.getPackage() != null
-                                        && !codeElementModel.getPackage().equals(getFileModel().getPackage())
-                                        && !Character.isUpperCase(codeElementModel.getName().charAt(0))) {
-                                        it.remove();
+                                    PackageModel packageModel = getFileModel().getPackage();
+                                    Collection<? extends TypeModel> types = packageModel.getTypes();
+                                    for (TypeModel typeModel : types) {
+                                        if (intermediateResults.containsKey(typeModel.getName())) {
+                                            continue;
+                                        }
+
+                                        intermediateResults.put(typeModel.getName(), new TypeReferenceCompletionItem(typeModel));
                                     }
+                                } else if (finalContext instanceof GoParser.LabelContext) {
+                                    if (finalContext.getParent() instanceof GoParser.LabeledStmtContext) {
+                                        continue;
+                                    }
+
+                                    final List<Token> labels = new ArrayList<Token>();
+                                    ParseTreeListener<Token> listener = new GoParserBaseListener() {
+
+                                        @Override
+                                        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0)
+                                        public void enterLabeledStmt(LabeledStmtContext ctx) {
+                                            if (ctx.label() != null && ctx.label().IDENTIFIER() != null) {
+                                                labels.add(ctx.label().IDENTIFIER().getSymbol());
+                                            }
+                                        }
+
+                                    };
+
+                                    ParseTreeWalker.DEFAULT.walk(listener, entry.getKey());
+                                    for (Token token : labels) {
+                                        if (intermediateResults.containsKey(token.getText())) {
+                                            continue;
+                                        }
+
+                                        intermediateResults.put(token.getText(), new LabelReferenceCompletionItem(token.getText()));
+                                    }
+
+                                    LOGGER.log(Level.FINE, "TODO: Also include labels for the current function as obtained from the FunctionModel.");
+                                } else if (finalContext instanceof GoParser.BuiltinCallContext) {
+                                    // this is easy - just add the names of built in methods
+                                    for (String builtin : SemanticHighlighter.PREDEFINED_FUNCTIONS) {
+                                        if (intermediateResults.containsKey(builtin)) {
+                                            continue;
+                                        }
+
+                                        intermediateResults.put(builtin, new FunctionReferenceCompletionItem(builtin));
+                                    }
+                                } else if (finalContext instanceof GoParser.MethodNameContext) {
+                                    // This block only handles non-dotted identifiers, which means this can't be a methodExpr
+                                    // and is therefore always a declaration (never a reference).
+                                    continue;
+                                } else if (finalContext instanceof GoParser.ReceiverContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParser.FunctionDeclContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParser.TypeSpecContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParser.IdentifierListContext) {
+                                    // this is a declaration not a reference
+                                    continue;
+                                } else if (finalContext instanceof GoParser.TypeSwitchGuardContext) {
+                                    // this is a declaration not a reference
+                                    continue;
                                 }
                             }
-
-                            results.addAll(intermediateResults.values());
                         }
-                    } finally {
-                        ParserCache.DEFAULT.putParser(parser);
-                        parser = null;
+
+                        for (Iterator<Map.Entry<String, CompletionItem>> it = intermediateResults.entrySet().iterator(); it.hasNext(); ) {
+                            Map.Entry<String, CompletionItem> entry = it.next();
+                            if (entry.getValue() instanceof GoCompletionItem) {
+                                CodeElementModel codeElementModel = ((GoCompletionItem)entry.getValue()).getCodeElementModel();
+                                if (codeElementModel != null
+                                    && codeElementModel.getPackage() != null
+                                    && !codeElementModel.getPackage().equals(getFileModel().getPackage())
+                                    && !Character.isUpperCase(codeElementModel.getName().charAt(0))) {
+                                    it.remove();
+                                }
+                            }
+                        }
+
+                        results.addAll(intermediateResults.values());
                     }
+                } finally {
+                    ParserCache.DEFAULT.putParser(parser);
+                    parser = null;
                 }
             }
 
