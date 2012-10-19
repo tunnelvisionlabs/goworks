@@ -19,6 +19,11 @@
         GO SEMANTICS
     -->
 
+    <fontcolor name="stringliteralescape" default="stringliteral">
+        <font style="bold" />
+    </fontcolor>
+    <fontcolor name="stringliteralinvaildescape" default="stringliteralescape" waveUnderlined="FFCE7B00" />
+
     <fontcolor name="packageUse" default="identifier" />
     <fontcolor name="packageDeclaration" default="packageUse" />
 

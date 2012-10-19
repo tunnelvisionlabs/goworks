@@ -159,17 +159,12 @@ Exponent
     ;
 
 CharLiteral
-    :   '\'' (UNICODE_VALUE_NOSQUOTE | BYTE_VALUE) '\''
+    :   '\'' -> pushMode(CharLiteralMode)
     ;
 
 fragment
-UNICODE_VALUE_NOSQUOTE
-    :   UNICODE_CHAR_NOSQUOTE | LittleUValue | BigUValue | EscapedChar
-    ;
-
-fragment
-UNICODE_VALUE_NODQUOTE
-    :   UNICODE_CHAR_NODQUOTE | LittleUValue | BigUValue | EscapedChar
+UNICODE_VALUE_ESCAPE
+    :   LittleUValue | BigUValue | EscapedChar
     ;
 
 fragment
@@ -207,7 +202,7 @@ RawStringLiteral
     ;
 
 InterpretedStringLiteral
-    :   '"' (UNICODE_VALUE_NODQUOTE | BYTE_VALUE)* '"'
+    :   '"' -> pushMode(StringLiteralMode)
     ;
 
 fragment
@@ -298,4 +293,56 @@ mode RawLiteralMode;
 
     RawLiteral_ANYCHAR
         :   .                       -> type(ANYCHAR)
+        ;
+
+mode StringLiteralMode;
+
+    ContinueStringLiteral
+        :   UNICODE_CHAR_NODQUOTE -> type(InterpretedStringLiteral)
+        ;
+
+    StringLiteralEscape
+        :   UNICODE_VALUE_ESCAPE | BYTE_VALUE
+        ;
+
+    //StringLiteralInvalidEscape
+    //    :
+    //    ;
+
+    EndStringLiteral
+        :   '"' -> type(InterpretedStringLiteral), popMode
+        ;
+
+    StringLiteral_Unterminated
+        :   NEWLINE -> type(NEWLINE), popMode
+        ;
+
+    StringLiteral_ANYCHAR
+        :   . -> type(ANYCHAR)
+        ;
+
+mode CharLiteralMode;
+
+    ContinueCharLiteral
+        :   UNICODE_CHAR_NOSQUOTE -> type(CharLiteral)
+        ;
+
+    CharLiteralEscape
+        :   UNICODE_VALUE_ESCAPE | BYTE_VALUE
+        ;
+
+    //CharLiteralInvalidEscape
+    //    :
+    //    ;
+
+    EndCharLiteral
+        :   '\'' -> popMode, type(CharLiteral)
+        ;
+
+    CharLiteral_Unterminated
+        :   NEWLINE -> type(NEWLINE), popMode
+        ;
+
+    CharLiteral_ANYCHAR
+        :   .   -> type(ANYCHAR)
         ;

@@ -1,11 +1,12 @@
 Switch=23
-END_ML_COMMENT=85
+END_ML_COMMENT=87
 Pipe=32
 PipeEqual=43
 LessThan=54
 GreaterEqual=60
 Goto=13
 Go=12
+CharLiteralEscape=86
 LessEqual=59
 AmpEqual=42
 Fallthrough=9
@@ -47,6 +48,7 @@ MinusEqual=38
 InterpretedStringLiteral=83
 ColonEqual=61
 LeftShiftEqual=45
+StringLiteralEscape=85
 Colon=72
 LeftShift=34
 EqualEqual=53
@@ -111,7 +113,7 @@ RightBrace=68
 '^='=44
 '+='=37
 'break'=1
-'*/'=85
+'*/'=87
 '{'=67
 '...'=62
 'package'=18

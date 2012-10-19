@@ -56,6 +56,8 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
     private final AttributeSet keywordAttributes;
     private final AttributeSet commentAttributes;
     private final AttributeSet stringLiteralAttributes;
+    private final AttributeSet stringLiteralEscapeAttributes;
+    private final AttributeSet stringLiteralInvalidEscapeAttributes;
     private final AttributeSet numberLiteralAttributes;
 
     private GoHighlighterLexerWrapper lexerWrapper;
@@ -72,6 +74,8 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
         keywordAttributes = getFontAndColors(settings, "keyword", true);
         commentAttributes = getFontAndColors(settings, "comment");
         stringLiteralAttributes = getFontAndColors(settings, "stringliteral");
+        stringLiteralEscapeAttributes = getFontAndColors(settings, "stringliteralescape");
+        stringLiteralInvalidEscapeAttributes = getFontAndColors(settings, "stringliteralinvalidescape");
         numberLiteralAttributes = getFontAndColors(settings, "number");
     }
 
@@ -148,6 +152,10 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
         case GoHighlighterLexer.InterpretedStringLiteral:
         case GoHighlighterLexer.RawStringLiteral:
             return stringLiteralAttributes;
+
+        case GoHighlighterLexer.CharLiteralEscape:
+        case GoHighlighterLexer.StringLiteralEscape:
+            return stringLiteralEscapeAttributes;
 
         case GoHighlighterLexer.COMMENT:
         case GoHighlighterLexer.ML_COMMENT:
