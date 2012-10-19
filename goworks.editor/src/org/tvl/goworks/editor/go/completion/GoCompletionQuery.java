@@ -430,7 +430,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                if (previous != null) {
+                if (true) {
                     Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
                     Tagger<TokenTag<Token>> tagger = null;
                     try {
@@ -441,17 +441,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
                     }
 
-                    int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
-                    OffsetRegion region;
+                    int regionStart;
                     if (enclosing != null) {
-                        region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
+                        regionStart = enclosing.getSpan().getStartPosition(snapshot).getOffset();
+                    } else if (previous != null) {
+                        regionStart = previous.getSpan().getStartPosition(snapshot).getOffset();
                     } else {
-                        // at least for now, include the previous span due to the way error handling places bounds on an anchor
-                        region = OffsetRegion.fromBounds(previous.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
+                        regionStart = 0;
                     }
 
+                    int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
+                    OffsetRegion region = OffsetRegion.fromBounds(regionStart, regionEnd);
                     if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE, "Code completion from anchor region: {0}.", region);
+                        LOGGER.log(Level.FINE, "Code completion from {0}: {1}.", new Object[] { enclosing != null || previous != null ? "anchor region" : "top of File", region });
                     }
 
                     TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
@@ -477,7 +479,16 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             parser.setPackageNames(packageNames);
                         }
 
-                        switch (previous.getRule()) {
+                        int anchorRule;
+                        if (enclosing != null) {
+                            anchorRule = enclosing.getRule();
+                        } else if (previous != null) {
+                            anchorRule = previous.getRule();
+                        } else {
+                            anchorRule = GoParser.RULE_topLevelDecl;
+                        }
+
+                        switch (anchorRule) {
                         case GoParser.RULE_topLevelDecl:
                             parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
                             annotatedParseTrees = new HashMap<ParseTree<Token>, GoAnnotatedParseTree>();
