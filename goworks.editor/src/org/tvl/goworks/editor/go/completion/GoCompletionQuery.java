@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1070,6 +1071,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                     } else if (finalContext instanceof GoParser.TypeSwitchGuardContext) {
                                         // this is a declaration not a reference
                                         continue;
+                                    }
+                                }
+                            }
+
+                            for (Iterator<Map.Entry<String, CompletionItem>> it = intermediateResults.entrySet().iterator(); it.hasNext(); ) {
+                                Map.Entry<String, CompletionItem> entry = it.next();
+                                if (entry.getValue() instanceof GoCompletionItem) {
+                                    CodeElementModel codeElementModel = ((GoCompletionItem)entry.getValue()).getCodeElementModel();
+                                    if (codeElementModel != null
+                                        && codeElementModel.getPackage() != null
+                                        && !codeElementModel.getPackage().equals(getFileModel().getPackage())
+                                        && !Character.isUpperCase(codeElementModel.getName().charAt(0))) {
+                                        it.remove();
                                     }
                                 }
                             }
