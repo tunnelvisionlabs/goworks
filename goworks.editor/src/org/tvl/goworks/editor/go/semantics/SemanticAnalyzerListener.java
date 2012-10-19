@@ -1356,7 +1356,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
     public void exitInterfaceType(InterfaceTypeContext ctx) {
-        CodeElementReference codeClass = new InterfaceTypeReference();
+        CodeElementReference codeClass = new InterfaceTypeReference(((TypeModelImpl)IntrinsicTypeModels.INT).getFile());
         treeDecorator.putProperty(ctx, GoAnnotations.CODE_CLASS, codeClass);
 
         treeDecorator.putProperty(ctx, GoAnnotations.NODE_TYPE, NodeType.TYPE_LITERAL);
