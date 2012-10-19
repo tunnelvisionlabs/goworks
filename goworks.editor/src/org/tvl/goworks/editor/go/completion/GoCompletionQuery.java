@@ -1177,7 +1177,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (varEntry.getItem3() < 0) {
-                    ConstModelImpl constModel = new ConstModelImpl(name, (FileModelImpl)getFileModel(), varEntry.getItem1(), varEntry.getItem2());
+                    ConstModelImpl constModel = new ConstModelImpl(name, (FileModelImpl)getFileModel(), null, null, null, varEntry.getItem1(), varEntry.getItem2());
                     intermediateResults.put(name, new ConstReferenceCompletionItem(constModel, true));
                 } else {
                     for (CodeElementModel model : varTypes) {

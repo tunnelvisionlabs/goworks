@@ -26,10 +26,17 @@ public class ConstModelImpl extends AbstractCodeElementModel implements ConstMod
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public ConstModelImpl(String name, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    private final String _unevaluatedValue;
+    private final String _evaluatedValue;
+    private final TypeModelImpl _type;
+
+    public ConstModelImpl(String name, FileModelImpl file, String unevaluatedValue, String evaluatedValue, TypeModelImpl type, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
         super(name, file);
         this.seek = getOffsetRegion(seek);
         this.span = getOffsetRegion(span);
+        this._unevaluatedValue = unevaluatedValue;
+        this._evaluatedValue = evaluatedValue;
+        this._type = type;
     }
 
     @Override
@@ -56,8 +63,51 @@ public class ConstModelImpl extends AbstractCodeElementModel implements ConstMod
     }
 
     @Override
+    public TypeModelImpl getConstType() {
+        return _type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isTyped() {
+        return _type != null;
+    }
+
+    @Override
+    public String getUnevaluatedValue() {
+        return _unevaluatedValue != null ? _unevaluatedValue : "";
+    }
+
+    @Override
+    public String getEvaluatedValue() {
+        return _evaluatedValue != null ? _evaluatedValue : "";
+    }
+
+    @Override
     public String toString() {
-        return String.format("%s : const", getName());
+        StringBuilder builder = new StringBuilder("const ");
+        builder.append(getName());
+        if (isTyped()) {
+            builder.append(' ').append(getConstType().getName());
+        }
+
+        String unevaluated = getUnevaluatedValue();
+        String evaluated = getEvaluatedValue();
+        if (!unevaluated.isEmpty() || !evaluated.isEmpty()) {
+            builder.append(" =");
+        }
+
+        if (!unevaluated.isEmpty()) {
+            builder.append(' ').append(unevaluated);
+        }
+
+        if (!evaluated.isEmpty()) {
+            builder.append(" (").append(evaluated).append(')');
+        }
+
+        return builder.toString();
     }
 
 }

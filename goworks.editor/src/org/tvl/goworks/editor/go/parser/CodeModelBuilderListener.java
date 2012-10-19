@@ -62,6 +62,8 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionLiteralContext;
@@ -428,20 +430,35 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitConstSpec(ConstSpecContext ctx) {
-        IdentifierListContext idList = ctx.identifierList();
-        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
-        if (ids != null) {
-            for (TerminalNode<Token> id : ids) {
-                ConstModelImpl model = new ConstModelImpl(id.getSymbol().getText(), fileModel, id, ctx);
-                constContainerStack.peek().add(model);
-            }
+        TypeModelImpl type = null;
+        if (ctx.type() != null) {
+            type = typeModelStack.pop();
         }
 
-        if (ctx.type() != null) {
-            typeModelStack.pop();
+        IdentifierListContext idList = ctx.identifierList();
+        ExpressionListContext expressionList = ctx.expressionList();
+        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
+        List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : null;
+        if (ids != null) {
+            for (int i = 0; i < ids.size(); i++) {
+                TerminalNode<Token> id = ids.get(i);
+                String unevaluatedValue;
+                if (expressions != null && expressions.size() > i) {
+                    unevaluatedValue = expressions.get(i).getText();
+                } else {
+                    unevaluatedValue = null;
+                }
+
+                String evaluatedValue = null;
+
+                ConstModelImpl model = new ConstModelImpl(id.getSymbol().getText(), fileModel, unevaluatedValue, evaluatedValue, type, id, ctx);
+                constContainerStack.peek().add(model);
+            }
         }
     }
 

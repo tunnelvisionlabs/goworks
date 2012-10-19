@@ -8,6 +8,7 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
+import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +45,7 @@ import org.tvl.goworks.editor.go.codemodel.ChannelKind;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.TypeModel;
@@ -245,6 +247,8 @@ public class SemanticAnalyzerListener implements GoParserListener {
     private final Deque<Collection<TerminalNode<Token>>> unresolvedLabels = new ArrayDeque<Collection<TerminalNode<Token>>>();
 
     private final Map<String, List<TerminalNode<Token>>> importedPackages = new HashMap<String, List<TerminalNode<Token>>>();
+
+    private BigInteger _iota = BigInteger.ZERO;
 
     public SemanticAnalyzerListener(@NonNull VersionedDocument document, @NonNull GoAnnotatedParseTree annotatedParseTree) {
         Parameters.notNull("document", document);
@@ -1239,6 +1243,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0)
     public void exitConstSpec(ConstSpecContext ctx) {
+        _iota = _iota.add(BigInteger.ONE);
         applyPendingVars();
     }
 
@@ -1973,6 +1978,24 @@ public class SemanticAnalyzerListener implements GoParserListener {
             }
         } else if (ctx.IDENTIFIER() != null) {
             assert ctx.packageName() == null;
+            String text = ctx.IDENTIFIER().getText();
+            if ("true".equals(text)) {
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.UNEVALUATED_CONSTANT, "true");
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EVALUATED_CONSTANT, BigInteger.ONE);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+            } else if ("false".equals(text)) {
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.UNEVALUATED_CONSTANT, "false");
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EVALUATED_CONSTANT, BigInteger.ZERO);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+            } else if ("iota".equals(text)) {
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.UNEVALUATED_CONSTANT, "iota");
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EVALUATED_CONSTANT, _iota);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+            }
+
             TerminalNode<Token> local = getVisibleLocal(ctx.IDENTIFIER());
             if (local != null) {
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.VAR_REF);
@@ -2995,6 +3018,15 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     public void visitTerminal(TerminalNode<? extends Token> node) {
+        Token symbol = node.getSymbol();
+        switch (symbol.getType()) {
+        case GoParser.Const:
+            _iota = BigInteger.ZERO;
+            break;
+
+        default:
+            break;
+        }
     }
 
     @Override
