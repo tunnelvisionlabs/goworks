@@ -1,5 +1,9 @@
 /nbproject/private/
+*/nbproject/private/
 /build/
+/go.project/build/
+/goworks.branding/build/
+/goworks.editor/build/
 /org-abego-treelayout-core/build/
 /org-antlr-runtime/build/
 /org-antlr-v4-runtime/build/
