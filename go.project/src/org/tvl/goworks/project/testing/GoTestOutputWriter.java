@@ -40,7 +40,7 @@ public class GoTestOutputWriter extends Writer {
     private final List<Testcase> _cases = new ArrayList<Testcase>();
 
     private float _totalTime;
-    private TestSession session;
+    private TestSession _session;
 
     public GoTestOutputWriter(@NonNull GoProject project) {
         Parameters.notNull("project", project);
@@ -60,11 +60,11 @@ public class GoTestOutputWriter extends Writer {
 
     @Override
     public void close() throws IOException {
-        if (session != null) {
-            Report report = session.getReport(Math.round(_totalTime * 1000));
-            Manager.getInstance().displayReport(session, report);
-            Manager.getInstance().sessionFinished(session);
-            session = null;
+        if (_session != null) {
+            Report report = _session.getReport(Math.round(_totalTime * 1000));
+            Manager.getInstance().displayReport(_session, report);
+            Manager.getInstance().sessionFinished(_session);
+            _session = null;
         }
     }
 
@@ -139,21 +139,21 @@ public class GoTestOutputWriter extends Writer {
             return;
         }
 
-        if (session != null) {
-            Manager.getInstance().displayOutput(session, line, true);
+        if (_session != null) {
+            Manager.getInstance().displayOutput(_session, line, true);
         }
 
         LOGGER.log(Level.FINE, "Unknown output line: {0}", line);
     }
 
     private void createSession() {
-        if (session != null) {
+        if (_session != null) {
             return;
         }
 
         TestSession.SessionType sessionType = TestSession.SessionType.TEST;
-        session = new TestSession(_project.getProjectDirectory().getName(), _project, sessionType, new GoTestRunnerNodeFactory());
-        Manager.getInstance().testStarted(session);
+        _session = new TestSession(_project.getProjectDirectory().getName(), _project, sessionType, new GoTestRunnerNodeFactory());
+        Manager.getInstance().testStarted(_session);
     }
 
     private void processRun(String test) {
@@ -161,7 +161,7 @@ public class GoTestOutputWriter extends Writer {
     }
 
     private void processTestResult(String result, String test, String time) {
-        Testcase testcase = new Testcase(time, null, session);
+        Testcase testcase = new Testcase(time, null, _session);
         if ("PASS".equals(result)) {
             testcase.setStatus(Status.PASSED);
         } else {
@@ -189,12 +189,12 @@ public class GoTestOutputWriter extends Writer {
         }
 
         TestSuite suite = new TestSuite(packageName);
-        session.addSuite(suite);
-        Manager.getInstance().displaySuiteRunning(session, suite.getName());
+        _session.addSuite(suite);
+        Manager.getInstance().displaySuiteRunning(_session, suite.getName());
 
         for (Testcase testcase : _cases) {
             testcase.setClassName(packageName);
-            session.addTestCase(testcase);
+            _session.addTestCase(testcase);
         }
 
         _cases.clear();
