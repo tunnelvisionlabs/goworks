@@ -4,14 +4,15 @@
 <#include "../Licenses/license-${project.license}.txt">
 
 <#if package?? && package != "">
-package ${package}
+package ${package}_test
 
 </#if>
 import "testing"
+import "math"
 
 func TestSqrt(t *testing.T) {
 	const in, out = 4, 2
-	if x := Sqrt(in); x != out {
+	if x := math.Sqrt(in); x != out {
 		t.Errorf("Sqrt(%v) = %v, want %v", in, x, out)
 	}
 }
