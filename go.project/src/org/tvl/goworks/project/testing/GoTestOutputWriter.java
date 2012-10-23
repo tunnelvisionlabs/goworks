@@ -61,8 +61,6 @@ public class GoTestOutputWriter extends Writer {
     @Override
     public void close() throws IOException {
         if (_session != null) {
-            Report report = _session.getReport(Math.round(_totalTime * 1000));
-            Manager.getInstance().displayReport(_session, report);
             Manager.getInstance().sessionFinished(_session);
             _session = null;
         }
@@ -198,8 +196,9 @@ public class GoTestOutputWriter extends Writer {
         }
 
         _cases.clear();
-
         _totalTime += timeInSeconds;
+        Report report = _session.getReport(Math.round(timeInSeconds * 1000));
+        Manager.getInstance().displayReport(_session, report);
         LOGGER.log(Level.FINE, "Package result: result={0}, test={1}, time={2}, message={3}", new Object[] { result, packageName, time, message });
     }
 }
