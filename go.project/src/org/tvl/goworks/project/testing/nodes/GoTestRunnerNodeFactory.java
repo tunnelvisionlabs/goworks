@@ -10,7 +10,6 @@ package org.tvl.goworks.project.testing.nodes;
 
 import org.netbeans.api.project.Project;
 import org.netbeans.modules.gsf.testrunner.api.TestRunnerNodeFactory;
-import org.netbeans.modules.gsf.testrunner.api.TestSession;
 import org.netbeans.modules.gsf.testrunner.api.Testcase;
 import org.netbeans.modules.gsf.testrunner.api.TestsuiteNode;
 import org.openide.nodes.Node;
@@ -20,14 +19,6 @@ import org.openide.nodes.Node;
  * @author Sam Harwell
  */
 public class GoTestRunnerNodeFactory extends TestRunnerNodeFactory {
-    private TestSession session;
-    private Project project;
-
-    public GoTestRunnerNodeFactory(TestSession session, Project project) {
-        this.session = session;
-        this.project = project;
-    }
-
     @Override
     public Node createTestMethodNode(Testcase testcase, Project project) {
         return new GoTestMethodNode(testcase, project);

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,6 +30,7 @@ import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.extexecution.ExecutionDescriptor;
 import org.netbeans.api.extexecution.print.ConvertedLine;
 import org.netbeans.api.extexecution.print.LineConvertor;
@@ -57,12 +59,14 @@ import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NotImplementedException;
+import org.openide.util.Parameters;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Utilities;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 import org.openide.windows.OutputEvent;
 import org.openide.windows.OutputListener;
+import org.tvl.goworks.project.testing.GoTestOutputWriter;
 
 /**
  *
@@ -327,10 +331,15 @@ public final class GoActionProvider implements ActionProvider {
 
         };
 
+        List<Writer> outputHandlers = new ArrayList<Writer>();
+        if ("test".equals(commandName)) {
+            outputHandlers.add(new GoTestOutputWriter(_project));
+        }
+
         Writer outputListener = null;
-//        if (outputHandlers != null && !outputHandlers.isEmpty()) {
-//            writer = new WriterRedirector(outputHandlers);
-//        }
+        if (outputHandlers != null && !outputHandlers.isEmpty()) {
+            outputListener = new WriterRedirector(outputHandlers);
+        }
 
         final ProcessChangeListener processChangeListener = new ProcessChangeListener(listener, outputListener, convertor, io);
 
@@ -833,6 +842,37 @@ public final class GoActionProvider implements ActionProvider {
 
         @Override
         public void outputLineCleared(OutputEvent ev) {
+        }
+
+    }
+
+    protected static class WriterRedirector extends Writer {
+        private final List<Writer> _writers;
+        
+        public WriterRedirector(@NonNull Collection<? extends Writer> writers) {
+            Parameters.notNull("writers", writers);
+            _writers = new ArrayList<Writer>(writers);
+        }
+
+        @Override
+        public void write(char[] cbuf, int off, int len) throws IOException {
+            for (Writer writer : _writers) {
+                writer.write(cbuf, off, len);
+            }
+        }
+
+        @Override
+        public void flush() throws IOException {
+            for (Writer writer : _writers) {
+                writer.flush();
+            }
+        }
+
+        @Override
+        public void close() throws IOException {
+            for (Writer writer : _writers) {
+                writer.close();
+            }
         }
 
     }
