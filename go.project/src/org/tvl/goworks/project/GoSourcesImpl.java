@@ -22,6 +22,7 @@ import org.netbeans.api.project.ProjectManager;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.project.Sources;
 import org.netbeans.api.queries.SharabilityQuery;
+import org.netbeans.spi.project.support.GenericSources;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.ChangeSupport;
@@ -140,7 +141,9 @@ final class GoSourcesImpl implements Sources, ChangeListener {
                         groups = new SourceGroup[0];
                     }
                 } else if (type.equals(Sources.TYPE_GENERIC)) {
-                    groups = new SourceGroup[0];
+                    groups = new SourceGroup[] {
+                        GenericSources.group(_project, _project.getProjectDirectory(), "go-generic", "Go", null, null)
+                    };
                 } else {
                     groups = new SourceGroup[0];
                 }
