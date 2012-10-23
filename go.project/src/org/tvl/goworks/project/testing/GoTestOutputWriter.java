@@ -159,7 +159,7 @@ public class GoTestOutputWriter extends Writer {
     }
 
     private void processTestResult(String result, String test, String time) {
-        Testcase testcase = new Testcase(time, null, _session);
+        Testcase testcase = new Testcase(test, null, _session);
         if ("PASS".equals(result)) {
             testcase.setStatus(Status.PASSED);
         } else {
