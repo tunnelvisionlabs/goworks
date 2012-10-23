@@ -39,6 +39,7 @@ public class GoTestOutputWriter extends Writer {
     private final StringBuilder _buffer = new StringBuilder();
     private final List<Testcase> _cases = new ArrayList<Testcase>();
 
+    private float _totalTime;
     private TestSession session;
 
     public GoTestOutputWriter(@NonNull GoProject project) {
@@ -60,6 +61,8 @@ public class GoTestOutputWriter extends Writer {
     @Override
     public void close() throws IOException {
         if (session != null) {
+            Report report = session.getReport(Math.round(_totalTime * 1000));
+            Manager.getInstance().displayReport(session, report);
             Manager.getInstance().sessionFinished(session);
             session = null;
         }
@@ -196,8 +199,7 @@ public class GoTestOutputWriter extends Writer {
 
         _cases.clear();
 
-        Report report = session.getReport(Math.round(timeInSeconds * 1000));
-        Manager.getInstance().displayReport(session, report);
+        _totalTime += timeInSeconds;
         LOGGER.log(Level.FINE, "Package result: result={0}, test={1}, time={2}, message={3}", new Object[] { result, packageName, time, message });
     }
 }
