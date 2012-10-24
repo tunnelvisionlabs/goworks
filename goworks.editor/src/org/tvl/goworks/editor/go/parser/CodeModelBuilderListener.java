@@ -63,6 +63,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionOrCallExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
@@ -725,6 +726,20 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         if (ctx.type() != null) {
             TypeModelImpl type = typeModelStack.pop();
             _expressionTypes.put(ctx, type);
+        }
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
+    })
+    public void exitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
+        if (ctx.conversion() != null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.conversion());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
         }
     }
 
