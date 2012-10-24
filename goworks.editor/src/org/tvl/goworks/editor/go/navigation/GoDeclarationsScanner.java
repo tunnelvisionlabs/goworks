@@ -30,6 +30,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.AnonymousFieldContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BlockContext;
@@ -239,6 +240,7 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_anonymousField, version=0),
         })
         public void enterFieldDecl(FieldDeclContext ctx) {
             if (ctx.getParent() == null || isAnonymousType((StructTypeContext)ctx.getParent())) {
@@ -258,6 +260,19 @@ public class GoDeclarationsScanner {
                     description.setHtmlHeader(signature);
                     getCurrentParent().getChildren().add(description);
                 }
+            } else if (ctx.anonymousField() != null) {
+                // anonymous field, add to struct node in navigator
+                String type = HtmlSignatureVisitor.UNCOLORED.visit(ctx.anonymousField());
+                String headerFormat;
+                String header = getCurrentParent().getHtmlHeader();
+                if (!header.contains(":")) {
+                    headerFormat = "%s : <font color='808080'>%s</font>";
+                } else {
+                    headerFormat = "%s, <font color='808080'>%s</font>";
+                }
+
+                header = String.format(headerFormat, header, type);
+                getCurrentParent().setHtmlHeader(header);
             }
         }
 
