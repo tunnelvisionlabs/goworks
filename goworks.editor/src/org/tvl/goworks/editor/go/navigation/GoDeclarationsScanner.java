@@ -678,9 +678,8 @@ public class GoDeclarationsScanner {
             StringBuilder result = new StringBuilder();
             if (ctx.identifierList() != null) {
                 result.append(visit(ctx.identifierList()));
+                result.append(' ');
             }
-
-            result.append(' ');
 
             if (_colored) {
                 result.append("<font color='808080'>");
