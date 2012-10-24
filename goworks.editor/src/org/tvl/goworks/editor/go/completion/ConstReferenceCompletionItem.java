@@ -10,9 +10,11 @@ package org.tvl.goworks.editor.go.completion;
 
 import javax.swing.ImageIcon;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
+import org.tvl.goworks.editor.go.codemodel.TypeModel;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 
 /**
@@ -27,13 +29,15 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
 
     private final ConstModel constModel;
     private final String constName;
+    private final TypeModel typeModel;
     private final boolean localScope;
     private String leftText;
 
-    public ConstReferenceCompletionItem(@NonNull String constName, boolean localScope) {
+    public ConstReferenceCompletionItem(@NonNull String constName, @NullAllowed TypeModel typeModel, boolean localScope) {
         Parameters.notNull("constName", constName);
         this.constModel = null;
         this.constName = constName;
+        this.typeModel = typeModel;
         this.localScope = localScope;
     }
 
@@ -41,6 +45,7 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
         Parameters.notNull("constModel", constModel);
         this.constModel = constModel;
         this.constName = constModel.getName();
+        this.typeModel = constModel.getConstType();
         this.localScope = localScope;
     }
 
@@ -113,11 +118,32 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
     @Override
     protected String getRightHtmlText() {
         if (constModel != null) {
-            // TODO: figure out the type
-            return "?";
+            if (constModel.isTyped()) {
+                return constModel.getConstType().getName();
+            }
+
+            String unevaluated = constModel.getUnevaluatedValue();
+            String evaluated = constModel.getEvaluatedValue();
+
+            StringBuilder builder = new StringBuilder(unevaluated.length() + 3 + evaluated.length());
+
+            builder.append(unevaluated);
+            if (!unevaluated.isEmpty() && !evaluated.isEmpty()) {
+                builder.append(' ');
+            }
+
+            if (!evaluated.isEmpty()) {
+                builder.append('(').append(evaluated).append(')');
+            }
+
+            return builder.toString();
         }
 
-        return "?";
+        if (typeModel != null) {
+            return typeModel.getName();
+        }
+
+        return "";
     }
 
 }

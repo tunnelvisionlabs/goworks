@@ -970,7 +970,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                                 continue;
                                             }
 
-                                            intermediateResults.put(builtin, new ConstReferenceCompletionItem(builtin, false));
+                                            TypeModel typeModel = null;
+                                            if (builtin.equals("true") || builtin.equals("false")) {
+                                                typeModel = IntrinsicTypeModels.BOOL;
+                                            }
+
+                                            intermediateResults.put(builtin, new ConstReferenceCompletionItem(builtin, typeModel, false));
                                         }
 
                                         for (PackageModel packageModel : visiblePackages) {
