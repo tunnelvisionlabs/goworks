@@ -781,9 +781,14 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_signature, version=0),
         })
         public String visitFunctionType(FunctionTypeContext ctx) {
-            return "func?";
+            if (ctx.signature() != null) {
+                return "func" + UNCOLORED.visit(ctx.signature());
+            } else {
+                return "func?";
+            }
         }
 
         @Override
@@ -827,9 +832,25 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
         })
         public String visitChannelType(ChannelTypeContext ctx) {
-            return "chan?";
+            StringBuilder result = new StringBuilder();
+            if (ctx.recv != null) {
+                result.append("&lt;-");
+            }
+
+            result.append("chan");
+            if (ctx.send != null) {
+                result.append("&lt;-");
+            }
+
+            result.append(' ');
+            if (ctx.elementType() != null) {
+                result.append(visit(ctx.elementType()));
+            }
+
+            return result.toString();
         }
 
         @Override
