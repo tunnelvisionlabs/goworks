@@ -4156,34 +4156,34 @@ public abstract class AbstractGoParser extends Parser<Token> {
 						((UnaryExprContext)_localctx).op = _errHandler.recoverInline(this);
 					}
 					consume();
-					setState(616); expression(6);
+					setState(616); expression(7);
 					}
 					break;
 
 				case 2:
 					{
-					_localctx = new OperandExprContext(_localctx);
+					_localctx = new ConversionOrCallExprContext(_localctx);
 					_ctx = _localctx;
 					_prevctx = _localctx;
-					setState(617); operand();
+					setState(617); conversion();
 					}
 					break;
 
 				case 3:
 					{
-					_localctx = new ConversionOrCallExprContext(_localctx);
+					_localctx = new BuiltinCallExprContext(_localctx);
 					_ctx = _localctx;
 					_prevctx = _localctx;
-					setState(618); conversion();
+					setState(618); builtinCall();
 					}
 					break;
 
 				case 4:
 					{
-					_localctx = new BuiltinCallExprContext(_localctx);
+					_localctx = new OperandExprContext(_localctx);
 					_ctx = _localctx;
 					_prevctx = _localctx;
-					setState(619); builtinCall();
+					setState(619); operand();
 					}
 					break;
 			}
@@ -4204,7 +4204,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new MultExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(622);
-							if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
+							if (!(6 >= _localctx._p)) throw new FailedPredicateException(this, "6 >= $_p");
 							setState(623);
 							((MultExprContext)_localctx).op = _input.LT(1);
 							_la = _input.LA(1);
@@ -4212,7 +4212,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 								((MultExprContext)_localctx).op = _errHandler.recoverInline(this);
 							}
 							consume();
-							setState(624); expression(6);
+							setState(624); expression(7);
 							}
 							break;
 
@@ -4221,7 +4221,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new AddExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(625);
-							if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
+							if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
 							setState(626);
 							((AddExprContext)_localctx).op = _input.LT(1);
 							_la = _input.LA(1);
@@ -4229,7 +4229,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 								((AddExprContext)_localctx).op = _errHandler.recoverInline(this);
 							}
 							consume();
-							setState(627); expression(5);
+							setState(627); expression(6);
 							}
 							break;
 
@@ -4238,7 +4238,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new CompareExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(628);
-							if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
+							if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
 							setState(629);
 							((CompareExprContext)_localctx).op = _input.LT(1);
 							_la = _input.LA(1);
@@ -4246,7 +4246,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 								((CompareExprContext)_localctx).op = _errHandler.recoverInline(this);
 							}
 							consume();
-							setState(630); expression(4);
+							setState(630); expression(5);
 							}
 							break;
 
@@ -4255,9 +4255,9 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new AndExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(631);
-							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
+							if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
 							setState(632); match(And);
-							setState(633); expression(3);
+							setState(633); expression(4);
 							}
 							break;
 
@@ -4266,9 +4266,9 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new OrExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(634);
-							if (!(1 >= _localctx._p)) throw new FailedPredicateException(this, "1 >= $_p");
+							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
 							setState(635); match(Or);
-							setState(636); expression(2);
+							setState(636); expression(3);
 							}
 							break;
 
@@ -4277,7 +4277,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new SelectorExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(637);
-							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
+							if (!(12 >= _localctx._p)) throw new FailedPredicateException(this, "12 >= $_p");
 							setState(638); ((SelectorExprContext)_localctx).dot = match(Dot);
 							setState(639); match(IDENTIFIER);
 							}
@@ -4288,7 +4288,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new IndexExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(640);
-							if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
+							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
 							setState(641); match(LeftBrack);
 							setState(642); expression(0);
 							setState(643); match(RightBrack);
@@ -4300,7 +4300,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new SliceExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(645);
-							if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
+							if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
 							setState(646); match(LeftBrack);
 							setState(648);
 							//_errHandler.sync(this);
@@ -4330,7 +4330,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new TypeAssertionExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(655);
-							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
+							if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
 							setState(656); ((TypeAssertionExprContext)_localctx).dot = match(Dot);
 							setState(657); ((TypeAssertionExprContext)_localctx).lp = match(LeftParen);
 							setState(658); type();
@@ -4343,7 +4343,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 							_localctx = new CallExprContext(new ExpressionContext(_parentctx, _parentState, _p));
 							pushNewRecursionContext(_localctx, _startState, RULE_expression);
 							setState(661);
-							if (!(7 >= _localctx._p)) throw new FailedPredicateException(this, "7 >= $_p");
+							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
 							setState(662); ((CallExprContext)_localctx).lp = match(LeftParen);
 							setState(667);
 							//_errHandler.sync(this);
@@ -7704,25 +7704,25 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 	public boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch ( predIndex ) {
-			case 1 : return 5 >= _localctx._p;
+			case 1 : return 6 >= _localctx._p;
 
-			case 2 : return 4 >= _localctx._p;
+			case 2 : return 5 >= _localctx._p;
 
-			case 3 : return 3 >= _localctx._p;
+			case 3 : return 4 >= _localctx._p;
 
-			case 4 : return 2 >= _localctx._p;
+			case 4 : return 3 >= _localctx._p;
 
-			case 5 : return 1 >= _localctx._p;
+			case 5 : return 2 >= _localctx._p;
 
-			case 6 : return 11 >= _localctx._p;
+			case 6 : return 12 >= _localctx._p;
 
-			case 7 : return 10 >= _localctx._p;
+			case 7 : return 11 >= _localctx._p;
 
-			case 8 : return 9 >= _localctx._p;
+			case 8 : return 10 >= _localctx._p;
 
-			case 9 : return 8 >= _localctx._p;
+			case 9 : return 9 >= _localctx._p;
 
-			case 10 : return 7 >= _localctx._p;
+			case 10 : return 8 >= _localctx._p;
 		}
 		return true;
 	}
@@ -7961,7 +7961,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		"\u025eq\1\0\0\0\u025f\u0262\3v;\0\u0260\u0262\3f\63\0\u0261\u025f\1\0"+
 		"\0\0\u0261\u0260\1\0\0\0\u0262s\1\0\0\0\u0263\u0264\3\32\r\0\u0264\u0265"+
 		"\3N\'\0\u0265u\1\0\0\0\u0266\u0267\6;\uffff\0\u0267\u0268\7\1\0\0\u0268"+
-		"\u026d\3v;\0\u0269\u026d\3V+\0\u026a\u026d\3z=\0\u026b\u026d\3\u00ceg"+
+		"\u026d\3v;\0\u0269\u026d\3z=\0\u026a\u026d\3\u00ceg\0\u026b\u026d\3V+"+
 		"\0\u026c\u0266\1\0\0\0\u026c\u0269\1\0\0\0\u026c\u026a\1\0\0\0\u026c\u026b"+
 		"\1\0\0\0\u026d\u02a0\1\0\0\0\u026e\u026f\4;\1\1\u026f\u0270\7\2\0\0\u0270"+
 		"\u029f\3v;\0\u0271\u0272\4;\2\1\u0272\u0273\7\3\0\0\u0273\u029f\3v;\0"+

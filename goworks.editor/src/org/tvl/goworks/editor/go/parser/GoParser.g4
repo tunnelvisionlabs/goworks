@@ -361,9 +361,7 @@ functionLiteral
     ;
 
 expression
-    :   operand
-        # operandExpr
-    |   conversion
+    :   conversion
         # conversionOrCallExpr
     |   builtinCall
         # builtinCallExpr
@@ -391,6 +389,8 @@ expression
         # andExpr
     |   expression '||' expression
         # orExpr
+    |   operand
+        # operandExpr
     ;
 
 //primaryExpr
