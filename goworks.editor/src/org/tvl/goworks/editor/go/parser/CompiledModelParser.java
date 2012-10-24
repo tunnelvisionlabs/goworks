@@ -25,6 +25,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.parsing.SyntaxErrorListener;
 import org.netbeans.api.annotations.common.NonNull;
@@ -92,8 +93,8 @@ public class CompiledModelParser {
                     try {
                         try {
                             sourceFileContext = parser.sourceFile();
-                        } catch (RuntimeException ex) {
-                            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                        } catch (ParseCancellationException ex) {
+                            if (ex.getCause() instanceof RecognitionException) {
                                 GoParserCache.DEFAULT.putParser(parser);
                                 parser = null;
 
@@ -105,8 +106,8 @@ public class CompiledModelParser {
                                 throw ex;
                             }
                         }
-                    } catch (RuntimeException ex) {
-                        if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                    } catch (ParseCancellationException ex) {
+                        if (ex.getCause() instanceof RecognitionException) {
                             GoParserCache.DEFAULT.putParser(parser);
                             parser = null;
 
