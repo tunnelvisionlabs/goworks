@@ -30,31 +30,43 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BlockContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.IdentifierListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterListContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParametersContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.PointerTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ReceiverContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SignatureContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.SliceTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.GoParser;
 import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.GoParserBaseVisitor;
 
 /**
  *
@@ -181,13 +193,14 @@ public class GoDeclarationsScanner {
 
             IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
+            String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
             for (TerminalNode<Token> identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                String signature = String.format("%s", identifier.getSymbol().getText());
+                String signature = identifier.getSymbol().getText() + type;
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+                description.setHtmlHeader(signature);
                 getCurrentParent().getChildren().add(description);
             }
         }
@@ -230,13 +243,14 @@ public class GoDeclarationsScanner {
             IdentifierListContext idListContext = ctx.identifierList();
             if (idListContext != null) {
                 List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
+                String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
                 for (TerminalNode<Token> identifier : identifiers) {
                     Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                    String signature = String.format("%s", identifier.getSymbol().getText());
+                    String signature = identifier.getSymbol().getText() + type;
 
                     GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FIELD);
                     description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                    description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+                    description.setHtmlHeader(signature);
                     getCurrentParent().getChildren().add(description);
                 }
             }
@@ -334,11 +348,11 @@ public class GoDeclarationsScanner {
                 MethodNameContext methodNameContext = ctx.methodName();
                 Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
                 String name = methodNameContext.IDENTIFIER() != null ? methodNameContext.IDENTIFIER().getText() : "?";
-                String signature = name;
+                String signature = HtmlSignatureVisitor.COLORED.visit(ctx);
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+                description.setHtmlHeader(signature);
                 getCurrentParent().getChildren().add(description);
                 description.setChildren(new ArrayList<Description>());
                 descriptionStack.push(description);
@@ -367,11 +381,11 @@ public class GoDeclarationsScanner {
         public void enterFunctionDecl(FunctionDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String name = ctx.IDENTIFIER() != null ? ctx.IDENTIFIER().getText() : "?";
-            String signature = name;
+            String signature = HtmlSignatureVisitor.COLORED.visit(ctx);
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FUNCTION);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-            description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+            description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
             description.setChildren(new ArrayList<Description>());
             descriptionStack.push(description);
@@ -393,11 +407,11 @@ public class GoDeclarationsScanner {
         public void enterMethodDecl(MethodDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String name = ctx.methodName() != null && ctx.methodName().IDENTIFIER() != null ? ctx.methodName().IDENTIFIER().getSymbol().getText() : "?";
-            String signature = String.format("%s", name);
+            String signature = HtmlSignatureVisitor.COLORED.visit(ctx);
 
             GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-            description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+            description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
             description.setChildren(new ArrayList<Description>());
 
@@ -501,5 +515,326 @@ public class GoDeclarationsScanner {
 
             return true;
         }
+    }
+
+    public static class HtmlSignatureVisitor extends GoParserBaseVisitor<String> {
+        public static final HtmlSignatureVisitor COLORED = new HtmlSignatureVisitor(true);
+        public static final HtmlSignatureVisitor UNCOLORED = new HtmlSignatureVisitor(false);
+
+        private final boolean _colored;
+
+        public HtmlSignatureVisitor(boolean colored) {
+            this._colored = colored;
+        }
+
+        @Override
+        protected String defaultResult() {
+            return "";
+        }
+
+        @Override
+        protected String aggregateResult(String aggregate, String nextResult) {
+            if (aggregate == null || aggregate.isEmpty()) {
+                return nextResult;
+            } else if (nextResult == null || nextResult.isEmpty()) {
+                return aggregate;
+            }
+
+            return aggregate + ", " + nextResult;
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_signature, version=0),
+        })
+        public String visitFunctionDecl(FunctionDeclContext ctx) {
+            // name(args) return
+            StringBuilder result = new StringBuilder();
+            if (ctx.IDENTIFIER() != null) {
+                result.append(Description.htmlEscape(ctx.IDENTIFIER().getText()));
+            }
+
+            if (ctx.signature() != null) {
+                result.append(visit(ctx.signature()));
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_signature, version=0),
+        })
+        public String visitMethodDecl(MethodDeclContext ctx) {
+            // name(args) return
+            StringBuilder result = new StringBuilder();
+            if (ctx.methodName() != null) {
+                result.append(Description.htmlEscape(ctx.methodName().getText()));
+            }
+
+            if (ctx.signature() != null) {
+                result.append(visit(ctx.signature()));
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_signature, version=0),
+        })
+        public String visitMethodSpec(MethodSpecContext ctx) {
+            if (ctx.interfaceTypeName() != null) {
+                return Description.htmlEscape(ctx.interfaceTypeName().getText());
+            }
+
+            StringBuilder result = new StringBuilder();
+            if (ctx.methodName() != null) {
+                result.append(Description.htmlEscape(ctx.methodName().getText()));
+            }
+
+            if (ctx.signature() != null) {
+                result.append(visit(ctx.signature()));
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_signature, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameters, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0),
+        })
+        public String visitSignature(SignatureContext ctx) {
+            StringBuilder result = new StringBuilder();
+            if (ctx.parameters() != null) {
+                result.append(visit(ctx.parameters()));
+            }
+
+            result.append(' ');
+            if (ctx.result() != null) {
+                result.append(visit(ctx.result()));
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameters, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterList, version=0),
+        })
+        public String visitParameters(ParametersContext ctx) {
+            StringBuilder result = new StringBuilder();
+            result.append('(');
+
+            if (ctx.parameterList() != null) {
+                result.append(visit(ctx.parameterList()));
+            }
+
+            result.append(')');
+            return result.toString();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterList, version=0),
+        })
+        public String visitParameterList(ParameterListContext ctx) {
+            // default impl does the right thing
+            return super.visitParameterList(ctx);
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        })
+        public String visitParameterDecl(ParameterDeclContext ctx) {
+            StringBuilder result = new StringBuilder();
+            if (ctx.identifierList() != null) {
+                result.append(visit(ctx.identifierList()));
+            }
+
+            result.append(' ');
+
+            if (_colored) {
+                result.append("<font color='808080'>");
+            }
+
+            if (ctx.ellip != null) {
+                result.append("...");
+            }
+
+            if (ctx.type() != null) {
+                result.append(UNCOLORED.visit(ctx.type()));
+            }
+
+            if (_colored) {
+                result.append("</font>");
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
+        })
+        public String visitIdentifierList(IdentifierListContext ctx) {
+            StringBuilder result = new StringBuilder();
+            for (TerminalNode<Token> node : ctx.IDENTIFIER()) {
+                if (result.length() > 0) {
+                    result.append(", ");
+                }
+
+                result.append(Description.htmlEscape(node.getText()));
+            }
+
+            return result.toString();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        })
+        public String visitType(TypeContext ctx) {
+            // default impl does the right thing
+            return super.visitType(ctx);
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+        })
+        public String visitTypeName(TypeNameContext ctx) {
+            return Description.htmlEscape(ctx.getText());
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
+        })
+        public String visitTypeLiteral(TypeLiteralContext ctx) {
+            // default impl does the right thing
+            return super.visitTypeLiteral(ctx);
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
+        })
+        public String visitArrayType(ArrayTypeContext ctx) {
+            if (ctx.elementType() == null) {
+                return "[*]?";
+            }
+
+            return "[*]" + visit(ctx.elementType());
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
+        })
+        public String visitStructType(StructTypeContext ctx) {
+            return "struct{?}";
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0),
+        })
+        public String visitPointerType(PointerTypeContext ctx) {
+            if (ctx.baseType() == null) {
+                return "*?";
+            }
+
+            return "*" + visit(ctx.baseType());
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0),
+        })
+        public String visitFunctionType(FunctionTypeContext ctx) {
+            return "func?";
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+        })
+        public String visitInterfaceType(InterfaceTypeContext ctx) {
+            if (ctx.methodSpec().isEmpty()) {
+                return "interface{}";
+            }
+
+            return "interface{?}";
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
+        })
+        public String visitSliceType(SliceTypeContext ctx) {
+            if (ctx.elementType() == null) {
+                return "[]?";
+            }
+
+            return "[]" + visit(ctx.elementType());
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_keyType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
+        })
+        public String visitMapType(MapTypeContext ctx) {
+            String keyType = ctx.keyType() != null ? visit(ctx.keyType()) : "?";
+            String elementType = ctx.elementType() != null ? visit(ctx.elementType()) : "?";
+            return String.format("map[%s]%s", keyType, elementType);
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0),
+        })
+        public String visitChannelType(ChannelTypeContext ctx) {
+            return "chan?";
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameters, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        })
+        public String visitResult(ResultContext ctx) {
+            if (ctx.parameters() != null) {
+                return visit(ctx.parameters());
+            } else if (ctx.type() != null) {
+                if (_colored) {
+                    return String.format("<font color='808080'>%s</font>", UNCOLORED.visit(ctx.type()));
+                } else {
+                    return visit(ctx.type());
+                }
+            } else {
+                return "";
+            }
+        }
+
     }
 }
