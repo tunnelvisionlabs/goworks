@@ -113,6 +113,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeWrapperModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.AndExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
@@ -159,6 +160,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.OrExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
@@ -2323,6 +2325,18 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 setTargetProperty(ctx, results);
                 return results;
+            }
+
+            @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            public Collection<? extends CodeElementModel> visitAndExpr(AndExprContext ctx) {
+                return Collections.singletonList(IntrinsicTypeModels.BOOL);
+            }
+
+            @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            public Collection<? extends CodeElementModel> visitOrExpr(OrExprContext ctx) {
+                return Collections.singletonList(IntrinsicTypeModels.BOOL);
             }
 
             @Override
