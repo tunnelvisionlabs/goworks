@@ -58,6 +58,10 @@ public class GoNode extends NavigatorNode {
             imageName = "struct_16.png";
             break;
 
+        case INTERFACE:
+            imageName = "interface.png";
+            break;
+
         case UNKNOWN:
         default:
             // TODO: use error image

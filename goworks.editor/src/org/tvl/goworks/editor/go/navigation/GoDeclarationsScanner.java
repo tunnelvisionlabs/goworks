@@ -30,7 +30,11 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.IdentifierListContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
@@ -202,6 +206,26 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
+        public void enterInterfaceType(InterfaceTypeContext ctx) {
+            Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
+            String signature = typeNameStack.isEmpty() ? "?interface?" : typeNameStack.peek();
+
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.INTERFACE);
+            description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+            description.setHtmlHeader(String.format("%s", signature));
+            getCurrentParent().getChildren().add(description);
+            description.setChildren(new ArrayList<Description>());
+            descriptionStack.push(description);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
+        public void exitInterfaceType(InterfaceTypeContext ctx) {
+            descriptionStack.pop();
+        }
+
+        @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
         public void enterStructType(StructTypeContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
@@ -219,6 +243,53 @@ public class GoDeclarationsScanner {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
         public void exitStructType(StructTypeContext ctx) {
             descriptionStack.pop();
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+        })
+        public void enterMethodSpec(MethodSpecContext ctx) {
+            if (ctx.interfaceTypeName() != null) {
+                InterfaceTypeNameContext interfaceTypeNameContext = ctx.interfaceTypeName();
+                Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
+                String name = interfaceTypeNameContext.typeName() != null ? interfaceTypeNameContext.typeName().getText() : "?";
+                String signature = name;
+
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.INTERFACE);
+                description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+                getCurrentParent().getChildren().add(description);
+                description.setChildren(new ArrayList<Description>());
+                descriptionStack.push(description);
+            } else if (ctx.methodName() != null) {
+                MethodNameContext methodNameContext = ctx.methodName();
+                Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
+                String name = methodNameContext.IDENTIFIER() != null ? methodNameContext.IDENTIFIER().getText() : "?";
+                String signature = name;
+
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
+                description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+                getCurrentParent().getChildren().add(description);
+                description.setChildren(new ArrayList<Description>());
+                descriptionStack.push(description);
+            }
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+        })
+        public void exitMethodSpec(MethodSpecContext ctx) {
+            if (ctx.interfaceTypeName() != null || ctx.methodName() != null) {
+                descriptionStack.pop();
+            }
         }
 
         @Override
