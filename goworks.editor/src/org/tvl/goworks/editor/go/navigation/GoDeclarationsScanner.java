@@ -173,13 +173,14 @@ public class GoDeclarationsScanner {
 
             IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
+            String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
             for (TerminalNode<Token> identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                String signature = String.format("%s", identifier.getSymbol().getText());
+                String signature = identifier.getSymbol().getText() + type;
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.CONSTANT);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
-                description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
+                description.setHtmlHeader(signature);
                 getCurrentParent().getChildren().add(description);
             }
         }
