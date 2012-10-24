@@ -993,10 +993,9 @@ public abstract class AbstractGoLexer extends Lexer {
 		"\u02ba\3\u00cbe\0\u02b8\u02ba\5_\0\0\u02b9\u02b7\1\0\0\0\u02b9\u02b8\1"+
 		"\0\0\0\u02ba\u00d0\1\0\0\0\u02bb\u02bc\2\609\0\u02bc\u00d2\1\0\0\0\u02bd"+
 		"\u02be\2\60\67\0\u02be\u00d4\1\0\0\0\u02bf\u02c0\7\13\0\0\u02c0\u00d6"+
-		"\1\0\0\0\u02c1\u02c2\t\0\0\0\u02c2\u00d8\1\0\0\0\34\0\0\u01f1\0\u01f3"+
-		"\0\u01f9\0\u01fe\0\u020a\0\u0215\1\u0220\0\u0226\0\u022d\0\u0235\0\u0239"+
-		"\0\u0240\0\u0243\0\u024b\0\u024d\0\u0252\0\u0256\0\u025d\0\u0265\0\u026b"+
-		"\0\u026f\0\u0295\0\u029a\0\u029c\0\u02a4\0\u02a6\0\u02b9\0";
+		"\1\0\0\0\u02c1\u02c2\t\0\0\0\u02c2\u00d8\1\0\0\0\34\0\u01f1\u01f3\u01f9"+
+		"\u01fe\u020a\u0215\u0220\u0226\u022d\u0235\u0239\u0240\u0243\u024b\u024d"+
+		"\u0252\u0256\u025d\u0265\u026b\u026f\u0295\u029a\u029c\u02a4\u02a6\u02b9";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
