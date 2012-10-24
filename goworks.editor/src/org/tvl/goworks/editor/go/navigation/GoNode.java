@@ -31,19 +31,35 @@ public class GoNode extends NavigatorNode {
         String imageName;
         switch (getDescription().getKind()) {
         case CONSTANT:
-            imageName = "global_constant.png";
+            if (getDescription().isExported()) {
+                imageName = "const_static_public.png";
+            } else {
+                imageName = "const_static_protected.png";
+            }
             break;
 
         case VARIABLE:
-            imageName = "global_variable.png";
+            if (getDescription().isExported()) {
+                imageName = "field_static_16.png";
+            } else {
+                imageName = "field_static_protected_16.png";
+            }
             break;
 
         case FIELD:
-            imageName = "fields.png";
+            if (getDescription().isExported()) {
+                imageName = "fields.png";
+            } else {
+                imageName = "field_protected_16.png";
+            }
             break;
 
         case FUNCTION:
-            imageName = "global_function.png";
+            if (getDescription().isExported()) {
+                imageName = "methods_static.png";
+            } else {
+                imageName = "methods_static_protected.png";
+            }
             break;
 
         case METHOD:
