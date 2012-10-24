@@ -1091,9 +1091,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 CodeElementModel codeElementModel = ((GoCompletionItem)entry.getValue()).getCodeElementModel();
                                 if (codeElementModel != null
                                     && codeElementModel.getPackage() != null
-                                    && !codeElementModel.getPackage().equals(getFileModel().getPackage())
-                                    && !Character.isUpperCase(codeElementModel.getName().charAt(0))) {
-                                    it.remove();
+                                    && !codeElementModel.getPackage().equals(getFileModel().getPackage())) {
+
+                                    boolean remove = !Character.isUpperCase(codeElementModel.getName().charAt(0));
+                                    if (!remove && codeElementModel instanceof AbstractCodeElementModel) {
+                                        FileModelImpl targetFileModel = ((AbstractCodeElementModel)codeElementModel).getFile();
+                                        if (targetFileModel != null && targetFileModel.getName().toLowerCase().endsWith("_test.go")) {
+                                            remove = true;
+                                        }
+                                    }
+
+                                    if (remove) {
+                                        it.remove();
+                                    }
                                 }
                             }
                         }
