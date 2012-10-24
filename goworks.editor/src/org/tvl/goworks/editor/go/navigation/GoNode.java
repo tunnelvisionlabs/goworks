@@ -166,15 +166,16 @@ public class GoNode extends NavigatorNode {
         }
 
         private static int getSortOrder(DeclarationKind kind) {
+            // functions sort before vars, but fields sort before methods
             switch (kind) {
             case CONSTANT:
                 return 0;
 
             case FUNCTION:
-            case METHOD:
+            case FIELD:
                 return 1;
 
-            case FIELD:
+            case METHOD:
             case VARIABLE:
                 return 2;
 
