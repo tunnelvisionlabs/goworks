@@ -55,7 +55,6 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
-import org.tvl.goworks.editor.go.completion.GoCompletionQuery.UnknownTypeModelImpl;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
@@ -129,6 +128,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     private final Token[] tokens;
 
     private FileModelImpl fileModel;
+    private TypeModelImpl _unknownType;
 
     private final Deque<TypeStructModelImpl> structModelStack = new ArrayDeque<TypeStructModelImpl>();
     private final Deque<TypeInterfaceModelImpl> interfaceModelStack = new ArrayDeque<TypeInterfaceModelImpl>();
@@ -179,6 +179,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         this.constContainerStack.push(this.fileModel.getConstants());
         this.varContainerStack.push(this.fileModel.getVars());
         this.functionContainerStack.push(this.fileModel.getFunctions());
+        this._unknownType = new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
     }
 
     @Override
@@ -376,7 +377,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             valueType = typeModelStack.pop();
         }
         else {
-            valueType = new UnknownTypeModelImpl(fileModel);
+            valueType = _unknownType;
         }
 
         TypeModelImpl keyType;
@@ -384,7 +385,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             keyType = typeModelStack.pop();
         }
         else {
-            keyType = new UnknownTypeModelImpl(fileModel);
+            keyType = _unknownType;
         }
 
         typeModelStack.push(new TypeMapModelImpl(keyType, valueType));
@@ -426,7 +427,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             type = typeModelStack.pop();
         }
         else {
-            type = new UnknownTypeModelImpl(fileModel);
+            type = _unknownType;
         }
 
         TypeModelImpl model = new TypeAliasModelImpl(name, type, fileModel, ctx.IDENTIFIER(), ctx);
@@ -476,7 +477,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
     })
     public void exitVarSpec(VarSpecContext ctx) {
-        TypeModelImpl explicitType = ctx.type() != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
+        TypeModelImpl explicitType = ctx.type() != null ? typeModelStack.pop() : _unknownType;
         IdentifierListContext idList = ctx.identifierList();
         ExpressionListContext expressionList = ctx.expressionList(0);
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
@@ -493,7 +494,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
                 }
 
                 if (varType == null) {
-                    varType = new UnknownTypeModelImpl(fileModel);
+                    varType = _unknownType;
                 }
 
                 VarModelImpl model = new VarModelImpl(id.getSymbol().getText(), isGlobal ? VarKind.GLOBAL : VarKind.LOCAL, varType, fileModel, id, ctx);
