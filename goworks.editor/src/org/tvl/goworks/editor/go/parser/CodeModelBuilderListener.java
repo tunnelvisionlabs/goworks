@@ -16,6 +16,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -56,12 +57,14 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.AndExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BasicLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinArgsContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompareExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionContext;
@@ -83,6 +86,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandExprContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.OrExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
@@ -98,6 +102,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.UnaryExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 import org.tvl.goworks.project.GoProject;
 
@@ -743,6 +748,56 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
                 _expressionTypes.put(ctx, type);
             }
         }
+    }
+
+    @Override
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    public void exitUnaryExpr(UnaryExprContext ctx) {
+        TypeModelImpl type = _expressionTypes.get(ctx.expression());
+        if (type == null) {
+            return;
+        }
+
+        if (ctx.op != null) {
+            switch (ctx.op.getType()) {
+            case GoLexer.Amp:
+                type = new TypePointerModelImpl(type);
+                break;
+
+            case GoLexer.Bang:
+                type = (TypeModelImpl)IntrinsicTypeModels.BOOL;
+                break;
+
+            case GoLexer.Plus:
+            case GoLexer.Minus:
+                // type unchanged
+                break;
+
+            default:
+                LOGGER.log(Level.WARNING, "Unsupported unary operator: {0}", ctx.op.getText());
+                return;
+            }
+        }
+
+        _expressionTypes.put(ctx, type);
+    }
+
+    @Override
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    public void exitCompareExpr(CompareExprContext ctx) {
+        _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
+    }
+
+    @Override
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    public void exitAndExpr(AndExprContext ctx) {
+        _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
+    }
+
+    @Override
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    public void exitOrExpr(OrExprContext ctx) {
+        _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
     }
 
     @Override
