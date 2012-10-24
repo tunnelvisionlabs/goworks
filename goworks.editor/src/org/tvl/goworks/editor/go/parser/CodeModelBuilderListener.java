@@ -33,6 +33,7 @@ import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.tvl.goworks.editor.go.codemodel.ChannelKind;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.codemodel.impl.ConstModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.FieldModelImpl;
@@ -57,6 +58,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BasicLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinArgsContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
@@ -849,6 +851,22 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             if (type != null) {
                 _expressionTypes.put(ctx, type);
             }
+        }
+    }
+
+    @Override
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_basicLiteral, version=0)
+    public void exitBasicLiteral(BasicLiteralContext ctx) {
+        if (ctx.INT_LITERAL() != null) {
+            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.INT);
+        } else if (ctx.FLOAT_LITERAL() != null) {
+            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.FLOAT64);
+        } else if (ctx.IMAGINARY_LITERAL() != null) {
+            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.COMPLEX128);
+        } else if (ctx.CharLiteral() != null) {
+            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.RUNE);
+        } else if (ctx.StringLiteral() != null) {
+            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.STRING);
         }
     }
 
