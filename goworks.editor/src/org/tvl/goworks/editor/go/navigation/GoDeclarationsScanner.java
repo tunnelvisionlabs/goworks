@@ -167,6 +167,10 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         })
         public void enterConstSpec(ConstSpecContext ctx) {
+            if (!isTopLevel(ctx)) {
+                return;
+            }
+
             IdentifierListContext idListContext = ctx.identifierList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             for (TerminalNode<Token> identifier : identifiers) {
@@ -498,6 +502,18 @@ public class GoDeclarationsScanner {
             }
 
             return false;
+        }
+
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0),
+        })
+        private boolean isTopLevel(ConstSpecContext context) {
+            if (ParseTrees.findAncestor(context, BodyContext.class) != null) {
+                return false;
+            }
+
+            return true;
         }
 
         @RuleDependencies({
