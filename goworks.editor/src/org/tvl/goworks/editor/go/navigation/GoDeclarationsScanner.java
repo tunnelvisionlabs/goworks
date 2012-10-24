@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -39,6 +40,8 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.StructTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.TypeSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.VarSpecContext;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
@@ -187,9 +190,14 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         })
         public void enterFieldDecl(FieldDeclContext ctx) {
+            if (ctx.getParent() == null || isAnonymousType((StructTypeContext)ctx.getParent())) {
+                return;
+            }
+
             IdentifierListContext idListContext = ctx.identifierList();
             if (idListContext != null) {
                 List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
@@ -208,6 +216,10 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
         public void enterInterfaceType(InterfaceTypeContext ctx) {
+            if (isAnonymousType(ctx)) {
+                return;
+            }
+
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = typeNameStack.isEmpty() ? "?interface?" : typeNameStack.peek();
 
@@ -222,12 +234,20 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0)
         public void exitInterfaceType(InterfaceTypeContext ctx) {
+            if (isAnonymousType(ctx)) {
+                return;
+            }
+
             descriptionStack.pop();
         }
 
         @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
         public void enterStructType(StructTypeContext ctx) {
+            if (isAnonymousType(ctx)) {
+                return;
+            }
+
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
 
@@ -242,17 +262,26 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0)
         public void exitStructType(StructTypeContext ctx) {
+            if (isAnonymousType(ctx)) {
+                return;
+            }
+
             descriptionStack.pop();
         }
 
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
         })
         public void enterMethodSpec(MethodSpecContext ctx) {
+            if (ctx.getParent() == null || isAnonymousType((InterfaceTypeContext)ctx.getParent())) {
+                return;
+            }
+
             if (ctx.interfaceTypeName() != null) {
                 InterfaceTypeNameContext interfaceTypeNameContext = ctx.interfaceTypeName();
                 Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
@@ -283,10 +312,15 @@ public class GoDeclarationsScanner {
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
         })
         public void exitMethodSpec(MethodSpecContext ctx) {
+            if (ctx.getParent() == null || isAnonymousType((InterfaceTypeContext)ctx.getParent())) {
+                return;
+            }
+
             if (ctx.interfaceTypeName() != null || ctx.methodName() != null) {
                 descriptionStack.pop();
             }
@@ -375,6 +409,35 @@ public class GoDeclarationsScanner {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_block, version=0)
         public void exitBlock(BlockContext ctx) {
             blockLevel--;
+        }
+
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
+        })
+        private boolean isAnonymousType(ParserRuleContext<Token> context) {
+            if (!(context instanceof InterfaceTypeContext) && !(context instanceof StructTypeContext)) {
+                throw new IllegalArgumentException();
+            }
+
+            if (context.getParent() == null) {
+                return true;
+            }
+
+            TypeLiteralContext typeLiteralContext = (TypeLiteralContext)context.getParent();
+            if (typeLiteralContext.getParent() == null) {
+                return true;
+            }
+
+            TypeContext typeContext = (TypeContext)typeLiteralContext.getParent();
+            if (!(typeContext.getParent() instanceof TypeSpecContext)) {
+                return true;
+            }
+
+            return false;
         }
 
     }
