@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -72,10 +74,13 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.IdentifierListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeNameContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.LiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
@@ -135,6 +140,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
     private final Deque<TypeModelImpl> typeModelStack = new ArrayDeque<TypeModelImpl>();
     private final Deque<FunctionModel> functionModelStack = new ArrayDeque<FunctionModel>();
+
+    private final Map<ParserRuleContext<Token>, TypeModelImpl> _expressionTypes = new HashMap<ParserRuleContext<Token>, TypeModelImpl>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, Token[] tokens) {
         Project project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
@@ -469,12 +476,26 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
     })
     public void exitVarSpec(VarSpecContext ctx) {
-        TypeModelImpl varType = ctx.type() != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
+        TypeModelImpl explicitType = ctx.type() != null ? typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(fileModel);
         IdentifierListContext idList = ctx.identifierList();
-        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
-        if (ids != null && !ids.isEmpty()) {
+        ExpressionListContext expressionList = ctx.expressionList(0);
+        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
+        List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : Collections.<ExpressionContext>emptyList();
+        if (!ids.isEmpty()) {
             boolean isGlobal = varContainerStack.peek() == fileModel.getVars();
-            for (TerminalNode<Token> id : ids) {
+            for (int i = 0; i < ids.size(); i++) {
+                TerminalNode<Token> id = ids.get(i);
+                TypeModelImpl varType = null;
+                if (ctx.type() != null) {
+                    varType = explicitType;
+                } else if (i < expressions.size()) {
+                    varType = _expressionTypes.get(expressions.get(i));
+                }
+
+                if (varType == null) {
+                    varType = new UnknownTypeModelImpl(fileModel);
+                }
+
                 VarModelImpl model = new VarModelImpl(id.getSymbol().getText(), isGlobal ? VarKind.GLOBAL : VarKind.LOCAL, varType, fileModel, id, ctx);
                 varContainerStack.peek().add(model);
             }
@@ -701,7 +722,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void exitConversion(ConversionContext ctx) {
         if (ctx.type() != null) {
-            typeModelStack.pop();
+            TypeModelImpl type = typeModelStack.pop();
+            _expressionTypes.put(ctx, type);
         }
     }
 
@@ -731,13 +753,87 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0)
     public void exitFunctionLiteral(FunctionLiteralContext ctx) {
-        typeModelStack.pop();
+        TypeModelImpl type = typeModelStack.pop();
+        _expressionTypes.put(ctx, type);
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literal, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+    })
+    public void exitOperand(OperandContext ctx) {
+        if (ctx.literal() != null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.literal());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        } else if (ctx.qualifiedIdentifier()!= null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.qualifiedIdentifier());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        } else if (ctx.methodExpr()!= null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.methodExpr());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        } else if (ctx.expression()!= null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.expression());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        }
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
+    })
+    public void exitOperandExpr(OperandExprContext ctx) {
+        if (ctx.operand() != null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.operand());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        }
     }
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0)
     public void exitCompositeLiteral(CompositeLiteralContext ctx) {
-        typeModelStack.pop();
+        TypeModelImpl type = typeModelStack.pop();
+        _expressionTypes.put(ctx, type);
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literal, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_basicLiteral, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0),
+    })
+    public void exitLiteral(LiteralContext ctx) {
+        if (ctx.basicLiteral() != null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.basicLiteral());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        } else if (ctx.compositeLiteral() != null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.compositeLiteral());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        } else if (ctx.functionLiteral() != null) {
+            TypeModelImpl type = _expressionTypes.get(ctx.functionLiteral());
+            if (type != null) {
+                _expressionTypes.put(ctx, type);
+            }
+        }
     }
 
     private static String createAnonymousTypeName(ParserRuleContext<Token> context) {
