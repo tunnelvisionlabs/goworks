@@ -11,7 +11,9 @@ package org.tvl.goworks.editor.go.navigation;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.netbeans.editor.navigation.Description;
@@ -22,11 +24,15 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple3;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BlockContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
@@ -36,6 +42,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.InterfaceTypeNameContex
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ReceiverContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
@@ -108,6 +115,13 @@ public class GoDeclarationsScanner {
         private final Deque<DeclarationDescription> descriptionStack = new ArrayDeque<DeclarationDescription>();
         private final Deque<String> typeNameStack = new ArrayDeque<String>();
 
+        private final Map<String, Description> _typeDescriptions = new HashMap<String, Description>();
+        /**
+         * Name -> Parent Node -> Method Node
+         */
+        private final List<Tuple3<String, ? extends Description, ? extends Description>> _methodDescriptions =
+            new ArrayList<Tuple3<String, ? extends Description, ? extends Description>>();
+
         private int resultLevel;
         private int blockLevel;
 
@@ -118,6 +132,21 @@ public class GoDeclarationsScanner {
 
         public DeclarationDescription getCurrentParent() {
             return descriptionStack.peek();
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFile, version=1)
+        public void exitSourceFile(SourceFileContext ctx) {
+            for (Tuple3<String, ? extends Description, ? extends Description> pair : _methodDescriptions) {
+                Description typeDescription = _typeDescriptions.get(pair.getItem1());
+                if (typeDescription == null) {
+                    continue;
+                }
+
+                Description parent = pair.getItem2();
+                parent.getChildren().remove(pair.getItem3());
+                typeDescription.getChildren().add(pair.getItem3());
+            }
         }
 
         @Override
@@ -266,6 +295,13 @@ public class GoDeclarationsScanner {
                 return;
             }
 
+            if (isTopLevel(ctx)) {
+                String name = descriptionStack.peek().getName();
+                if (!_typeDescriptions.containsKey(name)) {
+                    _typeDescriptions.put(name, descriptionStack.peek());
+                }
+            }
+
             descriptionStack.pop();
         }
 
@@ -351,6 +387,8 @@ public class GoDeclarationsScanner {
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
         })
         public void enterMethodDecl(MethodDeclContext ctx) {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
@@ -362,6 +400,14 @@ public class GoDeclarationsScanner {
             description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
             getCurrentParent().getChildren().add(description);
             description.setChildren(new ArrayList<Description>());
+
+            ReceiverContext receiverContext = ctx.receiver();
+            BaseTypeNameContext baseTypeNameContext = receiverContext != null ? receiverContext.baseTypeName() : null;
+            if (baseTypeNameContext != null && baseTypeNameContext.IDENTIFIER() != null) {
+                String receiverTypeName = baseTypeNameContext.IDENTIFIER().getText();
+                _methodDescriptions.add(Tuple.create(receiverTypeName, getCurrentParent(), description));
+            }
+
             descriptionStack.push(description);
         }
 
@@ -440,5 +486,20 @@ public class GoDeclarationsScanner {
             return false;
         }
 
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0),
+        })
+        private boolean isTopLevel(StructTypeContext context) {
+            if (isAnonymousType(context)) {
+                return false;
+            }
+
+            if (ParseTrees.findAncestor(context, BodyContext.class) != null) {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
