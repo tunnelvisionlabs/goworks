@@ -92,6 +92,11 @@ public class GoCustomIndexer extends CustomIndexer {
                 continue;
             }
 
+            if (context.isCancelled()) {
+                future.cancel(true);
+                continue;
+            }
+
             ParserData<FileModel> parserData = null;
             try {
                 parserData = future.get(0, TimeUnit.MILLISECONDS);
