@@ -1092,25 +1092,37 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                             }
                         }
 
+                        final boolean sourceTestSource = getFileModel().getName().toLowerCase().endsWith("_test.go");
+
                         for (Iterator<Map.Entry<String, CompletionItem>> it = intermediateResults.entrySet().iterator(); it.hasNext(); ) {
                             Map.Entry<String, CompletionItem> entry = it.next();
                             if (entry.getValue() instanceof GoCompletionItem) {
                                 CodeElementModel codeElementModel = ((GoCompletionItem)entry.getValue()).getCodeElementModel();
-                                if (codeElementModel != null
-                                    && codeElementModel.getPackage() != null
-                                    && !codeElementModel.getPackage().equals(getFileModel().getPackage())) {
+                                if (codeElementModel == null || codeElementModel.getPackage() == null) {
+                                    continue;
+                                }
 
-                                    boolean remove = !Character.isUpperCase(codeElementModel.getName().charAt(0));
-                                    if (!remove && codeElementModel instanceof AbstractCodeElementModel) {
-                                        FileModelImpl targetFileModel = ((AbstractCodeElementModel)codeElementModel).getFile();
-                                        if (targetFileModel != null && targetFileModel.getName().toLowerCase().endsWith("_test.go")) {
-                                            remove = true;
-                                        }
-                                    }
+                                final boolean inCurrentPackage = codeElementModel.getPackage().equals(getFileModel().getPackage());
+                                if (!inCurrentPackage && !Character.isUpperCase(codeElementModel.getName().charAt(0))) {
+                                    // item is not visible to other packages
+                                    it.remove();
+                                    continue;
+                                }
 
-                                    if (remove) {
-                                        it.remove();
-                                    }
+                                if (!(codeElementModel instanceof AbstractCodeElementModel)) {
+                                    continue;
+                                }
+
+                                FileModelImpl codeElementFile = ((AbstractCodeElementModel)codeElementModel).getFile();
+                                if (codeElementFile == null) {
+                                    continue;
+                                }
+
+                                final boolean targetTestSource = codeElementFile.getName().toLowerCase().endsWith("_test.go");
+                                if (targetTestSource && (!sourceTestSource || !inCurrentPackage)) {
+                                    // item is defined in a test source that isn't visible
+                                    it.remove();
+                                    continue;
                                 }
                             }
                         }
