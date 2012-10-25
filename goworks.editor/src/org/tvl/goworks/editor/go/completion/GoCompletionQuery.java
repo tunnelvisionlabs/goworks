@@ -113,6 +113,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeSliceModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeWrapperModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.AddExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.AndExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeContext;
@@ -158,6 +159,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.MultExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.OrExprContext;
@@ -1629,6 +1631,53 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 default:
                     LOGGER.log(Level.WARNING, "Unary operator {0} is not supported by this visitor.", ctx.op.getText());
+                    return Collections.emptyList();
+                }
+            }
+
+            @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            public Collection<? extends CodeElementModel> visitMultExpr(MultExprContext ctx) {
+                if (ctx.op == null) {
+                    return Collections.emptyList();
+                }
+
+                switch (ctx.op.getType()) {
+                case GoLexer.LeftShift:
+                case GoLexer.RightShift:
+                    return visit(ctx.expression(0));
+
+                case GoLexer.Star:
+                case GoLexer.Slash:
+                case GoLexer.Percent:
+                case GoLexer.Amp:
+                case GoLexer.AmpCaret:
+                    // this may not be absolutely precise, but for now it's close enough to make the UI work
+                    return visit(ctx.expression(0));
+
+                default:
+                    LOGGER.log(Level.WARNING, "Multiply operator {0} is not supported by this visitor.", ctx.op.getText());
+                    return Collections.emptyList();
+                }
+            }
+
+            @Override
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            public Collection<? extends CodeElementModel> visitAddExpr(AddExprContext ctx) {
+                if (ctx.op == null) {
+                    return Collections.emptyList();
+                }
+
+                switch (ctx.op.getType()) {
+                case GoLexer.Plus:
+                case GoLexer.Minus:
+                case GoLexer.Pipe:
+                case GoLexer.Caret:
+                    // this may not be absolutely precise, but for now it's close enough to make the UI work
+                    return visit(ctx.expression(0));
+
+                default:
+                    LOGGER.log(Level.WARNING, "Add operator {0} is not supported by this visitor.", ctx.op.getText());
                     return Collections.emptyList();
                 }
             }
