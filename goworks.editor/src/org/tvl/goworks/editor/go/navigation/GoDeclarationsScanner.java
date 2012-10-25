@@ -949,10 +949,10 @@ public class GoDeclarationsScanner {
         })
         public String visitArrayType(ArrayTypeContext ctx) {
             if (ctx.elementType() == null) {
-                return "[*]?";
+                return "[...]?";
             }
 
-            return "[*]" + visit(ctx.elementType());
+            return "[...]" + visit(ctx.elementType());
         }
 
         @Override
