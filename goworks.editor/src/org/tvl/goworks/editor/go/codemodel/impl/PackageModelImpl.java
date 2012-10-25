@@ -10,9 +10,8 @@ package org.tvl.goworks.editor.go.codemodel.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
@@ -23,7 +22,7 @@ import org.tvl.goworks.project.GoProject;
  * @author Sam Harwell
  */
 public class PackageModelImpl extends AbstractCodeElementModel implements PackageModel {
-    private final Map<String, FileModelImpl> files = new HashMap<String, FileModelImpl>();
+    private final ConcurrentHashMap<String, FileModelImpl> files = new ConcurrentHashMap<String, FileModelImpl>();
 
     public PackageModelImpl(String name, GoProject project, String path) {
         super(name, project, path);
