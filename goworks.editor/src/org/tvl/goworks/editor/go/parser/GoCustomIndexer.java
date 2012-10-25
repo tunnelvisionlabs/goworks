@@ -26,7 +26,6 @@ import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.antlr.netbeans.parsing.spi.impl.TaskSchedulers;
 import org.antlr.v4.runtime.misc.Tuple;
 import org.antlr.v4.runtime.misc.Tuple2;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -73,7 +72,7 @@ public class GoCustomIndexer extends CustomIndexer {
                 }
 
                 VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
-                ParseContext parseContext = new ParseContext(TaskSchedulers.getScheduler(ParserTaskScheduler.MANUAL_TASK_SCHEDULER), versionedDocument);
+                ParseContext parseContext = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, versionedDocument);
                 Future<ParserData<FileModel>> future = taskManager.scheduleData(parseContext, GoParserDataDefinitions.FILE_MODEL);
                 futures.add(Tuple.create(file, future));
                 if (context.isCancelled()) {

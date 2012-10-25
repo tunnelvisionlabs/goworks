@@ -50,7 +50,7 @@ public class GoDeclarationsScannerParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getScheduler().getClass());
+        boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getSchedulerClass());
         if (!explicitRequest && snapshot.getVersionedDocument().getDocument() == null) {
             // no update for background parsed document unless specifically requested
             return;
