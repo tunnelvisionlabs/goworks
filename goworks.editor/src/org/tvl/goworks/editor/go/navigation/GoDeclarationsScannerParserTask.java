@@ -34,6 +34,7 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
 
 /**
+ * This task computes the root node for the navigator.
  *
  * @author Sam Harwell
  */
@@ -75,14 +76,14 @@ public class GoDeclarationsScannerParserTask implements ParserTask {
                 Future<ParserData<CompiledModel>> futureParserData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL, options);
                 ParserData<CompiledModel> parserData = futureParserData != null ? futureParserData.get() : null;
                 CompiledModel model = parserData != null ? parserData.getData() : null;
+                Description description = null;
                 if (model != null) {
                     GoDeclarationsScanner scanner = getScanner(model);
-                    Description description = scanner.scan(model);
-                    if (description != null) {
-                        data = new BaseParserData<Description>(context, GoParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
-                        results.addResult(data);
-                    }
+                    description = scanner.scan(model);
                 }
+
+                data = new BaseParserData<Description>(context, GoParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+                results.addResult(data);
             }
         }
     }

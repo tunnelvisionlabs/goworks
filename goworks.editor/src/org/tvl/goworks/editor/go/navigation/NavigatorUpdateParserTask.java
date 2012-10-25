@@ -37,6 +37,7 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
 
 /**
+ * Given a navigator root node, this task refreshes the navigator window itself.
  *
  * @author Sam Harwell
  */
