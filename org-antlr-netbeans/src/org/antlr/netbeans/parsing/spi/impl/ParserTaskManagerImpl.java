@@ -154,7 +154,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return new CompletedFuture<ParserData<T>>(cachedData, null);
         }
 
-        ParseContext context = new ParseContext(TaskSchedulers.getScheduler(ManualParserTaskScheduler.class), snapshot, component);
+        ParseContext context = new ParseContext(ManualParserTaskScheduler.class, snapshot, component);
         Callable<ParserData<T>> callable = createCallable(context, definition);
         if (options.contains(ParserDataOptions.SYNCHRONOUS) || isParserThread()) {
             try {
@@ -191,15 +191,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public void reschedule(VersionedDocument document, JTextComponent component, Class<? extends ParserTaskScheduler> schedulerClass) {
-        Collection<? extends ParserTaskScheduler> schedulers = Lookup.getDefault().lookupAll(ParserTaskScheduler.class);
-        ParserTaskScheduler scheduler = null;
-        for (ParserTaskScheduler i : schedulers) {
-            if (i.getClass() == schedulerClass) {
-                scheduler = i;
-                break;
-            }
-        }
-
+        ParserTaskScheduler scheduler = TaskSchedulers.getScheduler(schedulerClass);
         if (scheduler != null) {
             @SuppressWarnings("rawtypes")
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
@@ -209,22 +201,14 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 }
             }
 
-            ParseContext context = new ParseContext(scheduler, document, component);
+            ParseContext context = new ParseContext(scheduler.getClass(), document, component);
             scheduler.schedule(context);
         }
     }
 
     @Override
     public void reschedule(VersionedDocument document, JTextComponent component, long delay, TimeUnit timeUnit, Class<? extends ParserTaskScheduler> schedulerClass) {
-        Collection<? extends ParserTaskScheduler> schedulers = Lookup.getDefault().lookupAll(ParserTaskScheduler.class);
-        ParserTaskScheduler scheduler = null;
-        for (ParserTaskScheduler i : schedulers) {
-            if (i.getClass() == schedulerClass) {
-                scheduler = i;
-                break;
-            }
-        }
-
+        ParserTaskScheduler scheduler = TaskSchedulers.getScheduler(schedulerClass);
         if (scheduler != null) {
             @SuppressWarnings("rawtypes")
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
@@ -234,7 +218,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 }
             }
 
-            ParseContext context = new ParseContext(scheduler, document, component);
+            ParseContext context = new ParseContext(scheduler.getClass(), document, component);
             scheduler.schedule(context, delay, timeUnit);
         }
     }

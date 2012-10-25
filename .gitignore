@@ -1,6 +1,7 @@
 /nbproject/private/
 */nbproject/private/
 /build/
+/dist/
 /go.project/build/
 /goworks.branding/build/
 /goworks.editor/build/
@@ -13,8 +14,10 @@
 /org-antlr-v4/build/
 /org-antlr-netbeans/build/
 /works.editor.antlr4/build/
+/works.editor.antlr4/nbproject/private/
 /works.editor.antlr3/build/
 /org-antlr-works-editor/build/
+/org-antlr-works-editor/nbproject/private/
 /tvl-editor-actions/build/
 /editor.containingfolder/build/
 /tvl.editor.whitespace/build/
