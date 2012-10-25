@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.completion;
 
 import javax.swing.ImageIcon;
+import org.antlr.netbeans.editor.navigation.Description;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
@@ -129,7 +130,7 @@ public class VarReferenceCompletionItem extends GoCompletionItem {
     @Override
     protected String getRightHtmlText() {
         if (varModel != null) {
-            String name = varModel.getVarType().getSimpleName();
+            String name = Description.htmlEscape(varModel.getVarType().getSimpleName());
             return "    " + name;
             //String name = varModel.getClass().getSimpleName();
             //name = name.substring(name.lastIndexOf('.') + 1);

@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.completion;
 
 import javax.swing.ImageIcon;
+import org.antlr.netbeans.editor.navigation.Description;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.ImageUtilities;
@@ -119,7 +120,7 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
     protected String getRightHtmlText() {
         if (constModel != null) {
             if (constModel.isTyped()) {
-                return constModel.getConstType().getName();
+                return Description.htmlEscape(constModel.getConstType().getName());
             }
 
             String unevaluated = constModel.getUnevaluatedValue();
@@ -136,11 +137,11 @@ public class ConstReferenceCompletionItem extends GoCompletionItem {
                 builder.append('(').append(evaluated).append(')');
             }
 
-            return builder.toString();
+            return Description.htmlEscape(builder.toString());
         }
 
         if (typeModel != null) {
-            return typeModel.getName();
+            return Description.htmlEscape(typeModel.getName());
         }
 
         return "";

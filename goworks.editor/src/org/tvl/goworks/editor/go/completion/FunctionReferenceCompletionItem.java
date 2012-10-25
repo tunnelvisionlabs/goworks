@@ -9,6 +9,7 @@
 package org.tvl.goworks.editor.go.completion;
 
 import javax.swing.ImageIcon;
+import org.antlr.netbeans.editor.navigation.Description;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Parameters;
@@ -165,13 +166,13 @@ public class FunctionReferenceCompletionItem extends GoCompletionItem {
     private void appendParameter(StringBuilder builder, ParameterModel parameter) {
         if (!"_".equals(parameter.getName())) {
             builder.append(PARAMETER_NAME_COLOR);
-            builder.append(parameter.getName());
+            builder.append(Description.htmlEscape(parameter.getName()));
             builder.append(COLOR_END);
             builder.append(" ");
         }
 
         builder.append(PARAMETER_TYPE_COLOR);
-        builder.append(parameter.getVarType().getSimpleName());
+        builder.append(Description.htmlEscape(parameter.getVarType().getSimpleName()));
         builder.append(COLOR_END);
     }
 
