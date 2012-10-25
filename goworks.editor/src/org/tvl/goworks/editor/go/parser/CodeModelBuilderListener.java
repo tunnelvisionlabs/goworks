@@ -63,6 +63,8 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BasicLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinArgsContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompareExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
@@ -751,6 +753,44 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
+    })
+    public void exitBuiltinCallExpr(BuiltinCallExprContext ctx) {
+        TypeModelImpl type = _expressionTypes.get(ctx.builtinCall());
+        if (type != null) {
+            _expressionTypes.put(ctx, type);
+        }
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+    })
+    public void exitBuiltinCall(BuiltinCallContext ctx) {
+        String functionName = ctx.IDENTIFIER() != null ? ctx.IDENTIFIER().getText() : null;
+        if (functionName == null || functionName.isEmpty()) {
+            return;
+        }
+
+        BuiltinArgsContext args = ctx.builtinArgs();
+        if (args == null || args.type() == null) {
+            return;
+        }
+
+        if ("make".equals(functionName)) {
+            TypeModelImpl type = _expressionTypes.get(args.type());
+            _expressionTypes.put(ctx, type);
+        } else if ("new".equals(functionName)) {
+            TypeModelImpl type = _expressionTypes.get(args.type());
+            _expressionTypes.put(ctx, new TypePointerModelImpl(type));
+        }
+    }
+
+    @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
     public void exitUnaryExpr(UnaryExprContext ctx) {
         TypeModelImpl type = _expressionTypes.get(ctx.expression());
@@ -768,6 +808,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
                 type = (TypeModelImpl)IntrinsicTypeModels.BOOL;
                 break;
 
+            case GoLexer.Caret:
             case GoLexer.Plus:
             case GoLexer.Minus:
                 // type unchanged
@@ -807,7 +848,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void exitBuiltinArgs(BuiltinArgsContext ctx) {
         if (ctx.type() != null) {
-            _typeModelStack.pop();
+            TypeModelImpl type = _typeModelStack.pop();
+            _expressionTypes.put(ctx.type(), type);
         }
     }
 
