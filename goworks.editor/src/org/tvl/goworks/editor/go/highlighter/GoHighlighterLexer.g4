@@ -12,6 +12,10 @@ options {
     abstract=true;
 }
 
+tokens {
+    INT_LITERAL,
+}
+
 @header {/*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -117,25 +121,16 @@ ML_COMMENT
     :   '/*'                                            -> pushMode(BlockComment)
     ;
 
-INT_LITERAL
-    :   DecimalLiteral
-    |   OctalLiteral
-    |   HexLiteral
-    ;
-
-fragment
 DecimalLiteral
-    :   '1'..'9' DECIMAL_DIGIT_CHAR*
+    :   '1'..'9' DECIMAL_DIGIT_CHAR*    -> type(INT_LITERAL)
     ;
 
-fragment
 OctalLiteral
-    :   '0' OCTAL_DIGIT_CHAR*
+    :   '0' OCTAL_DIGIT_CHAR*           -> type(INT_LITERAL)
     ;
 
-fragment
 HexLiteral
-    :   '0' [xX] HEX_DIGIT_CHAR+
+    :   '0' [xX] HEX_DIGIT_CHAR+        -> type(INT_LITERAL)
     ;
 
 IMAGINARY_LITERAL
