@@ -109,6 +109,10 @@ public class GoNode extends NavigatorNode {
             imageName = INTERFACE;
             break;
 
+        case TYPEDEF:
+            imageName = TYPEDEF;
+            break;
+
         case UNKNOWN:
         default:
             // TODO: use error image
@@ -181,6 +185,7 @@ public class GoNode extends NavigatorNode {
 
             case STRUCT:
             case INTERFACE:
+            case TYPEDEF:
                 return 3;
 
             case UNKNOWN:

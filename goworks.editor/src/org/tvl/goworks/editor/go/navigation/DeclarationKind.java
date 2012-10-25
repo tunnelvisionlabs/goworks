@@ -22,6 +22,7 @@ public enum DeclarationKind {
 
     STRUCT,
     INTERFACE,
+    TYPEDEF,
 
     UNKNOWN,
 

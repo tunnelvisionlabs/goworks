@@ -51,6 +51,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParametersContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.PointerTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.QualifiedIdentifierContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ReceiverContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ShortVarDeclContext;
@@ -340,6 +341,90 @@ public class GoDeclarationsScanner {
         }
 
         @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0)
+        public void enterQualifiedIdentifier(QualifiedIdentifierContext ctx) {
+            handleEnterTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0)
+        public void exitQualifiedIdentifier(QualifiedIdentifierContext ctx) {
+            handleExitTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0)
+        public void enterArrayType(ArrayTypeContext ctx) {
+            handleEnterTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0)
+        public void exitArrayType(ArrayTypeContext ctx) {
+            handleExitTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0)
+        public void enterPointerType(PointerTypeContext ctx) {
+            handleEnterTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0)
+        public void exitPointerType(PointerTypeContext ctx) {
+            handleExitTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0)
+        public void enterFunctionType(FunctionTypeContext ctx) {
+            handleEnterTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0)
+        public void exitFunctionType(FunctionTypeContext ctx) {
+            handleExitTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0)
+        public void enterSliceType(SliceTypeContext ctx) {
+            handleEnterTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0)
+        public void exitSliceType(SliceTypeContext ctx) {
+            handleExitTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0)
+        public void enterMapType(MapTypeContext ctx) {
+            handleEnterTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0)
+        public void exitMapType(MapTypeContext ctx) {
+            handleExitTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0)
+        public void enterChannelType(ChannelTypeContext ctx) {
+            handleEnterTypeAlias(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0)
+        public void exitChannelType(ChannelTypeContext ctx) {
+            handleExitTypeAlias(ctx);
+        }
+
+        @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
@@ -545,6 +630,104 @@ public class GoDeclarationsScanner {
                 return false;
             }
 
+            return true;
+        }
+
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0),
+        })
+        private boolean isTypeAlias(ParserRuleContext<Token> context, boolean topLevelOnly) {
+            switch (context.getRuleIndex()) {
+            case GoParser.RULE_qualifiedIdentifier:
+            case GoParser.RULE_arrayType:
+            case GoParser.RULE_pointerType:
+            case GoParser.RULE_functionType:
+            case GoParser.RULE_sliceType:
+            case GoParser.RULE_mapType:
+            case GoParser.RULE_channelType:
+                break;
+
+            default:
+                throw new IllegalArgumentException();
+            }
+
+            TypeSpecContext typeSpecContext = null;
+
+            if (context.getParent() instanceof TypeLiteralContext) {
+                TypeLiteralContext typeLiteralContext = (TypeLiteralContext)context.getParent();
+                if (!(typeLiteralContext.getParent() instanceof TypeContext)) {
+                    return false;
+                }
+
+                if (!(typeLiteralContext.getParent().getParent() instanceof TypeSpecContext)) {
+                    return false;
+                }
+
+                typeSpecContext = (TypeSpecContext)typeLiteralContext.getParent().getParent();
+            } else if (context.getParent() instanceof TypeNameContext) {
+                TypeNameContext typeNameContext = (TypeNameContext)context.getParent();
+                if (!(typeNameContext.getParent() instanceof TypeContext)) {
+                    return false;
+                }
+
+                if (!(typeNameContext.getParent().getParent() instanceof TypeSpecContext)) {
+                    return false;
+                }
+
+                typeSpecContext = (TypeSpecContext)typeNameContext.getParent().getParent();
+            }
+
+            if (typeSpecContext == null) {
+                return false;
+            }
+
+            if (!topLevelOnly) {
+                return true;
+            }
+
+            return ParseTrees.findAncestor(typeSpecContext, BodyContext.class) == null;
+        }
+
+        private boolean handleEnterTypeAlias(ParserRuleContext<Token> ctx) {
+            if (!isTypeAlias(ctx, false)) {
+                return false;
+            }
+
+            Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
+            String name = typeNameStack.isEmpty() ? "?" : typeNameStack.peek();
+            String signature = String.format("%s : <font color='808080'>%s</font>", Description.htmlEscape(name), HtmlSignatureVisitor.UNCOLORED.visit(ctx.getParent()));
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.TYPEDEF);
+            description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
+            description.setHtmlHeader(signature);
+            getCurrentParent().getChildren().add(description);
+            description.setChildren(new ArrayList<Description>());
+            descriptionStack.push(description);
+            return true;
+        }
+
+        private boolean handleExitTypeAlias(ParserRuleContext<Token> context) {
+            if (!isTypeAlias(context, false)) {
+                return false;
+            }
+
+            if (isTypeAlias(context, true)) {
+                String name = descriptionStack.peek().getName();
+                if (!_typeDescriptions.containsKey(name)) {
+                    _typeDescriptions.put(name, descriptionStack.peek());
+                }
+            }
+
+            descriptionStack.pop();
             return true;
         }
     }
