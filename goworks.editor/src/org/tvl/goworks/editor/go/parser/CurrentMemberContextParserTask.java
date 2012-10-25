@@ -92,14 +92,10 @@ public class CurrentMemberContextParserTask implements ParserTask {
                         input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                         GoLexer lexer = new GoLexer(input);
                         CommonTokenStream tokens = new TaskTokenStream(lexer);
-                        final GoParser parser = GoParserCache.DEFAULT.getParser(tokens);
-                        try {
-                            parser.removeErrorListeners();
-                            parser.setBuildParseTree(true);
-                            context = parser.topLevelDecl();
-                        } finally {
-                            GoParserCache.DEFAULT.putParser(parser);
-                        }
+                        final GoParser parser = GoParserFactory.DEFAULT.getParser(tokens, ParserConfiguration.PRECISE);
+                        parser.removeErrorListeners();
+                        parser.setBuildParseTree(true);
+                        context = parser.topLevelDecl();
                     }
                 }
 

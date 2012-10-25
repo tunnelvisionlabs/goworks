@@ -86,7 +86,7 @@ public class CompiledModelParser {
                 Tagger<TokenTag<Token>> tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
                 TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
                 CommonTokenStream tokenStream = new CommonTokenStream(tokenSource);
-                GoParser parser = GoParserCache.DEFAULT.getParser(tokenStream, ParserConfiguration.FASTEST);
+                GoParser parser = GoParserFactory.DEFAULT.getParser(tokenStream, ParserConfiguration.FASTEST);
                 try {
                     SyntaxErrorListener syntaxErrorListener = new SyntaxErrorListener(snapshot);
                     SourceFileContext sourceFileContext;
@@ -95,12 +95,9 @@ public class CompiledModelParser {
                             sourceFileContext = parser.sourceFile();
                         } catch (ParseCancellationException ex) {
                             if (ex.getCause() instanceof RecognitionException) {
-                                GoParserCache.DEFAULT.putParser(parser);
-                                parser = null;
-
                                 // retry with hybrid parser
                                 tokenStream.reset();
-                                parser = GoParserCache.DEFAULT.getParser(tokenStream, ParserConfiguration.HYBRID);
+                                parser = GoParserFactory.DEFAULT.getParser(tokenStream, ParserConfiguration.HYBRID);
                                 sourceFileContext = parser.sourceFile();
                             } else {
                                 throw ex;
@@ -108,12 +105,9 @@ public class CompiledModelParser {
                         }
                     } catch (ParseCancellationException ex) {
                         if (ex.getCause() instanceof RecognitionException) {
-                            GoParserCache.DEFAULT.putParser(parser);
-                            parser = null;
-
                             // retry with precise parser and default error handler
                             tokenStream.reset();
-                            parser = GoParserCache.DEFAULT.getParser(tokenStream, ParserConfiguration.PRECISE);
+                            parser = GoParserFactory.DEFAULT.getParser(tokenStream, ParserConfiguration.PRECISE);
                             parser.removeErrorListeners();
                             parser.addErrorListener(syntaxErrorListener);
                             sourceFileContext = parser.sourceFile();
@@ -137,10 +131,6 @@ public class CompiledModelParser {
                     lastResult = null;
                     lastException = null;
                     return null;
-                } finally {
-                    if (parser != null) {
-                        GoParserCache.DEFAULT.putParser(parser);
-                    }
                 }
             } catch (Throwable ex) {
                 lastSnapshot = snapshot;

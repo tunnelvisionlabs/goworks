@@ -61,7 +61,7 @@ import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.ImportDeclarationModel;
 import org.tvl.goworks.editor.go.completion.CodeCompletionGoParser;
 import org.tvl.goworks.editor.go.completion.GoForestParser;
-import org.tvl.goworks.editor.go.completion.ParserCache;
+import org.tvl.goworks.editor.go.completion.ParserFactory;
 import org.tvl.goworks.editor.go.parser.GoParser;
 
 /**
@@ -79,7 +79,6 @@ public class GoIndentTask implements IndentTask {
     private boolean fileModelDataFailed;
 
     private GoCodeStyle codeStyle;
-    private CodeCompletionGoParser parser;
 
     public GoIndentTask(Context context) {
         this.context = context;
@@ -171,95 +170,90 @@ public class GoIndentTask implements IndentTask {
         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
         Map<RuleContext<Token>, CaretReachedException> parseTrees;
-        parser = ParserCache.DEFAULT.getParser(tokens);
-        try {
-            parser.setBuildParseTree(true);
-            parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
-            @SuppressWarnings("LocalVariableHidesMemberVariable")
-            FileModel fileModel = getFileModel();
-            if (fileModel != null) {
-                Set<String> packageNames = new HashSet<String>();
-                for (ImportDeclarationModel model : fileModel.getImportDeclarations()) {
-                    String name = model.getName();
-                    if (!name.isEmpty() && !name.equals(".")) {
-                        packageNames.add(name);
-                    }
+        CodeCompletionGoParser parser = ParserFactory.DEFAULT.getParser(tokens);
+        parser.setBuildParseTree(true);
+        parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
+        @SuppressWarnings("LocalVariableHidesMemberVariable")
+        FileModel fileModel = getFileModel();
+        if (fileModel != null) {
+            Set<String> packageNames = new HashSet<String>();
+            for (ImportDeclarationModel model : fileModel.getImportDeclarations()) {
+                String name = model.getName();
+                if (!name.isEmpty() && !name.equals(".")) {
+                    packageNames.add(name);
                 }
-
-                parser.setCheckPackageNames(true);
-                parser.setPackageNames(packageNames);
             }
 
-            switch (previous.getRule()) {
-            case GoParser.RULE_topLevelDecl:
-                parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
-                break;
+            parser.setCheckPackageNames(true);
+            parser.setPackageNames(packageNames);
+        }
 
-            default:
-                parseTrees = null;
-                break;
+        switch (previous.getRule()) {
+        case GoParser.RULE_topLevelDecl:
+            parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
+            break;
+
+        default:
+            parseTrees = null;
+            break;
+        }
+
+        if (parseTrees == null) {
+            return false;
+        }
+
+        NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels =
+            new TreeMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>>();
+        for (Map.Entry<RuleContext<Token>, CaretReachedException> parseTree : parseTrees.entrySet()) {
+            if (parseTree.getValue() == null) {
+                continue;
             }
 
-            if (parseTrees == null) {
-                return false;
+            ParseTree<Token> firstNodeOnLine = findFirstNodeAfterOffset(parseTree.getKey(), endPositionOnLine.getContainingLine().getStart().getOffset());
+            if (firstNodeOnLine == null) {
+                firstNodeOnLine = parseTree.getValue().getFinalContext();
             }
 
-            NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels =
-                new TreeMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>>();
-            for (Map.Entry<RuleContext<Token>, CaretReachedException> parseTree : parseTrees.entrySet()) {
-                if (parseTree.getValue() == null) {
-                    continue;
-                }
+            if (firstNodeOnLine == null) {
+                continue;
+            }
 
-                ParseTree<Token> firstNodeOnLine = findFirstNodeAfterOffset(parseTree.getKey(), endPositionOnLine.getContainingLine().getStart().getOffset());
-                if (firstNodeOnLine == null) {
-                    firstNodeOnLine = parseTree.getValue().getFinalContext();
-                }
-
-                if (firstNodeOnLine == null) {
-                    continue;
-                }
-
-                int indentationLevel = getIndent(firstNodeOnLine);
+            int indentationLevel = getIndent(firstNodeOnLine);
 
 //                TerminalNode<Token> startNode = ParseTrees.getStartNode(parseTree.getKey());
 //                //int startLine = new SnapshotPosition(snapshot, startNode.getSymbol().getStartIndex()).getContainingLine();
 //                int lineStartOffset = context.lineStartOffset(startNode.getSymbol().getStartIndex());
 //                int outerIndent = context.lineIndent(lineStartOffset);
 
-                List<Map.Entry<RuleContext<Token>, CaretReachedException>> indentList =
-                    indentLevels.get(indentationLevel);
-                if (indentList == null) {
-                    indentList = new ArrayList<Map.Entry<RuleContext<Token>, CaretReachedException>>();
-                    indentLevels.put(indentationLevel, indentList);
-                }
-
-                indentList.add(parseTree);
+            List<Map.Entry<RuleContext<Token>, CaretReachedException>> indentList =
+                indentLevels.get(indentationLevel);
+            if (indentList == null) {
+                indentList = new ArrayList<Map.Entry<RuleContext<Token>, CaretReachedException>>();
+                indentLevels.put(indentationLevel, indentList);
             }
 
-            int indentLevel = !indentLevels.isEmpty() ? indentLevels.firstKey() : 0;
-            if (indentLevels.size() > 1) {
-                // TODO: resolve multiple possibilities (appears at least with case statements)
-            }
-
-            int startLine = NbDocument.findLineNumber(document, context.startOffset());
-            int endLine;
-            if (context.endOffset() <= context.startOffset()) {
-                endLine = startLine;
-            } else {
-                endLine = NbDocument.findLineNumber(document, context.endOffset() - 1);
-            }
-
-            for (int line = startLine; line <= endLine; line++) {
-                int currentOffset = NbDocument.findLineOffset(document, startLine);
-                context.modifyIndent(currentOffset, indentLevel);
-            }
-
-            return true;
-        } finally {
-            ParserCache.DEFAULT.putParser(parser);
-            parser = null;
+            indentList.add(parseTree);
         }
+
+        int indentLevel = !indentLevels.isEmpty() ? indentLevels.firstKey() : 0;
+        if (indentLevels.size() > 1) {
+            // TODO: resolve multiple possibilities (appears at least with case statements)
+        }
+
+        int startLine = NbDocument.findLineNumber(document, context.startOffset());
+        int endLine;
+        if (context.endOffset() <= context.startOffset()) {
+            endLine = startLine;
+        } else {
+            endLine = NbDocument.findLineNumber(document, context.endOffset() - 1);
+        }
+
+        for (int line = startLine; line <= endLine; line++) {
+            int currentOffset = NbDocument.findLineOffset(document, startLine);
+            context.modifyIndent(currentOffset, indentLevel);
+        }
+
+        return true;
     }
 
     private FileModel getFileModel() {

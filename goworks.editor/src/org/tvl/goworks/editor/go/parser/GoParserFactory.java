@@ -19,37 +19,36 @@ import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.SemanticContext;
-import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GoParserCache extends AbstractParserCache<Token, GoParser> {
-    public static final GoParserCache DEFAULT = new GoParserCache();
+public class GoParserFactory {
+    public static final GoParserFactory DEFAULT = new GoParserFactory();
 
-    @Override
-    protected GoParser createParser(TokenStream<? extends Token> input) {
+    @NonNull
+    protected GoParser createParser(@NonNull TokenStream<? extends Token> input) {
         GoParser parser = new GoParserWrapper(input);
         return parser;
     }
 
-    @Override
-    public GoParser getParser(TokenStream<? extends Token> input) {
-        GoParser result = super.getParser(input);
-        configureParser(result, ParserConfiguration.PRECISE);
-        return result;
+    @NonNull
+    public final GoParser getParser(@NonNull TokenStream<? extends Token> input) {
+        return getParser(input, ParserConfiguration.PRECISE);
     }
 
-    public GoParser getParser(TokenStream<? extends Token> input, ParserConfiguration configuration) {
-        GoParser result = super.getParser(input);
+    @NonNull
+    public GoParser getParser(@NonNull TokenStream<? extends Token> input, @NonNull ParserConfiguration configuration) {
+        GoParser result = createParser(input);
         configureParser(result, configuration);
         return result;
     }
 
-    private static void configureParser(Parser<? extends Token> parser, ParserConfiguration configuration) {
+    protected void configureParser(@NonNull Parser<? extends Token> parser, @NonNull ParserConfiguration configuration) {
         ParserATNSimulator<?> interpreter = parser.getInterpreter();
 
         // common configuration
@@ -104,7 +103,7 @@ public class GoParserCache extends AbstractParserCache<Token, GoParser> {
         }
     }
 
-    private final class GoParserWrapper extends GoParser {
+    private static final class GoParserWrapper extends GoParser {
 
         public GoParserWrapper(TokenStream<? extends Token> input) {
             super(input);

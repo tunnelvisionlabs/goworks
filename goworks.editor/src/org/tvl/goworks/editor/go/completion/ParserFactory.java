@@ -14,30 +14,29 @@ import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
-import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-public class ParserCache extends AbstractParserCache<Token, CodeCompletionGoParser> {
-    public static final ParserCache DEFAULT = new ParserCache();
+public class ParserFactory {
+    public static final ParserFactory DEFAULT = new ParserFactory();
 
-    @Override
-    protected CodeCompletionGoParser createParser(TokenStream<? extends Token> input) {
+    @NonNull
+    protected CodeCompletionGoParser createParser(@NonNull TokenStream<? extends Token> input) {
         CharStream charStream = input.getTokenSource().getInputStream();
         if (!(charStream instanceof DocumentSnapshotCharStream)) {
             throw new UnsupportedOperationException();
         }
 
         CodeCompletionGoParser parser = new CodeCompletionGoParser(input);
-        parser.removeErrorListeners();
         return parser;
     }
 
-    @Override
-    public CodeCompletionGoParser getParser(TokenStream<? extends Token> input) {
-        CodeCompletionGoParser parser = super.getParser(input);
+    @NonNull
+    public CodeCompletionGoParser getParser(@NonNull TokenStream<? extends Token> input) {
+        CodeCompletionGoParser parser = createParser(input);
 
         parser.removeErrorListeners();
         parser.setBuildParseTree(false);

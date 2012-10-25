@@ -8,10 +8,6 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.Map;
-import java.util.WeakHashMap;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -26,8 +22,6 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<SimpleLexerState> {
-    private static final Map<Thread, Reference<GoLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<GoLexerWrapper>>();
-
     public GoTokensTaskTaggerSnapshot(@NonNull DocumentSnapshot snapshot) {
         super(snapshot);
     }
@@ -43,24 +37,14 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
 
     @Override
     protected TokenSourceWithStateV4<Token, SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
-        synchronized (lexerCache) {
-            Reference<GoLexerWrapper> ref = lexerCache.get(Thread.currentThread());
-            GoLexerWrapper lexer = ref != null ? ref.get() : null;
-            if (lexer == null) {
-                lexer = new GoLexerWrapper(input);
-                lexerCache.put(Thread.currentThread(), new SoftReference<GoLexerWrapper>(lexer));
-            } else {
-                lexer.setInputStream(input);
-            }
-
-            startState.apply(lexer);
-            return lexer;
-        }
+        GoLexerWrapper lexer = new GoLexerWrapper(input);
+        startState.apply(lexer);
+        return lexer;
     }
 
     @Override
     protected TokenSource<Token> getEffectiveTokenSource(TokenSourceWithStateV4<Token, SimpleLexerState> lexer) {
-        return new GoLexerWrapper(lexer.getInputStream());
+        return lexer;
     }
 
     @Override
@@ -81,7 +65,6 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
 
         @Override
         public void close() {
-            // TODO: return this lexer to the lexer cache
         }
     }
 }
