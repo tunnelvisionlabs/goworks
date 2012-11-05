@@ -14,7 +14,6 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
-import org.antlr.v4.runtime.atn.RangeTransition;
 import org.antlr.v4.runtime.atn.SetTransition;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -192,7 +191,6 @@ public class GoHighlighterLexer extends AbstractGoHighlighterLexer {
         }
 
         protected void resetAcceptPosition(CharStream input, int index, int line, int charPositionInLine) {
-            traceSeek(index);
             input.seek(index);
             this.line = line;
             this.charPositionInLine = charPositionInLine;

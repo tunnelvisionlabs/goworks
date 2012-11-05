@@ -203,30 +203,29 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 0, RULE_type);
 		try {
 			setState(230);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(224); typeName();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(224); typeName();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(225); typeLiteral();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(225); typeLiteral();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(226); match(LeftParen);
-					setState(227); type();
-					setState(228); match(RightParen);
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(226); match(LeftParen);
+				setState(227); type();
+				setState(228); match(RightParen);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -334,63 +333,62 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 4, RULE_typeLiteral);
 		try {
 			setState(242);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(234); arrayType();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(234); arrayType();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(235); structType();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(235); structType();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(236); pointerType();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(236); pointerType();
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(237); functionType();
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(237); functionType();
+				}
+				break;
 
-				case 5:
-					enterOuterAlt(_localctx, 5);
-					{
-					setState(238); interfaceType();
-					}
-					break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(238); interfaceType();
+				}
+				break;
 
-				case 6:
-					enterOuterAlt(_localctx, 6);
-					{
-					setState(239); sliceType();
-					}
-					break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(239); sliceType();
+				}
+				break;
 
-				case 7:
-					enterOuterAlt(_localctx, 7);
-					{
-					setState(240); mapType();
-					}
-					break;
+			case 7:
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(240); mapType();
+				}
+				break;
 
-				case 8:
-					enterOuterAlt(_localctx, 8);
-					{
-					setState(241); channelType();
-					}
-					break;
+			case 8:
+				enterOuterAlt(_localctx, 8);
+				{
+				setState(241); channelType();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -641,13 +639,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			}
 			setState(268);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
-				case 1:
-					{
-					setState(267); fieldDecl();
-					}
-					break;
+			case 1:
+				{
+				setState(267); fieldDecl();
+				}
+				break;
 			}
 			setState(270); match(RightBrace);
 			}
@@ -703,29 +700,27 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(276);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
-				case 1:
-					{
-					setState(272); identifierList();
-					setState(273); type();
-					}
-					break;
+			case 1:
+				{
+				setState(272); identifierList();
+				setState(273); type();
+				}
+				break;
 
-				case 2:
-					{
-					setState(275); anonymousField();
-					}
-					break;
+			case 2:
+				{
+				setState(275); anonymousField();
+				}
+				break;
 			}
 			setState(279);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
-				case 1:
-					{
-					setState(278); tag();
-					}
-					break;
+			case 1:
+				{
+				setState(278); tag();
+				}
+				break;
 			}
 			}
 		}
@@ -772,13 +767,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(282);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
-				case 1:
-					{
-					setState(281); _localctx.ptr = match(Star);
-					}
-					break;
+			case 1:
+				{
+				setState(281); _localctx.ptr = match(Star);
+				}
+				break;
 			}
 			setState(284); typeName();
 			}
@@ -1006,13 +1000,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(296); parameters();
 			setState(298);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
-				case 1:
-					{
-					setState(297); result();
-					}
-					break;
+			case 1:
+				{
+				setState(297); result();
+				}
+				break;
 			}
 			}
 		}
@@ -1059,21 +1052,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 30, RULE_result);
 		try {
 			setState(302);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(300); parameters();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(300); parameters();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(301); type();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(301); type();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1119,22 +1111,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(304); match(LeftParen);
 			setState(309);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
+			case 1:
+				{
+				setState(305); parameterList();
+				setState(307);
+				switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 				case 1:
 					{
-					setState(305); parameterList();
-					setState(307);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
-						case 1:
-							{
-							setState(306); match(Comma);
-							}
-							break;
-					}
+					setState(306); match(Comma);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			setState(311); match(RightParen);
 			}
@@ -1249,22 +1239,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(322);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
-				case 1:
-					{
-					setState(321); identifierList();
-					}
-					break;
+			case 1:
+				{
+				setState(321); identifierList();
+				}
+				break;
 			}
 			setState(325);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
-				case 1:
-					{
-					setState(324); _localctx.ellip = match(Ellipsis);
-					}
-					break;
+			case 1:
+				{
+				setState(324); _localctx.ellip = match(Ellipsis);
+				}
+				break;
 			}
 			setState(327); type();
 			}
@@ -1317,38 +1305,36 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			setState(329); match(Interface);
 			setState(330); match(LeftBrace);
 			setState(342);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
-				case 1:
-					{
-					setState(331); methodSpec();
-					setState(336);
+			case 1:
+				{
+				setState(331); methodSpec();
+				setState(336);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(332); match(Semi);
+						setState(333); methodSpec();
+						}
+						} 
+					}
+					setState(338);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(332); match(Semi);
-							setState(333); methodSpec();
-							}
-							} 
-						}
-						setState(338);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
-					}
-					setState(340);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
-						case 1:
-							{
-							setState(339); match(Semi);
-							}
-							break;
-					}
+				}
+				setState(340);
+				switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
+				case 1:
+					{
+					setState(339); match(Semi);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			setState(344); match(RightBrace);
 			}
@@ -1399,22 +1385,21 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 40, RULE_methodSpec);
 		try {
 			setState(350);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(346); methodName();
-					setState(347); signature();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(346); methodName();
+				setState(347); signature();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(349); interfaceTypeName();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(349); interfaceTypeName();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1642,29 +1627,27 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(370);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
+			case 1:
+				{
+				setState(364); match(Chan);
+				setState(366);
+				switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
 				case 1:
 					{
-					setState(364); match(Chan);
-					setState(366);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
-						case 1:
-							{
-							setState(365); _localctx.send = match(LeftArrow);
-							}
-							break;
-					}
+					setState(365); _localctx.send = match(LeftArrow);
 					}
 					break;
+				}
+				}
+				break;
 
-				case 2:
-					{
-					setState(368); _localctx.recv = match(LeftArrow);
-					setState(369); match(Chan);
-					}
-					break;
+			case 2:
+				{
+				setState(368); _localctx.recv = match(LeftArrow);
+				setState(369); match(Chan);
+				}
+				break;
 			}
 			setState(372); elementType();
 			}
@@ -1716,38 +1699,36 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(374); match(LeftBrace);
 			setState(386);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
-				case 1:
-					{
-					setState(375); statement();
-					setState(380);
+			case 1:
+				{
+				setState(375); statement();
+				setState(380);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(376); match(Semi);
+						setState(377); statement();
+						}
+						} 
+					}
+					setState(382);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(376); match(Semi);
-							setState(377); statement();
-							}
-							} 
-						}
-						setState(382);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
-					}
-					setState(384);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
-						case 1:
-							{
-							setState(383); match(Semi);
-							}
-							break;
-					}
+				}
+				setState(384);
+				switch ( getInterpreter().adaptivePredict(_input,21,_ctx) ) {
+				case 1:
+					{
+					setState(383); match(Semi);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			setState(388); match(RightBrace);
 			}
@@ -1798,28 +1779,27 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 54, RULE_declaration);
 		try {
 			setState(393);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,23,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(390); constDecl();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(390); constDecl();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(391); typeDecl();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(391); typeDecl();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(392); varDecl();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(392); varDecl();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1868,28 +1848,27 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 56, RULE_topLevelDecl);
 		try {
 			setState(398);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,24,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(395); declaration();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(395); declaration();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(396); functionDecl();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(396); functionDecl();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(397); methodDecl();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(397); methodDecl();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1939,54 +1918,51 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(400); match(Const);
 			setState(417);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
+			case 1:
+				{
+				setState(401); constSpec();
+				}
+				break;
+
+			case 2:
+				{
+				setState(402); match(LeftParen);
+				setState(414);
+				switch ( getInterpreter().adaptivePredict(_input,27,_ctx) ) {
 				case 1:
 					{
-					setState(401); constSpec();
-					}
-					break;
-
-				case 2:
-					{
-					setState(402); match(LeftParen);
-					setState(414);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,27,_ctx) ) {
-						case 1:
+					setState(403); constSpec();
+					setState(408);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
-							setState(403); constSpec();
-							setState(408);
-							_errHandler.sync(this);
-							_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
-							while ( _alt!=2 && _alt!=-1 ) {
-								if ( _alt==1 ) {
-									{
-									{
-									setState(404); match(Semi);
-									setState(405); constSpec();
-									}
-									} 
-								}
-								setState(410);
-								_errHandler.sync(this);
-								_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
+							{
+							setState(404); match(Semi);
+							setState(405); constSpec();
 							}
-							setState(412);
-							//_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,26,_ctx) ) {
-								case 1:
-									{
-									setState(411); match(Semi);
-									}
-									break;
-							}
-							}
-							break;
+							} 
+						}
+						setState(410);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
 					}
-					setState(416); match(RightParen);
+					setState(412);
+					switch ( getInterpreter().adaptivePredict(_input,26,_ctx) ) {
+					case 1:
+						{
+						setState(411); match(Semi);
+						}
+						break;
+					}
 					}
 					break;
+				}
+				setState(416); match(RightParen);
+				}
+				break;
 			}
 			}
 		}
@@ -2039,23 +2015,21 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(419); identifierList();
 			setState(425);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,30,_ctx) ) {
+			case 1:
+				{
+				setState(421);
+				switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
 				case 1:
 					{
-					setState(421);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,29,_ctx) ) {
-						case 1:
-							{
-							setState(420); type();
-							}
-							break;
-					}
-					setState(423); match(Equal);
-					setState(424); expressionList();
+					setState(420); type();
 					}
 					break;
+				}
+				setState(423); match(Equal);
+				setState(424); expressionList();
+				}
+				break;
 			}
 			}
 		}
@@ -2232,54 +2206,51 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(443); match(Type);
 			setState(460);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,36,_ctx) ) {
+			case 1:
+				{
+				setState(444); typeSpec();
+				}
+				break;
+
+			case 2:
+				{
+				setState(445); match(LeftParen);
+				setState(457);
+				switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
 				case 1:
 					{
-					setState(444); typeSpec();
-					}
-					break;
-
-				case 2:
-					{
-					setState(445); match(LeftParen);
-					setState(457);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
-						case 1:
+					setState(446); typeSpec();
+					setState(451);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
-							setState(446); typeSpec();
-							setState(451);
-							_errHandler.sync(this);
-							_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
-							while ( _alt!=2 && _alt!=-1 ) {
-								if ( _alt==1 ) {
-									{
-									{
-									setState(447); match(Semi);
-									setState(448); typeSpec();
-									}
-									} 
-								}
-								setState(453);
-								_errHandler.sync(this);
-								_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
+							{
+							setState(447); match(Semi);
+							setState(448); typeSpec();
 							}
-							setState(455);
-							//_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
-								case 1:
-									{
-									setState(454); match(Semi);
-									}
-									break;
-							}
-							}
-							break;
+							} 
+						}
+						setState(453);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
 					}
-					setState(459); match(RightParen);
+					setState(455);
+					switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
+					case 1:
+						{
+						setState(454); match(Semi);
+						}
+						break;
+					}
 					}
 					break;
+				}
+				setState(459); match(RightParen);
+				}
+				break;
 			}
 			}
 		}
@@ -2376,54 +2347,51 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(465); match(Var);
 			setState(482);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,40,_ctx) ) {
+			case 1:
+				{
+				setState(466); varSpec();
+				}
+				break;
+
+			case 2:
+				{
+				setState(467); match(LeftParen);
+				setState(479);
+				switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
 				case 1:
 					{
-					setState(466); varSpec();
-					}
-					break;
-
-				case 2:
-					{
-					setState(467); match(LeftParen);
-					setState(479);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
-						case 1:
+					setState(468); varSpec();
+					setState(473);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,37,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
-							setState(468); varSpec();
-							setState(473);
-							_errHandler.sync(this);
-							_alt = getInterpreter().adaptivePredict(_input,37,_ctx);
-							while ( _alt!=2 && _alt!=-1 ) {
-								if ( _alt==1 ) {
-									{
-									{
-									setState(469); match(Semi);
-									setState(470); varSpec();
-									}
-									} 
-								}
-								setState(475);
-								_errHandler.sync(this);
-								_alt = getInterpreter().adaptivePredict(_input,37,_ctx);
+							{
+							setState(469); match(Semi);
+							setState(470); varSpec();
 							}
-							setState(477);
-							//_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
-								case 1:
-									{
-									setState(476); match(Semi);
-									}
-									break;
-							}
-							}
-							break;
+							} 
+						}
+						setState(475);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input,37,_ctx);
 					}
-					setState(481); match(RightParen);
+					setState(477);
+					switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
+					case 1:
+						{
+						setState(476); match(Semi);
+						}
+						break;
+					}
 					}
 					break;
+				}
+				setState(481); match(RightParen);
+				}
+				break;
 			}
 			}
 		}
@@ -2479,30 +2447,28 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(484); identifierList();
 			setState(492);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
+			case 1:
+				{
+				setState(485); type();
+				setState(488);
+				switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 				case 1:
 					{
-					setState(485); type();
-					setState(488);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
-						case 1:
-							{
-							setState(486); match(Equal);
-							setState(487); expressionList();
-							}
-							break;
-					}
+					setState(486); match(Equal);
+					setState(487); expressionList();
 					}
 					break;
+				}
+				}
+				break;
 
-				case 2:
-					{
-					setState(490); match(Equal);
-					setState(491); expressionList();
-					}
-					break;
+			case 2:
+				{
+				setState(490); match(Equal);
+				setState(491); expressionList();
+				}
+				break;
 			}
 			}
 		}
@@ -2604,13 +2570,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			setState(499); match(IDENTIFIER);
 			setState(500); signature();
 			setState(502);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,43,_ctx) ) {
-				case 1:
-					{
-					setState(501); body();
-					}
-					break;
+			case 1:
+				{
+				setState(501); body();
+				}
+				break;
 			}
 			}
 		}
@@ -2713,13 +2678,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			setState(508); methodName();
 			setState(509); signature();
 			setState(511);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,44,_ctx) ) {
-				case 1:
-					{
-					setState(510); body();
-					}
-					break;
+			case 1:
+				{
+				setState(510); body();
+				}
+				break;
 			}
 			}
 		}
@@ -2768,22 +2732,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(513); match(LeftParen);
 			setState(515);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,45,_ctx) ) {
-				case 1:
-					{
-					setState(514); match(IDENTIFIER);
-					}
-					break;
+			case 1:
+				{
+				setState(514); match(IDENTIFIER);
+				}
+				break;
 			}
 			setState(518);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,46,_ctx) ) {
-				case 1:
-					{
-					setState(517); _localctx.ptr = match(Star);
-					}
-					break;
+			case 1:
+				{
+				setState(517); _localctx.ptr = match(Star);
+				}
+				break;
 			}
 			setState(520); baseTypeName();
 			setState(521); match(RightParen);
@@ -2880,37 +2842,36 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 86, RULE_operand);
 		try {
 			setState(532);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,47,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(525); literal();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(525); literal();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(526); qualifiedIdentifier();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(526); qualifiedIdentifier();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(527); methodExpr();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(527); methodExpr();
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(528); match(LeftParen);
-					setState(529); expression(0);
-					setState(530); match(RightParen);
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(528); match(LeftParen);
+				setState(529); expression(0);
+				setState(530); match(RightParen);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -2959,28 +2920,27 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 88, RULE_literal);
 		try {
 			setState(537);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,48,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(534); basicLiteral();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(534); basicLiteral();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(535); compositeLiteral();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(535); compositeLiteral();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(536); functionLiteral();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(536); functionLiteral();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3080,16 +3040,15 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(545);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,49,_ctx) ) {
-				case 1:
-					{
-					setState(541);
-					if (!(isPackageName(_input.LT(1)))) throw new FailedPredicateException(this, "isPackageName(_input.LT(1))");
-					setState(542); packageName();
-					setState(543); _localctx.dot = match(Dot);
-					}
-					break;
+			case 1:
+				{
+				setState(541);
+				if (!(isPackageName(_input.LT(1)))) throw new FailedPredicateException(this, "isPackageName(_input.LT(1))");
+				setState(542); packageName();
+				setState(543); _localctx.dot = match(Dot);
+				}
+				break;
 			}
 			setState(547); match(IDENTIFIER);
 			}
@@ -3185,24 +3144,23 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 96, RULE_receiverType);
 		try {
 			setState(559);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,50,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(553); typeName();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(553); typeName();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(554); match(LeftParen);
-					setState(555); _localctx.ptr = match(Star);
-					setState(556); typeName();
-					setState(557); match(RightParen);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(554); match(LeftParen);
+				setState(555); _localctx.ptr = match(Star);
+				setState(556); typeName();
+				setState(557); match(RightParen);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3308,52 +3266,51 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 100, RULE_literalType);
 		try {
 			setState(573);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,51,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(564); structType();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(564); structType();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(565); arrayType();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(565); arrayType();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(566); match(LeftBrack);
-					setState(567); match(Ellipsis);
-					setState(568); match(RightBrack);
-					setState(569); elementType();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(566); match(LeftBrack);
+				setState(567); match(Ellipsis);
+				setState(568); match(RightBrack);
+				setState(569); elementType();
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(570); sliceType();
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(570); sliceType();
+				}
+				break;
 
-				case 5:
-					enterOuterAlt(_localctx, 5);
-					{
-					setState(571); mapType();
-					}
-					break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(571); mapType();
+				}
+				break;
 
-				case 6:
-					enterOuterAlt(_localctx, 6);
-					{
-					setState(572); typeName();
-					}
-					break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(572); typeName();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3399,22 +3356,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(575); match(LeftBrace);
 			setState(580);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,53,_ctx) ) {
+			case 1:
+				{
+				setState(576); elementList();
+				setState(578);
+				switch ( getInterpreter().adaptivePredict(_input,52,_ctx) ) {
 				case 1:
 					{
-					setState(576); elementList();
-					setState(578);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,52,_ctx) ) {
-						case 1:
-							{
-							setState(577); match(Comma);
-							}
-							break;
-					}
+					setState(577); match(Comma);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			setState(582); match(RightBrace);
 			}
@@ -3528,14 +3483,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(595);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,55,_ctx) ) {
-				case 1:
-					{
-					setState(592); key();
-					setState(593); match(Colon);
-					}
-					break;
+			case 1:
+				{
+				setState(592); key();
+				setState(593); match(Colon);
+				}
+				break;
 			}
 			setState(597); value();
 			}
@@ -3583,21 +3537,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 108, RULE_key);
 		try {
 			setState(601);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,56,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(599); fieldName();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(599); fieldName();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(600); elementIndex();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(600); elementIndex();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3729,21 +3682,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 114, RULE_value);
 		try {
 			setState(609);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,57,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(607); expression(0);
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(607); expression(0);
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(608); literalValue();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(608); literalValue();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4141,51 +4093,50 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(620);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
-				case 1:
-					{
-					_localctx = new UnaryExprContext(_localctx);
-					_ctx = _localctx;
-					_prevctx = _localctx;
+			case 1:
+				{
+				_localctx = new UnaryExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 
-					setState(615);
-					((UnaryExprContext)_localctx).op = _input.LT(1);
-					_la = _input.LA(1);
-					if ( !(_la==Plus || _la==Minus || _la==Star || _la==Amp || _la==Caret || _la==LeftArrow || _la==Bang) ) {
-						((UnaryExprContext)_localctx).op = _errHandler.recoverInline(this);
-					}
-					consume();
-					setState(616); expression(7);
-					}
-					break;
+				setState(615);
+				((UnaryExprContext)_localctx).op = _input.LT(1);
+				_la = _input.LA(1);
+				if ( !(_la==Plus || _la==Minus || _la==Star || _la==Amp || _la==Caret || _la==LeftArrow || _la==Bang) ) {
+					((UnaryExprContext)_localctx).op = _errHandler.recoverInline(this);
+				}
+				consume();
+				setState(616); expression(7);
+				}
+				break;
 
-				case 2:
-					{
-					_localctx = new ConversionOrCallExprContext(_localctx);
-					_ctx = _localctx;
-					_prevctx = _localctx;
-					setState(617); conversion();
-					}
-					break;
+			case 2:
+				{
+				_localctx = new ConversionOrCallExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(617); conversion();
+				}
+				break;
 
-				case 3:
-					{
-					_localctx = new BuiltinCallExprContext(_localctx);
-					_ctx = _localctx;
-					_prevctx = _localctx;
-					setState(618); builtinCall();
-					}
-					break;
+			case 3:
+				{
+				_localctx = new BuiltinCallExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(618); builtinCall();
+				}
+				break;
 
-				case 4:
-					{
-					_localctx = new OperandExprContext(_localctx);
-					_ctx = _localctx;
-					_prevctx = _localctx;
-					setState(619); operand();
-					}
-					break;
+			case 4:
+				{
+				_localctx = new OperandExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(619); operand();
+				}
+				break;
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(672);
@@ -4197,175 +4148,170 @@ public abstract class AbstractGoParser extends Parser<Token> {
 					_prevctx = _localctx;
 					{
 					setState(670);
-					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
+					case 1:
+						{
+						_localctx = new MultExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(622);
+						if (!(6 >= _localctx._p)) throw new FailedPredicateException(this, "6 >= $_p");
+						setState(623);
+						((MultExprContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==Star || _la==Slash || _la==Percent || _la==Amp || _la==LeftShift || _la==RightShift || _la==AmpCaret) ) {
+							((MultExprContext)_localctx).op = _errHandler.recoverInline(this);
+						}
+						consume();
+						setState(624); expression(7);
+						}
+						break;
+
+					case 2:
+						{
+						_localctx = new AddExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(625);
+						if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
+						setState(626);
+						((AddExprContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==Plus || _la==Minus || _la==Pipe || _la==Caret) ) {
+							((AddExprContext)_localctx).op = _errHandler.recoverInline(this);
+						}
+						consume();
+						setState(627); expression(6);
+						}
+						break;
+
+					case 3:
+						{
+						_localctx = new CompareExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(628);
+						if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
+						setState(629);
+						((CompareExprContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==EqualEqual || _la==LessThan || _la==GreaterThan || _la==BangEqual || _la==LessEqual || _la==GreaterEqual) ) {
+							((CompareExprContext)_localctx).op = _errHandler.recoverInline(this);
+						}
+						consume();
+						setState(630); expression(5);
+						}
+						break;
+
+					case 4:
+						{
+						_localctx = new AndExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(631);
+						if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
+						setState(632); match(And);
+						setState(633); expression(4);
+						}
+						break;
+
+					case 5:
+						{
+						_localctx = new OrExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(634);
+						if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
+						setState(635); match(Or);
+						setState(636); expression(3);
+						}
+						break;
+
+					case 6:
+						{
+						_localctx = new SelectorExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(637);
+						if (!(12 >= _localctx._p)) throw new FailedPredicateException(this, "12 >= $_p");
+						setState(638); ((SelectorExprContext)_localctx).dot = match(Dot);
+						setState(639); match(IDENTIFIER);
+						}
+						break;
+
+					case 7:
+						{
+						_localctx = new IndexExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(640);
+						if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
+						setState(641); match(LeftBrack);
+						setState(642); expression(0);
+						setState(643); match(RightBrack);
+						}
+						break;
+
+					case 8:
+						{
+						_localctx = new SliceExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(645);
+						if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
+						setState(646); match(LeftBrack);
+						setState(648);
+						switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
 						case 1:
 							{
-							_localctx = new MultExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(622);
-							if (!(6 >= _localctx._p)) throw new FailedPredicateException(this, "6 >= $_p");
-							setState(623);
-							((MultExprContext)_localctx).op = _input.LT(1);
-							_la = _input.LA(1);
-							if ( !(_la==Star || _la==Slash || _la==Percent || _la==Amp || _la==LeftShift || _la==RightShift || _la==AmpCaret) ) {
-								((MultExprContext)_localctx).op = _errHandler.recoverInline(this);
-							}
-							consume();
-							setState(624); expression(7);
+							setState(647); ((SliceExprContext)_localctx).from = expression(0);
 							}
 							break;
-
-						case 2:
+						}
+						setState(650); match(Colon);
+						setState(652);
+						switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
+						case 1:
 							{
-							_localctx = new AddExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(625);
-							if (!(5 >= _localctx._p)) throw new FailedPredicateException(this, "5 >= $_p");
-							setState(626);
-							((AddExprContext)_localctx).op = _input.LT(1);
-							_la = _input.LA(1);
-							if ( !(_la==Plus || _la==Minus || _la==Pipe || _la==Caret) ) {
-								((AddExprContext)_localctx).op = _errHandler.recoverInline(this);
-							}
-							consume();
-							setState(627); expression(6);
+							setState(651); ((SliceExprContext)_localctx).to = expression(0);
 							}
 							break;
+						}
+						setState(654); match(RightBrack);
+						}
+						break;
 
-						case 3:
-							{
-							_localctx = new CompareExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(628);
-							if (!(4 >= _localctx._p)) throw new FailedPredicateException(this, "4 >= $_p");
-							setState(629);
-							((CompareExprContext)_localctx).op = _input.LT(1);
-							_la = _input.LA(1);
-							if ( !(_la==EqualEqual || _la==LessThan || _la==GreaterThan || _la==BangEqual || _la==LessEqual || _la==GreaterEqual) ) {
-								((CompareExprContext)_localctx).op = _errHandler.recoverInline(this);
-							}
-							consume();
-							setState(630); expression(5);
-							}
-							break;
+					case 9:
+						{
+						_localctx = new TypeAssertionExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(655);
+						if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
+						setState(656); ((TypeAssertionExprContext)_localctx).dot = match(Dot);
+						setState(657); ((TypeAssertionExprContext)_localctx).lp = match(LeftParen);
+						setState(658); type();
+						setState(659); ((TypeAssertionExprContext)_localctx).rp = match(RightParen);
+						}
+						break;
 
-						case 4:
+					case 10:
+						{
+						_localctx = new CallExprContext(new ExpressionContext(_parentctx, _parentState, _p));
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(661);
+						if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
+						setState(662); ((CallExprContext)_localctx).lp = match(LeftParen);
+						setState(667);
+						switch ( getInterpreter().adaptivePredict(_input,62,_ctx) ) {
+						case 1:
 							{
-							_localctx = new AndExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(631);
-							if (!(3 >= _localctx._p)) throw new FailedPredicateException(this, "3 >= $_p");
-							setState(632); match(And);
-							setState(633); expression(4);
+							setState(663); argumentList();
+							setState(665);
+							switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
+							case 1:
+								{
+								setState(664); match(Comma);
+								}
+								break;
+							}
 							}
 							break;
-
-						case 5:
-							{
-							_localctx = new OrExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(634);
-							if (!(2 >= _localctx._p)) throw new FailedPredicateException(this, "2 >= $_p");
-							setState(635); match(Or);
-							setState(636); expression(3);
-							}
-							break;
-
-						case 6:
-							{
-							_localctx = new SelectorExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(637);
-							if (!(12 >= _localctx._p)) throw new FailedPredicateException(this, "12 >= $_p");
-							setState(638); ((SelectorExprContext)_localctx).dot = match(Dot);
-							setState(639); match(IDENTIFIER);
-							}
-							break;
-
-						case 7:
-							{
-							_localctx = new IndexExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(640);
-							if (!(11 >= _localctx._p)) throw new FailedPredicateException(this, "11 >= $_p");
-							setState(641); match(LeftBrack);
-							setState(642); expression(0);
-							setState(643); match(RightBrack);
-							}
-							break;
-
-						case 8:
-							{
-							_localctx = new SliceExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(645);
-							if (!(10 >= _localctx._p)) throw new FailedPredicateException(this, "10 >= $_p");
-							setState(646); match(LeftBrack);
-							setState(648);
-							//_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,59,_ctx) ) {
-								case 1:
-									{
-									setState(647); ((SliceExprContext)_localctx).from = expression(0);
-									}
-									break;
-							}
-							setState(650); match(Colon);
-							setState(652);
-							//_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
-								case 1:
-									{
-									setState(651); ((SliceExprContext)_localctx).to = expression(0);
-									}
-									break;
-							}
-							setState(654); match(RightBrack);
-							}
-							break;
-
-						case 9:
-							{
-							_localctx = new TypeAssertionExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(655);
-							if (!(9 >= _localctx._p)) throw new FailedPredicateException(this, "9 >= $_p");
-							setState(656); ((TypeAssertionExprContext)_localctx).dot = match(Dot);
-							setState(657); ((TypeAssertionExprContext)_localctx).lp = match(LeftParen);
-							setState(658); type();
-							setState(659); ((TypeAssertionExprContext)_localctx).rp = match(RightParen);
-							}
-							break;
-
-						case 10:
-							{
-							_localctx = new CallExprContext(new ExpressionContext(_parentctx, _parentState, _p));
-							pushNewRecursionContext(_localctx, _startState, RULE_expression);
-							setState(661);
-							if (!(8 >= _localctx._p)) throw new FailedPredicateException(this, "8 >= $_p");
-							setState(662); ((CallExprContext)_localctx).lp = match(LeftParen);
-							setState(667);
-							//_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,62,_ctx) ) {
-								case 1:
-									{
-									setState(663); argumentList();
-									setState(665);
-									//_errHandler.sync(this);
-									switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
-										case 1:
-											{
-											setState(664); match(Comma);
-											}
-											break;
-									}
-									}
-									break;
-							}
-							setState(669); ((CallExprContext)_localctx).rp = match(RightParen);
-							}
-							break;
+						}
+						setState(669); ((CallExprContext)_localctx).rp = match(RightParen);
+						}
+						break;
 					}
 					} 
 				}
@@ -4419,13 +4365,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(675); expressionList();
 			setState(677);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
-				case 1:
-					{
-					setState(676); _localctx.ellip = match(Ellipsis);
-					}
-					break;
+			case 1:
+				{
+				setState(676); _localctx.ellip = match(Ellipsis);
+				}
+				break;
 			}
 			}
 		}
@@ -4561,112 +4506,111 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 124, RULE_statement);
 		try {
 			setState(699);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,66,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(684); declaration();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(684); declaration();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(685); labeledStmt();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(685); labeledStmt();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(686); simpleStmt();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(686); simpleStmt();
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(687); goStmt();
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(687); goStmt();
+				}
+				break;
 
-				case 5:
-					enterOuterAlt(_localctx, 5);
-					{
-					setState(688); returnStmt();
-					}
-					break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(688); returnStmt();
+				}
+				break;
 
-				case 6:
-					enterOuterAlt(_localctx, 6);
-					{
-					setState(689); breakStmt();
-					}
-					break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(689); breakStmt();
+				}
+				break;
 
-				case 7:
-					enterOuterAlt(_localctx, 7);
-					{
-					setState(690); continueStmt();
-					}
-					break;
+			case 7:
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(690); continueStmt();
+				}
+				break;
 
-				case 8:
-					enterOuterAlt(_localctx, 8);
-					{
-					setState(691); gotoStmt();
-					}
-					break;
+			case 8:
+				enterOuterAlt(_localctx, 8);
+				{
+				setState(691); gotoStmt();
+				}
+				break;
 
-				case 9:
-					enterOuterAlt(_localctx, 9);
-					{
-					setState(692); fallthroughStmt();
-					}
-					break;
+			case 9:
+				enterOuterAlt(_localctx, 9);
+				{
+				setState(692); fallthroughStmt();
+				}
+				break;
 
-				case 10:
-					enterOuterAlt(_localctx, 10);
-					{
-					setState(693); block();
-					}
-					break;
+			case 10:
+				enterOuterAlt(_localctx, 10);
+				{
+				setState(693); block();
+				}
+				break;
 
-				case 11:
-					enterOuterAlt(_localctx, 11);
-					{
-					setState(694); ifStmt();
-					}
-					break;
+			case 11:
+				enterOuterAlt(_localctx, 11);
+				{
+				setState(694); ifStmt();
+				}
+				break;
 
-				case 12:
-					enterOuterAlt(_localctx, 12);
-					{
-					setState(695); switchStmt();
-					}
-					break;
+			case 12:
+				enterOuterAlt(_localctx, 12);
+				{
+				setState(695); switchStmt();
+				}
+				break;
 
-				case 13:
-					enterOuterAlt(_localctx, 13);
-					{
-					setState(696); selectStmt();
-					}
-					break;
+			case 13:
+				enterOuterAlt(_localctx, 13);
+				{
+				setState(696); selectStmt();
+				}
+				break;
 
-				case 14:
-					enterOuterAlt(_localctx, 14);
-					{
-					setState(697); forStmt();
-					}
-					break;
+			case 14:
+				enterOuterAlt(_localctx, 14);
+				{
+				setState(697); forStmt();
+				}
+				break;
 
-				case 15:
-					enterOuterAlt(_localctx, 15);
-					{
-					setState(698); deferStmt();
-					}
-					break;
+			case 15:
+				enterOuterAlt(_localctx, 15);
+				{
+				setState(698); deferStmt();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4724,49 +4668,48 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 126, RULE_simpleStmt);
 		try {
 			setState(707);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,67,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(701); emptyStmt();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(701); emptyStmt();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(702); expressionStmt();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(702); expressionStmt();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(703); sendStmt();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(703); sendStmt();
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(704); incDecStmt();
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(704); incDecStmt();
+				}
+				break;
 
-				case 5:
-					enterOuterAlt(_localctx, 5);
-					{
-					setState(705); assignment();
-					}
-					break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(705); assignment();
+				}
+				break;
 
-				case 6:
-					enterOuterAlt(_localctx, 6);
-					{
-					setState(706); shortVarDecl();
-					}
-					break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(706); shortVarDecl();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -5187,28 +5130,27 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 144, RULE_assignOp);
 		try {
 			setState(735);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,68,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(732); addAssignOp();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(732); addAssignOp();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(733); mulAssignOp();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(733); mulAssignOp();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(734); match(Equal);
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(734); match(Equal);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -5362,40 +5304,37 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(741); match(If);
 			setState(745);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,69,_ctx) ) {
-				case 1:
-					{
-					setState(742); simpleStmt();
-					setState(743); match(Semi);
-					}
-					break;
+			case 1:
+				{
+				setState(742); simpleStmt();
+				setState(743); match(Semi);
+				}
+				break;
 			}
 			setState(747); expression(0);
 			setState(748); block();
 			setState(754);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,71,_ctx) ) {
+			case 1:
+				{
+				setState(749); match(Else);
+				setState(752);
+				switch ( getInterpreter().adaptivePredict(_input,70,_ctx) ) {
 				case 1:
 					{
-					setState(749); match(Else);
-					setState(752);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,70,_ctx) ) {
-						case 1:
-							{
-							setState(750); ifStmt();
-							}
-							break;
-
-						case 2:
-							{
-							setState(751); block();
-							}
-							break;
-					}
+					setState(750); ifStmt();
 					}
 					break;
+
+				case 2:
+					{
+					setState(751); block();
+					}
+					break;
+				}
+				}
+				break;
 			}
 			}
 		}
@@ -5442,21 +5381,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 152, RULE_switchStmt);
 		try {
 			setState(758);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,72,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(756); exprSwitchStmt();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(756); exprSwitchStmt();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(757); typeSwitchStmt();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(757); typeSwitchStmt();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -5512,23 +5450,21 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(760); match(Switch);
 			setState(764);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,73,_ctx) ) {
-				case 1:
-					{
-					setState(761); simpleStmt();
-					setState(762); match(Semi);
-					}
-					break;
+			case 1:
+				{
+				setState(761); simpleStmt();
+				setState(762); match(Semi);
+				}
+				break;
 			}
 			setState(767);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,74,_ctx) ) {
-				case 1:
-					{
-					setState(766); expression(0);
-					}
-					break;
+			case 1:
+				{
+				setState(766); expression(0);
+				}
+				break;
 			}
 			setState(769); match(LeftBrace);
 			setState(773);
@@ -5600,38 +5536,36 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			setState(778); exprSwitchCase();
 			setState(779); match(Colon);
 			setState(791);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,78,_ctx) ) {
-				case 1:
-					{
-					setState(780); statement();
-					setState(785);
+			case 1:
+				{
+				setState(780); statement();
+				setState(785);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,76,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(781); match(Semi);
+						setState(782); statement();
+						}
+						} 
+					}
+					setState(787);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,76,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(781); match(Semi);
-							setState(782); statement();
-							}
-							} 
-						}
-						setState(787);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,76,_ctx);
-					}
-					setState(789);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,77,_ctx) ) {
-						case 1:
-							{
-							setState(788); match(Semi);
-							}
-							break;
-					}
+				}
+				setState(789);
+				switch ( getInterpreter().adaptivePredict(_input,77,_ctx) ) {
+				case 1:
+					{
+					setState(788); match(Semi);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			}
 		}
@@ -5675,22 +5609,21 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 158, RULE_exprSwitchCase);
 		try {
 			setState(796);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,79,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(793); match(Case);
-					setState(794); expressionList();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(793); match(Case);
+				setState(794); expressionList();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(795); match(Default);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(795); match(Default);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -5746,14 +5679,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(798); match(Switch);
 			setState(802);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,80,_ctx) ) {
-				case 1:
-					{
-					setState(799); simpleStmt();
-					setState(800); match(Semi);
-					}
-					break;
+			case 1:
+				{
+				setState(799); simpleStmt();
+				setState(800); match(Semi);
+				}
+				break;
 			}
 			setState(804); typeSwitchGuard();
 			setState(805); match(LeftBrace);
@@ -5820,14 +5752,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(816);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,82,_ctx) ) {
-				case 1:
-					{
-					setState(814); match(IDENTIFIER);
-					setState(815); _localctx.defeq = match(ColonEqual);
-					}
-					break;
+			case 1:
+				{
+				setState(814); match(IDENTIFIER);
+				setState(815); _localctx.defeq = match(ColonEqual);
+				}
+				break;
 			}
 			setState(818); expression(0);
 			setState(819); _localctx.dot = match(Dot);
@@ -5887,38 +5818,36 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			setState(824); typeSwitchCase();
 			setState(825); match(Colon);
 			setState(837);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,85,_ctx) ) {
-				case 1:
-					{
-					setState(826); statement();
-					setState(831);
+			case 1:
+				{
+				setState(826); statement();
+				setState(831);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,83,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(827); match(Semi);
+						setState(828); statement();
+						}
+						} 
+					}
+					setState(833);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,83,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(827); match(Semi);
-							setState(828); statement();
-							}
-							} 
-						}
-						setState(833);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,83,_ctx);
-					}
-					setState(835);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,84,_ctx) ) {
-						case 1:
-							{
-							setState(834); match(Semi);
-							}
-							break;
-					}
+				}
+				setState(835);
+				switch ( getInterpreter().adaptivePredict(_input,84,_ctx) ) {
+				case 1:
+					{
+					setState(834); match(Semi);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			}
 		}
@@ -5962,22 +5891,21 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 166, RULE_typeSwitchCase);
 		try {
 			setState(842);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,86,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(839); match(Case);
-					setState(840); typeList();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(839); match(Case);
+				setState(840); typeList();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(841); match(Default);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(841); match(Default);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -6096,25 +6024,24 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(852); match(For);
 			setState(856);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,88,_ctx) ) {
-				case 1:
-					{
-					setState(853); condition();
-					}
-					break;
+			case 1:
+				{
+				setState(853); condition();
+				}
+				break;
 
-				case 2:
-					{
-					setState(854); forClause();
-					}
-					break;
+			case 2:
+				{
+				setState(854); forClause();
+				}
+				break;
 
-				case 3:
-					{
-					setState(855); rangeClause();
-					}
-					break;
+			case 3:
+				{
+				setState(855); rangeClause();
+				}
+				break;
 			}
 			setState(858); block();
 			}
@@ -6211,33 +6138,30 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(863);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,89,_ctx) ) {
-				case 1:
-					{
-					setState(862); initStmt();
-					}
-					break;
+			case 1:
+				{
+				setState(862); initStmt();
+				}
+				break;
 			}
 			setState(865); match(Semi);
 			setState(867);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,90,_ctx) ) {
-				case 1:
-					{
-					setState(866); condition();
-					}
-					break;
+			case 1:
+				{
+				setState(866); condition();
+				}
+				break;
 			}
 			setState(869); match(Semi);
 			setState(871);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,91,_ctx) ) {
-				case 1:
-					{
-					setState(870); postStmt();
-					}
-					break;
+			case 1:
+				{
+				setState(870); postStmt();
+				}
+				break;
 			}
 			}
 		}
@@ -6380,29 +6304,27 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(877); _localctx.e1 = expression(0);
 			setState(880);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,92,_ctx) ) {
-				case 1:
-					{
-					setState(878); match(Comma);
-					setState(879); _localctx.e2 = expression(0);
-					}
-					break;
+			case 1:
+				{
+				setState(878); match(Comma);
+				setState(879); _localctx.e2 = expression(0);
+				}
+				break;
 			}
 			setState(884);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,93,_ctx) ) {
-				case 1:
-					{
-					setState(882); _localctx.eq = match(Equal);
-					}
-					break;
+			case 1:
+				{
+				setState(882); _localctx.eq = match(Equal);
+				}
+				break;
 
-				case 2:
-					{
-					setState(883); _localctx.defeq = match(ColonEqual);
-					}
-					break;
+			case 2:
+				{
+				setState(883); _localctx.defeq = match(ColonEqual);
+				}
+				break;
 			}
 			setState(886); match(Range);
 			setState(887); _localctx.e = expression(0);
@@ -6569,38 +6491,36 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			setState(902); commCase();
 			setState(903); match(Colon);
 			setState(915);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,97,_ctx) ) {
-				case 1:
-					{
-					setState(904); statement();
-					setState(909);
+			case 1:
+				{
+				setState(904); statement();
+				setState(909);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,95,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(905); match(Semi);
+						setState(906); statement();
+						}
+						} 
+					}
+					setState(911);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,95,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(905); match(Semi);
-							setState(906); statement();
-							}
-							} 
-						}
-						setState(911);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,95,_ctx);
-					}
-					setState(913);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,96,_ctx) ) {
-						case 1:
-							{
-							setState(912); match(Semi);
-							}
-							break;
-					}
+				}
+				setState(913);
+				switch ( getInterpreter().adaptivePredict(_input,96,_ctx) ) {
+				case 1:
+					{
+					setState(912); match(Semi);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			}
 		}
@@ -6647,36 +6567,34 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 188, RULE_commCase);
 		try {
 			setState(923);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,99,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(917); match(Case);
+				setState(920);
+				switch ( getInterpreter().adaptivePredict(_input,98,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(917); match(Case);
-					setState(920);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,98,_ctx) ) {
-						case 1:
-							{
-							setState(918); sendStmt();
-							}
-							break;
-
-						case 2:
-							{
-							setState(919); recvStmt();
-							}
-							break;
-					}
+					setState(918); sendStmt();
 					}
 					break;
 
 				case 2:
-					enterOuterAlt(_localctx, 2);
 					{
-					setState(922); match(Default);
+					setState(919); recvStmt();
 					}
 					break;
+				}
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(922); match(Default);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -6731,38 +6649,35 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(934);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,102,_ctx) ) {
+			case 1:
+				{
+				setState(925); _localctx.e1 = expression(0);
+				setState(928);
+				switch ( getInterpreter().adaptivePredict(_input,100,_ctx) ) {
 				case 1:
 					{
-					setState(925); _localctx.e1 = expression(0);
-					setState(928);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,100,_ctx) ) {
-						case 1:
-							{
-							setState(926); match(Comma);
-							setState(927); _localctx.e2 = expression(0);
-							}
-							break;
-					}
-					setState(932);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,101,_ctx) ) {
-						case 1:
-							{
-							setState(930); _localctx.eq = match(Equal);
-							}
-							break;
-
-						case 2:
-							{
-							setState(931); _localctx.defeq = match(ColonEqual);
-							}
-							break;
-					}
+					setState(926); match(Comma);
+					setState(927); _localctx.e2 = expression(0);
 					}
 					break;
+				}
+				setState(932);
+				switch ( getInterpreter().adaptivePredict(_input,101,_ctx) ) {
+				case 1:
+					{
+					setState(930); _localctx.eq = match(Equal);
+					}
+					break;
+
+				case 2:
+					{
+					setState(931); _localctx.defeq = match(ColonEqual);
+					}
+					break;
+				}
+				}
+				break;
 			}
 			setState(936); recvExpr();
 			}
@@ -6854,13 +6769,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(940); match(Return);
 			setState(942);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,103,_ctx) ) {
-				case 1:
-					{
-					setState(941); expressionList();
-					}
-					break;
+			case 1:
+				{
+				setState(941); expressionList();
+				}
+				break;
 			}
 			}
 		}
@@ -6907,13 +6821,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(944); match(Break);
 			setState(946);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,104,_ctx) ) {
-				case 1:
-					{
-					setState(945); label();
-					}
-					break;
+			case 1:
+				{
+				setState(945); label();
+				}
+				break;
 			}
 			}
 		}
@@ -6960,13 +6873,12 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(948); match(Continue);
 			setState(950);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,105,_ctx) ) {
-				case 1:
-					{
-					setState(949); label();
-					}
-					break;
+			case 1:
+				{
+				setState(949); label();
+				}
+				break;
 			}
 			}
 		}
@@ -7146,22 +7058,20 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			setState(960); match(IDENTIFIER);
 			setState(961); match(LeftParen);
 			setState(966);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,107,_ctx) ) {
+			case 1:
+				{
+				setState(962); builtinArgs();
+				setState(964);
+				switch ( getInterpreter().adaptivePredict(_input,106,_ctx) ) {
 				case 1:
 					{
-					setState(962); builtinArgs();
-					setState(964);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,106,_ctx) ) {
-						case 1:
-							{
-							setState(963); match(Comma);
-							}
-							break;
-					}
+					setState(963); match(Comma);
 					}
 					break;
+				}
+				}
+				break;
 			}
 			setState(968); match(RightParen);
 			}
@@ -7209,31 +7119,29 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 208, RULE_builtinArgs);
 		try {
 			setState(976);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,109,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(970); type();
+				setState(973);
+				switch ( getInterpreter().adaptivePredict(_input,108,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(970); type();
-					setState(973);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,108,_ctx) ) {
-						case 1:
-							{
-							setState(971); match(Comma);
-							setState(972); expressionList();
-							}
-							break;
-					}
+					setState(971); match(Comma);
+					setState(972); expressionList();
 					}
 					break;
+				}
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(975); expressionList();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(975); expressionList();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -7291,14 +7199,13 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(981);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,110,_ctx) ) {
-				case 1:
-					{
-					setState(978); packageClause();
-					setState(979); match(Semi);
-					}
-					break;
+			case 1:
+				{
+				setState(978); packageClause();
+				setState(979); match(Semi);
+				}
+				break;
 			}
 			setState(988);
 			_errHandler.sync(this);
@@ -7516,54 +7423,51 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			{
 			setState(1008); match(Import);
 			setState(1025);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,116,_ctx) ) {
+			case 1:
+				{
+				setState(1009); importSpec();
+				}
+				break;
+
+			case 2:
+				{
+				setState(1010); match(LeftParen);
+				setState(1022);
+				switch ( getInterpreter().adaptivePredict(_input,115,_ctx) ) {
 				case 1:
 					{
-					setState(1009); importSpec();
-					}
-					break;
-
-				case 2:
-					{
-					setState(1010); match(LeftParen);
-					setState(1022);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,115,_ctx) ) {
-						case 1:
+					setState(1011); importSpec();
+					setState(1016);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,113,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
-							setState(1011); importSpec();
-							setState(1016);
-							_errHandler.sync(this);
-							_alt = getInterpreter().adaptivePredict(_input,113,_ctx);
-							while ( _alt!=2 && _alt!=-1 ) {
-								if ( _alt==1 ) {
-									{
-									{
-									setState(1012); match(Semi);
-									setState(1013); importSpec();
-									}
-									} 
-								}
-								setState(1018);
-								_errHandler.sync(this);
-								_alt = getInterpreter().adaptivePredict(_input,113,_ctx);
+							{
+							setState(1012); match(Semi);
+							setState(1013); importSpec();
 							}
-							setState(1020);
-							//_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,114,_ctx) ) {
-								case 1:
-									{
-									setState(1019); match(Semi);
-									}
-									break;
-							}
-							}
-							break;
+							} 
+						}
+						setState(1018);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input,113,_ctx);
 					}
-					setState(1024); match(RightParen);
+					setState(1020);
+					switch ( getInterpreter().adaptivePredict(_input,114,_ctx) ) {
+					case 1:
+						{
+						setState(1019); match(Semi);
+						}
+						break;
+					}
 					}
 					break;
+				}
+				setState(1024); match(RightParen);
+				}
+				break;
 			}
 			}
 		}
@@ -7613,32 +7517,31 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		enterRule(_localctx, 220, RULE_importSpec);
 		try {
 			setState(1036);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,117,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(1027); _localctx.dot = match(Dot);
-					setState(1028); importPath();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(1027); _localctx.dot = match(Dot);
+				setState(1028); importPath();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(1029); _localctx.packageName = packageName();
-					setState(1030); importPath();
-					addPackageName((_localctx.packageName!=null?(_localctx.packageName.start):null));
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(1029); _localctx.packageName = packageName();
+				setState(1030); importPath();
+				addPackageName((_localctx.packageName!=null?(_localctx.packageName.start):null));
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(1033); _localctx.importPath = importPath();
-					addPackageName((_localctx.importPath!=null?(_localctx.importPath.start):null));
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(1033); _localctx.importPath = importPath();
+				addPackageName((_localctx.importPath!=null?(_localctx.importPath.start):null));
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -7695,40 +7598,40 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 
 	public boolean sempred(RuleContext<Token> _localctx, int ruleIndex, int predIndex) {
-		switch ( ruleIndex ) {
-				case 46 : return qualifiedIdentifier_sempred((QualifiedIdentifierContext)_localctx, predIndex);
+		switch (ruleIndex) {
+		case 46: return qualifiedIdentifier_sempred((QualifiedIdentifierContext)_localctx, predIndex);
 
-				case 59 : return expression_sempred((ExpressionContext)_localctx, predIndex);
+		case 59: return expression_sempred((ExpressionContext)_localctx, predIndex);
 		}
 		return true;
 	}
 	public boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
-		switch ( predIndex ) {
-			case 1 : return 6 >= _localctx._p;
+		switch (predIndex) {
+		case 1: return 6 >= _localctx._p;
 
-			case 2 : return 5 >= _localctx._p;
+		case 2: return 5 >= _localctx._p;
 
-			case 3 : return 4 >= _localctx._p;
+		case 3: return 4 >= _localctx._p;
 
-			case 4 : return 3 >= _localctx._p;
+		case 4: return 3 >= _localctx._p;
 
-			case 5 : return 2 >= _localctx._p;
+		case 5: return 2 >= _localctx._p;
 
-			case 6 : return 12 >= _localctx._p;
+		case 6: return 12 >= _localctx._p;
 
-			case 7 : return 11 >= _localctx._p;
+		case 7: return 11 >= _localctx._p;
 
-			case 8 : return 10 >= _localctx._p;
+		case 8: return 10 >= _localctx._p;
 
-			case 9 : return 9 >= _localctx._p;
+		case 9: return 9 >= _localctx._p;
 
-			case 10 : return 8 >= _localctx._p;
+		case 10: return 8 >= _localctx._p;
 		}
 		return true;
 	}
 	public boolean qualifiedIdentifier_sempred(QualifiedIdentifierContext _localctx, int predIndex) {
-		switch ( predIndex ) {
-			case 0 : return isPackageName(_input.LT(1));
+		switch (predIndex) {
+		case 0: return isPackageName(_input.LT(1));
 		}
 		return true;
 	}
@@ -8120,8 +8023,5 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
-		//org.antlr.v4.tool.DOTGenerator dot = new org.antlr.v4.tool.DOTGenerator(null);
-		//System.out.println(dot.getDOT(_ATN.decisionToState.get(0), ruleNames, false));
-		//System.out.println(dot.getDOT(_ATN.ruleToStartState[2], ruleNames, false));
 	}
 }

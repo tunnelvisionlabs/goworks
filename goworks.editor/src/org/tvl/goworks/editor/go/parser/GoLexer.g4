@@ -118,7 +118,7 @@ COMMENT
 	;
 
 ML_COMMENT
-    :   '/*' .* '*/'            -> channel(HIDDEN)
+    :   '/*' .*? '*/'           -> channel(HIDDEN)
     ;
 
 DecimalLiteral

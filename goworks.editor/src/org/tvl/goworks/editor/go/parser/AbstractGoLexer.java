@@ -94,655 +94,655 @@ public abstract class AbstractGoLexer extends Lexer {
 
 	@Override
 	public void action(RuleContext<Integer> _localctx, int ruleIndex, int actionIndex) {
-		switch ( ruleIndex ) {
-			case 0 : Break_action(_localctx, actionIndex); break;
+		switch (ruleIndex) {
+		case 0 : Break_action(_localctx, actionIndex); break;
 
-			case 1 : Case_action(_localctx, actionIndex); break;
+		case 1 : Case_action(_localctx, actionIndex); break;
 
-			case 2 : Chan_action(_localctx, actionIndex); break;
+		case 2 : Chan_action(_localctx, actionIndex); break;
 
-			case 3 : Const_action(_localctx, actionIndex); break;
+		case 3 : Const_action(_localctx, actionIndex); break;
 
-			case 4 : Continue_action(_localctx, actionIndex); break;
+		case 4 : Continue_action(_localctx, actionIndex); break;
 
-			case 5 : Default_action(_localctx, actionIndex); break;
+		case 5 : Default_action(_localctx, actionIndex); break;
 
-			case 6 : Defer_action(_localctx, actionIndex); break;
+		case 6 : Defer_action(_localctx, actionIndex); break;
 
-			case 7 : Else_action(_localctx, actionIndex); break;
+		case 7 : Else_action(_localctx, actionIndex); break;
 
-			case 8 : Fallthrough_action(_localctx, actionIndex); break;
+		case 8 : Fallthrough_action(_localctx, actionIndex); break;
 
-			case 9 : For_action(_localctx, actionIndex); break;
+		case 9 : For_action(_localctx, actionIndex); break;
 
-			case 10 : Func_action(_localctx, actionIndex); break;
+		case 10 : Func_action(_localctx, actionIndex); break;
 
-			case 11 : Go_action(_localctx, actionIndex); break;
+		case 11 : Go_action(_localctx, actionIndex); break;
 
-			case 12 : Goto_action(_localctx, actionIndex); break;
+		case 12 : Goto_action(_localctx, actionIndex); break;
 
-			case 13 : If_action(_localctx, actionIndex); break;
+		case 13 : If_action(_localctx, actionIndex); break;
 
-			case 14 : Import_action(_localctx, actionIndex); break;
+		case 14 : Import_action(_localctx, actionIndex); break;
 
-			case 15 : Interface_action(_localctx, actionIndex); break;
+		case 15 : Interface_action(_localctx, actionIndex); break;
 
-			case 16 : Map_action(_localctx, actionIndex); break;
+		case 16 : Map_action(_localctx, actionIndex); break;
 
-			case 17 : Package_action(_localctx, actionIndex); break;
+		case 17 : Package_action(_localctx, actionIndex); break;
 
-			case 18 : Range_action(_localctx, actionIndex); break;
+		case 18 : Range_action(_localctx, actionIndex); break;
 
-			case 19 : Return_action(_localctx, actionIndex); break;
+		case 19 : Return_action(_localctx, actionIndex); break;
 
-			case 20 : Select_action(_localctx, actionIndex); break;
+		case 20 : Select_action(_localctx, actionIndex); break;
 
-			case 21 : Struct_action(_localctx, actionIndex); break;
+		case 21 : Struct_action(_localctx, actionIndex); break;
 
-			case 22 : Switch_action(_localctx, actionIndex); break;
+		case 22 : Switch_action(_localctx, actionIndex); break;
 
-			case 23 : Type_action(_localctx, actionIndex); break;
+		case 23 : Type_action(_localctx, actionIndex); break;
 
-			case 24 : Var_action(_localctx, actionIndex); break;
+		case 24 : Var_action(_localctx, actionIndex); break;
 
-			case 25 : Plus_action(_localctx, actionIndex); break;
+		case 25 : Plus_action(_localctx, actionIndex); break;
 
-			case 26 : Minus_action(_localctx, actionIndex); break;
+		case 26 : Minus_action(_localctx, actionIndex); break;
 
-			case 27 : Star_action(_localctx, actionIndex); break;
+		case 27 : Star_action(_localctx, actionIndex); break;
 
-			case 28 : Slash_action(_localctx, actionIndex); break;
+		case 28 : Slash_action(_localctx, actionIndex); break;
 
-			case 29 : Percent_action(_localctx, actionIndex); break;
+		case 29 : Percent_action(_localctx, actionIndex); break;
 
-			case 30 : Amp_action(_localctx, actionIndex); break;
+		case 30 : Amp_action(_localctx, actionIndex); break;
 
-			case 31 : Pipe_action(_localctx, actionIndex); break;
+		case 31 : Pipe_action(_localctx, actionIndex); break;
 
-			case 32 : Caret_action(_localctx, actionIndex); break;
+		case 32 : Caret_action(_localctx, actionIndex); break;
 
-			case 33 : LeftShift_action(_localctx, actionIndex); break;
+		case 33 : LeftShift_action(_localctx, actionIndex); break;
 
-			case 34 : RightShift_action(_localctx, actionIndex); break;
+		case 34 : RightShift_action(_localctx, actionIndex); break;
 
-			case 35 : AmpCaret_action(_localctx, actionIndex); break;
+		case 35 : AmpCaret_action(_localctx, actionIndex); break;
 
-			case 36 : PlusEqual_action(_localctx, actionIndex); break;
+		case 36 : PlusEqual_action(_localctx, actionIndex); break;
 
-			case 37 : MinusEqual_action(_localctx, actionIndex); break;
+		case 37 : MinusEqual_action(_localctx, actionIndex); break;
 
-			case 38 : StarEqual_action(_localctx, actionIndex); break;
+		case 38 : StarEqual_action(_localctx, actionIndex); break;
 
-			case 39 : SlashEqual_action(_localctx, actionIndex); break;
+		case 39 : SlashEqual_action(_localctx, actionIndex); break;
 
-			case 40 : PercentEqual_action(_localctx, actionIndex); break;
+		case 40 : PercentEqual_action(_localctx, actionIndex); break;
 
-			case 41 : AmpEqual_action(_localctx, actionIndex); break;
+		case 41 : AmpEqual_action(_localctx, actionIndex); break;
 
-			case 42 : PipeEqual_action(_localctx, actionIndex); break;
+		case 42 : PipeEqual_action(_localctx, actionIndex); break;
 
-			case 43 : CaretEqual_action(_localctx, actionIndex); break;
+		case 43 : CaretEqual_action(_localctx, actionIndex); break;
 
-			case 44 : LeftShiftEqual_action(_localctx, actionIndex); break;
+		case 44 : LeftShiftEqual_action(_localctx, actionIndex); break;
 
-			case 45 : RightShiftEqual_action(_localctx, actionIndex); break;
+		case 45 : RightShiftEqual_action(_localctx, actionIndex); break;
 
-			case 46 : AmpCaretEqual_action(_localctx, actionIndex); break;
+		case 46 : AmpCaretEqual_action(_localctx, actionIndex); break;
 
-			case 47 : And_action(_localctx, actionIndex); break;
+		case 47 : And_action(_localctx, actionIndex); break;
 
-			case 48 : Or_action(_localctx, actionIndex); break;
+		case 48 : Or_action(_localctx, actionIndex); break;
 
-			case 49 : LeftArrow_action(_localctx, actionIndex); break;
+		case 49 : LeftArrow_action(_localctx, actionIndex); break;
 
-			case 50 : Inc_action(_localctx, actionIndex); break;
+		case 50 : Inc_action(_localctx, actionIndex); break;
 
-			case 51 : Dec_action(_localctx, actionIndex); break;
+		case 51 : Dec_action(_localctx, actionIndex); break;
 
-			case 52 : EqualEqual_action(_localctx, actionIndex); break;
+		case 52 : EqualEqual_action(_localctx, actionIndex); break;
 
-			case 53 : LessThan_action(_localctx, actionIndex); break;
+		case 53 : LessThan_action(_localctx, actionIndex); break;
 
-			case 54 : GreaterThan_action(_localctx, actionIndex); break;
+		case 54 : GreaterThan_action(_localctx, actionIndex); break;
 
-			case 55 : Equal_action(_localctx, actionIndex); break;
+		case 55 : Equal_action(_localctx, actionIndex); break;
 
-			case 56 : Bang_action(_localctx, actionIndex); break;
+		case 56 : Bang_action(_localctx, actionIndex); break;
 
-			case 57 : BangEqual_action(_localctx, actionIndex); break;
+		case 57 : BangEqual_action(_localctx, actionIndex); break;
 
-			case 58 : LessEqual_action(_localctx, actionIndex); break;
+		case 58 : LessEqual_action(_localctx, actionIndex); break;
 
-			case 59 : GreaterEqual_action(_localctx, actionIndex); break;
+		case 59 : GreaterEqual_action(_localctx, actionIndex); break;
 
-			case 60 : ColonEqual_action(_localctx, actionIndex); break;
+		case 60 : ColonEqual_action(_localctx, actionIndex); break;
 
-			case 61 : Ellipsis_action(_localctx, actionIndex); break;
+		case 61 : Ellipsis_action(_localctx, actionIndex); break;
 
-			case 62 : LeftParen_action(_localctx, actionIndex); break;
+		case 62 : LeftParen_action(_localctx, actionIndex); break;
 
-			case 63 : RightParen_action(_localctx, actionIndex); break;
+		case 63 : RightParen_action(_localctx, actionIndex); break;
 
-			case 64 : LeftBrack_action(_localctx, actionIndex); break;
+		case 64 : LeftBrack_action(_localctx, actionIndex); break;
 
-			case 65 : RightBrack_action(_localctx, actionIndex); break;
+		case 65 : RightBrack_action(_localctx, actionIndex); break;
 
-			case 66 : LeftBrace_action(_localctx, actionIndex); break;
+		case 66 : LeftBrace_action(_localctx, actionIndex); break;
 
-			case 67 : RightBrace_action(_localctx, actionIndex); break;
+		case 67 : RightBrace_action(_localctx, actionIndex); break;
 
-			case 68 : Comma_action(_localctx, actionIndex); break;
+		case 68 : Comma_action(_localctx, actionIndex); break;
 
-			case 69 : Dot_action(_localctx, actionIndex); break;
+		case 69 : Dot_action(_localctx, actionIndex); break;
 
-			case 70 : Semi_action(_localctx, actionIndex); break;
+		case 70 : Semi_action(_localctx, actionIndex); break;
 
-			case 71 : Colon_action(_localctx, actionIndex); break;
+		case 71 : Colon_action(_localctx, actionIndex); break;
 
-			case 72 : IDENTIFIER_action(_localctx, actionIndex); break;
+		case 72 : IDENTIFIER_action(_localctx, actionIndex); break;
 
-			case 73 : WS_action(_localctx, actionIndex); break;
+		case 73 : WS_action(_localctx, actionIndex); break;
 
-			case 74 : NEWLINE_action(_localctx, actionIndex); break;
+		case 74 : NEWLINE_action(_localctx, actionIndex); break;
 
-			case 75 : COMMENT_action(_localctx, actionIndex); break;
+		case 75 : COMMENT_action(_localctx, actionIndex); break;
 
-			case 76 : ML_COMMENT_action(_localctx, actionIndex); break;
+		case 76 : ML_COMMENT_action(_localctx, actionIndex); break;
 
-			case 77 : DecimalLiteral_action(_localctx, actionIndex); break;
+		case 77 : DecimalLiteral_action(_localctx, actionIndex); break;
 
-			case 78 : OctalLiteral_action(_localctx, actionIndex); break;
+		case 78 : OctalLiteral_action(_localctx, actionIndex); break;
 
-			case 79 : HexLiteral_action(_localctx, actionIndex); break;
+		case 79 : HexLiteral_action(_localctx, actionIndex); break;
 
-			case 80 : IMAGINARY_LITERAL_action(_localctx, actionIndex); break;
+		case 80 : IMAGINARY_LITERAL_action(_localctx, actionIndex); break;
 
-			case 81 : FLOAT_LITERAL_action(_localctx, actionIndex); break;
+		case 81 : FLOAT_LITERAL_action(_localctx, actionIndex); break;
 
-			case 82 : Decimals_action(_localctx, actionIndex); break;
+		case 82 : Decimals_action(_localctx, actionIndex); break;
 
-			case 83 : Exponent_action(_localctx, actionIndex); break;
+		case 83 : Exponent_action(_localctx, actionIndex); break;
 
-			case 84 : CharLiteral_action(_localctx, actionIndex); break;
+		case 84 : CharLiteral_action(_localctx, actionIndex); break;
 
-			case 85 : UNICODE_VALUE_NOSQUOTE_action(_localctx, actionIndex); break;
+		case 85 : UNICODE_VALUE_NOSQUOTE_action(_localctx, actionIndex); break;
 
-			case 86 : UNICODE_VALUE_NODQUOTE_action(_localctx, actionIndex); break;
+		case 86 : UNICODE_VALUE_NODQUOTE_action(_localctx, actionIndex); break;
 
-			case 87 : BYTE_VALUE_action(_localctx, actionIndex); break;
+		case 87 : BYTE_VALUE_action(_localctx, actionIndex); break;
 
-			case 88 : OCTAL_BYTE_VALUE_action(_localctx, actionIndex); break;
+		case 88 : OCTAL_BYTE_VALUE_action(_localctx, actionIndex); break;
 
-			case 89 : HexByteValue_action(_localctx, actionIndex); break;
+		case 89 : HexByteValue_action(_localctx, actionIndex); break;
 
-			case 90 : LittleUValue_action(_localctx, actionIndex); break;
+		case 90 : LittleUValue_action(_localctx, actionIndex); break;
 
-			case 91 : BigUValue_action(_localctx, actionIndex); break;
+		case 91 : BigUValue_action(_localctx, actionIndex); break;
 
-			case 92 : EscapedChar_action(_localctx, actionIndex); break;
+		case 92 : EscapedChar_action(_localctx, actionIndex); break;
 
-			case 93 : StringLiteral_action(_localctx, actionIndex); break;
+		case 93 : StringLiteral_action(_localctx, actionIndex); break;
 
-			case 94 : RawStringLiteral_action(_localctx, actionIndex); break;
+		case 94 : RawStringLiteral_action(_localctx, actionIndex); break;
 
-			case 95 : InterpretedStringLiteral_action(_localctx, actionIndex); break;
+		case 95 : InterpretedStringLiteral_action(_localctx, actionIndex); break;
 
-			case 96 : NEWLINE_CHAR_action(_localctx, actionIndex); break;
+		case 96 : NEWLINE_CHAR_action(_localctx, actionIndex); break;
 
-			case 97 : UNICODE_CHAR_NOSQUOTE_action(_localctx, actionIndex); break;
+		case 97 : UNICODE_CHAR_NOSQUOTE_action(_localctx, actionIndex); break;
 
-			case 98 : UNICODE_CHAR_NODQUOTE_action(_localctx, actionIndex); break;
+		case 98 : UNICODE_CHAR_NODQUOTE_action(_localctx, actionIndex); break;
 
-			case 99 : UNICODE_CHAR_NOBTICK_action(_localctx, actionIndex); break;
+		case 99 : UNICODE_CHAR_NOBTICK_action(_localctx, actionIndex); break;
 
-			case 100 : UNICODE_LETTER_CHAR_action(_localctx, actionIndex); break;
+		case 100 : UNICODE_LETTER_CHAR_action(_localctx, actionIndex); break;
 
-			case 101 : UNICODE_DIGIT_CHAR_action(_localctx, actionIndex); break;
+		case 101 : UNICODE_DIGIT_CHAR_action(_localctx, actionIndex); break;
 
-			case 102 : LETTER_CHAR_action(_localctx, actionIndex); break;
+		case 102 : LETTER_CHAR_action(_localctx, actionIndex); break;
 
-			case 103 : DECIMAL_DIGIT_CHAR_action(_localctx, actionIndex); break;
+		case 103 : DECIMAL_DIGIT_CHAR_action(_localctx, actionIndex); break;
 
-			case 104 : OCTAL_DIGIT_CHAR_action(_localctx, actionIndex); break;
+		case 104 : OCTAL_DIGIT_CHAR_action(_localctx, actionIndex); break;
 
-			case 105 : HEX_DIGIT_CHAR_action(_localctx, actionIndex); break;
+		case 105 : HEX_DIGIT_CHAR_action(_localctx, actionIndex); break;
 
-			case 106 : ANYCHAR_action(_localctx, actionIndex); break;
+		case 106 : ANYCHAR_action(_localctx, actionIndex); break;
 		}
 	}
 	public void Switch_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void UNICODE_CHAR_NOBTICK_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void PipeEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Pipe_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LessThan_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Goto_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void OctalLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 5 : _type = INT_LITERAL;  break;
+		switch (actionIndex) {
+		case 5: _type = INT_LITERAL;  break;
 		}
 	}
 	public void Fallthrough_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BangEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Percent_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LeftArrow_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Decimals_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Default_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void IMAGINARY_LITERAL_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void NEWLINE_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void CharLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Chan_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void DECIMAL_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 2 : _channel = HIDDEN;  break;
+		switch (actionIndex) {
+		case 2: _channel = HIDDEN;  break;
 		}
 	}
 	public void MinusEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ColonEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void UNICODE_CHAR_NOSQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LeftShiftEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Colon_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Const_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Equal_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Dec_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void RightShift_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void CaretEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Range_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Minus_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Semi_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 0 : _channel = HIDDEN;  break;
+		switch (actionIndex) {
+		case 0: _channel = HIDDEN;  break;
 		}
 	}
 	public void Break_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void UNICODE_VALUE_NODQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void UNICODE_VALUE_NOSQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Inc_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LeftBrace_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void SlashEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LeftBrack_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LeftParen_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Star_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Defer_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void AmpCaret_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void RightParen_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void RawStringLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Else_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Var_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Slash_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void UNICODE_CHAR_NODQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void GreaterEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BigUValue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LETTER_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Go_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void EscapedChar_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Exponent_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LessEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void AmpEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void HEX_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Case_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Func_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void GreaterThan_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ML_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 3 : _channel = HIDDEN;  break;
+		switch (actionIndex) {
+		case 3: _channel = HIDDEN;  break;
 		}
 	}
 	public void StarEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Map_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void IDENTIFIER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Amp_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Ellipsis_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Interface_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void AmpCaretEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Select_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void HexByteValue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void UNICODE_LETTER_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Or_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Return_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Struct_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Caret_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void If_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void RightShiftEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void PercentEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BYTE_VALUE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void And_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void HexLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 6 : _type = INT_LITERAL;  break;
+		switch (actionIndex) {
+		case 6: _type = INT_LITERAL;  break;
 		}
 	}
 	public void Import_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void PlusEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Type_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Continue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void UNICODE_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void InterpretedStringLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LeftShift_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void EqualEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void DecimalLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 4 : _type = INT_LITERAL;  break;
+		switch (actionIndex) {
+		case 4: _type = INT_LITERAL;  break;
 		}
 	}
 	public void For_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Package_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void FLOAT_LITERAL_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void OCTAL_BYTE_VALUE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void StringLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Plus_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Bang_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 1 : _channel = HIDDEN;  break;
+		switch (actionIndex) {
+		case 1: _channel = HIDDEN;  break;
 		}
 	}
 	public void Dot_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void OCTAL_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void RightBrack_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LittleUValue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void Comma_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void RightBrace_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 
@@ -777,7 +777,7 @@ public abstract class AbstractGoLexer extends Lexer {
 		"?\1?\1@\1@\1A\1A\1B\1B\1C\1C\1D\1D\1E\1E\1F\1F\1G\1G\1H\1H\1H\5H\u01f0"+
 		"\bH\nH\fH\u01f3\tH\1I\4I\u01f6\bI\13I\fI\u01f7\1I\1I\1J\3J\u01fd\bJ\1"+
 		"J\1J\1J\1J\1K\1K\1K\1K\5K\u0207\bK\nK\fK\u020a\tK\1K\1K\1L\1L\1L\1L\5"+
-		"L\u0212\bL\nL\fL\u0215\tL\1L\1L\1L\1L\1L\1M\1M\5M\u021e\bM\nM\fM\u0221"+
+		"L\u0212\bL\u800aL\fL\u0215\tL\1L\1L\1L\1L\1L\1M\1M\5M\u021e\bM\nM\fM\u0221"+
 		"\tM\1M\1M\1N\1N\5N\u0227\bN\nN\fN\u022a\tN\1N\1N\1O\1O\1O\4O\u0231\bO"+
 		"\13O\fO\u0232\1O\1O\1P\1P\3P\u0239\bP\1P\1P\1Q\1Q\1Q\3Q\u0240\bQ\1Q\3"+
 		"Q\u0243\bQ\1Q\1Q\1Q\1Q\1Q\1Q\3Q\u024b\bQ\3Q\u024d\bQ\1R\4R\u0250\bR\13"+
@@ -996,8 +996,5 @@ public abstract class AbstractGoLexer extends Lexer {
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
-		//org.antlr.v4.tool.DOTGenerator dot = new org.antlr.v4.tool.DOTGenerator(null);
-		//System.out.println(dot.getDOT(_ATN.decisionToState.get(0), ruleNames, false));
-		//System.out.println(dot.getDOT(_ATN.ruleToStartState[2], ruleNames, false));
 	}
 }
