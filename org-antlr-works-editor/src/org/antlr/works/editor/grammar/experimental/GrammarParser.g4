@@ -119,6 +119,7 @@ prequelConstruct
 
 // A list of options that affect analysis and/or code generation
 optionsSpec
+@version{1}
 	:	OPTIONS (option SEMI)* RBRACE
 	;
 
@@ -135,14 +136,15 @@ optionValue
 		// and so on. Many option values meet this description
 		qid
 
-	|	// The value is a long string
-		STRING_LITERAL
+	|	(	// The value is a long string
+			STRING_LITERAL
 
-	|	// The value was an integer number
-		INT
+		|	// The value was an integer number
+			INT
 
-	|	// Asterisk, used for things like k=*
-		STAR
+		|	// Asterisk, used for things like k=*
+			STAR
+		)
 	;
 
 // A list of grammars to which this grammar will delegate certain
@@ -174,26 +176,27 @@ actionBlock
 			(	actionBlock
 			|	actionExpression
 			|	actionScopeExpression
-			|	ACTION_WS
-			|	ACTION_NEWLINE
-			|	ACTION_COMMENT
-			|	ACTION_LITERAL
-			|	ACTION_TEXT
-			|	ACTION_LT
-			|	ACTION_GT
-			|	ACTION_LPAREN
-			|	ACTION_RPAREN
-			|	ACTION_LBRACK
-			|	ACTION_RBRACK
-			|	ACTION_EQUALS
-			|	ACTION_COMMA
-			|	ACTION_ESCAPE
-			|	ACTION_WORD
-			|	ACTION_REFERENCE
-			|	ACTION_COLON
-			|	ACTION_COLON2
-			|	ACTION_MINUS
-			|	ACTION_DOT
+			|	(	ACTION_WS
+				|	ACTION_NEWLINE
+				|	ACTION_COMMENT
+				|	ACTION_LITERAL
+				|	ACTION_TEXT
+				|	ACTION_LT
+				|	ACTION_GT
+				|	ACTION_LPAREN
+				|	ACTION_RPAREN
+				|	ACTION_LBRACK
+				|	ACTION_RBRACK
+				|	ACTION_EQUALS
+				|	ACTION_COMMA
+				|	ACTION_ESCAPE
+				|	ACTION_WORD
+				|	ACTION_REFERENCE
+				|	ACTION_COLON
+				|	ACTION_COLON2
+				|	ACTION_MINUS
+				|	ACTION_DOT
+				)
 			)*
 		END_ACTION
 	;
@@ -266,8 +269,9 @@ action
  */
 actionScopeName
 	:	id
-	|	LEXER
-	|	PARSER
+	|	(	LEXER
+		|	PARSER
+		)
 	;
 
 modeSpec
@@ -502,7 +506,8 @@ labeledLexerElement
 	;
 
 lexerBlock
-	:	LPAREN lexerAltList RPAREN
+@version{1}
+	:	LPAREN (optionsSpec COLON)? lexerAltList RPAREN
 	;
 
 // channel=HIDDEN, skip, more, mode(INSIDE), push(INSIDE), pop
@@ -580,9 +585,10 @@ blockSuffix
 	;
 
 ebnfSuffix
-	:	QUESTION
-	|	STAR
-	|	PLUS
+@version{1}
+	:	QUESTION QUESTION?
+	|	STAR QUESTION?
+	|	PLUS QUESTION?
 	;
 
 lexerAtom
@@ -633,10 +639,11 @@ blockSet
 
 setElement
 @version{2}
-	:	TOKEN_REF
-	|	STRING_LITERAL
+	:	(	TOKEN_REF
+		|	STRING_LITERAL
+		|	LEXER_CHAR_SET
+		)
 	|	range
-	|	LEXER_CHAR_SET
 	;
 
 // -------------
