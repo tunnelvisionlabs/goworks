@@ -10,6 +10,7 @@ package org.tvl.goworks.editor.go.navigation;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -30,13 +31,15 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.AnonymousFieldContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BlockContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.BodyContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ChannelTypeContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.CompositeLiteralContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionTypeContext;
@@ -47,6 +50,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.MapTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.MethodSpecContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.OperandExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterDeclContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParameterListContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ParametersContext;
@@ -199,11 +203,23 @@ public class GoDeclarationsScanner {
             }
 
             IdentifierListContext idListContext = ctx.identifierList();
+            ExpressionListContext expressionListContext = ctx.expressionList(0);
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
-            String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
-            for (TerminalNode<Token> identifier : identifiers) {
+            List<? extends ExpressionContext> expressions = expressionListContext != null ? expressionListContext.expression() : Collections.<ExpressionContext>emptyList();
+            String type = ctx.type() != null ? HtmlSignatureVisitor.UNCOLORED.visit(ctx.type()) : "";
+            for (int i = 0; i < identifiers.size(); i++) {
+                TerminalNode<Token> identifier = identifiers.get(i);
+                String varType = type;
+                if (varType.isEmpty() && expressions.size() == identifiers.size()) {
+                    varType = HtmlSignatureVisitor.UNCOLORED.visit(expressions.get(i));
+                }
+
+                if (!varType.isEmpty()) {
+                    varType = String.format(" : <font color='808080'>%s</font>", varType);
+                }
+
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                String signature = identifier.getSymbol().getText() + type;
+                String signature = identifier.getSymbol().getText() + varType;
 
                 GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
@@ -944,6 +960,28 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        })
+        public String visitOperandExpr(OperandExprContext ctx) {
+            // default impl does the right thing
+            return super.visitOperandExpr(ctx);
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalType, version=0),
+        })
+        public String visitCompositeLiteral(CompositeLiteralContext ctx) {
+            if (ctx.literalType() != null) {
+                return visit(ctx.literalType());
+            }
+
+            return "";
+        }
+
+        @Override
+        @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
         })
@@ -960,7 +998,11 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
         })
         public String visitStructType(StructTypeContext ctx) {
-            return "struct{?}";
+            if (ctx.fieldDecl().isEmpty()) {
+                return "struct{}";
+            }
+
+            return "struct{...}";
         }
 
         @Override
