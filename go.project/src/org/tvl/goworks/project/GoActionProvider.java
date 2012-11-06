@@ -297,7 +297,7 @@ public final class GoActionProvider implements ActionProvider {
 
     private static final String PACKAGE_NAME_PATTERN_STRING = "\\w+(?:/\\w+)*";
     private static final Pattern PACKAGE_NAME_PATTERN = Pattern.compile(PACKAGE_NAME_PATTERN_STRING);
-    private static final Pattern BUILD_ERROR_PATTERN = Pattern.compile("(?<file>\\w+(?:[\\\\/]\\w+)*[\\\\/]\\w+\\.go):(?<line>\\d+):\\s*(?<message>.*)");
+    private static final Pattern BUILD_ERROR_PATTERN = Pattern.compile("(\\w+(?:[\\\\/]\\w+)*[\\\\/]\\w+\\.go):(\\d+):\\s*(.*)");
 
     private void executeImpl(final String commandName, final String packageName, final InputOutput io, final ExecutionListener listener) {
         ExecutionEnvironmentFactoryService executionEnvironmentFactoryService =
@@ -787,9 +787,9 @@ public final class GoActionProvider implements ActionProvider {
             }
 
             final String workingDirectory = _project.getProjectDirectory().getPath().replace('/', File.separatorChar);
-            String filePath = workingDirectory + File.separatorChar + matcher.group("file").replace('/', File.separatorChar);
-            String message = matcher.group("message");
-            int line = Integer.parseInt(matcher.group("line"));
+            String filePath = workingDirectory + File.separatorChar + matcher.group(1).replace('/', File.separatorChar);
+            String message = matcher.group(3);
+            int line = Integer.parseInt(matcher.group(2));
             final int column = -1;
 
             FileObject file = FileUtil.toFileObject(new File(filePath));

@@ -93,25 +93,25 @@ public class GoTestOutputWriter extends Writer {
         }
     }
 
-    private static final Pattern RUN_PATTERN = Pattern.compile("^===\\s*RUN\\s+(?<test>[a-zA-Z0-9_]+)\\s*$");
-    private static final Pattern TEST_RESULT_PATTERN = Pattern.compile("^---\\s*(?<result>PASS|FAIL):\\s*(?<test>[a-zA-Z0-9_]+)\\s+\\((?<time>[0-9+](\\.[0-9]+)?)\\s+seconds\\)\\s*$");
+    private static final Pattern RUN_PATTERN = Pattern.compile("^===\\s*RUN\\s+([a-zA-Z0-9_]+)\\s*$");
+    private static final Pattern TEST_RESULT_PATTERN = Pattern.compile("^---\\s*(PASS|FAIL):\\s*([a-zA-Z0-9_]+)\\s+\\(([0-9+](\\.[0-9]+)?)\\s+seconds\\)\\s*$");
     private static final Pattern PACKAGE_RESULT_PATTERN = Pattern.compile(
         "^" +
-        "(?<result>\\?|ok|FAIL)" +
+        "(\\?|ok|FAIL)" + // result
         "\\s+" +
-        "(?<package>[a-zA-Z0-9_]+)" +
+        "([a-zA-Z0-9_]+)" + // package
         "\\s+" +
         "(?:" +
-            "(?<time>[0-9+](\\.[0-9]+)?)s" +
+            "([0-9+](\\.[0-9]+)?)s" + // time
             "|" +
-            "\\[(?<message>.*?)\\]" +
+            "\\[(.*?)\\]" + // message
         ")\\s*$");
 
     private void processLine(String line) {
         Matcher runMatcher = RUN_PATTERN.matcher(line);
         if (runMatcher.matches()) {
             createSession();
-            String test = runMatcher.group("test");
+            String test = runMatcher.group(1);
             processRun(test);
             return;
         }
@@ -119,9 +119,9 @@ public class GoTestOutputWriter extends Writer {
         Matcher testResultMatcher = TEST_RESULT_PATTERN.matcher(line);
         if (testResultMatcher.matches()) {
             createSession();
-            String result = testResultMatcher.group("result");
-            String test = testResultMatcher.group("test");
-            String time = testResultMatcher.group("time");
+            String result = testResultMatcher.group(1);
+            String test = testResultMatcher.group(2);
+            String time = testResultMatcher.group(3);
             processTestResult(result, test, time);
             return;
         }
@@ -129,10 +129,10 @@ public class GoTestOutputWriter extends Writer {
         Matcher packageResultMatcher = PACKAGE_RESULT_PATTERN.matcher(line);
         if (packageResultMatcher.matches()) {
             createSession();
-            String result = packageResultMatcher.group("result");
-            String packageName = packageResultMatcher.group("package");
-            String time = packageResultMatcher.group("time");
-            String message = packageResultMatcher.group("message");
+            String result = packageResultMatcher.group(1);
+            String packageName = packageResultMatcher.group(2);
+            String time = packageResultMatcher.group(3);
+            String message = packageResultMatcher.group(4);
             processPackageResult(result, packageName, time, message);
             return;
         }
