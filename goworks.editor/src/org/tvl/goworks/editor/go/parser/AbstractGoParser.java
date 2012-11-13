@@ -2407,11 +2407,8 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 
 	public static class VarSpecContext extends ParserRuleContext<Token> {
-		public List<? extends ExpressionListContext> expressionList() {
-			return getRuleContexts(ExpressionListContext.class);
-		}
-		public ExpressionListContext expressionList(int i) {
-			return getRuleContext(ExpressionListContext.class,i);
+		public ExpressionListContext expressionList() {
+			return getRuleContext(ExpressionListContext.class,0);
 		}
 		public IdentifierListContext identifierList() {
 			return getRuleContext(IdentifierListContext.class,0);
@@ -2988,7 +2985,6 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(539);
-			_input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==INT_LITERAL || _la==IMAGINARY_LITERAL || _la==FLOAT_LITERAL || _la==CharLiteral || _la==StringLiteral) ) {
 			_errHandler.recoverInline(this);
@@ -5193,7 +5189,6 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(737);
-			_input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==PlusEqual || _la==MinusEqual || _la==PipeEqual || _la==CaretEqual) ) {
 			_errHandler.recoverInline(this);
@@ -5241,7 +5236,6 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(739);
-			_input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==StarEqual || _la==SlashEqual || _la==PercentEqual || _la==AmpEqual || _la==CaretEqual || _la==LeftShiftEqual || _la==RightShiftEqual || _la==AmpCaretEqual) ) {
 			_errHandler.recoverInline(this);
