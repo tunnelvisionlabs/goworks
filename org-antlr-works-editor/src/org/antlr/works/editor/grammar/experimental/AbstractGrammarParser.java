@@ -208,11 +208,8 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 
 	public static class GrammarTypeContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> PARSER() { return getToken(AbstractGrammarParser.PARSER, 0); }
-		public TerminalNode<Token> GRAMMAR(int i) {
-			return getToken(AbstractGrammarParser.GRAMMAR, i);
-		}
 		public TerminalNode<Token> LEXER() { return getToken(AbstractGrammarParser.LEXER, 0); }
-		public List<? extends TerminalNode<Token>> GRAMMAR() { return getTokens(AbstractGrammarParser.GRAMMAR); }
+		public TerminalNode<Token> GRAMMAR() { return getToken(AbstractGrammarParser.GRAMMAR, 0); }
 		public GrammarTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -237,11 +234,10 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		GrammarTypeContext _localctx = new GrammarTypeContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_grammarType);
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
 			setState(168);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
+				enterOuterAlt(_localctx, 1);
 				{
 				setState(163); match(LEXER);
 				setState(164); match(GRAMMAR);
@@ -249,6 +245,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				break;
 
 			case 2:
+				enterOuterAlt(_localctx, 2);
 				{
 				setState(165); match(PARSER);
 				setState(166); match(GRAMMAR);
@@ -256,11 +253,11 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				break;
 
 			case 3:
+				enterOuterAlt(_localctx, 3);
 				{
 				setState(167); match(GRAMMAR);
 				}
 				break;
-			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -519,7 +516,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(192);
-				_input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==STAR || _la==INT || _la==STRING_LITERAL) ) {
 				_errHandler.recoverInline(this);
@@ -920,7 +916,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 					case 4:
 						{
 						setState(233);
-						_input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==ACTION_DOT || _la==ACTION_LT || _la==ACTION_GT || _la==ACTION_LPAREN || _la==ACTION_RPAREN || _la==ACTION_LBRACK || _la==ACTION_RBRACK || _la==ACTION_EQUALS || _la==ACTION_COMMA || _la==ACTION_COLON2 || _la==ACTION_COLON || _la==ACTION_MINUS || _la==ACTION_ESCAPE || _la==ACTION_WORD || _la==ACTION_REFERENCE || _la==ACTION_COMMENT || _la==ACTION_LITERAL || _la==ACTION_TEXT || _la==ACTION_WS || _la==ACTION_NEWLINE) ) {
 						_errHandler.recoverInline(this);
@@ -1295,7 +1290,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 					{
 					{
 					setState(306);
-					_input.LT(1);
 					_la = _input.LA(1);
 					if ( !(_la==ARG_ACTION_LT || _la==ARG_ACTION_GT || _la==ARG_ACTION_LPAREN || _la==ARG_ACTION_RPAREN || _la==ARG_ACTION_EQUALS || _la==ARG_ACTION_COMMA || _la==ARG_ACTION_ESCAPE || _la==ARG_ACTION_WORD || _la==ARG_ACTION_ELEMENT || _la==ARG_ACTION_TEXT || _la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE) ) {
 					_errHandler.recoverInline(this);
@@ -1752,7 +1746,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(388);
-			_input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE || _la==ACTION_COMMENT || _la==ACTION_WS || _la==ACTION_NEWLINE) ) {
 			_errHandler.recoverInline(this);
@@ -1878,7 +1871,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(400);
-				_input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==LEXER || _la==PARSER) ) {
 				_errHandler.recoverInline(this);
@@ -2818,7 +2810,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(496);
-			_input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==FRAGMENT || _la==PROTECTED || _la==PUBLIC || _la==PRIVATE) ) {
 			_errHandler.recoverInline(this);
@@ -4764,7 +4755,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(702);
-				_input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==TOKEN_REF || _la==LEXER_CHAR_SET || _la==STRING_LITERAL) ) {
 				_errHandler.recoverInline(this);
@@ -5236,7 +5226,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(760);
-			_input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==TOKEN_REF || _la==RULE_REF) ) {
 			_errHandler.recoverInline(this);
