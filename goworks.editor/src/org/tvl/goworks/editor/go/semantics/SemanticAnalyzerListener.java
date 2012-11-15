@@ -1828,17 +1828,17 @@ public class SemanticAnalyzerListener implements GoParserListener {
             
             if (ctx.type() != null) {
                 treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.EXPLICIT_TYPE, ctx.type());
-            } else if (ctx.expressionList(0) != null) {
+            } else if (ctx.expressionList() != null) {
                 int varCount = ctx.identifierList().IDENTIFIER().size();
-                int exprCount = ctx.expressionList(0).expression().size();
+                int exprCount = ctx.expressionList().expression().size();
                 if (varCount > 1 && exprCount == 1) {
                     for (int i = 0; i < varCount; i++) {
-                        treeDecorator.putProperty(ctx.identifierList().IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList(0).expression(0));
+                        treeDecorator.putProperty(ctx.identifierList().IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList().expression(0));
                         treeDecorator.putProperty(ctx.identifierList().IDENTIFIER(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 } else if (varCount == exprCount) {
                     for (int i = 0; i < varCount; i++) {
-                        treeDecorator.putProperty(ctx.identifierList().IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList(0).expression(i));
+                        treeDecorator.putProperty(ctx.identifierList().IDENTIFIER(i), GoAnnotations.IMPLICIT_TYPE, ctx.expressionList().expression(i));
                         treeDecorator.putProperty(ctx.identifierList().IDENTIFIER(i), GoAnnotations.IMPLICIT_INDEX, i);
                     }
                 }

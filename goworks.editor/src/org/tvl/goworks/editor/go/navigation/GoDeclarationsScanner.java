@@ -203,7 +203,7 @@ public class GoDeclarationsScanner {
             }
 
             IdentifierListContext idListContext = ctx.identifierList();
-            ExpressionListContext expressionListContext = ctx.expressionList(0);
+            ExpressionListContext expressionListContext = ctx.expressionList();
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             List<? extends ExpressionContext> expressions = expressionListContext != null ? expressionListContext.expression() : Collections.<ExpressionContext>emptyList();
             String type = ctx.type() != null ? HtmlSignatureVisitor.UNCOLORED.visit(ctx.type()) : "";

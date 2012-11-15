@@ -489,7 +489,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitVarSpec(VarSpecContext ctx) {
         TypeModelImpl explicitType = ctx.type() != null ? _typeModelStack.pop() : _unknownType;
         IdentifierListContext idList = ctx.identifierList();
-        ExpressionListContext expressionList = ctx.expressionList(0);
+        ExpressionListContext expressionList = ctx.expressionList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
         List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : Collections.<ExpressionContext>emptyList();
         if (!ids.isEmpty()) {

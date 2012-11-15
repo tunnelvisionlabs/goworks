@@ -1386,7 +1386,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
                 public void enterVarSpec(VarSpecContext ctx) {
-                    addVars(locals, ctx.identifierList(), ctx.type(), ctx.expressionList(0));
+                    addVars(locals, ctx.identifierList(), ctx.type(), ctx.expressionList());
                 }
 
                 @Override
