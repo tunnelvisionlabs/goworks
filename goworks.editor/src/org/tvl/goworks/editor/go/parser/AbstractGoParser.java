@@ -4391,11 +4391,11 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		public SimpleStmtContext simpleStmt() {
 			return getRuleContext(SimpleStmtContext.class,0);
 		}
-		public ReturnStmtContext returnStmt() {
-			return getRuleContext(ReturnStmtContext.class,0);
-		}
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
+		}
+		public ReturnStmtContext returnStmt() {
+			return getRuleContext(ReturnStmtContext.class,0);
 		}
 		public SelectStmtContext selectStmt() {
 			return getRuleContext(SelectStmtContext.class,0);
@@ -4467,7 +4467,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(681); simpleStmt();
+				setState(681); block();
 				}
 				break;
 
@@ -4516,42 +4516,42 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			case 10:
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(688); block();
+				setState(688); ifStmt();
 				}
 				break;
 
 			case 11:
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(689); ifStmt();
+				setState(689); switchStmt();
 				}
 				break;
 
 			case 12:
 				enterOuterAlt(_localctx, 12);
 				{
-				setState(690); switchStmt();
+				setState(690); selectStmt();
 				}
 				break;
 
 			case 13:
 				enterOuterAlt(_localctx, 13);
 				{
-				setState(691); selectStmt();
+				setState(691); forStmt();
 				}
 				break;
 
 			case 14:
 				enterOuterAlt(_localctx, 14);
 				{
-				setState(692); forStmt();
+				setState(692); deferStmt();
 				}
 				break;
 
 			case 15:
 				enterOuterAlt(_localctx, 15);
 				{
-				setState(693); deferStmt();
+				setState(693); simpleStmt();
 				}
 				break;
 			}
@@ -4615,42 +4615,42 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(696); emptyStmt();
+				setState(696); shortVarDecl();
 				}
 				break;
 
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(697); expressionStmt();
+				setState(697); sendStmt();
 				}
 				break;
 
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(698); sendStmt();
+				setState(698); incDecStmt();
 				}
 				break;
 
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(699); incDecStmt();
+				setState(699); assignment();
 				}
 				break;
 
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(700); assignment();
+				setState(700); expressionStmt();
 				}
 				break;
 
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(701); shortVarDecl();
+				setState(701); emptyStmt();
 				}
 				break;
 			}
@@ -7835,28 +7835,28 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		"\3@ \0\u029f\u02a1\5?\0\0\u02a0\u029f\1\0\0\0\u02a0\u02a1\1\0\0\0\u02a1"+
 		"w\1\0\0\0\u02a2\u02a3\3\0\0\0\u02a3\u02a4\5@\0\0\u02a4\u02a5\3t:\0\u02a5"+
 		"\u02a6\5A\0\0\u02a6y\1\0\0\0\u02a7\u02b7\3\66\33\0\u02a8\u02b7\3\u0080"+
-		"@\0\u02a9\u02b7\3|>\0\u02aa\u02b7\3\u00b4Z\0\u02ab\u02b7\3\u00c0`\0\u02ac"+
-		"\u02b7\3\u00c2a\0\u02ad\u02b7\3\u00c4b\0\u02ae\u02b7\3\u00c6c\0\u02af"+
-		"\u02b7\3\u00c8d\0\u02b0\u02b7\3\64\32\0\u02b1\u02b7\3\u0094J\0\u02b2\u02b7"+
-		"\3\u0096K\0\u02b3\u02b7\3\u00b6[\0\u02b4\u02b7\3\u00a8T\0\u02b5\u02b7"+
-		"\3\u00cae\0\u02b6\u02a7\1\0\0\0\u02b6\u02a8\1\0\0\0\u02b6\u02a9\1\0\0"+
-		"\0\u02b6\u02aa\1\0\0\0\u02b6\u02ab\1\0\0\0\u02b6\u02ac\1\0\0\0\u02b6\u02ad"+
-		"\1\0\0\0\u02b6\u02ae\1\0\0\0\u02b6\u02af\1\0\0\0\u02b6\u02b0\1\0\0\0\u02b6"+
-		"\u02b1\1\0\0\0\u02b6\u02b2\1\0\0\0\u02b6\u02b3\1\0\0\0\u02b6\u02b4\1\0"+
-		"\0\0\u02b6\u02b5\1\0\0\0\u02b7{\1\0\0\0\u02b8\u02bf\3~?\0\u02b9\u02bf"+
-		"\3\u0084B\0\u02ba\u02bf\3\u0086C\0\u02bb\u02bf\3\u008aE\0\u02bc\u02bf"+
-		"\3\u008cF\0\u02bd\u02bf\3J%\0\u02be\u02b8\1\0\0\0\u02be\u02b9\1\0\0\0"+
-		"\u02be\u02ba\1\0\0\0\u02be\u02bb\1\0\0\0\u02be\u02bc\1\0\0\0\u02be\u02bd"+
-		"\1\0\0\0\u02bf}\1\0\0\0\u02c0\u02c1\1\0\0\0\u02c1\177\1\0\0\0\u02c2\u02c3"+
-		"\3\u0082A\0\u02c3\u02c4\5I\0\0\u02c4\u02c5\3z=\0\u02c5\u0081\1\0\0\0\u02c6"+
-		"\u02c7\5J\0\0\u02c7\u0083\1\0\0\0\u02c8\u02c9\3t:\0\u02c9\u0085\1\0\0"+
-		"\0\u02ca\u02cb\3\u0088D\0\u02cb\u02cc\5\63\0\0\u02cc\u02cd\3t:\0\u02cd"+
-		"\u0087\1\0\0\0\u02ce\u02cf\3t:\0\u02cf\u0089\1\0\0\0\u02d0\u02d1\3t:\0"+
-		"\u02d1\u02d2\7\5\0\0\u02d2\u008b\1\0\0\0\u02d3\u02d4\3@ \0\u02d4\u02d5"+
-		"\3\u008eG\0\u02d5\u02d6\3@ \0\u02d6\u008d\1\0\0\0\u02d7\u02db\3\u0090"+
-		"H\0\u02d8\u02db\3\u0092I\0\u02d9\u02db\59\0\0\u02da\u02d7\1\0\0\0\u02da"+
-		"\u02d8\1\0\0\0\u02da\u02d9\1\0\0\0\u02db\u008f\1\0\0\0\u02dc\u02dd\7\6"+
-		"\0\0\u02dd\u0091\1\0\0\0\u02de\u02df\7\7\0\0\u02df\u0093\1\0\0\0\u02e0"+
+		"@\0\u02a9\u02b7\3\64\32\0\u02aa\u02b7\3\u00b4Z\0\u02ab\u02b7\3\u00c0`"+
+		"\0\u02ac\u02b7\3\u00c2a\0\u02ad\u02b7\3\u00c4b\0\u02ae\u02b7\3\u00c6c"+
+		"\0\u02af\u02b7\3\u00c8d\0\u02b0\u02b7\3\u0094J\0\u02b1\u02b7\3\u0096K"+
+		"\0\u02b2\u02b7\3\u00b6[\0\u02b3\u02b7\3\u00a8T\0\u02b4\u02b7\3\u00cae"+
+		"\0\u02b5\u02b7\3|>\0\u02b6\u02a7\1\0\0\0\u02b6\u02a8\1\0\0\0\u02b6\u02a9"+
+		"\1\0\0\0\u02b6\u02aa\1\0\0\0\u02b6\u02ab\1\0\0\0\u02b6\u02ac\1\0\0\0\u02b6"+
+		"\u02ad\1\0\0\0\u02b6\u02ae\1\0\0\0\u02b6\u02af\1\0\0\0\u02b6\u02b0\1\0"+
+		"\0\0\u02b6\u02b1\1\0\0\0\u02b6\u02b2\1\0\0\0\u02b6\u02b3\1\0\0\0\u02b6"+
+		"\u02b4\1\0\0\0\u02b6\u02b5\1\0\0\0\u02b7{\1\0\0\0\u02b8\u02bf\3J%\0\u02b9"+
+		"\u02bf\3\u0086C\0\u02ba\u02bf\3\u008aE\0\u02bb\u02bf\3\u008cF\0\u02bc"+
+		"\u02bf\3\u0084B\0\u02bd\u02bf\3~?\0\u02be\u02b8\1\0\0\0\u02be\u02b9\1"+
+		"\0\0\0\u02be\u02ba\1\0\0\0\u02be\u02bb\1\0\0\0\u02be\u02bc\1\0\0\0\u02be"+
+		"\u02bd\1\0\0\0\u02bf}\1\0\0\0\u02c0\u02c1\1\0\0\0\u02c1\177\1\0\0\0\u02c2"+
+		"\u02c3\3\u0082A\0\u02c3\u02c4\5I\0\0\u02c4\u02c5\3z=\0\u02c5\u0081\1\0"+
+		"\0\0\u02c6\u02c7\5J\0\0\u02c7\u0083\1\0\0\0\u02c8\u02c9\3t:\0\u02c9\u0085"+
+		"\1\0\0\0\u02ca\u02cb\3\u0088D\0\u02cb\u02cc\5\63\0\0\u02cc\u02cd\3t:\0"+
+		"\u02cd\u0087\1\0\0\0\u02ce\u02cf\3t:\0\u02cf\u0089\1\0\0\0\u02d0\u02d1"+
+		"\3t:\0\u02d1\u02d2\7\5\0\0\u02d2\u008b\1\0\0\0\u02d3\u02d4\3@ \0\u02d4"+
+		"\u02d5\3\u008eG\0\u02d5\u02d6\3@ \0\u02d6\u008d\1\0\0\0\u02d7\u02db\3"+
+		"\u0090H\0\u02d8\u02db\3\u0092I\0\u02d9\u02db\59\0\0\u02da\u02d7\1\0\0"+
+		"\0\u02da\u02d8\1\0\0\0\u02da\u02d9\1\0\0\0\u02db\u008f\1\0\0\0\u02dc\u02dd"+
+		"\7\6\0\0\u02dd\u0091\1\0\0\0\u02de\u02df\7\7\0\0\u02df\u0093\1\0\0\0\u02e0"+
 		"\u02e4\5\17\0\0\u02e1\u02e2\3|>\0\u02e2\u02e3\5H\0\0\u02e3\u02e5\1\0\0"+
 		"\0\u02e4\u02e1\1\0\0\0\u02e4\u02e5\1\0\0\0\u02e5\u02e6\1\0\0\0\u02e6\u02e7"+
 		"\3t:\0\u02e7\u02ed\3\64\32\0\u02e8\u02eb\5\t\0\0\u02e9\u02ec\3\u0094J"+

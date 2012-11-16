@@ -413,28 +413,28 @@ conversion
 statement
     :   declaration
     |   labeledStmt
-    |   simpleStmt
+    |   block
     |   goStmt
     |   returnStmt
     |   breakStmt
     |   continueStmt
     |   gotoStmt
     |   fallthroughStmt
-    |   block
     |   ifStmt
     |   switchStmt
     |   selectStmt
     |   forStmt
     |   deferStmt
+    |   simpleStmt
     ;
 
 simpleStmt
-    :   emptyStmt
-    |   expressionStmt
+    :   shortVarDecl
     |   sendStmt
     |   incDecStmt
     |   assignment
-    |   shortVarDecl
+    |   expressionStmt
+    |   emptyStmt
     ;
 
 emptyStmt
