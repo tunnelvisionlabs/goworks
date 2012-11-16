@@ -18,7 +18,9 @@ import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.PredicateTransition;
 import org.antlr.v4.runtime.atn.SemanticContext;
+import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 import org.netbeans.api.annotations.common.NonNull;
@@ -103,6 +105,34 @@ public class GoParserFactory {
         }
     }
 
+    public static int getQidDecision(@NonNull ATN atn) {
+        ATNState decisionState = atn.ruleToStartState[GoParser.RULE_qualifiedIdentifier].transition(0).target;
+        if (decisionState instanceof DecisionState) {
+            return ((DecisionState)decisionState).decision;
+        } else {
+            return -1;
+        }
+    }
+
+    public static SemanticContext.Predicate getQidPredicate(@NonNull ATN atn) {
+        int predicateIndex = -1;
+        for (ATNState state : atn.states) {
+            if (state.ruleIndex != GoParser.RULE_qualifiedIdentifier) {
+                continue;
+            }
+
+            for (int i = 0; i < state.getNumberOfOptimizedTransitions(); i++) {
+                Transition transition = state.getOptimizedTransition(i);
+                if (transition instanceof PredicateTransition) {
+                    predicateIndex = ((PredicateTransition)transition).predIndex;
+                }
+            }
+        }
+
+        assert predicateIndex >= 0 : "Couldn't find the QID predicate transition.";
+        return new SemanticContext.Predicate(GoParser.RULE_qualifiedIdentifier, predicateIndex, false);
+    }
+
     private static final class GoParserWrapper extends GoParser {
 
         public GoParserWrapper(TokenStream<? extends Token> input) {
@@ -114,18 +144,14 @@ public class GoParserFactory {
 
     protected static class GoParserATNSimulator extends ParserATNSimulator<Token> {
 
-        private static final SemanticContext.Predicate qidPredicate = new SemanticContext.Predicate(GoParser.RULE_qualifiedIdentifier, 0, false);
+        private final SemanticContext.Predicate qidPredicate;
 
         private final int QID_DECISION;
 
         public GoParserATNSimulator(Parser<Token> parser, ATN atn) {
             super(parser, atn);
-            ATNState decisionState = atn.ruleToStartState[GoParser.RULE_qualifiedIdentifier].transition(0).target;
-            if (decisionState instanceof DecisionState) {
-                QID_DECISION = ((DecisionState)decisionState).decision;
-            } else {
-                QID_DECISION = -1;
-            }
+            QID_DECISION = getQidDecision(atn);
+            qidPredicate = getQidPredicate(atn);
         }
 
         @Override

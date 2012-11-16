@@ -13,33 +13,28 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNState;
-import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.SemanticContext;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionParserATNSimulator;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.netbeans.api.annotations.common.NonNull;
 import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.GoParserFactory;
 
 /**
  *
  * @author Sam Harwell
  */
 public class CompletionParserATNSimulator extends AbstractCompletionParserATNSimulator {
-    private static final SemanticContext qidPredicate = new SemanticContext.Predicate(GoParser.RULE_qualifiedIdentifier, 0, false);
+    private final SemanticContext qidPredicate;
 
     private final int QID_DECISION;
 
     public CompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
         disable_global_context = true;
-        ATNState decisionState = atn.ruleToStartState[GoParser.RULE_qualifiedIdentifier].transition(0).target;
-        if (decisionState instanceof DecisionState) {
-            QID_DECISION = ((DecisionState)decisionState).decision;
-        } else {
-            QID_DECISION = -1;
-        }
+        QID_DECISION = GoParserFactory.getQidDecision(atn);
+        qidPredicate = GoParserFactory.getQidPredicate(atn);
     }
 
     public static final IntervalSet WORDLIKE_TOKEN_TYPES =
