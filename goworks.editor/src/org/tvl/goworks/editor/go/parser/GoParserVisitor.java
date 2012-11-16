@@ -31,6 +31,8 @@ public interface GoParserVisitor<Symbol extends Token, Result> extends ParseTree
 
 	Result visitTag(AbstractGoParser.TagContext ctx);
 
+	Result visitElementNameOrIndex(AbstractGoParser.ElementNameOrIndexContext ctx);
+
 	Result visitFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx);
 
 	Result visitSelectorExpr(AbstractGoParser.SelectorExprContext ctx);
@@ -38,8 +40,6 @@ public interface GoParserVisitor<Symbol extends Token, Result> extends ParseTree
 	Result visitParameterList(AbstractGoParser.ParameterListContext ctx);
 
 	Result visitReceiverType(AbstractGoParser.ReceiverTypeContext ctx);
-
-	Result visitFieldName(AbstractGoParser.FieldNameContext ctx);
 
 	Result visitIfStmt(AbstractGoParser.IfStmtContext ctx);
 
@@ -198,8 +198,6 @@ public interface GoParserVisitor<Symbol extends Token, Result> extends ParseTree
 	Result visitBaseTypeName(AbstractGoParser.BaseTypeNameContext ctx);
 
 	Result visitMethodExpr(AbstractGoParser.MethodExprContext ctx);
-
-	Result visitElementIndex(AbstractGoParser.ElementIndexContext ctx);
 
 	Result visitTypeList(AbstractGoParser.TypeListContext ctx);
 

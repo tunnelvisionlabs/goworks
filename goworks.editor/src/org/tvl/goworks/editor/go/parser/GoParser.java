@@ -133,7 +133,7 @@ public class GoParser extends AbstractGoParser {
             @RuleDependency(recognizer=GoParser.class, rule=RULE_expression, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_exprSwitchStmt, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_arrayLength, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_elementIndex, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_elementNameOrIndex, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_channel, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_incDecStmt, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_ifStmt, version=0),
@@ -170,7 +170,7 @@ public class GoParser extends AbstractGoParser {
             case RULE_deferStmt:
                 return false;
 
-            case RULE_elementIndex:
+            case RULE_elementNameOrIndex:
             case RULE_expressionList:
             case RULE_operand:
             case RULE_value:

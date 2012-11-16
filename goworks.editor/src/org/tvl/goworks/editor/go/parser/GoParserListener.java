@@ -39,6 +39,9 @@ public interface GoParserListener extends ParseTreeListener<Token> {
 	void enterTag(AbstractGoParser.TagContext ctx);
 	void exitTag(AbstractGoParser.TagContext ctx);
 
+	void enterElementNameOrIndex(AbstractGoParser.ElementNameOrIndexContext ctx);
+	void exitElementNameOrIndex(AbstractGoParser.ElementNameOrIndexContext ctx);
+
 	void enterFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx);
 	void exitFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx);
 
@@ -50,9 +53,6 @@ public interface GoParserListener extends ParseTreeListener<Token> {
 
 	void enterReceiverType(AbstractGoParser.ReceiverTypeContext ctx);
 	void exitReceiverType(AbstractGoParser.ReceiverTypeContext ctx);
-
-	void enterFieldName(AbstractGoParser.FieldNameContext ctx);
-	void exitFieldName(AbstractGoParser.FieldNameContext ctx);
 
 	void enterIfStmt(AbstractGoParser.IfStmtContext ctx);
 	void exitIfStmt(AbstractGoParser.IfStmtContext ctx);
@@ -290,9 +290,6 @@ public interface GoParserListener extends ParseTreeListener<Token> {
 
 	void enterMethodExpr(AbstractGoParser.MethodExprContext ctx);
 	void exitMethodExpr(AbstractGoParser.MethodExprContext ctx);
-
-	void enterElementIndex(AbstractGoParser.ElementIndexContext ctx);
-	void exitElementIndex(AbstractGoParser.ElementIndexContext ctx);
 
 	void enterTypeList(AbstractGoParser.TypeListContext ctx);
 	void exitTypeList(AbstractGoParser.TypeListContext ctx);

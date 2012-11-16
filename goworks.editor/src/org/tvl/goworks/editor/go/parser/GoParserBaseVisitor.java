@@ -32,6 +32,8 @@ public class GoParserBaseVisitor<Result> extends AbstractParseTreeVisitor<Token,
 
 	@Override public Result visitTag(AbstractGoParser.TagContext ctx) { return visitChildren(ctx); }
 
+	@Override public Result visitElementNameOrIndex(AbstractGoParser.ElementNameOrIndexContext ctx) { return visitChildren(ctx); }
+
 	@Override public Result visitFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitSelectorExpr(AbstractGoParser.SelectorExprContext ctx) { return visitChildren(ctx); }
@@ -39,8 +41,6 @@ public class GoParserBaseVisitor<Result> extends AbstractParseTreeVisitor<Token,
 	@Override public Result visitParameterList(AbstractGoParser.ParameterListContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitReceiverType(AbstractGoParser.ReceiverTypeContext ctx) { return visitChildren(ctx); }
-
-	@Override public Result visitFieldName(AbstractGoParser.FieldNameContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitIfStmt(AbstractGoParser.IfStmtContext ctx) { return visitChildren(ctx); }
 
@@ -199,8 +199,6 @@ public class GoParserBaseVisitor<Result> extends AbstractParseTreeVisitor<Token,
 	@Override public Result visitBaseTypeName(AbstractGoParser.BaseTypeNameContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitMethodExpr(AbstractGoParser.MethodExprContext ctx) { return visitChildren(ctx); }
-
-	@Override public Result visitElementIndex(AbstractGoParser.ElementIndexContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitTypeList(AbstractGoParser.TypeListContext ctx) { return visitChildren(ctx); }
 

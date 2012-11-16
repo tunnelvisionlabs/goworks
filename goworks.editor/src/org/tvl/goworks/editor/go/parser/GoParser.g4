@@ -341,15 +341,11 @@ element
     ;
 
 key
-    :   fieldName
-    |   elementIndex
+@version{1}
+    :   elementNameOrIndex
     ;
 
-fieldName
-    :   IDENTIFIER
-    ;
-
-elementIndex
+elementNameOrIndex
     :   expression
     ;
 

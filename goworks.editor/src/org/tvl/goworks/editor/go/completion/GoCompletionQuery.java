@@ -132,12 +132,12 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConstSpecContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionOrCallExprContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.DeclarationContext;
+import org.tvl.goworks.editor.go.parser.AbstractGoParser.ElementNameOrIndexContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ElementTypeContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExprCaseClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExprSwitchStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ExpressionContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldDeclContext;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.FieldNameContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ForClauseContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.ForStmtContext;
 import org.tvl.goworks.editor.go.parser.AbstractGoParser.FunctionDeclContext;
@@ -369,7 +369,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
@@ -381,7 +380,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_commCase, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalValue, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0),
@@ -562,7 +562,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                     case GoParser.RULE_baseTypeName:
                                     case GoParser.RULE_builtinCall: // only happens for builtin method name
                                     case GoParser.RULE_expression:  // only happens for selector
-                                    case GoParser.RULE_fieldName:
                                     case GoParser.RULE_qualifiedIdentifier:
                                         possibleReference = true;
                                         break;
@@ -886,46 +885,54 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                 */
                                 RuleContext<Token> compositeLiteralRuleContext = getTopContext(parser, finalContext, IntervalSet.of(GoParser.RULE_compositeLiteral));
                                 GoParser.CompositeLiteralContext compositeLiteralContext = (GoParser.CompositeLiteralContext)compositeLiteralRuleContext;
-                                if (finalContext instanceof GoParser.FieldNameContext) {
-                                    assert compositeLiteralContext != null && compositeLiteralContext.literalType() != null;
-
-                                    List<GoParser.LiteralValueContext> literalValueContexts = new ArrayList<GoParser.LiteralValueContext>();
-                                    for (RuleContext<Token> context = finalContext; context != null; context = context.parent) {
-                                        if (context instanceof GoParser.LiteralValueContext) {
-                                            literalValueContexts.add((GoParser.LiteralValueContext)context);
-                                        } else if (context instanceof GoParser.CompositeLiteralContext) {
-                                            // stop at the containing compositeLiteral
-                                            break;
-                                        }
+                                if (finalContext instanceof GoParser.QualifiedIdentifierContext) {
+                                    GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)finalContext;
+                                    if (context.packageName() != null) {
+                                        continue;
                                     }
 
-                                    // first resolve the type of the containing compositeLiteral
-                                    Collection<? extends CodeElementModel> models = targetAnalyzer.visit(compositeLiteralContext.literalType());
-                                    if (literalValueContexts.size() > 1) {
-                                        LOGGER.log(Level.FINE, "TODO: resolve nested values - need type of the innermost value.");
-                                        models = Collections.emptyList();
-                                    }
+                                    if (context.getParent() instanceof OperandContext
+                                        && context.getParent().getParent() instanceof ExpressionContext
+                                        && context.getParent().getParent().getParent() instanceof ElementNameOrIndexContext)
+                                    {
+                                        // could be a field name
+                                        assert compositeLiteralContext != null && compositeLiteralContext.literalType() != null;
 
-                                    if (!models.isEmpty()) {
-                                        for (CodeElementModel model : models) {
-                                            if (!(model instanceof TypeModel)) {
-                                                continue;
+                                        List<GoParser.LiteralValueContext> literalValueContexts = new ArrayList<GoParser.LiteralValueContext>();
+                                        for (RuleContext<Token> context2 = finalContext; context2 != null; context2 = context2.parent) {
+                                            if (context2 instanceof GoParser.LiteralValueContext) {
+                                                literalValueContexts.add((GoParser.LiteralValueContext)context2);
+                                            } else if (context2 instanceof GoParser.CompositeLiteralContext) {
+                                                // stop at the containing compositeLiteral
+                                                break;
                                             }
+                                        }
 
-                                            TypeModel typeModel = (TypeModel)model;
-                                            for (VarModel field : typeModel.getFields()) {
-                                                String key = field.getName() + ":";
-                                                if (intermediateResults.containsKey(key)) {
+                                        // first resolve the type of the containing compositeLiteral
+                                        Collection<? extends CodeElementModel> models = targetAnalyzer.visit(compositeLiteralContext.literalType());
+                                        if (literalValueContexts.size() > 1) {
+                                            LOGGER.log(Level.FINE, "TODO: resolve nested values - need type of the innermost value.");
+                                            models = Collections.emptyList();
+                                        }
+
+                                        if (!models.isEmpty()) {
+                                            for (CodeElementModel model : models) {
+                                                if (!(model instanceof TypeModel)) {
                                                     continue;
                                                 }
 
-                                                intermediateResults.put(key, new FieldReferenceKeyCompletionItem(field));
+                                                TypeModel typeModel = (TypeModel)model;
+                                                for (VarModel field : typeModel.getFields()) {
+                                                    String key = field.getName() + ":";
+                                                    if (intermediateResults.containsKey(key)) {
+                                                        continue;
+                                                    }
+
+                                                    intermediateResults.put(key, new FieldReferenceKeyCompletionItem(field));
+                                                }
                                             }
                                         }
-                                    }
-                                } else if (finalContext instanceof GoParser.QualifiedIdentifierContext) {
-                                    GoParser.QualifiedIdentifierContext context = (GoParser.QualifiedIdentifierContext)finalContext;
-                                    if (context.packageName() != null) {
+
                                         continue;
                                     }
 
@@ -2884,13 +2891,6 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0)
         public ParseTree<Token> visitBuiltinCall(BuiltinCallContext ctx) {
-            // this is not a declaration
-            return null;
-        }
-
-        @Override
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldName, version=0)
-        public ParseTree<Token> visitFieldName(FieldNameContext ctx) {
             // this is not a declaration
             return null;
         }

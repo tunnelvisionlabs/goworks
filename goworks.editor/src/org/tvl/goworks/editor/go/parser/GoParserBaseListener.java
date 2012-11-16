@@ -42,6 +42,9 @@ public class GoParserBaseListener implements GoParserListener {
 	@Override public void enterTag(AbstractGoParser.TagContext ctx) { }
 	@Override public void exitTag(AbstractGoParser.TagContext ctx) { }
 
+	@Override public void enterElementNameOrIndex(AbstractGoParser.ElementNameOrIndexContext ctx) { }
+	@Override public void exitElementNameOrIndex(AbstractGoParser.ElementNameOrIndexContext ctx) { }
+
 	@Override public void enterFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx) { }
 	@Override public void exitFallthroughStmt(AbstractGoParser.FallthroughStmtContext ctx) { }
 
@@ -53,9 +56,6 @@ public class GoParserBaseListener implements GoParserListener {
 
 	@Override public void enterReceiverType(AbstractGoParser.ReceiverTypeContext ctx) { }
 	@Override public void exitReceiverType(AbstractGoParser.ReceiverTypeContext ctx) { }
-
-	@Override public void enterFieldName(AbstractGoParser.FieldNameContext ctx) { }
-	@Override public void exitFieldName(AbstractGoParser.FieldNameContext ctx) { }
 
 	@Override public void enterIfStmt(AbstractGoParser.IfStmtContext ctx) { }
 	@Override public void exitIfStmt(AbstractGoParser.IfStmtContext ctx) { }
@@ -293,9 +293,6 @@ public class GoParserBaseListener implements GoParserListener {
 
 	@Override public void enterMethodExpr(AbstractGoParser.MethodExprContext ctx) { }
 	@Override public void exitMethodExpr(AbstractGoParser.MethodExprContext ctx) { }
-
-	@Override public void enterElementIndex(AbstractGoParser.ElementIndexContext ctx) { }
-	@Override public void exitElementIndex(AbstractGoParser.ElementIndexContext ctx) { }
 
 	@Override public void enterTypeList(AbstractGoParser.TypeListContext ctx) { }
 	@Override public void exitTypeList(AbstractGoParser.TypeListContext ctx) { }
