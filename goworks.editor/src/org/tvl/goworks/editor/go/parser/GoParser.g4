@@ -75,6 +75,8 @@ public boolean isCheckPackageNames() {
 public void setCheckPackageNames(boolean checkPackageNames) {
     this.checkPackageNames = checkPackageNames;
 }
+
+protected abstract boolean isLiteralAllowed(Token nextToken, OperandContext context);
 }
 
 type
@@ -280,7 +282,7 @@ baseTypeName
     ;
 
 operand
-    :   literal
+    :   {isLiteralAllowed(_input.LT(1), $ctx)}? literal
     |   qualifiedIdentifier
     |   methodExpr
     |   '(' expression ')'
