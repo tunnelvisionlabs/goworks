@@ -517,7 +517,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				{
 				setState(192);
 				_la = _input.LA(1);
-				if ( !(_la==STAR || _la==INT || _la==STRING_LITERAL) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << STAR) | (1L << INT) | (1L << STRING_LITERAL))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -917,7 +917,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 						{
 						setState(233);
 						_la = _input.LA(1);
-						if ( !(_la==ACTION_DOT || _la==ACTION_LT || _la==ACTION_GT || _la==ACTION_LPAREN || _la==ACTION_RPAREN || _la==ACTION_LBRACK || _la==ACTION_RBRACK || _la==ACTION_EQUALS || _la==ACTION_COMMA || _la==ACTION_COLON2 || _la==ACTION_COLON || _la==ACTION_MINUS || _la==ACTION_ESCAPE || _la==ACTION_WORD || _la==ACTION_REFERENCE || _la==ACTION_COMMENT || _la==ACTION_LITERAL || _la==ACTION_TEXT || _la==ACTION_WS || _la==ACTION_NEWLINE) ) {
+						if ( !(((((_la - 66)) & ~0x3f) == 0 && ((1L << (_la - 66)) & ((1L << (ACTION_DOT - 66)) | (1L << (ACTION_LT - 66)) | (1L << (ACTION_GT - 66)) | (1L << (ACTION_LPAREN - 66)) | (1L << (ACTION_RPAREN - 66)) | (1L << (ACTION_LBRACK - 66)) | (1L << (ACTION_RBRACK - 66)) | (1L << (ACTION_EQUALS - 66)) | (1L << (ACTION_COMMA - 66)) | (1L << (ACTION_COLON2 - 66)) | (1L << (ACTION_COLON - 66)) | (1L << (ACTION_MINUS - 66)) | (1L << (ACTION_ESCAPE - 66)) | (1L << (ACTION_WORD - 66)) | (1L << (ACTION_REFERENCE - 66)) | (1L << (ACTION_COMMENT - 66)) | (1L << (ACTION_LITERAL - 66)) | (1L << (ACTION_TEXT - 66)) | (1L << (ACTION_WS - 66)) | (1L << (ACTION_NEWLINE - 66)))) != 0)) ) {
 						_errHandler.recoverInline(this);
 						}
 						consume();
@@ -1291,7 +1291,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 					{
 					setState(306);
 					_la = _input.LA(1);
-					if ( !(_la==ARG_ACTION_LT || _la==ARG_ACTION_GT || _la==ARG_ACTION_LPAREN || _la==ARG_ACTION_RPAREN || _la==ARG_ACTION_EQUALS || _la==ARG_ACTION_COMMA || _la==ARG_ACTION_ESCAPE || _la==ARG_ACTION_WORD || _la==ARG_ACTION_ELEMENT || _la==ARG_ACTION_TEXT || _la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE) ) {
+					if ( !(((((_la - 53)) & ~0x3f) == 0 && ((1L << (_la - 53)) & ((1L << (ARG_ACTION_LT - 53)) | (1L << (ARG_ACTION_GT - 53)) | (1L << (ARG_ACTION_LPAREN - 53)) | (1L << (ARG_ACTION_RPAREN - 53)) | (1L << (ARG_ACTION_EQUALS - 53)) | (1L << (ARG_ACTION_COMMA - 53)) | (1L << (ARG_ACTION_ESCAPE - 53)) | (1L << (ARG_ACTION_WORD - 53)) | (1L << (ARG_ACTION_ELEMENT - 53)) | (1L << (ARG_ACTION_TEXT - 53)) | (1L << (ARG_ACTION_WS - 53)) | (1L << (ARG_ACTION_NEWLINE - 53)))) != 0)) ) {
 					_errHandler.recoverInline(this);
 					}
 					consume();
@@ -1747,7 +1747,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(388);
 			_la = _input.LA(1);
-			if ( !(_la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE || _la==ACTION_COMMENT || _la==ACTION_WS || _la==ACTION_NEWLINE) ) {
+			if ( !(((((_la - 63)) & ~0x3f) == 0 && ((1L << (_la - 63)) & ((1L << (ARG_ACTION_WS - 63)) | (1L << (ARG_ACTION_NEWLINE - 63)) | (1L << (ACTION_COMMENT - 63)) | (1L << (ACTION_WS - 63)) | (1L << (ACTION_NEWLINE - 63)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -2811,7 +2811,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(496);
 			_la = _input.LA(1);
-			if ( !(_la==FRAGMENT || _la==PROTECTED || _la==PUBLIC || _la==PRIVATE) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FRAGMENT) | (1L << PROTECTED) | (1L << PUBLIC) | (1L << PRIVATE))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4756,7 +4756,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				{
 				setState(702);
 				_la = _input.LA(1);
-				if ( !(_la==TOKEN_REF || _la==LEXER_CHAR_SET || _la==STRING_LITERAL) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TOKEN_REF) | (1L << LEXER_CHAR_SET) | (1L << STRING_LITERAL))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -5369,10 +5369,12 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		"\b?\n?\f?\u02cb\t?\1?\3?\u02ce\b?\1?\1?\1?\1@\1@\3@\u02d5\b@\1A\1A\1A"+
 		"\1A\1B\1B\3B\u02dd\bB\1B\1B\3B\u02e1\bB\3B\u02e3\bB\1C\1C\1C\1C\5C\u02e9"+
 		"\bC\nC\fC\u02ec\tC\1C\1C\1D\1D\1D\1D\1D\3D\u02f5\bD\3D\u02f7\bD\1E\1E"+
-		"\1F\1F\1F\5F\u02fe\bF\nF\fF\u0301\tF\1FG\0\2\4\6\b\n\f\16\20\22\24\26"+
-		"\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhjlnprtvxz|"+
-		"~\u0080\u0082\u0084\u0086\u0088\u008a\u008c\0\n\2%%\61\62\1BU\1\65@\3"+
-		"?@QQTU\1\16\17\2\r\r\21\23\2##\'\'\2##\'\'\3\1\1\3\3\62\62\1\1\2\u0336"+
+		"\1F\1F\1F\5F\u02fe\bF\nF\fF\u0301\tF\1FG\0\0\2\0\4\0\6\0\b\0\n\0\f\0\16"+
+		"\0\20\0\22\0\24\0\26\0\30\0\32\0\34\0\36\0 \0\"\0$\0&\0(\0*\0,\0.\0\60"+
+		"\0\62\0\64\0\66\08\0:\0<\0>\0@\0B\0D\0F\0H\0J\0L\0N\0P\0R\0T\0V\0X\0Z"+
+		"\0\\\0^\0`\0b\0d\0f\0h\0j\0l\0n\0p\0r\0t\0v\0x\0z\0|\0~\0\u0080\0\u0082"+
+		"\0\u0084\0\u0086\0\u0088\0\u008a\0\u008c\0\0\n\2%%\61\62\1BU\1\65@\3?"+
+		"@QQTU\1\16\17\2\r\r\21\23\2##\'\'\2##\'\'\3\1\1\3\3\62\62\1\1\2\u0336"+
 		"\0\u008f\1\0\0\0\2\u00a8\1\0\0\0\4\u00ae\1\0\0\0\6\u00b0\1\0\0\0\b\u00bb"+
 		"\1\0\0\0\n\u00c1\1\0\0\0\f\u00c3\1\0\0\0\16\u00d3\1\0\0\0\20\u00d5\1\0"+
 		"\0\0\22\u00e5\1\0\0\0\24\u00f1\1\0\0\0\26\u0101\1\0\0\0\30\u0131\1\0\0"+
