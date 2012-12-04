@@ -4988,8 +4988,6 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 
 	public static class AssignmentContext extends ParserRuleContext<Token> {
-		public ExpressionListContext targets;
-		public ExpressionListContext values;
 		public AssignOpContext assignOp() {
 			return getRuleContext(AssignOpContext.class,0);
 		}
@@ -5025,9 +5023,9 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(723); _localctx.targets = expressionList();
+			setState(723); expressionList();
 			setState(724); assignOp();
-			setState(725); _localctx.values = expressionList();
+			setState(725); expressionList();
 			}
 		}
 		catch (RecognitionException re) {

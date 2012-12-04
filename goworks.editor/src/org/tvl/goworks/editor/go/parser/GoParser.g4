@@ -466,7 +466,7 @@ incDecStmt
     ;
 
 assignment
-    :   targets=expressionList assignOp values=expressionList
+    :   expressionList assignOp expressionList
     ;
 
 assignOp
