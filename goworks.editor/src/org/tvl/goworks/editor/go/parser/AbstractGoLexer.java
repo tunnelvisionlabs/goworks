@@ -95,152 +95,6 @@ public abstract class AbstractGoLexer extends Lexer {
 	@Override
 	public void action(RuleContext<Integer> _localctx, int ruleIndex, int actionIndex) {
 		switch (ruleIndex) {
-		case 0 : Break_action(_localctx, actionIndex); break;
-
-		case 1 : Case_action(_localctx, actionIndex); break;
-
-		case 2 : Chan_action(_localctx, actionIndex); break;
-
-		case 3 : Const_action(_localctx, actionIndex); break;
-
-		case 4 : Continue_action(_localctx, actionIndex); break;
-
-		case 5 : Default_action(_localctx, actionIndex); break;
-
-		case 6 : Defer_action(_localctx, actionIndex); break;
-
-		case 7 : Else_action(_localctx, actionIndex); break;
-
-		case 8 : Fallthrough_action(_localctx, actionIndex); break;
-
-		case 9 : For_action(_localctx, actionIndex); break;
-
-		case 10 : Func_action(_localctx, actionIndex); break;
-
-		case 11 : Go_action(_localctx, actionIndex); break;
-
-		case 12 : Goto_action(_localctx, actionIndex); break;
-
-		case 13 : If_action(_localctx, actionIndex); break;
-
-		case 14 : Import_action(_localctx, actionIndex); break;
-
-		case 15 : Interface_action(_localctx, actionIndex); break;
-
-		case 16 : Map_action(_localctx, actionIndex); break;
-
-		case 17 : Package_action(_localctx, actionIndex); break;
-
-		case 18 : Range_action(_localctx, actionIndex); break;
-
-		case 19 : Return_action(_localctx, actionIndex); break;
-
-		case 20 : Select_action(_localctx, actionIndex); break;
-
-		case 21 : Struct_action(_localctx, actionIndex); break;
-
-		case 22 : Switch_action(_localctx, actionIndex); break;
-
-		case 23 : Type_action(_localctx, actionIndex); break;
-
-		case 24 : Var_action(_localctx, actionIndex); break;
-
-		case 25 : Plus_action(_localctx, actionIndex); break;
-
-		case 26 : Minus_action(_localctx, actionIndex); break;
-
-		case 27 : Star_action(_localctx, actionIndex); break;
-
-		case 28 : Slash_action(_localctx, actionIndex); break;
-
-		case 29 : Percent_action(_localctx, actionIndex); break;
-
-		case 30 : Amp_action(_localctx, actionIndex); break;
-
-		case 31 : Pipe_action(_localctx, actionIndex); break;
-
-		case 32 : Caret_action(_localctx, actionIndex); break;
-
-		case 33 : LeftShift_action(_localctx, actionIndex); break;
-
-		case 34 : RightShift_action(_localctx, actionIndex); break;
-
-		case 35 : AmpCaret_action(_localctx, actionIndex); break;
-
-		case 36 : PlusEqual_action(_localctx, actionIndex); break;
-
-		case 37 : MinusEqual_action(_localctx, actionIndex); break;
-
-		case 38 : StarEqual_action(_localctx, actionIndex); break;
-
-		case 39 : SlashEqual_action(_localctx, actionIndex); break;
-
-		case 40 : PercentEqual_action(_localctx, actionIndex); break;
-
-		case 41 : AmpEqual_action(_localctx, actionIndex); break;
-
-		case 42 : PipeEqual_action(_localctx, actionIndex); break;
-
-		case 43 : CaretEqual_action(_localctx, actionIndex); break;
-
-		case 44 : LeftShiftEqual_action(_localctx, actionIndex); break;
-
-		case 45 : RightShiftEqual_action(_localctx, actionIndex); break;
-
-		case 46 : AmpCaretEqual_action(_localctx, actionIndex); break;
-
-		case 47 : And_action(_localctx, actionIndex); break;
-
-		case 48 : Or_action(_localctx, actionIndex); break;
-
-		case 49 : LeftArrow_action(_localctx, actionIndex); break;
-
-		case 50 : Inc_action(_localctx, actionIndex); break;
-
-		case 51 : Dec_action(_localctx, actionIndex); break;
-
-		case 52 : EqualEqual_action(_localctx, actionIndex); break;
-
-		case 53 : LessThan_action(_localctx, actionIndex); break;
-
-		case 54 : GreaterThan_action(_localctx, actionIndex); break;
-
-		case 55 : Equal_action(_localctx, actionIndex); break;
-
-		case 56 : Bang_action(_localctx, actionIndex); break;
-
-		case 57 : BangEqual_action(_localctx, actionIndex); break;
-
-		case 58 : LessEqual_action(_localctx, actionIndex); break;
-
-		case 59 : GreaterEqual_action(_localctx, actionIndex); break;
-
-		case 60 : ColonEqual_action(_localctx, actionIndex); break;
-
-		case 61 : Ellipsis_action(_localctx, actionIndex); break;
-
-		case 62 : LeftParen_action(_localctx, actionIndex); break;
-
-		case 63 : RightParen_action(_localctx, actionIndex); break;
-
-		case 64 : LeftBrack_action(_localctx, actionIndex); break;
-
-		case 65 : RightBrack_action(_localctx, actionIndex); break;
-
-		case 66 : LeftBrace_action(_localctx, actionIndex); break;
-
-		case 67 : RightBrace_action(_localctx, actionIndex); break;
-
-		case 68 : Comma_action(_localctx, actionIndex); break;
-
-		case 69 : Dot_action(_localctx, actionIndex); break;
-
-		case 70 : Semi_action(_localctx, actionIndex); break;
-
-		case 71 : Colon_action(_localctx, actionIndex); break;
-
-		case 72 : IDENTIFIER_action(_localctx, actionIndex); break;
-
 		case 73 : WS_action(_localctx, actionIndex); break;
 
 		case 74 : NEWLINE_action(_localctx, actionIndex); break;
@@ -254,495 +108,41 @@ public abstract class AbstractGoLexer extends Lexer {
 		case 78 : OctalLiteral_action(_localctx, actionIndex); break;
 
 		case 79 : HexLiteral_action(_localctx, actionIndex); break;
-
-		case 80 : IMAGINARY_LITERAL_action(_localctx, actionIndex); break;
-
-		case 81 : FLOAT_LITERAL_action(_localctx, actionIndex); break;
-
-		case 82 : Decimals_action(_localctx, actionIndex); break;
-
-		case 83 : Exponent_action(_localctx, actionIndex); break;
-
-		case 84 : CharLiteral_action(_localctx, actionIndex); break;
-
-		case 85 : UNICODE_VALUE_NOSQUOTE_action(_localctx, actionIndex); break;
-
-		case 86 : UNICODE_VALUE_NODQUOTE_action(_localctx, actionIndex); break;
-
-		case 87 : BYTE_VALUE_action(_localctx, actionIndex); break;
-
-		case 88 : OCTAL_BYTE_VALUE_action(_localctx, actionIndex); break;
-
-		case 89 : HexByteValue_action(_localctx, actionIndex); break;
-
-		case 90 : LittleUValue_action(_localctx, actionIndex); break;
-
-		case 91 : BigUValue_action(_localctx, actionIndex); break;
-
-		case 92 : EscapedChar_action(_localctx, actionIndex); break;
-
-		case 93 : StringLiteral_action(_localctx, actionIndex); break;
-
-		case 94 : RawStringLiteral_action(_localctx, actionIndex); break;
-
-		case 95 : InterpretedStringLiteral_action(_localctx, actionIndex); break;
-
-		case 96 : NEWLINE_CHAR_action(_localctx, actionIndex); break;
-
-		case 97 : UNICODE_CHAR_NOSQUOTE_action(_localctx, actionIndex); break;
-
-		case 98 : UNICODE_CHAR_NODQUOTE_action(_localctx, actionIndex); break;
-
-		case 99 : UNICODE_CHAR_NOBTICK_action(_localctx, actionIndex); break;
-
-		case 100 : UNICODE_LETTER_CHAR_action(_localctx, actionIndex); break;
-
-		case 101 : UNICODE_DIGIT_CHAR_action(_localctx, actionIndex); break;
-
-		case 102 : LETTER_CHAR_action(_localctx, actionIndex); break;
-
-		case 103 : DECIMAL_DIGIT_CHAR_action(_localctx, actionIndex); break;
-
-		case 104 : OCTAL_DIGIT_CHAR_action(_localctx, actionIndex); break;
-
-		case 105 : HEX_DIGIT_CHAR_action(_localctx, actionIndex); break;
-
-		case 106 : ANYCHAR_action(_localctx, actionIndex); break;
 		}
 	}
-	public void Switch_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void UNICODE_CHAR_NOBTICK_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void PipeEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Pipe_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LessThan_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Goto_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void OctalLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 5: _type = INT_LITERAL;  break;
-		}
-	}
-	public void Fallthrough_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void BangEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Percent_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LeftArrow_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Decimals_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Default_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void IMAGINARY_LITERAL_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void NEWLINE_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void CharLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Chan_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void DECIMAL_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 2: _channel = HIDDEN;  break;
-		}
-	}
-	public void MinusEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void ColonEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void UNICODE_CHAR_NOSQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LeftShiftEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Colon_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Const_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Equal_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Dec_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void RightShift_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void CaretEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Range_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Minus_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Semi_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 0: _channel = HIDDEN;  break;
-		}
-	}
-	public void Break_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void UNICODE_VALUE_NODQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void UNICODE_VALUE_NOSQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Inc_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LeftBrace_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void SlashEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LeftBrack_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LeftParen_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Star_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Defer_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void AmpCaret_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void RightParen_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void RawStringLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Else_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Var_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Slash_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void UNICODE_CHAR_NODQUOTE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void GreaterEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void BigUValue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LETTER_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Go_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void EscapedChar_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Exponent_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LessEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void AmpEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void HEX_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Case_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Func_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void GreaterThan_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void ML_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 3: _channel = HIDDEN;  break;
-		}
-	}
-	public void StarEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Map_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void IDENTIFIER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Amp_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Ellipsis_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Interface_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void AmpCaretEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Select_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void HexByteValue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void UNICODE_LETTER_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Or_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Return_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Struct_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Caret_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void If_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void RightShiftEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void PercentEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void BYTE_VALUE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void And_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void HexLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
+	private void HexLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 6: _type = INT_LITERAL;  break;
 		}
 	}
-	public void Import_action(RuleContext<Integer> _localctx, int actionIndex) {
+	private void ML_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch (actionIndex) {
+		case 3: _channel = HIDDEN;  break;
 		}
 	}
-	public void PlusEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
+	private void WS_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch (actionIndex) {
+		case 0: _channel = HIDDEN;  break;
 		}
 	}
-	public void Type_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Continue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void UNICODE_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void InterpretedStringLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void LeftShift_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void EqualEqual_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void DecimalLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 4: _type = INT_LITERAL;  break;
-		}
-	}
-	public void For_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Package_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void FLOAT_LITERAL_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void OCTAL_BYTE_VALUE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void StringLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Plus_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Bang_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
+	private void NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 1: _channel = HIDDEN;  break;
 		}
 	}
-	public void Dot_action(RuleContext<Integer> _localctx, int actionIndex) {
+	private void COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch (actionIndex) {
+		case 2: _channel = HIDDEN;  break;
 		}
 	}
-	public void OCTAL_DIGIT_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
+	private void OctalLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch (actionIndex) {
+		case 5: _type = INT_LITERAL;  break;
 		}
 	}
-	public void RightBrack_action(RuleContext<Integer> _localctx, int actionIndex) {
+	private void DecimalLiteral_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch (actionIndex) {
-		}
-	}
-	public void LittleUValue_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void Comma_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
-		}
-	}
-	public void RightBrace_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch (actionIndex) {
+		case 4: _type = INT_LITERAL;  break;
 		}
 	}
 
@@ -787,36 +187,39 @@ public abstract class AbstractGoLexer extends Lexer {
 		"[\1[\1[\1[\1[\1\\\1\\\1\\\1]\1]\3]\u0295\b]\1^\1^\1^\5^\u029a\b^\n^\f"+
 		"^\u029d\t^\1^\1^\1_\1_\1_\5_\u02a4\b_\n_\f_\u02a7\t_\1_\1_\1`\1`\1a\1"+
 		"a\1b\1b\1c\1c\1d\1d\1e\1e\1f\1f\3f\u02b9\bf\1g\1g\1h\1h\1i\1i\1j\1jk\1"+
-		"\2\uffff\3\3\uffff\5\4\uffff\7\5\uffff\t\6\uffff\13\7\uffff\r\b\uffff"+
-		"\17\t\uffff\21\n\uffff\23\13\uffff\25\f\uffff\27\r\uffff\31\16\uffff\33"+
-		"\17\uffff\35\20\uffff\37\21\uffff!\22\uffff#\23\uffff%\24\uffff\'\25\uffff"+
-		")\26\uffff+\27\uffff-\30\uffff/\31\uffff\61\32\uffff\63\33\uffff\65\34"+
-		"\uffff\67\35\uffff9\36\uffff;\37\uffff= \uffff?!\uffffA\"\uffffC#\uffff"+
-		"E$\uffffG%\uffffI&\uffffK\'\uffffM(\uffffO)\uffffQ*\uffffS+\uffffU,\uffff"+
-		"W-\uffffY.\uffff[/\uffff]\60\uffff_\61\uffffa\62\uffffc\63\uffffe\64\uffff"+
-		"g\65\uffffi\66\uffffk\67\uffffm8\uffffo9\uffffq:\uffffs;\uffffu<\uffff"+
-		"w=\uffffy>\uffff{?\uffff}@\uffff\177A\uffff\u0081B\uffff\u0083C\uffff"+
-		"\u0085D\uffff\u0087E\uffff\u0089F\uffff\u008bG\uffff\u008dH\uffff\u008f"+
-		"I\uffff\u0091J\uffff\u0093K\0\u0095L\1\u0097M\2\u0099N\3\u009b\0\4\u009d"+
-		"\0\5\u009f\0\6\u00a1O\uffff\u00a3P\uffff\u00a5\0\uffff\u00a7\0\uffff\u00a9"+
-		"Q\uffff\u00ab\0\uffff\u00ad\0\uffff\u00af\0\uffff\u00b1\0\uffff\u00b3"+
-		"\0\uffff\u00b5\0\uffff\u00b7\0\uffff\u00b9\0\uffff\u00bbR\uffff\u00bd"+
-		"\0\uffff\u00bf\0\uffff\u00c1\0\uffff\u00c3\0\uffff\u00c5\0\uffff\u00c7"+
-		"\0\uffff\u00c9\0\uffff\u00cb\0\uffff\u00cd\0\uffff\u00cf\0\uffff\u00d1"+
-		"\0\uffff\u00d3\0\uffff\u00d5S\uffff\1\0\f\2\t\t  \2\n\n\r\r\2XXxx\2EE"+
-		"ee\2++--\t\"\"\'\'\\\\abffnnrrttvv\3\n\n\'\'\\\\\3\n\n\"\"\\\\\2\n\n`"+
-		"`\3AZaz\u0101\u0101\2\609\u0660\u0660\3\609AFaf\u02ca\0\1\1\0\0\0\0\3"+
-		"\1\0\0\0\0\5\1\0\0\0\0\7\1\0\0\0\0\t\1\0\0\0\0\13\1\0\0\0\0\r\1\0\0\0"+
-		"\0\17\1\0\0\0\0\21\1\0\0\0\0\23\1\0\0\0\0\25\1\0\0\0\0\27\1\0\0\0\0\31"+
-		"\1\0\0\0\0\33\1\0\0\0\0\35\1\0\0\0\0\37\1\0\0\0\0!\1\0\0\0\0#\1\0\0\0"+
-		"\0%\1\0\0\0\0\'\1\0\0\0\0)\1\0\0\0\0+\1\0\0\0\0-\1\0\0\0\0/\1\0\0\0\0"+
-		"\61\1\0\0\0\0\63\1\0\0\0\0\65\1\0\0\0\0\67\1\0\0\0\09\1\0\0\0\0;\1\0\0"+
-		"\0\0=\1\0\0\0\0?\1\0\0\0\0A\1\0\0\0\0C\1\0\0\0\0E\1\0\0\0\0G\1\0\0\0\0"+
-		"I\1\0\0\0\0K\1\0\0\0\0M\1\0\0\0\0O\1\0\0\0\0Q\1\0\0\0\0S\1\0\0\0\0U\1"+
-		"\0\0\0\0W\1\0\0\0\0Y\1\0\0\0\0[\1\0\0\0\0]\1\0\0\0\0_\1\0\0\0\0a\1\0\0"+
-		"\0\0c\1\0\0\0\0e\1\0\0\0\0g\1\0\0\0\0i\1\0\0\0\0k\1\0\0\0\0m\1\0\0\0\0"+
-		"o\1\0\0\0\0q\1\0\0\0\0s\1\0\0\0\0u\1\0\0\0\0w\1\0\0\0\0y\1\0\0\0\0{\1"+
-		"\0\0\0\0}\1\0\0\0\0\177\1\0\0\0\0\u0081\1\0\0\0\0\u0083\1\0\0\0\0\u0085"+
+		"\0\2\uffff\3\0\3\uffff\5\0\4\uffff\7\0\5\uffff\t\0\6\uffff\13\0\7\uffff"+
+		"\r\0\b\uffff\17\0\t\uffff\21\0\n\uffff\23\0\13\uffff\25\0\f\uffff\27\0"+
+		"\r\uffff\31\0\16\uffff\33\0\17\uffff\35\0\20\uffff\37\0\21\uffff!\0\22"+
+		"\uffff#\0\23\uffff%\0\24\uffff\'\0\25\uffff)\0\26\uffff+\0\27\uffff-\0"+
+		"\30\uffff/\0\31\uffff\61\0\32\uffff\63\0\33\uffff\65\0\34\uffff\67\0\35"+
+		"\uffff9\0\36\uffff;\0\37\uffff=\0 \uffff?\0!\uffffA\0\"\uffffC\0#\uffff"+
+		"E\0$\uffffG\0%\uffffI\0&\uffffK\0\'\uffffM\0(\uffffO\0)\uffffQ\0*\uffff"+
+		"S\0+\uffffU\0,\uffffW\0-\uffffY\0.\uffff[\0/\uffff]\0\60\uffff_\0\61\uffff"+
+		"a\0\62\uffffc\0\63\uffffe\0\64\uffffg\0\65\uffffi\0\66\uffffk\0\67\uffff"+
+		"m\08\uffffo\09\uffffq\0:\uffffs\0;\uffffu\0<\uffffw\0=\uffffy\0>\uffff"+
+		"{\0?\uffff}\0@\uffff\177\0A\uffff\u0081\0B\uffff\u0083\0C\uffff\u0085"+
+		"\0D\uffff\u0087\0E\uffff\u0089\0F\uffff\u008b\0G\uffff\u008d\0H\uffff"+
+		"\u008f\0I\uffff\u0091\0J\uffff\u0093\0K\0\u0095\0L\1\u0097\0M\2\u0099"+
+		"\0N\3\u009b\0\0\4\u009d\0\0\5\u009f\0\0\6\u00a1\0O\uffff\u00a3\0P\uffff"+
+		"\u00a5\0\0\uffff\u00a7\0\0\uffff\u00a9\0Q\uffff\u00ab\0\0\uffff\u00ad"+
+		"\0\0\uffff\u00af\0\0\uffff\u00b1\0\0\uffff\u00b3\0\0\uffff\u00b5\0\0\uffff"+
+		"\u00b7\0\0\uffff\u00b9\0\0\uffff\u00bb\0R\uffff\u00bd\0\0\uffff\u00bf"+
+		"\0\0\uffff\u00c1\0\0\uffff\u00c3\0\0\uffff\u00c5\0\0\uffff\u00c7\0\0\uffff"+
+		"\u00c9\0\0\uffff\u00cb\0\0\uffff\u00cd\0\0\uffff\u00cf\0\0\uffff\u00d1"+
+		"\0\0\uffff\u00d3\0\0\uffff\u00d5\0S\uffff\1\0\f\2\t\t  \2\n\n\r\r\2XX"+
+		"xx\2EEee\2++--\t\"\"\'\'\\\\abffnnrrttvv\3\n\n\'\'\\\\\3\n\n\"\"\\\\\2"+
+		"\n\n``\3AZaz\u0101\u0101\2\609\u0660\u0660\3\609AFaf\u02ca\0\1\1\0\0\0"+
+		"\0\3\1\0\0\0\0\5\1\0\0\0\0\7\1\0\0\0\0\t\1\0\0\0\0\13\1\0\0\0\0\r\1\0"+
+		"\0\0\0\17\1\0\0\0\0\21\1\0\0\0\0\23\1\0\0\0\0\25\1\0\0\0\0\27\1\0\0\0"+
+		"\0\31\1\0\0\0\0\33\1\0\0\0\0\35\1\0\0\0\0\37\1\0\0\0\0!\1\0\0\0\0#\1\0"+
+		"\0\0\0%\1\0\0\0\0\'\1\0\0\0\0)\1\0\0\0\0+\1\0\0\0\0-\1\0\0\0\0/\1\0\0"+
+		"\0\0\61\1\0\0\0\0\63\1\0\0\0\0\65\1\0\0\0\0\67\1\0\0\0\09\1\0\0\0\0;\1"+
+		"\0\0\0\0=\1\0\0\0\0?\1\0\0\0\0A\1\0\0\0\0C\1\0\0\0\0E\1\0\0\0\0G\1\0\0"+
+		"\0\0I\1\0\0\0\0K\1\0\0\0\0M\1\0\0\0\0O\1\0\0\0\0Q\1\0\0\0\0S\1\0\0\0\0"+
+		"U\1\0\0\0\0W\1\0\0\0\0Y\1\0\0\0\0[\1\0\0\0\0]\1\0\0\0\0_\1\0\0\0\0a\1"+
+		"\0\0\0\0c\1\0\0\0\0e\1\0\0\0\0g\1\0\0\0\0i\1\0\0\0\0k\1\0\0\0\0m\1\0\0"+
+		"\0\0o\1\0\0\0\0q\1\0\0\0\0s\1\0\0\0\0u\1\0\0\0\0w\1\0\0\0\0y\1\0\0\0\0"+
+		"{\1\0\0\0\0}\1\0\0\0\0\177\1\0\0\0\0\u0081\1\0\0\0\0\u0083\1\0\0\0\0\u0085"+
 		"\1\0\0\0\0\u0087\1\0\0\0\0\u0089\1\0\0\0\0\u008b\1\0\0\0\0\u008d\1\0\0"+
 		"\0\0\u008f\1\0\0\0\0\u0091\1\0\0\0\0\u0093\1\0\0\0\0\u0095\1\0\0\0\0\u0097"+
 		"\1\0\0\0\0\u0099\1\0\0\0\0\u009b\1\0\0\0\0\u009d\1\0\0\0\0\u009f\1\0\0"+
