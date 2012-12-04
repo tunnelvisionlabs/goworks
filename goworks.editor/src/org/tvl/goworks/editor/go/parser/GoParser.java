@@ -134,20 +134,21 @@ public class GoParser extends AbstractGoParser {
             @RuleDependency(recognizer=GoParser.class, rule=RULE_exprSwitchStmt, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_arrayLength, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_elementNameOrIndex, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_channel, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_incDecStmt, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_channel, version=1),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_incDecStmt, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_ifStmt, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_condition, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_rangeClause, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_recvStmt, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_recvExpr, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_deferStmt, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_expressionList, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_expressionList, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_operand, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_value, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_conversion, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_expressionStmt, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_sendStmt, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_expressionStmt, version=1),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_sendStmt, version=1),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_simpleStmt, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_typeSwitchGuard, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_goStmt, version=0),
         })
@@ -179,6 +180,12 @@ public class GoParser extends AbstractGoParser {
             case RULE_sendStmt:
             case RULE_typeSwitchGuard:
             case RULE_goStmt:
+                return true;
+
+            // this one is needed due to explicit left factoring of expression
+            // into simpleStmt, and this is called before the parse tree is
+            // restored to the intended shape
+            case RULE_simpleStmt:
                 return true;
 
             case RULE_expression:

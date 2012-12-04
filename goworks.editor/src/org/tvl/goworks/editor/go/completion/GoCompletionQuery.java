@@ -1389,7 +1389,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                 })
                 public void enterVarSpec(VarSpecContext ctx) {
@@ -1400,7 +1400,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependencies({
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
                 })
                 public void enterShortVarDecl(ShortVarDeclContext ctx) {
                     addVars(locals, ctx.identifierList(), null, ctx.expressionList());
@@ -1494,7 +1494,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
                 })
                 public void enterConstSpec(ConstSpecContext ctx) {
                     addVars(constants, ctx.identifierList(), ctx.type(), ctx.expressionList());
@@ -1503,7 +1503,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependencies({
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
                 })
@@ -3138,7 +3138,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             @RuleDependencies({
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_simpleStmt, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_simpleStmt, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_statement, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_ifStmt, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_exprSwitchStmt, version=0),

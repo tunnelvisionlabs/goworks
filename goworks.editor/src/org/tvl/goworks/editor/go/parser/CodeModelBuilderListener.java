@@ -448,7 +448,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })

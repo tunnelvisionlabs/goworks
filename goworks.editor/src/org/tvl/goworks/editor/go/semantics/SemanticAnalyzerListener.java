@@ -1066,7 +1066,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_argumentList, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
     })
     public void exitCallExpr(CallExprContext ctx) {
         CodeElementReference returnType = CodeElementReference.UNKNOWN;
@@ -1275,7 +1275,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
     })
     public void enterShortVarDecl(ShortVarDeclContext ctx) {
@@ -1799,7 +1799,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varDecl, version=0),
@@ -2507,7 +2507,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
     })
     public void exitBuiltinCall(BuiltinCallContext ctx) {
@@ -2967,7 +2967,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channel, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channel, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
     })
     public void exitChannel(ChannelContext ctx) {
@@ -3093,7 +3093,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayLength, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channel, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channel, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_condition, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_recvExpr, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),

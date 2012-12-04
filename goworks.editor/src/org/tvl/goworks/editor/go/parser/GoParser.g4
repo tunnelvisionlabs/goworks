@@ -229,6 +229,7 @@ identifierList
     ;
 
 expressionList
+@version{1}
     :   expression (',' expression)*
     ;
 
@@ -429,6 +430,8 @@ statement
     ;
 
 simpleStmt
+@version{1}
+@leftfactor{expression}
     :   shortVarDecl
     |   sendStmt
     |   incDecStmt
@@ -450,22 +453,27 @@ label
     ;
 
 expressionStmt
+@version{1}
     :   expression
     ;
 
 sendStmt
+@version{1}
     :   channel '<-' expression
     ;
 
 channel
+@version{1}
     :   expression
     ;
 
 incDecStmt
+@version{1}
     :   expression op=('++' | '--')
     ;
 
 assignment
+@version{1}
     :   expressionList assignOp expressionList
     ;
 
