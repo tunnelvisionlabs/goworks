@@ -166,7 +166,7 @@ public class GoLexer extends AbstractGoLexer {
         if (_type == NEWLINE || _type == COMMENT) {
             if (insertSemicolonAtEol) {
                 // emit the virtual semicolon token first
-                semicolonToken = _factory.create(this, Semi, ";", DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
+                semicolonToken = _factory.create(_tokenFactorySourcePair, Semi, ";", DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
                 emit(semicolonToken);
             }
 
@@ -189,7 +189,7 @@ public class GoLexer extends AbstractGoLexer {
         Token semicolonToken = null;
         if (insertSemicolonAtEol) {
             // emit the virtual semicolon token first
-            semicolonToken = _factory.create(this, Semi, ";", DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
+            semicolonToken = _factory.create(_tokenFactorySourcePair, Semi, ";", DEFAULT_TOKEN_CHANNEL, _tokenStartCharIndex, _tokenStartCharIndex - 1, _tokenStartLine, _tokenStartCharPositionInLine);
             emit(semicolonToken);
             // don't want to emit it twice
             insertSemicolonAtEol = false;
