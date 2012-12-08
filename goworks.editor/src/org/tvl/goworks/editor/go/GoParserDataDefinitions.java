@@ -50,6 +50,7 @@ public class GoParserDataDefinitions {
     public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
 
     public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
+    public static final ParserDataDefinition<Boolean> NAVIGATOR_UI_VISIBLE = new NavigatorUIVisibleDataDefinition();
 
     private GoParserDataDefinitions() {
     }
@@ -185,6 +186,14 @@ public class GoParserDataDefinitions {
 
         public NavigatorRootDataDefinition() {
             super("Go Navigator Root", Description.class, false, true, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class NavigatorUIVisibleDataDefinition extends ParserDataDefinition<Boolean> {
+
+        public NavigatorUIVisibleDataDefinition() {
+            super("Go Navigator UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
         }
 
     }
