@@ -278,9 +278,9 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2W\u0313\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2"+
-		"\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2"+
-		"\13\7\13\2\f\7\f\2\r\7\r\2\16\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22"+
+		"\3\2W\u0313\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2"+
+		"\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n"+
+		"\2\13\7\13\2\f\7\f\2\r\7\r\2\16\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22"+
 		"\7\22\2\23\7\23\2\24\7\24\2\25\7\25\2\26\7\26\2\27\7\27\2\30\7\30\2\31"+
 		"\7\31\2\32\7\32\2\33\7\33\2\34\7\34\2\35\7\35\2\36\7\36\2\37\7\37\2 \7"+
 		" \2!\7!\2\"\7\"\2#\7#\2$\7$\2%\7%\2&\7&\2\'\7\'\2(\7(\2)\7)\2*\7*\2+\7"+
@@ -321,13 +321,13 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 		"k\1k\1k\1k\1k\1l\1l\1l\1l\1m\1m\1m\1m\1n\1n\1n\1n\1o\1o\4o\u02de\bo\13"+
 		"o\fo\u02df\1o\1o\1p\1p\1p\1p\1q\1q\1q\1q\1r\1r\1r\1r\1s\1s\3s\u02f2\b"+
 		"s\1t\1t\1t\1t\1u\1u\1u\1u\1v\1v\1v\1v\1w\1w\1w\1w\1x\1x\3x\u0306\bx\1"+
-		"y\1y\1y\1y\1z\1z\1z\1z\1{\1{\1{\1{|\5\0\2\uffff\7\0\3\uffff\t\0\4\uffff"+
-		"\13\0\5\uffff\r\0\6\uffff\17\0\7\uffff\21\0\b\uffff\23\0\t\uffff\25\0"+
-		"\n\uffff\27\0\13\uffff\31\0\f\uffff\33\0\r\uffff\35\0\16\uffff\37\0\17"+
-		"\uffff!\0\20\uffff#\0\21\uffff%\0\22\uffff\'\0\23\uffff)\0\24\uffff+\0"+
-		"\25\uffff-\0\26\uffff/\0\27\uffff\61\0\30\uffff\63\0\31\uffff\65\0\32"+
-		"\uffff\67\0\33\uffff9\0\34\uffff;\0\35\uffff=\0\36\uffff?\0\37\uffffA"+
-		"\0 \uffffC\0!\uffffE\0\"\uffffG\0#\uffffI\0$\uffffK\0%\uffffM\0&\uffff"+
+		"y\1y\1y\1y\1z\1z\1z\1z\1{\1{\1{\1{\0\0|\5\0\2\uffff\7\0\3\uffff\t\0\4"+
+		"\uffff\13\0\5\uffff\r\0\6\uffff\17\0\7\uffff\21\0\b\uffff\23\0\t\uffff"+
+		"\25\0\n\uffff\27\0\13\uffff\31\0\f\uffff\33\0\r\uffff\35\0\16\uffff\37"+
+		"\0\17\uffff!\0\20\uffff#\0\21\uffff%\0\22\uffff\'\0\23\uffff)\0\24\uffff"+
+		"+\0\25\uffff-\0\26\uffff/\0\27\uffff\61\0\30\uffff\63\0\31\uffff\65\0"+
+		"\32\uffff\67\0\33\uffff9\0\34\uffff;\0\35\uffff=\0\36\uffff?\0\37\uffff"+
+		"A\0 \uffffC\0!\uffffE\0\"\uffffG\0#\uffffI\0$\uffffK\0%\uffffM\0&\uffff"+
 		"O\0\'\uffffQ\0(\uffffS\0)\uffffU\0*\uffffW\0+\uffffY\0,\uffff[\0-\uffff"+
 		"]\0.\uffff_\0/\uffffa\0\60\uffffc\0\61\uffffe\0\62\uffffg\0\63\uffffi"+
 		"\0\64\uffffk\0\65\uffffm\0\66\uffffo\0\67\uffffq\08\uffffs\09\uffffu\0"+
