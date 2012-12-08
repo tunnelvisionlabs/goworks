@@ -38,9 +38,12 @@ import org.tvl.goworks.editor.go.parser.CompiledModel;
  *
  * @author Sam Harwell
  */
-public class GoDeclarationsScannerParserTask implements ParserTask {
+public final class GoDeclarationsScannerParserTask implements ParserTask {
     private final GoDeclarationsScanner declarationsScanner = new GoDeclarationsScanner();
     private final Object lock = new Object();
+
+    private GoDeclarationsScannerParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {

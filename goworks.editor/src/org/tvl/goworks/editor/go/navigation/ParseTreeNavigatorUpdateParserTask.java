@@ -41,8 +41,11 @@ import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
  *
  * @author Sam Harwell
  */
-public class ParseTreeNavigatorUpdateParserTask implements ParserTask {
+public final class ParseTreeNavigatorUpdateParserTask implements ParserTask {
     private final Object lock = new Object();
+
+    private ParseTreeNavigatorUpdateParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {

@@ -46,11 +46,10 @@ import org.tvl.goworks.editor.go.codemodel.impl.FileModelImpl;
  *
  * @author Sam Harwell
  */
-public class ReferenceAnchorsParserTask implements ParserTask {
+public final class ReferenceAnchorsParserTask implements ParserTask {
 
     private static final Logger LOGGER = Logger.getLogger(ReferenceAnchorsParserTask.class.getName());
     private final Object lock = new Object();
-
 
     private ReferenceAnchorsParserTask() {
     }

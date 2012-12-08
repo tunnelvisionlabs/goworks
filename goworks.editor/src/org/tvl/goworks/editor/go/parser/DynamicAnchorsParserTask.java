@@ -36,7 +36,7 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
  *
  * @author Sam Harwell
  */
-public class DynamicAnchorsParserTask implements ParserTask {
+public final class DynamicAnchorsParserTask implements ParserTask {
 
     private DynamicAnchorsParserTask() {
     }

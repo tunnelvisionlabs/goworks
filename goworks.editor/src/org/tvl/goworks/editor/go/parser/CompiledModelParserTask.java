@@ -31,9 +31,12 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
  *
  * @author Sam Harwell
  */
-public class CompiledModelParserTask implements ParserTask {
+public final class CompiledModelParserTask implements ParserTask {
 
     private final CompiledModelParser parser = new CompiledModelParser();
+
+    private CompiledModelParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {

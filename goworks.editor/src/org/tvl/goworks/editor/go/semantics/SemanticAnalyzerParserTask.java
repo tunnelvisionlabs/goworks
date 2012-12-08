@@ -41,7 +41,7 @@ import org.tvl.goworks.editor.go.parser.CompiledModel;
  *
  * @author Sam Harwell
  */
-public class SemanticAnalyzerParserTask implements ParserTask {
+public final class SemanticAnalyzerParserTask implements ParserTask {
     // -J-Dorg.tvl.goworks.editor.go.semantics.SemanticAnalyzerParserTask.level=FINE
     private static final Logger LOGGER = Logger.getLogger(SemanticAnalyzerParserTask.class.getName());
 

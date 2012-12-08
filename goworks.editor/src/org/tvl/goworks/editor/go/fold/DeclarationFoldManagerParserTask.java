@@ -27,7 +27,7 @@ import org.tvl.goworks.editor.go.parser.CompiledModel;
  *
  * @author Sam Harwell
  */
-public class DeclarationFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
+public final class DeclarationFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
 
     private final DeclarationFoldScanner declarationFoldScanner = new DeclarationFoldScanner();
 

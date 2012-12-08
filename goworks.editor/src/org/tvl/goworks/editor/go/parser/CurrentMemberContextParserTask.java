@@ -44,7 +44,7 @@ import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
  *
  * @author Sam Harwell
  */
-public class CurrentMemberContextParserTask implements ParserTask {
+public final class CurrentMemberContextParserTask implements ParserTask {
 
     private CurrentMemberContextParserTask() {
     }

@@ -47,9 +47,12 @@ import org.tvl.goworks.editor.go.parser.CompiledModel;
  *
  * @author Sam Harwell
  */
-public class SyntaxErrorsHighlightingParserTask implements ParserTask {
+public final class SyntaxErrorsHighlightingParserTask implements ParserTask {
     // -J-Dorg.tvl.goworks.editor.go.semantics.SyntaxErrorsHighlightingParserTask.level=FINE
     private static final Logger LOGGER = Logger.getLogger(SyntaxErrorsHighlightingParserTask.class.getName());
+
+    private SyntaxErrorsHighlightingParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
