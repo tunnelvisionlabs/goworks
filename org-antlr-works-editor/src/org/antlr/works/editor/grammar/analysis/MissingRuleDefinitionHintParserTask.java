@@ -59,7 +59,7 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class MissingRuleDefinitionHintParserTask implements ParserTask {
+public final class MissingRuleDefinitionHintParserTask implements ParserTask {
     private static final String HINT_LAYER = "antlr4/missing-rule-definitions";
 
     private MissingRuleDefinitionHintParserTask() {
@@ -71,7 +71,7 @@ public class MissingRuleDefinitionHintParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
 
         Document document = context.getDocument().getDocument();
         if (document == null) {

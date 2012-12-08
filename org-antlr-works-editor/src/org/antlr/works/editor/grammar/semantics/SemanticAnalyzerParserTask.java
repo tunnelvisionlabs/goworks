@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.semantics;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -41,7 +40,7 @@ import org.openide.util.Lookup;
  *
  * @author Sam Harwell
  */
-public class SemanticAnalyzerParserTask implements ParserTask {
+public final class SemanticAnalyzerParserTask implements ParserTask {
 
     private final Object lock = new Object();
 
@@ -54,7 +53,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE)) {

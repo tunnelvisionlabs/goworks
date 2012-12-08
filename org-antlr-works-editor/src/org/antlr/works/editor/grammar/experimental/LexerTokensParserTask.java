@@ -38,11 +38,14 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class LexerTokensParserTask implements ParserTask {
+public final class LexerTokensParserTask implements ParserTask {
 
     private static final String DOCUMENT_CACHE_KEY = LexerTokensParserTask.class.getName() + "-snapshot-data";
 
     private final Object lock = new Object();
+
+    private LexerTokensParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -50,7 +53,7 @@ public class LexerTokensParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(GrammarParserDataDefinitions.LEXER_TOKENS)) {

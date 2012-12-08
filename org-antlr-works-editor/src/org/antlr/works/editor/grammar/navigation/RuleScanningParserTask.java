@@ -38,11 +38,14 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class RuleScanningParserTask implements ParserTask {
+public final class RuleScanningParserTask implements ParserTask {
 
     private final RuleScannerV3 v3 = new RuleScannerV3();
     private final RuleScannerV4 v4 = new RuleScannerV4();
     private final Object lock = new Object();
+
+    private RuleScanningParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -50,7 +53,7 @@ public class RuleScanningParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getSchedulerClass());

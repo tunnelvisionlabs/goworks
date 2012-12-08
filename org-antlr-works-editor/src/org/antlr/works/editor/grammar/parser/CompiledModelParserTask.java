@@ -31,10 +31,13 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class CompiledModelParserTask implements ParserTask {
+public final class CompiledModelParserTask implements ParserTask {
 
     private final CompiledModelParserV3 v3 = new CompiledModelParserV3();
     private final CompiledModelParserV4 v4 = new CompiledModelParserV4();
+
+    private CompiledModelParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -42,7 +45,7 @@ public class CompiledModelParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         getParser(snapshot).parse(taskManager, context, snapshot, requestedData, results);

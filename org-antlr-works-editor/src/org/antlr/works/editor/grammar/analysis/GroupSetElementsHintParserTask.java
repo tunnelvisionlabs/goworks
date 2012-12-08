@@ -57,7 +57,7 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class GroupSetElementsHintParserTask implements ParserTask {
+public final class GroupSetElementsHintParserTask implements ParserTask {
     private static final String HINT_LAYER = "antlr4/group-terminals";
 
     private GroupSetElementsHintParserTask() {
@@ -69,7 +69,7 @@ public class GroupSetElementsHintParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
 
         Document document = context.getDocument().getDocument();
         if (document == null) {

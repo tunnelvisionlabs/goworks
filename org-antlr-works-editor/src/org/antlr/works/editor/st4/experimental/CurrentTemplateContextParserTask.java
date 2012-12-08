@@ -46,7 +46,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class CurrentTemplateContextParserTask implements ParserTask {
+public final class CurrentTemplateContextParserTask implements ParserTask {
 
     private CurrentTemplateContextParserTask() {
     }
@@ -58,7 +58,7 @@ public class CurrentTemplateContextParserTask implements ParserTask {
 
     @Override
     @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         if (context.getPosition() == null) {

@@ -71,7 +71,7 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class FactorLabelForSetHintParserTask implements ParserTask {
+public final class FactorLabelForSetHintParserTask implements ParserTask {
     private static final String HINT_LAYER = "antlr4/factor-label-for-set";
 
     private FactorLabelForSetHintParserTask() {
@@ -83,7 +83,7 @@ public class FactorLabelForSetHintParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
 
         Document document = context.getDocument().getDocument();
         if (document == null) {

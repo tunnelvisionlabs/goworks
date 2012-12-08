@@ -45,7 +45,10 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class SyntaxErrorsHighlightingParserTask implements ParserTask {
+public final class SyntaxErrorsHighlightingParserTask implements ParserTask {
+
+    private SyntaxErrorsHighlightingParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -53,7 +56,7 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), TemplateParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));

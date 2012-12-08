@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.navigation.Description;
@@ -40,7 +42,9 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class NavigatorUpdateParserTask implements ParserTask {
+public final class NavigatorUpdateParserTask implements ParserTask {
+    // -J-Dorg.antlr.works.editor.st4.navigation.NavigatorUpdateParserTask.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(NavigatorUpdateParserTask.class.getName());
 
     private final Object lock = new Object();
 
@@ -53,12 +57,13 @@ public class NavigatorUpdateParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         synchronized (lock) {
             TemplatesPanel panel = TemplatesPanel.getInstance();
             if (panel == null) {
+                LOGGER.log(Level.FINE, "Navigator update cancelled: {0} instance not found.", TemplatesPanel.class.getName());
                 return;
             }
 
@@ -102,7 +107,8 @@ public class NavigatorUpdateParserTask implements ParserTask {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 TemplateParserDataDefinitions.NAVIGATOR_ROOT,
-                TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT);
+                TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT,
+                TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
 
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
