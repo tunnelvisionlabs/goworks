@@ -92,6 +92,10 @@ public class GoDeclarationsPanel implements NavigatorPanel {
             return;
         }
 
+        if (!GoEditorKit.GO_MIME_TYPE.equals(versionedDocument.getMimeType())) {
+            return;
+        }
+
         ParseContext context = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, versionedDocument);
         Lookup.getDefault().lookup(ParserTaskManager.class).scheduleData(context, GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE, 0, TimeUnit.MILLISECONDS);
     }
