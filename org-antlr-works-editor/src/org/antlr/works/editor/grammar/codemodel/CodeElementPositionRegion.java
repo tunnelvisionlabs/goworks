@@ -8,23 +8,24 @@
  */
 package org.antlr.works.editor.grammar.codemodel;
 
-import java.util.Collection;
-import org.netbeans.api.annotations.common.CheckForNull;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.filesystems.FileObject;
 
 /**
  *
  * @author Sam Harwell
  */
-public interface TokenData {
+public interface CodeElementPositionRegion {
 
     @NonNull
-    String getName();
-
-    @CheckForNull
-    String getLiteral();
+    FileObject getFileObject();
 
     @NonNull
-    Collection<? extends RuleModel> resolve();
+    OffsetRegion getOffsetRegion();
+
+    @NonNull
+    SnapshotPositionRegion getSnapshotPositionRegion(boolean translateToOpenDocument);
 
 }

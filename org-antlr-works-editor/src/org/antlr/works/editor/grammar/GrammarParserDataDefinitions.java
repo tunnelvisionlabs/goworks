@@ -24,9 +24,9 @@ import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarSpecContext;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.semantics.GrammarAnnotatedParseTree;
@@ -42,7 +42,7 @@ public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<CompiledModel> COMPILED_MODEL = new CompiledModelDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
-    public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
+    public static final ParserDataDefinition<GrammarSpecContext> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
     public static final ParserDataDefinition<GrammarAnnotatedParseTree> ANNOTATED_PARSE_TREE = new AnnotatedParseTreeDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
@@ -52,6 +52,7 @@ public class GrammarParserDataDefinitions {
 
     public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
     public static final ParserDataDefinition<Boolean> NAVIGATOR_UI_VISIBLE = new NavigatorUIVisibleDataDefinition();
+    public static final ParserDataDefinition<Boolean> PARSE_TREE_UI_VISIBLE = new ParseTreeUIVisibleDataDefinition();
 
     private GrammarParserDataDefinitions() {
     }
@@ -95,7 +96,7 @@ public class GrammarParserDataDefinitions {
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
-    public static ParserDataDefinition<ParserRuleContext<Token>> getReferenceParseTreeDataDefinition() {
+    public static ParserDataDefinition<GrammarSpecContext> getReferenceParseTreeDataDefinition() {
         return REFERENCE_PARSE_TREE;
     }
 
@@ -146,11 +147,10 @@ public class GrammarParserDataDefinitions {
 
     }
 
-    private static final class ReferenceParseTreeDataDefinition extends ParserDataDefinition<ParserRuleContext<Token>> {
+    private static final class ReferenceParseTreeDataDefinition extends ParserDataDefinition<GrammarSpecContext> {
 
-        @SuppressWarnings("unchecked")
         public ReferenceParseTreeDataDefinition() {
-            super("Grammar Reference Parse Tree", (Class<ParserRuleContext<Token>>)(Object)ParserRuleContext.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("Grammar Reference Parse Tree", GrammarSpecContext.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
@@ -209,6 +209,14 @@ public class GrammarParserDataDefinitions {
 
         public NavigatorUIVisibleDataDefinition() {
             super("Grammar Navigator UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class ParseTreeUIVisibleDataDefinition extends ParserDataDefinition<Boolean> {
+
+        public ParseTreeUIVisibleDataDefinition() {
+            super("Parse Tree UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
         }
 
     }
