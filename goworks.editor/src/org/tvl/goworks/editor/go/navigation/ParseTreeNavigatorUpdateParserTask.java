@@ -94,7 +94,8 @@ public final class ParseTreeNavigatorUpdateParserTask implements ParserTask {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 GoParserDataDefinitions.COMPILED_MODEL,
-                GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT);
+                GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT,
+                GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
 
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
