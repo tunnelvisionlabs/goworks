@@ -103,7 +103,6 @@ public abstract class AbstractGoHighlighterLexer extends Lexer {
 	@Override
 	public String[] getModeNames() { return modeNames; }
 
-
 	@Override
 	public void action(RuleContext<Integer> _localctx, int ruleIndex, int actionIndex) {
 		switch (ruleIndex) {
