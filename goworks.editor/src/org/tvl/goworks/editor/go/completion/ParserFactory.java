@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.netbeans.api.annotations.common.NonNull;
 
@@ -41,7 +42,7 @@ public class ParserFactory {
         parser.removeErrorListeners();
         parser.setBuildParseTree(false);
         parser.setErrorHandler(new DefaultErrorStrategy<Token>());
-        parser.getInterpreter().disable_global_context = false;
+        parser.getInterpreter().setPredictionMode(PredictionMode.LL);
         parser.getInterpreter().force_global_context = false;
         parser.getInterpreter().always_try_local_context = true;
 

@@ -19,6 +19,7 @@ import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.PredicateTransition;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.atn.SemanticContext;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
@@ -63,7 +64,7 @@ public class GoParserFactory {
 
         switch (configuration) {
         case FASTEST:
-            interpreter.disable_global_context = true;
+            interpreter.setPredictionMode(PredictionMode.SLL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = true;
             parser.setErrorHandler(new BailErrorStrategy<Token>());
@@ -71,14 +72,14 @@ public class GoParserFactory {
 
         case SLL:
             throw new UnsupportedOperationException("The tail_call_preserves_sll flag cannot change within a single ATN instance.");
-            //interpreter.disable_global_context = true;
+            //interpreter.setPredictionMode(PredictionMode.SLL);
             //interpreter.tail_call_preserves_sll = true;
             //interpreter.treat_sllk1_conflict_as_ambiguity = true;
             //parser.setErrorHandler(new BailErrorStrategy<Token>());
             //break;
 
         case HYBRID:
-            interpreter.disable_global_context = false;
+            interpreter.setPredictionMode(PredictionMode.LL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = true;
             parser.setErrorHandler(new BailErrorStrategy<Token>());
@@ -86,14 +87,14 @@ public class GoParserFactory {
 
         case HYBRID_SLL:
             throw new UnsupportedOperationException("The tail_call_preserves_sll flag cannot change within a single ATN instance.");
-            //interpreter.disable_global_context = false;
+            //interpreter.setPredictionMode(PredictionMode.LL);
             //interpreter.tail_call_preserves_sll = true;
             //interpreter.treat_sllk1_conflict_as_ambiguity = true;
             //parser.setErrorHandler(new BailErrorStrategy<Token>());
             //break;
 
         case PRECISE:
-            interpreter.disable_global_context = false;
+            interpreter.setPredictionMode(PredictionMode.LL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = false;
             parser.setErrorHandler(new DefaultErrorStrategy<Token>());

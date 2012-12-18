@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.atn.SemanticContext;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionParserATNSimulator;
@@ -32,7 +33,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
 
     public CompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
-        disable_global_context = true;
+        setPredictionMode(PredictionMode.SLL);
         QID_DECISION = GoParserFactory.getQidDecision(atn);
         qidPredicate = GoParserFactory.getQidPredicate(atn);
     }
