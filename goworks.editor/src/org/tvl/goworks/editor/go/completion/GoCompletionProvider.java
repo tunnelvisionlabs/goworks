@@ -33,7 +33,6 @@ import org.antlr.works.editor.antlr4.completion.AbstractCompletionProvider;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionProvider;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;

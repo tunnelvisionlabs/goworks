@@ -17,7 +17,6 @@ import javax.swing.KeyStroke;
 import javax.swing.text.EditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
-import javax.swing.text.StyledDocument;
 import javax.swing.text.TextAction;
 import org.antlr.netbeans.editor.commenting.BlockCommentFormat;
 import org.antlr.netbeans.editor.commenting.ExtendedCommentAction;
