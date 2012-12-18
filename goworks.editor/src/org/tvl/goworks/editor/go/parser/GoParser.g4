@@ -117,7 +117,7 @@ sliceType
     ;
 
 structType
-    :   'struct' '{' (fieldDecl ';')* fieldDecl? '}'
+    :   'struct' '{' (fieldDecl (';' fieldDecl)* ';'?)? '}'
     ;
 
 fieldDecl
