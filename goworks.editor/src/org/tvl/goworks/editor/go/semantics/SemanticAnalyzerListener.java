@@ -774,12 +774,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterMultExpr(MultExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitMultExpr(MultExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) != null) {
@@ -936,7 +936,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterSelectorExpr(SelectorExprContext ctx) {
         if (ctx.IDENTIFIER() != null) {
             treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.QUALIFIED_EXPR, true);
@@ -947,7 +947,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitSelectorExpr(SelectorExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         TerminalNode<Token> node = ctx.IDENTIFIER();
@@ -1058,13 +1058,13 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterCallExpr(CallExprContext ctx) {
     }
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_argumentList, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
     })
@@ -1122,7 +1122,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void enterTypeSwitchGuard(TypeSwitchGuardContext ctx) {
         if (ctx.IDENTIFIER() != null) {
@@ -1159,12 +1159,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterOrExpr(OrExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitOrExpr(OrExprContext ctx) {
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, BuiltinTypeReference.BOOL);
     }
@@ -1177,7 +1177,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_recvExpr, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitRecvExpr(RecvExprContext ctx) {
         assert ctx.getChildCount() <= 1;
@@ -1273,10 +1273,10 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void enterShortVarDecl(ShortVarDeclContext ctx) {
         if (ctx.identifierList() != null) {
@@ -1303,7 +1303,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=1)
     public void exitShortVarDecl(ShortVarDeclContext ctx) {
         applyPendingVars();
     }
@@ -1326,7 +1326,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayLength, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitArrayLength(ArrayLengthContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
@@ -1779,12 +1779,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterIndexExpr(IndexExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitIndexExpr(IndexExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.expression(0) != null) {
@@ -1800,7 +1800,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varDecl, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_declaration, version=0),
@@ -1842,13 +1842,13 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterOperandExpr(OperandExprContext ctx) {
     }
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
     })
     public void exitOperandExpr(OperandExprContext ctx) {
@@ -1869,13 +1869,13 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterBuiltinCallExpr(BuiltinCallExprContext ctx) {
     }
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
     })
     public void exitBuiltinCallExpr(BuiltinCallExprContext ctx) {
@@ -2072,13 +2072,13 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterTypeAssertionExpr(TypeAssertionExprContext ctx) {
     }
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
     })
     public void exitTypeAssertionExpr(TypeAssertionExprContext ctx) {
@@ -2142,7 +2142,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_value, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalValue, version=0),
     })
     public void exitValue(ValueContext ctx) {
@@ -2246,7 +2246,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_condition, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitCondition(ConditionContext ctx) {
         assert ctx.getChildCount() == 0 || (ctx.getChildCount() == 1 && ctx.expression() != null);
@@ -2260,13 +2260,13 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterConversionOrCallExpr(ConversionOrCallExprContext ctx) {
     }
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
     })
     public void exitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
@@ -2403,12 +2403,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterSliceExpr(SliceExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitSliceExpr(SliceExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
         if (ctx.expression(0) != null) {
@@ -2457,8 +2457,8 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=1),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitElementNameOrIndex(ElementNameOrIndexContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
@@ -2508,7 +2508,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitBuiltinCall(BuiltinCallContext ctx) {
         CodeElementReference typeArgument = CodeElementReference.UNKNOWN;
@@ -2558,12 +2558,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterAndExpr(AndExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitAndExpr(AndExprContext ctx) {
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, BuiltinTypeReference.BOOL);
     }
@@ -2684,12 +2684,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterCompareExpr(CompareExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitCompareExpr(CompareExprContext ctx) {
         treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, BuiltinTypeReference.BOOL);
     }
@@ -2754,12 +2754,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterAddExpr(AddExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitAddExpr(AddExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.expression(0) != null && ctx.op != null && ctx.expression(1) != null) {
@@ -2838,7 +2838,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void enterRangeClause(RangeClauseContext ctx) {
         if (ctx.defeq != null) {
@@ -2867,7 +2867,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitRangeClause(RangeClauseContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
@@ -2890,7 +2890,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literal, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitOperand(OperandContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
@@ -2944,12 +2944,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterUnaryExpr(UnaryExprContext ctx) {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitUnaryExpr(UnaryExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.MISSING;
         if (ctx.expression() != null && ctx.op != null) {
@@ -2968,7 +2968,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channel, version=1),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
     })
     public void exitChannel(ChannelContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
@@ -3080,7 +3080,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literal, version=0),
@@ -3090,7 +3090,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalValue, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_value, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayLength, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channel, version=1),

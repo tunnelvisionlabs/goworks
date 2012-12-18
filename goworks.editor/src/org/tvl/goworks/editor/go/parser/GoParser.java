@@ -108,7 +108,7 @@ public class GoParser extends AbstractGoParser {
     protected static final class CompositeLiteralAllowedVisitor extends GoParserBaseVisitor<Boolean> {
         protected static final CompositeLiteralAllowedVisitor INSTANCE = new CompositeLiteralAllowedVisitor();
 
-        @RuleDependency(recognizer=GoParser.class, rule=RULE_expression, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=RULE_expression, version=1)
         @Override
         public Boolean visitChildren(RuleNode<? extends Token> node) {
             RuleContext<? extends Token> ruleContext = node.getRuleContext();
@@ -130,10 +130,10 @@ public class GoParser extends AbstractGoParser {
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_expression, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_expression, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_exprSwitchStmt, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_arrayLength, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=RULE_elementNameOrIndex, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=RULE_elementNameOrIndex, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_channel, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_incDecStmt, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_ifStmt, version=0),

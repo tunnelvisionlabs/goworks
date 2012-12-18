@@ -368,7 +368,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_label, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
@@ -380,7 +380,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_commCase, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalValue, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
@@ -1390,7 +1390,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 })
                 public void enterVarSpec(VarSpecContext ctx) {
                     addVars(locals, ctx.identifierList(), ctx.type(), ctx.expressionList());
@@ -1398,7 +1398,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 @Override
                 @RuleDependencies({
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=1),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
                 })
@@ -1409,7 +1409,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @Override
                 @RuleDependencies({
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 })
                 public void enterRangeClause(RangeClauseContext ctx) {
                     if (ctx.defeq != null) {
@@ -1449,7 +1449,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @Override
                 @RuleDependencies({
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_recvStmt, version=0),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 })
                 public void enterRecvStmt(RecvStmtContext ctx) {
                     if (ctx.defeq != null) {
@@ -1504,7 +1504,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
-                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_constSpec, version=0),
                 })
                 private void addVars(@NonNull Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars,
@@ -1585,7 +1585,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitUnaryExpr(UnaryExprContext ctx) {
                 if (ctx.op == null) {
                     return Collections.emptyList();
@@ -1642,7 +1642,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitMultExpr(MultExprContext ctx) {
                 if (ctx.op == null) {
                     return Collections.emptyList();
@@ -1668,7 +1668,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitAddExpr(AddExprContext ctx) {
                 if (ctx.op == null) {
                     return Collections.emptyList();
@@ -1689,7 +1689,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitIndexExpr(IndexExprContext ctx) {
                 List<? extends ExpressionContext> expressions = ctx.expression();
                 if (expressions.isEmpty()) {
@@ -1717,7 +1717,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitSliceExpr(SliceExprContext ctx) {
                 List<? extends ExpressionContext> expressions = ctx.expression();
                 if (expressions.isEmpty()) {
@@ -1744,7 +1744,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
             })
             public Collection<? extends CodeElementModel> visitOperandExpr(OperandExprContext ctx) {
@@ -1761,7 +1761,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
             })
             public Collection<? extends CodeElementModel> visitBuiltinCallExpr(BuiltinCallExprContext ctx) {
@@ -1840,7 +1840,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitSelectorExpr(SelectorExprContext ctx) {
                 if (ctx.IDENTIFIER() == null) {
                     setTargetProperty(ctx, Collections.<CodeElementModel>emptyList());
@@ -2045,7 +2045,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             @RuleDependencies({
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
             })
             public Collection<? extends CodeElementModel> visitRangeClause(RangeClauseContext ctx) {
                 if (ctx.e == null) {
@@ -2080,7 +2080,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             @RuleDependencies({
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchStmt, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeCaseClause, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchCase, version=0),
@@ -2326,7 +2326,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literal, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodExpr, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
             })
             public Collection<? extends CodeElementModel> visitOperand(OperandContext ctx) {
                 Collection<? extends CodeElementModel> result;
@@ -2349,7 +2349,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
             })
             public Collection<? extends CodeElementModel> visitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
@@ -2400,19 +2400,19 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitAndExpr(AndExprContext ctx) {
                 return Collections.singletonList(IntrinsicTypeModels.BOOL);
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitOrExpr(OrExprContext ctx) {
                 return Collections.singletonList(IntrinsicTypeModels.BOOL);
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
             public Collection<? extends CodeElementModel> visitCallExpr(CallExprContext ctx) {
                 if (ctx.expression() == null) {
                     return Collections.emptyList();
@@ -2571,7 +2571,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
             })
             public Collection<? extends CodeElementModel> visitTypeAssertionExpr(TypeAssertionExprContext ctx) {
@@ -2913,7 +2913,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varDecl, version=0),
         })
@@ -2986,7 +2986,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_importSpec, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_importDecl, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageClause, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
         })
         public ParseTree<Token> visitPackageName(PackageNameContext ctx) {
@@ -3012,7 +3012,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_forStmt, version=0),
         })
@@ -3054,7 +3054,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         }
 
         @Override
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0)
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
         public ParseTree<Token> visitSelectorExpr(SelectorExprContext ctx) {
             // this isn't a declaration
             return null;
@@ -3083,7 +3083,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             @RuleDependencies({
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sourceFileBody, version=1),
             })
             public ParseTree<Token> visitTopLevelDecl(TopLevelDeclContext ctx) {
                 return (SourceFileBodyContext)ctx.getParent();
@@ -3137,7 +3137,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_simpleStmt, version=1),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_statement, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_ifStmt, version=0),

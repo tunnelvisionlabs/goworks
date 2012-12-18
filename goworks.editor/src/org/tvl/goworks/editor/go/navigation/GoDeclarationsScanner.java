@@ -230,7 +230,7 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_shortVarDecl, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         })
         public void enterShortVarDecl(ShortVarDeclContext ctx) {
@@ -960,7 +960,7 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
         })
         public String visitOperandExpr(OperandExprContext ctx) {
             // default impl does the right thing
