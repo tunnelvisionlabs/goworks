@@ -171,7 +171,7 @@ interfaceType
 
 methodSpec
     :   methodName signature
-    |   interfaceTypeName
+    |   interfaceTypeName {}
     ;
 
 methodName
