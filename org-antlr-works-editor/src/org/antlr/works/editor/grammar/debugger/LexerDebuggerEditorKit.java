@@ -16,7 +16,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.text.BadLocationException;
@@ -24,11 +23,16 @@ import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.TextAction;
 import javax.xml.bind.DatatypeConverter;
-import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNSimulator;
 import org.antlr.works.editor.grammar.debugger.LexerDebuggerTokenHighlighterLayerFactory.LexerOpCode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.modules.editor.NbEditorKit;
+import org.netbeans.modules.editor.NbEditorUtilities;
+import org.openide.filesystems.FileObject;
+import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -40,9 +44,8 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     private static final Logger LOG = Logger.getLogger(LexerDebuggerEditorKit.class.getName());
     private static final String UTF_8 = "UTF-8"; // NOI18N
 
-    private static final boolean INTERNAL_PARSE = true;
-
     public static final String PROP_TRACE = "Lexer Trace";
+    public static final String PROP_INTERP_DATA = "Lexer Interpreter Data";
     public static final String PROP_TOKENS = "Trace Tokens";
     public static final String PROP_SELECTED_TOKENS = "Selected Trace Tokens";
     public static final String PROP_CHANNELS = "Channels";
@@ -55,9 +58,6 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     @Override
     protected void initDocument(BaseDocument doc) {
         super.initDocument(doc);
-        if (INTERNAL_PARSE && !LOG.isLoggable(Level.INFO)) {
-            LOG.setLevel(Level.INFO);
-        }
     }
 
     @Override
@@ -78,6 +78,12 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
 
     @Override
     public void read(Reader in, Document doc, int pos) throws IOException, BadLocationException {
+        FileObject fileObject = NbEditorUtilities.getFileObject(doc);
+        if (fileObject.hasExt("linterp")) {
+            super.read(in, doc, pos);
+            return;
+        }
+
         String data = readAllText(in, 0);
         byte[] binary = DatatypeConverter.parseBase64Binary(data);
         int inputSize = readInteger(binary, 0);
@@ -153,27 +159,52 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
         TraceToken[] tokens = (TraceToken[])document.getProperty(PROP_TOKENS);
         if (tokens == null) {
             byte[] traceData = (byte[])document.getProperty(PROP_TRACE);
-            tokens = loadTokens(document, new ByteArrayInputStream(traceData));
-            //if (INTERNAL_PARSE) {
-            //    Lexer lexer = LexerDebuggerTest.createLexer(new DocumentCharStreamV4((StyledDocument)document));
-            //    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            //    lexer.getInterpreter().setTraceStream(outputStream);
-            //    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-            //    tokenStream.fill();
-            //    outputStream.flush();
-            //    LOG.info(String.format("Lexer trace consumes %d bytes.\n", outputStream.size()));
-            //    document.putProperty(PROP_TRACE, outputStream.toByteArray());
-            //    tokens = loadTokens(document, new ByteArrayInputStream(outputStream.toByteArray()));
-            //} else {
-            //    String sourceFileName = (String)document.getProperty(Document.StreamDescriptionProperty);
-            //    String traceFileName = sourceFileName + ".trace";
-            //    File traceFile = new File(traceFileName);
-            //    tokens = loadTokens(document, new BufferedInputStream(new FileInputStream(traceFileName)));
-            //}
+            if (traceData != null) {
+                tokens = loadTokens(document, new ByteArrayInputStream(traceData));
+            }
+            else {
+                LexerInterpreterData interpreterData = (LexerInterpreterData)document.getProperty(PROP_INTERP_DATA);
+                if (interpreterData != null) {
+                    tokens = loadTokens(document, interpreterData);
+                }
+            }
+
             document.putProperty(PROP_TOKENS, tokens);
         }
 
         return tokens;
+    }
+
+    private TraceToken[] loadTokens(final Document document, LexerInterpreterData interpreterData) {
+        final List<TraceToken> tokens = new ArrayList<TraceToken>();
+
+        LexerTraceListener listener = new AbstractLexerTraceListener() {
+            int mode;
+
+            @Override
+            public void beginMatch(int mode, int index) {
+                this.mode = mode;
+            }
+
+            @Override
+            public void emit(int startIndex, int stopIndex, int type, int channel) {
+                tokens.add(new TraceToken(document, startIndex, stopIndex, tokens.size(), type, channel, mode));
+            }
+
+        };
+        try {
+            TracingCharStream charStream = new TracingCharStream(listener, document.getText(0, document.getLength()));
+            TracingLexer lexer = new TracingLexer(interpreterData, listener, charStream);
+            ATN atn = ATNSimulator.deserialize(interpreterData.serializedAtn.toCharArray());
+            TracingLexerATNSimulator atnSimulator = new TracingLexerATNSimulator(listener, lexer, atn);
+            lexer.setInterpreter(atnSimulator);
+            CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
+            commonTokenStream.fill();
+            return tokens.toArray(new TraceToken[0]);
+        } catch (BadLocationException ex) {
+            Exceptions.printStackTrace(ex);
+            return new TraceToken[0];
+        }
     }
 
     private TraceToken[] loadTokens(final Document document, InputStream reader) {
@@ -198,7 +229,7 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     }
 
     public void processTrace(Document document, LexerTraceListener listener) {
-        byte[] trace = (byte[])document.getProperty(PROP_TRACE);        
+        byte[] trace = (byte[])document.getProperty(PROP_TRACE);
         if (trace != null) {
             loadTrace(document, new ByteArrayInputStream(trace), listener);
         }
