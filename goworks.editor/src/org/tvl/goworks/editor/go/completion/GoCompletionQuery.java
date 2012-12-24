@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -72,8 +74,6 @@ import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
-import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.ChannelKind;

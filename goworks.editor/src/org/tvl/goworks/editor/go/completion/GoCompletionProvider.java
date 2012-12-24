@@ -8,6 +8,7 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import com.tvl.spi.editor.completion.CompletionProvider;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -32,7 +33,6 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionProvider;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;

@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.editor.go.navigation;
 
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionProvider;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -21,8 +23,6 @@ import org.antlr.works.editor.antlr4.completion.CompletionQueryResult;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
-import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.tvl.goworks.editor.GoEditorKit;

@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.editor.go.highlighter;
 
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionProvider;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -32,8 +34,6 @@ import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.settings.AttributesUtilities;
 import org.netbeans.api.editor.settings.EditorStyleConstants;
 import org.netbeans.api.editor.settings.FontColorSettings;
-import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.highlighting.HighlightAttributeValue;
 import org.openide.util.Lookup;
 import org.tvl.goworks.editor.GoEditorKit;

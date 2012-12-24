@@ -8,12 +8,12 @@
  */
 package org.tvl.goworks.editor.go.completion;
 
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionControllerProvider;
+import com.tvl.spi.editor.completion.CompletionTask;
 import java.util.List;
 import javax.swing.text.JTextComponent;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.spi.editor.completion.CompletionController;
-import org.netbeans.spi.editor.completion.CompletionControllerProvider;
-import org.netbeans.spi.editor.completion.CompletionTask;
 import org.tvl.goworks.editor.GoEditorKit;
 
 /**

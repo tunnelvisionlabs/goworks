@@ -8,6 +8,7 @@
  */
 package org.tvl.goworks.editor.go.navigation;
 
+import com.tvl.spi.editor.completion.CompletionProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -26,7 +27,6 @@ import org.netbeans.api.editor.settings.EditorStyleConstants;
 import org.netbeans.lib.editor.hyperlink.spi.HyperlinkProviderExt;
 import org.netbeans.lib.editor.hyperlink.spi.HyperlinkType;
 import org.netbeans.modules.editor.NbEditorUtilities;
-import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.cookies.EditorCookie;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
