@@ -446,7 +446,7 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodSpec, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
         })
         public void enterMethodSpec(MethodSpecContext ctx) {
@@ -944,7 +944,7 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=3, dependents=Dependents.PARENTS),
         })
         public String visitTypeName(TypeNameContext ctx) {
             return Description.htmlEscape(ctx.getText());

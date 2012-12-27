@@ -1653,7 +1653,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=3, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
     })
     public void exitTypeName(TypeNameContext ctx) {
@@ -1687,7 +1687,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
     })
     public void exitLiteralType(LiteralTypeContext ctx) {
@@ -2099,7 +2099,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
     })
     public void exitType(TypeContext ctx) {
@@ -3100,7 +3100,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_recvExpr, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_rangeClause, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),

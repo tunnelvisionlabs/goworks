@@ -312,8 +312,10 @@ methodExpr
     ;
 
 receiverType
+@version{3}
     :   typeName
     |   '(' ptr='*' typeName ')'
+    |   '(' receiverType ')'
     ;
 
 compositeLiteral

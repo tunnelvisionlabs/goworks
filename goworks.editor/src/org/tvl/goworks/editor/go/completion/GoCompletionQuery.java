@@ -384,7 +384,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementNameOrIndex, version=1),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalValue, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=3, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0),
         })
         public void runImpl(BaseDocument document) {
@@ -1868,7 +1868,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @Override
             @RuleDependencies({
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
             })
             public Collection<? extends CodeElementModel> visitType(TypeContext ctx) {
@@ -2282,7 +2282,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0)
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=3, dependents=Dependents.PARENTS)
             public Collection<? extends CodeElementModel> visitTypeName(TypeNameContext ctx) {
                 assert ctx.getChildCount() <= 1 : "Unknown typeName syntax.";
                 Collection<? extends CodeElementModel> result = visit(ctx.getChild(0));
@@ -2647,7 +2647,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public Collection<? extends CodeElementModel> visitCompositeLiteral(CompositeLiteralContext ctx) {
