@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> AbstractGoParser.java generatedTimestamp>
+// Generated from GoParser.g4 by ANTLR 4.0-SNAPSHOT
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -345,7 +345,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -410,7 +410,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -475,7 +475,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeLiteral(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -576,7 +576,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitArrayType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -623,7 +623,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitArrayLength(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -667,7 +667,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElementType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -711,7 +711,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSliceType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -760,7 +760,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitStructType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -848,7 +848,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFieldDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -915,7 +915,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAnonymousField(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -965,7 +965,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTag(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1010,7 +1010,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPointerType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1055,7 +1055,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBaseType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1099,7 +1099,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFunctionType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1147,7 +1147,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSignature(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1202,7 +1202,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitResult(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1258,7 +1258,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitParameters(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1322,7 +1322,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitParameterList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1387,7 +1387,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitParameterDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1450,7 +1450,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitInterfaceType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1535,7 +1535,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1591,7 +1591,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1635,7 +1635,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitInterfaceTypeName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1682,7 +1682,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMapType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1730,7 +1730,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitKeyType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1776,7 +1776,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitChannelType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1846,7 +1846,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBlock(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1930,7 +1930,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitDeclaration(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1999,7 +1999,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTopLevelDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2065,7 +2065,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConstDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2163,7 +2163,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConstSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2225,7 +2225,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIdentifierList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2289,7 +2289,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExpressionList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2353,7 +2353,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2446,7 +2446,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2494,7 +2494,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitVarDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2592,7 +2592,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitVarSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2663,7 +2663,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitShortVarDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2713,7 +2713,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFunctionDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2767,7 +2767,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBody(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2820,7 +2820,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2877,7 +2877,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitReceiver(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2937,7 +2937,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBaseTypeName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2990,7 +2990,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitOperand(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3070,7 +3070,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLiteral(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3135,7 +3135,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBasicLiteral(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3187,7 +3187,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitQualifiedIdentifier(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3246,7 +3246,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMethodExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3293,7 +3293,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitReceiverType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3355,7 +3355,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCompositeLiteral(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3415,7 +3415,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLiteralType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3502,7 +3502,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLiteralValue(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3566,7 +3566,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElementList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3630,7 +3630,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3683,7 +3683,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitKey(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3727,7 +3727,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitElementNameOrIndex(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3774,7 +3774,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitValue(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3833,7 +3833,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFunctionLiteral(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3890,7 +3890,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMultExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class AndExprContext extends ExpressionContext {
@@ -3912,7 +3912,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAndExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ConversionOrCallExprContext extends ExpressionContext {
@@ -3931,7 +3931,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConversionOrCallExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class CallExprContext extends ExpressionContext {
@@ -3955,7 +3955,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCallExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class TypeAssertionExprContext extends ExpressionContext {
@@ -3980,7 +3980,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeAssertionExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class CompareExprContext extends ExpressionContext {
@@ -4003,7 +4003,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCompareExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class OrExprContext extends ExpressionContext {
@@ -4025,7 +4025,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitOrExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class SelectorExprContext extends ExpressionContext {
@@ -4046,7 +4046,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSelectorExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class SliceExprContext extends ExpressionContext {
@@ -4070,7 +4070,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSliceExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class UnaryExprContext extends ExpressionContext {
@@ -4090,7 +4090,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitUnaryExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class OperandExprContext extends ExpressionContext {
@@ -4109,7 +4109,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitOperandExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class AddExprContext extends ExpressionContext {
@@ -4132,7 +4132,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAddExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class BuiltinCallExprContext extends ExpressionContext {
@@ -4151,7 +4151,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBuiltinCallExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 	public static class IndexExprContext extends ExpressionContext {
@@ -4173,7 +4173,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIndexExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4450,7 +4450,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitArgumentList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4505,7 +4505,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitConversion(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4594,7 +4594,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitStatement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4756,7 +4756,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSimpleStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4842,7 +4842,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitEmptyStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4888,7 +4888,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLabeledStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4932,7 +4932,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitLabel(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4976,7 +4976,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExpressionStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5023,7 +5023,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSendStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5069,7 +5069,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitChannel(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5114,7 +5114,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIncDecStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5172,7 +5172,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAssignment(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5221,7 +5221,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAssignOp(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5281,7 +5281,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitAddAssignOp(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5328,7 +5328,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitMulAssignOp(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5390,7 +5390,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitIfStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5470,7 +5470,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSwitchStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5535,7 +5535,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExprSwitchStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5620,7 +5620,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExprCaseClause(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5698,7 +5698,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitExprSwitchCase(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5764,7 +5764,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5839,7 +5839,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchGuard(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5902,7 +5902,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeCaseClause(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5980,7 +5980,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeSwitchCase(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6040,7 +6040,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitTypeList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6110,7 +6110,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitForStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6175,7 +6175,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCondition(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6225,7 +6225,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitForClause(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6294,7 +6294,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitInitStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6338,7 +6338,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPostStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6390,7 +6390,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitRangeClause(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6459,7 +6459,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitGoStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6507,7 +6507,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSelectStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6575,7 +6575,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCommClause(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6656,7 +6656,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitCommCase(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6736,7 +6736,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitRecvStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6811,7 +6811,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitRecvExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6855,7 +6855,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitReturnStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6907,7 +6907,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBreakStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -6959,7 +6959,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitContinueStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7011,7 +7011,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitGotoStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7053,7 +7053,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitFallthroughStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7097,7 +7097,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitDeferStmt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7143,7 +7143,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBuiltinCall(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7208,7 +7208,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitBuiltinArgs(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7285,7 +7285,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSourceFileBody(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7371,7 +7371,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitSourceFile(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7417,7 +7417,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPackageClause(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7461,7 +7461,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitPackageName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7508,7 +7508,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitImportDecl(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7606,7 +7606,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitImportSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -7671,7 +7671,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GoParserVisitor<?, ?> ) return ((GoParserVisitor<? super Token, ? extends Result>)visitor).visitImportPath(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 

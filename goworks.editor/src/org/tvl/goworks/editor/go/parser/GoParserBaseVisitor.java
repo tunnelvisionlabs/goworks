@@ -1,3 +1,4 @@
+// Generated from GoParser.g4 by ANTLR 4.0-SNAPSHOT
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.

@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> AbstractGoLexer.java generatedTimestamp>
+// Generated from GoLexer.g4 by ANTLR 4.0-SNAPSHOT
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
