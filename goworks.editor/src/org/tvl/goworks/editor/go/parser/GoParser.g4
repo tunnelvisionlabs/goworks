@@ -613,8 +613,9 @@ builtinCall
     ;
 
 builtinArgs
-    :   type (',' expressionList)?
-    |   expressionList
+@version{2}
+    :   type (',' argumentList)?
+    |   argumentList
     ;
 
 sourceFileBody

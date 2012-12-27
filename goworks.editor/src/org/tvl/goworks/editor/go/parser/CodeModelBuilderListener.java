@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
@@ -244,7 +245,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0)
+    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS)
     public void exitType(TypeContext ctx) {
         // handled by child contexts
         if (_typeModelStack.isEmpty()) {
@@ -424,7 +425,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitTypeSpec(TypeSpecContext ctx) {
         String name = "?";
@@ -450,7 +451,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitConstSpec(ConstSpecContext ctx) {
         TypeModelImpl type = null;
@@ -483,7 +484,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_varSpec, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
     })
     public void exitVarSpec(VarSpecContext ctx) {
@@ -638,7 +639,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_result, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitResult(ResultContext ctx) {
         if (ctx.type() != null) {
@@ -650,7 +651,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_parameterDecl, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitParameterDecl(ParameterDeclContext ctx) {
         if (ctx.identifierList() == null && ctx.type() == null) {
@@ -675,7 +676,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_fieldDecl, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_anonymousField, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_identifierList, version=0),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0),
@@ -707,7 +708,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitTypeAssertionExpr(TypeAssertionExprContext ctx) {
         if (ctx.type() != null) {
@@ -729,7 +730,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitConversion(ConversionContext ctx) {
         if (ctx.type() != null) {
@@ -767,8 +768,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=2, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitBuiltinCall(BuiltinCallContext ctx) {
         String functionName = ctx.IDENTIFIER() != null ? ctx.IDENTIFIER().getText() : null;
@@ -843,8 +844,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=2, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitBuiltinArgs(BuiltinArgsContext ctx) {
         if (ctx.type() != null) {
@@ -856,7 +857,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeList, version=0),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitTypeList(TypeListContext ctx) {
         int typeCount = ctx.type().size();

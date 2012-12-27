@@ -7187,8 +7187,8 @@ public abstract class AbstractGoParser extends Parser<Token> {
 	}
 
 	public static class BuiltinArgsContext extends ParserRuleContext<Token> {
-		public ExpressionListContext expressionList() {
-			return getRuleContext(ExpressionListContext.class,0);
+		public ArgumentListContext argumentList() {
+			return getRuleContext(ArgumentListContext.class,0);
 		}
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
@@ -7212,7 +7212,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		}
 	}
 
-	@RuleVersion(0)
+	@RuleVersion(2)
 	public final BuiltinArgsContext builtinArgs() throws RecognitionException {
 		BuiltinArgsContext _localctx = new BuiltinArgsContext(_ctx, getState());
 		enterRule(_localctx, 218, RULE_builtinArgs);
@@ -7228,7 +7228,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 				case 1:
 					{
 					setState(1006); match(Comma);
-					setState(1007); expressionList();
+					setState(1007); argumentList();
 					}
 					break;
 				}
@@ -7238,7 +7238,7 @@ public abstract class AbstractGoParser extends Parser<Token> {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(1010); expressionList();
+				setState(1010); argumentList();
 				}
 				break;
 			}
@@ -8110,40 +8110,40 @@ public abstract class AbstractGoParser extends Parser<Token> {
 		"\5J\0\0\u03e4\u03e9\5@\0\0\u03e5\u03e7\3\u00dam\0\u03e6\u03e8\5F\0\0\u03e7"+
 		"\u03e6\1\0\0\0\u03e7\u03e8\1\0\0\0\u03e8\u03ea\1\0\0\0\u03e9\u03e5\1\0"+
 		"\0\0\u03e9\u03ea\1\0\0\0\u03ea\u03eb\1\0\0\0\u03eb\u03ec\5A\0\0\u03ec"+
-		"\u00d9\1\0\0\0\u03ed\u03f0\3\f\6\0\u03ee\u03ef\5F\0\0\u03ef\u03f1\3L&"+
-		"\0\u03f0\u03ee\1\0\0\0\u03f0\u03f1\1\0\0\0\u03f1\u03f4\1\0\0\0\u03f2\u03f4"+
-		"\3L&\0\u03f3\u03ed\1\0\0\0\u03f3\u03f2\1\0\0\0\u03f4\u00db\1\0\0\0\u03f5"+
-		"\u03f6\3\u00e0p\0\u03f6\u03f7\5H\0\0\u03f7\u03f9\1\0\0\0\u03f8\u03f5\1"+
-		"\0\0\0\u03f8\u03f9\1\0\0\0\u03f9\u03ff\1\0\0\0\u03fa\u03fb\3\u00e4r\0"+
-		"\u03fb\u03fc\5H\0\0\u03fc\u03fe\1\0\0\0\u03fd\u03fa\1\0\0\0\u03fe\u0401"+
-		"\1\0\0\0\u03ff\u03fd\1\0\0\0\u03ff\u0400\1\0\0\0\u0400\u0407\1\0\0\0\u0401"+
-		"\u03ff\1\0\0\0\u0402\u0403\3D\"\0\u0403\u0404\5H\0\0\u0404\u0406\1\0\0"+
-		"\0\u0405\u0402\1\0\0\0\u0406\u0409\1\0\0\0\u0407\u0405\1\0\0\0\u0407\u0408"+
-		"\1\0\0\0\u0408\u00dd\1\0\0\0\u0409\u0407\1\0\0\0\u040a\u040b\3\u00dcn"+
-		"\0\u040b\u040c\5\uffff\0\0\u040c\u00df\1\0\0\0\u040d\u040e\5\23\0\0\u040e"+
-		"\u040f\3\u00e2q\0\u040f\u0410\6p\uffff\0\u0410\u00e1\1\0\0\0\u0411\u0412"+
-		"\5J\0\0\u0412\u00e3\1\0\0\0\u0413\u0424\5\20\0\0\u0414\u0425\3\u00e6s"+
-		"\0\u0415\u0421\5@\0\0\u0416\u041b\3\u00e6s\0\u0417\u0418\5H\0\0\u0418"+
-		"\u041a\3\u00e6s\0\u0419\u0417\1\0\0\0\u041a\u041d\1\0\0\0\u041b\u0419"+
-		"\1\0\0\0\u041b\u041c\1\0\0\0\u041c\u041f\1\0\0\0\u041d\u041b\1\0\0\0\u041e"+
-		"\u0420\5H\0\0\u041f\u041e\1\0\0\0\u041f\u0420\1\0\0\0\u0420\u0422\1\0"+
-		"\0\0\u0421\u0416\1\0\0\0\u0421\u0422\1\0\0\0\u0422\u0423\1\0\0\0\u0423"+
-		"\u0425\5A\0\0\u0424\u0414\1\0\0\0\u0424\u0415\1\0\0\0\u0425\u00e5\1\0"+
-		"\0\0\u0426\u0427\5G\0\0\u0427\u0430\3\u00e8t\0\u0428\u0429\3\u00e2q\0"+
-		"\u0429\u042a\3\u00e8t\0\u042a\u042b\6s\uffff\0\u042b\u0430\1\0\0\0\u042c"+
-		"\u042d\3\u00e8t\0\u042d\u042e\6s\uffff\0\u042e\u0430\1\0\0\0\u042f\u0426"+
-		"\1\0\0\0\u042f\u0428\1\0\0\0\u042f\u042c\1\0\0\0\u0430\u00e7\1\0\0\0\u0431"+
-		"\u0432\5R\0\0\u0432\u00e9\1\0\0\0x\u00f6\u0105\u0111\u0127\u012b\u012d"+
-		"\u0135\u0138\u013b\u014b\u014f\u0154\u0156\u015f\u0163\u0166\u0171\u0175"+
-		"\u0177\u0181\u0191\u0195\u019f\u01a3\u01a5\u01ac\u01b1\u01bb\u01bf\u01c1"+
-		"\u01c4\u01c8\u01cc\u01d3\u01db\u01e6\u01ea\u01ec\u01ef\u01fc\u0200\u0202"+
-		"\u0205\u020b\u020f\u0219\u0222\u0226\u0229\u0238\u023d\u0245\u0253\u0261"+
-		"\u0266\u0268\u0271\u0277\u0281\u028c\u02a8\u02ac\u02b9\u02bb\u02be\u02c0"+
-		"\u02c5\u02db\u02e3\u02e6\u0302\u030c\u0313\u0315\u0319\u031f\u0322\u0328"+
-		"\u0334\u0338\u033a\u033f\u0345\u034c\u0353\u0362\u0366\u0368\u036d\u0374"+
-		"\u037b\u0382\u0386\u038a\u0393\u0397\u03a4\u03b0\u03b4\u03b6\u03bb\u03be"+
-		"\u03c3\u03c7\u03c9\u03d1\u03d5\u03d9\u03e7\u03e9\u03f0\u03f3\u03f8\u03ff"+
-		"\u0407\u041b\u041f\u0421\u0424\u042f";
+		"\u00d9\1\0\0\0\u03ed\u03f0\3\f\6\0\u03ee\u03ef\5F\0\0\u03ef\u03f1\3\u0082"+
+		"A\0\u03f0\u03ee\1\0\0\0\u03f0\u03f1\1\0\0\0\u03f1\u03f4\1\0\0\0\u03f2"+
+		"\u03f4\3\u0082A\0\u03f3\u03ed\1\0\0\0\u03f3\u03f2\1\0\0\0\u03f4\u00db"+
+		"\1\0\0\0\u03f5\u03f6\3\u00e0p\0\u03f6\u03f7\5H\0\0\u03f7\u03f9\1\0\0\0"+
+		"\u03f8\u03f5\1\0\0\0\u03f8\u03f9\1\0\0\0\u03f9\u03ff\1\0\0\0\u03fa\u03fb"+
+		"\3\u00e4r\0\u03fb\u03fc\5H\0\0\u03fc\u03fe\1\0\0\0\u03fd\u03fa\1\0\0\0"+
+		"\u03fe\u0401\1\0\0\0\u03ff\u03fd\1\0\0\0\u03ff\u0400\1\0\0\0\u0400\u0407"+
+		"\1\0\0\0\u0401\u03ff\1\0\0\0\u0402\u0403\3D\"\0\u0403\u0404\5H\0\0\u0404"+
+		"\u0406\1\0\0\0\u0405\u0402\1\0\0\0\u0406\u0409\1\0\0\0\u0407\u0405\1\0"+
+		"\0\0\u0407\u0408\1\0\0\0\u0408\u00dd\1\0\0\0\u0409\u0407\1\0\0\0\u040a"+
+		"\u040b\3\u00dcn\0\u040b\u040c\5\uffff\0\0\u040c\u00df\1\0\0\0\u040d\u040e"+
+		"\5\23\0\0\u040e\u040f\3\u00e2q\0\u040f\u0410\6p\uffff\0\u0410\u00e1\1"+
+		"\0\0\0\u0411\u0412\5J\0\0\u0412\u00e3\1\0\0\0\u0413\u0424\5\20\0\0\u0414"+
+		"\u0425\3\u00e6s\0\u0415\u0421\5@\0\0\u0416\u041b\3\u00e6s\0\u0417\u0418"+
+		"\5H\0\0\u0418\u041a\3\u00e6s\0\u0419\u0417\1\0\0\0\u041a\u041d\1\0\0\0"+
+		"\u041b\u0419\1\0\0\0\u041b\u041c\1\0\0\0\u041c\u041f\1\0\0\0\u041d\u041b"+
+		"\1\0\0\0\u041e\u0420\5H\0\0\u041f\u041e\1\0\0\0\u041f\u0420\1\0\0\0\u0420"+
+		"\u0422\1\0\0\0\u0421\u0416\1\0\0\0\u0421\u0422\1\0\0\0\u0422\u0423\1\0"+
+		"\0\0\u0423\u0425\5A\0\0\u0424\u0414\1\0\0\0\u0424\u0415\1\0\0\0\u0425"+
+		"\u00e5\1\0\0\0\u0426\u0427\5G\0\0\u0427\u0430\3\u00e8t\0\u0428\u0429\3"+
+		"\u00e2q\0\u0429\u042a\3\u00e8t\0\u042a\u042b\6s\uffff\0\u042b\u0430\1"+
+		"\0\0\0\u042c\u042d\3\u00e8t\0\u042d\u042e\6s\uffff\0\u042e\u0430\1\0\0"+
+		"\0\u042f\u0426\1\0\0\0\u042f\u0428\1\0\0\0\u042f\u042c\1\0\0\0\u0430\u00e7"+
+		"\1\0\0\0\u0431\u0432\5R\0\0\u0432\u00e9\1\0\0\0x\u00f6\u0105\u0111\u0127"+
+		"\u012b\u012d\u0135\u0138\u013b\u014b\u014f\u0154\u0156\u015f\u0163\u0166"+
+		"\u0171\u0175\u0177\u0181\u0191\u0195\u019f\u01a3\u01a5\u01ac\u01b1\u01bb"+
+		"\u01bf\u01c1\u01c4\u01c8\u01cc\u01d3\u01db\u01e6\u01ea\u01ec\u01ef\u01fc"+
+		"\u0200\u0202\u0205\u020b\u020f\u0219\u0222\u0226\u0229\u0238\u023d\u0245"+
+		"\u0253\u0261\u0266\u0268\u0271\u0277\u0281\u028c\u02a8\u02ac\u02b9\u02bb"+
+		"\u02be\u02c0\u02c5\u02db\u02e3\u02e6\u0302\u030c\u0313\u0315\u0319\u031f"+
+		"\u0322\u0328\u0334\u0338\u033a\u033f\u0345\u034c\u0353\u0362\u0366\u0368"+
+		"\u036d\u0374\u037b\u0382\u0386\u038a\u0393\u0397\u03a4\u03b0\u03b4\u03b6"+
+		"\u03bb\u03be\u03c3\u03c7\u03c9\u03d1\u03d5\u03d9\u03e7\u03e9\u03f0\u03f3"+
+		"\u03f8\u03ff\u0407\u041b\u041f\u0421\u0424\u042f";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
