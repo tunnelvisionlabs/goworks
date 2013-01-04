@@ -345,7 +345,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                     }
                 }
                 layout.showCompletion(Collections.singletonList(waitText),
-                        Collections.emptyList(),
+                        Collections.<CompletionItem>emptyList(),
                         null, -1, CompletionImpl.this, null, null,
                         FALLBACK_COMPLETION_CONTROLLER,
                         CompletionController.Selection.DEFAULT);
@@ -380,7 +380,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             return;
         }
         // Check whether the insertion came from typing
-        if (!DocumentUtilities.isTypingModification(e)) {
+        if (!DocumentUtilities.isTypingModification(e.getDocument())) {
             return;
         }
 
@@ -823,7 +823,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             completionCancel();
             if (explicitQuery) {
                 layout.showCompletion(Collections.singletonList(NO_SUGGESTIONS),
-                      Collections.emptyList(),
+                      Collections.<CompletionItem>emptyList(),
                       null, -1, CompletionImpl.this, null, null,
                       FALLBACK_COMPLETION_CONTROLLER,
                       CompletionController.Selection.DEFAULT);
@@ -909,8 +909,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         if (localCompletionResult != null) {
             CharSequence commonText = null;
             int anchorOffset = -1;
-outer:      for (Iterator it = localCompletionResult.getResultSets().iterator(); it.hasNext();) {
-                CompletionResultSetImpl resultSet = (CompletionResultSetImpl)it.next();
+outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getResultSets()) {
                 List<? extends CompletionItem> resultItems = resultSet.getItems();
                 if (resultItems.size() > 0) {
                     if (anchorOffset >= -1) {
@@ -919,8 +918,8 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
                         else
                             anchorOffset = resultSet.getAnchorOffset();
                     }
-                    for (Iterator itt = resultItems.iterator(); itt.hasNext();) {
-                        CharSequence text = ((CompletionItem)itt.next()).getInsertPrefix();
+                    for (CompletionItem item : resultItems) {
+                        CharSequence text = item.getInsertPrefix();
                         if (text == null) {
                             commonText = null;
                             break outer;
@@ -949,22 +948,29 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
                 int caretOffset = c.getSelectionStart();
                 if (caretOffset - anchorOffset < commonText.length()) {
 
-                    Document doc = getActiveDocument();
-                    BaseDocument baseDoc = null;
-                    if(doc instanceof BaseDocument)
-                        baseDoc = (BaseDocument)doc;
-                        
+                    final int finalAnchorOffset = anchorOffset;
+                    final int finalCaretOffset = caretOffset;
+                    final CharSequence finalCommonText = commonText;
+                    final Document doc = getActiveDocument();
+
+                    Runnable operation = new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                doc.remove(finalAnchorOffset, finalCaretOffset - finalAnchorOffset);
+                                doc.insertString(finalAnchorOffset, finalCommonText.toString(), null);
+                            } catch (BadLocationException e) {
+                            }
+                        }
+                    };
+
                     // Insert the missing end part of the prefix
-                    if(baseDoc != null)
-                        baseDoc.atomicLock();
-                    try {
-                        doc.remove(anchorOffset, caretOffset - anchorOffset);
-                        doc.insertString(anchorOffset, commonText.toString(), null);
-                    } catch (BadLocationException e) {
-                    } finally {
-                        if(baseDoc != null)
-                            baseDoc.atomicUnlock();
+                    if (doc instanceof BaseDocument) {
+                        ((BaseDocument)doc).runAtomic(operation);
+                    } else {
+                        operation.run();
                     }
+
                     return;
                 }
             }

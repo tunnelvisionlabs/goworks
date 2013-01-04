@@ -97,7 +97,7 @@ public class CompletionScrollPane extends JScrollPane {
 
     private CompletionJList view;
     
-    private List dataObj;
+    private List<?> dataObj;
     
     private JLabel topLabel;
     
@@ -122,7 +122,7 @@ public class CompletionScrollPane extends JScrollPane {
         installKeybindings(editorComponent);
     }
     
-    public void setData(List data,
+    public void setData(List<?> data,
                         String title,
                         CompletionController controller,
                         CompletionController.Selection selection) {
@@ -214,6 +214,7 @@ public class CompletionScrollPane extends JScrollPane {
         getActionMap().put(actionName, new CompletionPaneAction(action));
     }
 
+    @SuppressWarnings("deprecation")
     private void installKeybindings(JTextComponent component) {
 	// Register Escape key
         registerKeybinding(ACTION_ESCAPE, ESCAPE,
@@ -251,10 +252,6 @@ public class CompletionScrollPane extends JScrollPane {
         BaseKit.endLineAction, component);
     }
 
-    List testGetData() {
-        return dataObj;
-    }
-    
     private class CompletionPaneAction extends AbstractAction {
         private int action;
 
