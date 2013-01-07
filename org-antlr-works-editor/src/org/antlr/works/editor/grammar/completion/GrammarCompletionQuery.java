@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
+import com.tvl.spi.editor.completion.CompletionItem;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +39,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
@@ -64,14 +66,12 @@ import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionExpressionContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.GrammarReferenceAnchors;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionExpressionContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionScopeExpressionContext;
 import org.netbeans.editor.BaseDocument;
-import com.tvl.spi.editor.completion.CompletionItem;
-import org.antlr.v4.runtime.Dependents;
 import org.openide.util.Exceptions;
 
 /**

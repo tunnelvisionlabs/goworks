@@ -5,4 +5,111 @@
 <project name="org.tvl.goworks.editor" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project org.tvl.goworks.editor.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <target name="clean-generated-sources">
+        <delete failonerror="true" includeemptydirs="true">
+            <fileset dir="${basedir}" includes="src/**/generated/**"/>
+        </delete>
+    </target>
+
+    <target name="clean" depends="projectized-common.clean,clean-generated-sources"/>
+
+    <target name="antlr-init">
+        <property name="antlr4.jar" value="${basedir}/../org-antlr-v4/release/modules/ext/antlr4.jar"/>
+        <property name="antlr4_runtime.jar" value="${basedir}/../org-antlr-v4-runtime/release/modules/ext/antlr4_runtime.jar"/>
+        <property name="st4.jar" value="${basedir}/../org-stringtemplate-v4/release/modules/ext/st4.jar"/>
+        <property name="antlr3_runtime.jar" value="${basedir}/../org-antlr-runtime/release/modules/ext/antlr3_runtime.jar"/>
+
+        <path id="cp.antlr4">
+            <pathelement location="${antlr4.jar}"/>
+            <pathelement location="${antlr4_runtime.jar}"/>
+            <pathelement location="${st4.jar}"/>
+            <pathelement location="${antlr3_runtime.jar}"/>
+        </path>
+
+        <property name="antlr4.touch" value="${build.dir}/antlr4.touch" />
+    </target>
+
+    <target name="build-init" depends="antlr-init,harness.build-init"/>
+
+    <target name="antlr4-up-to-date" depends="antlr-init">
+        <uptodate targetfile="${antlr4.touch}" property="is.antlr4.uptodate">
+            <!-- TODO: rebuild grammars if we switch to a new build of the tool -->
+            <srcfiles dir="${src.dir}">
+                <include name="**/*.g4"/>
+                <include name="**/*.tokens"/>
+                <exclude name="**/generated/**"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="up-to-date" depends="antlr4-up-to-date,projectized-common.up-to-date">
+        <condition property="is.all.uptodate">
+            <and>
+                <istrue value="${is.jar.uptodate}"/>
+                <istrue value="${is.antlr4.uptodate}"/>
+            </and>
+        </condition>
+
+        <scriptdef name="propertyreset" language="javascript"
+                   description="Allows to assign @{property} new value">
+            <attribute name="name"/>
+            <attribute name="value"/>
+            project.setProperty(attributes.get("name"), attributes.get("value"));
+        </scriptdef>
+
+        <propertyreset name="${is.jar.uptodate}" value="${is.all.uptodate}" />
+    </target>
+
+    <target name="compile" depends="init,up-to-date,antlr4,projectized-common.compile" unless="is.jar.uptodate" />
+
+    <macrodef name="antlr4">
+        <attribute name="srcpath"/>
+        <element name="args" optional="true"/>
+        <sequential>
+            <local name="package"/>
+            <pathconvert property="package" dirsep=".">
+                <path location="${src.dir}/@{srcpath}"/>
+                <map from="${src.dir}/" to=""/>
+            </pathconvert>
+            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/@{srcpath}">
+                <arg value="-o"/>
+                <arg value="generated"/>
+                <arg value="-package"/>
+                <arg value="${package}.generated"/>
+                <args/>
+                <arg value="*.g4"/>
+                <classpath>
+                    <path refid="cp.antlr4"/>
+                    <pathelement location="${java.class.path}"/>
+                </classpath>
+            </java>
+        </sequential>
+    </macrodef>
+
+    <target name="antlr4" depends="antlr-init,antlr4-up-to-date" unless="is.antlr4.uptodate">
+        <mkdir dir="${build.antlr4.dir}" />
+
+        <path id="sources.antlr4">
+            <fileset dir="${src.dir}" includes="**/*.g4"/>
+        </path>
+        <pathconvert pathsep="${line.separator}  " property="echo.sources.antlr4" refid="sources.antlr4">
+            <map from="${src.dir}/" to=""/>
+        </pathconvert>
+        <echo message="Generating ANTLR 4 grammars:${line.separator}  ${echo.sources.antlr4}"/>
+
+        <parallel threadsperprocessor="1" failonany="true">
+            <antlr4 srcpath="org/tvl/goworks/editor/go/parser">
+                <args>
+                    <arg value="-visitor"/>
+                    <arg value="-Xforce-atn"/>
+                </args>
+            </antlr4>
+
+            <antlr4 srcpath="org/tvl/goworks/editor/go/highlighter"/>
+        </parallel>
+
+        <touch file="${antlr4.touch}" mkdirs="true"/>
+    </target>
+
 </project>
