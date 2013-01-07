@@ -16,7 +16,7 @@ import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.SourceFileContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.SourceFileContext;
 
 /**
  *

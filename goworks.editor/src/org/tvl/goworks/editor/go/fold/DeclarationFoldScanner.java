@@ -18,12 +18,12 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.fold.AbstractAntlrFoldScanner;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.ImportDeclContext;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
 import org.tvl.goworks.editor.go.parser.GoParser;
-import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ImportDeclContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.generated.GoParserBaseListener;
 
 /**
  *

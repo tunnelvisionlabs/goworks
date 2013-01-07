@@ -38,7 +38,7 @@ import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.TopLevelDeclContext;
 
 /**
  *

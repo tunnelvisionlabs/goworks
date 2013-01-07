@@ -24,7 +24,6 @@ tokens {
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.highlighter;
 }
 
 Break       : 'break';

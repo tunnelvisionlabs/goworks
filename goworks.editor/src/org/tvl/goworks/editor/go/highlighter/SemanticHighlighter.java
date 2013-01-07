@@ -43,7 +43,7 @@ import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.TypeKind;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
 import org.tvl.goworks.editor.go.parser.GoParser;
-import org.tvl.goworks.editor.go.parser.GoParserBaseListener;
+import org.tvl.goworks.editor.go.parser.generated.GoParserBaseListener;
 import org.tvl.goworks.editor.go.semantics.GoAnnotatedParseTree;
 import org.tvl.goworks.editor.go.semantics.NodeType;
 

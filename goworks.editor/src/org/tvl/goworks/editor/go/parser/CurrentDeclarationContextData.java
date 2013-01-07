@@ -10,7 +10,7 @@ package org.tvl.goworks.editor.go.parser;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.RuleDependency;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.TopLevelDeclContext;
 
 /**
  *

@@ -23,7 +23,8 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.TopLevelDeclContext;
+import org.tvl.goworks.editor.go.parser.generated.GoParserBaseListener;
 
 /**
  *

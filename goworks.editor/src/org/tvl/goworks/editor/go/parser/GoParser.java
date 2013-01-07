@@ -21,6 +21,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser;
+import org.tvl.goworks.editor.go.parser.generated.GoParserBaseVisitor;
 
 /**
  *

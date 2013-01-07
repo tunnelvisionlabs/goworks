@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.SetTransition;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoLexer;
 
 /**
  *

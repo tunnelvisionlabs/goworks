@@ -16,10 +16,10 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.annotations.common.NonNull;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.BuiltinCallContext;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.ConversionOrCallExprContext;
-import org.tvl.goworks.editor.go.parser.AbstractGoParser.PackageNameContext;
 import org.tvl.goworks.editor.go.parser.GoParser;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.BuiltinCallContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ConversionOrCallExprContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.PackageNameContext;
 
 /**
  *

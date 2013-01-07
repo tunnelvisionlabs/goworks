@@ -21,8 +21,6 @@ options {
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.tvl.goworks.editor.go.parser;
-
 import java.util.HashSet;
 import java.util.Set;
 }
