@@ -46,6 +46,10 @@ public class GoParseTreeNavigatorPanel extends TreeNavigatorPanel {
 
     private FileObject _currentFile;
 
+    public GoParseTreeNavigatorPanel() {
+        super(GoEditorKit.GO_MIME_TYPE, GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
+    }
+
     public static GoParseTreeNavigatorPanel getInstance() {
         return INSTANCE;
     }
@@ -75,33 +79,13 @@ public class GoParseTreeNavigatorPanel extends TreeNavigatorPanel {
         scheduleTaskManagerUpdate(null);
     }
 
-    private void scheduleTaskManagerUpdate(DataObject dataObject) {
+    @Override
+    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
         if (dataObject != null && !(dataObject instanceof GoDataObject)) {
             return;
         }
 
-        JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
-        if (currentComponent == null) {
-            return;
-        }
-
-        Document document = currentComponent.getDocument();
-        DataObject documentDataObject = document != null ? NbEditorUtilities.getDataObject(document) : null;
-        VersionedDocument versionedDocument;
-        if (dataObject != null && (documentDataObject == null || !dataObject.equals(documentDataObject))) {
-            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(dataObject.getPrimaryFile());
-        } else if (document != null) {
-            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-        } else {
-            return;
-        }
-
-        if (!GoEditorKit.GO_MIME_TYPE.equals(versionedDocument.getMimeType())) {
-            return;
-        }
-
-        ParseContext context = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, versionedDocument);
-        Lookup.getDefault().lookup(ParserTaskManager.class).scheduleData(context, GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE, 0, TimeUnit.MILLISECONDS);
+        super.scheduleTaskManagerUpdate(dataObject);
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=HighlightsLayerFactory.class)

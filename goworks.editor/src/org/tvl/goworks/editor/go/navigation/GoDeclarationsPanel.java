@@ -8,17 +8,7 @@
  */
 package org.tvl.goworks.editor.go.navigation;
 
-import java.util.concurrent.TimeUnit;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
-import org.antlr.netbeans.editor.text.VersionedDocument;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.netbeans.parsing.spi.ParseContext;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
-import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.netbeans.api.editor.EditorRegistry;
-import org.netbeans.modules.editor.NbEditorUtilities;
-import org.netbeans.spi.navigator.NavigatorPanel;
+import org.antlr.netbeans.editor.navigation.AbstractNavigatorPanel;
 import org.netbeans.spi.navigator.NavigatorPanel.Registration;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
@@ -32,11 +22,13 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
     "HINT_declarations=Declarations",
 })
 @Registration(mimeType = GoEditorKit.GO_MIME_TYPE, position = 100, displayName = "#LBL_declarations")
-public class GoDeclarationsPanel implements NavigatorPanel {
+public class GoDeclarationsPanel extends AbstractNavigatorPanel<GoDeclarationsPanelUI> {
 
     private static volatile GoDeclarationsPanel INSTANCE;
 
-    private GoDeclarationsPanelUI component;
+    public GoDeclarationsPanel() {
+        super(GoEditorKit.GO_MIME_TYPE, GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
+    }
 
     @Override
     public String getDisplayName() {
@@ -49,11 +41,6 @@ public class GoDeclarationsPanel implements NavigatorPanel {
     }
 
     @Override
-    public GoDeclarationsPanelUI getComponent() {
-        return getDeclarationsPanelUI();
-    }
-
-    @Override
     public void panelActivated(Lookup context) {
         INSTANCE = this;
         scheduleTaskManagerUpdate(context.lookup(DataObject.class));
@@ -63,49 +50,26 @@ public class GoDeclarationsPanel implements NavigatorPanel {
     public void panelDeactivated() {
         INSTANCE = null;
         scheduleTaskManagerUpdate(null);
-        getDeclarationsPanelUI().showWaitNode();
+        getComponent().showWaitNode();
     }
 
     @Override
     public Lookup getLookup() {
-        return getDeclarationsPanelUI().getLookup();
+        return getComponent().getLookup();
     }
 
-    private void scheduleTaskManagerUpdate(DataObject dataObject) {
+    @Override
+    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
         if (dataObject != null && !(dataObject instanceof GoDataObject)) {
             return;
         }
 
-        JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
-        if (currentComponent == null) {
-            return;
-        }
-
-        Document document = currentComponent.getDocument();
-        DataObject documentDataObject = document != null ? NbEditorUtilities.getDataObject(document) : null;
-        VersionedDocument versionedDocument;
-        if (dataObject != null && (documentDataObject == null || !dataObject.equals(documentDataObject))) {
-            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(dataObject.getPrimaryFile());
-        } else if (document != null) {
-            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-        } else {
-            return;
-        }
-
-        if (!GoEditorKit.GO_MIME_TYPE.equals(versionedDocument.getMimeType())) {
-            return;
-        }
-
-        ParseContext context = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, versionedDocument);
-        Lookup.getDefault().lookup(ParserTaskManager.class).scheduleData(context, GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE, 0, TimeUnit.MILLISECONDS);
+        super.scheduleTaskManagerUpdate(dataObject);
     }
 
-    private synchronized GoDeclarationsPanelUI getDeclarationsPanelUI() {
-        if (this.component == null) {
-            this.component = new GoDeclarationsPanelUI();
-        }
-
-        return this.component;
+    @Override
+    protected GoDeclarationsPanelUI createPanelUI() {
+        return new GoDeclarationsPanelUI();
     }
 
     public static GoDeclarationsPanel getInstance() {
