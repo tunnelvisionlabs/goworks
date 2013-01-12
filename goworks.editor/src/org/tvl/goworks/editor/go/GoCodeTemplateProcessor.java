@@ -23,7 +23,7 @@ public class GoCodeTemplateProcessor implements CodeTemplateProcessor {
 
     private final CodeTemplateInsertRequest _request;
 
-    public GoCodeTemplateProcessor(CodeTemplateInsertRequest request) {
+    private GoCodeTemplateProcessor(CodeTemplateInsertRequest request) {
         this._request = request;
     }
 
