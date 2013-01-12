@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: false
 OpenIDE-Module: org.tvl.goworks.branding
 OpenIDE-Module-Layer: org/tvl/goworks/branding/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/tvl/goworks/branding/Bundle.properties
