@@ -10,29 +10,15 @@ package org.tvl.goworks.editor.go.navigation;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.navigation.AbstractNavigatorUpdateWithContextParserTask;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParseContext;
-import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
-import org.antlr.netbeans.parsing.spi.ParserDataOptions;
-import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
-import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
-import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
@@ -43,13 +29,10 @@ import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
  *
  * @author Sam Harwell
  */
-public final class NavigatorUpdateParserTask implements ParserTask {
-    // -J-Dorg.tvl.goworks.editor.go.navigation.NavigatorUpdateParserTask.level=FINE
-    private static final Logger LOGGER = Logger.getLogger(NavigatorUpdateParserTask.class.getName());
-
-    private final Object lock = new Object();
+public final class NavigatorUpdateParserTask extends AbstractNavigatorUpdateWithContextParserTask<GoDeclarationsPanel, Description, CurrentDeclarationContextData> {
 
     private NavigatorUpdateParserTask() {
+        super(GoParserDataDefinitions.NAVIGATOR_ROOT, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT);
     }
 
     @Override
@@ -58,71 +41,27 @@ public final class NavigatorUpdateParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
-        throws InterruptedException, ExecutionException {
-
-        if (snapshot.getVersionedDocument().getDocument() == null) {
-            // no navigator updates for background parsing
-            return;
-        }
-
-        synchronized (lock) {
-            GoDeclarationsPanel panel = GoDeclarationsPanel.getInstance();
-            if (panel == null) {
-                LOGGER.log(Level.FINE, "Navigator update cancelled: {0} instance not found.", GoDeclarationsPanel.class.getName());
-                return;
-            }
-
-            JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
-            if (currentComponent == null) {
-                return;
-            }
-
-            Document document = currentComponent.getDocument();
-            if (document == null || !VersionedDocumentUtilities.getVersionedDocument(document).equals(snapshot.getVersionedDocument())) {
-                return;
-            }
-
-            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
-            ParserData<Description> parserData = futureData != null ? futureData.get() : null;
-            if (parserData == null) {
-                return;
-            }
-
-            Description root = parserData.getData();
-
-            Future<ParserData<CurrentDeclarationContextData>> futureContextData = taskManager.getData(snapshot, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
-            ParserData<CurrentDeclarationContextData> parserContextData = futureContextData != null ? futureContextData.get() : null;
-            CurrentDeclarationContextData context = null;
-            if (parserContextData != null) {
-                context = parserContextData.getData();
-            }
-
-            String selectedRule = context != null ? context.getMemberName() : null;
-
-            GoDeclarationsPanelUI ui = panel != null ? panel.getComponent() : null;
-            if (ui == null) {
-                return;
-            }
-
-            ui.refresh(root, selectedRule);
-        }
+    protected GoDeclarationsPanel getActiveNavigatorPanel() {
+        return GoDeclarationsPanel.getInstance();
     }
 
-    private static final class Definition extends ParserTaskDefinition {
+    @Override
+    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, GoDeclarationsPanel panel, Description data, CurrentDeclarationContextData context) {
+        String selectedMember = context != null ? context.getMemberName() : null;
+        panel.getComponent().refresh(data, selectedMember);
+    }
+
+    private static final class Definition extends AbstractDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 GoParserDataDefinitions.NAVIGATOR_ROOT,
                 GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT,
                 GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
 
-        private static final Collection<ParserDataDefinition<?>> OUTPUTS =
-            Collections.<ParserDataDefinition<?>>emptyList();
-
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("Go Navigator Update", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
+            super("Go Navigator Update", INPUTS);
         }
     }
 

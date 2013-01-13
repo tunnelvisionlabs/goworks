@@ -78,6 +78,10 @@ public final class GoDeclarationsScannerParserTask implements ParserTask {
 
                 Future<ParserData<CompiledModel>> futureParserData = taskManager.getData(snapshot, context.getComponent(), GoParserDataDefinitions.COMPILED_MODEL, options);
                 ParserData<CompiledModel> parserData = futureParserData != null ? futureParserData.get() : null;
+                if (parserData == null && !explicitRequest) {
+                    return;
+                }
+
                 CompiledModel model = parserData != null ? parserData.getData() : null;
                 Description description = null;
                 if (model != null) {

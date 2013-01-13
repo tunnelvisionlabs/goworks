@@ -10,41 +10,28 @@ package org.tvl.goworks.editor.go.navigation;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.navigation.AbstractNavigatorUpdateParserTask;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParseContext;
-import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
-import org.antlr.netbeans.parsing.spi.ParserDataOptions;
-import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
-import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
-import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
-import org.tvl.goworks.editor.go.parser.CurrentDeclarationContextData;
 
 /**
  *
  * @author Sam Harwell
  */
-public final class ParseTreeNavigatorUpdateParserTask implements ParserTask {
-    private final Object lock = new Object();
+public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorUpdateParserTask<GoParseTreeNavigatorPanel, CompiledModel> {
 
     private ParseTreeNavigatorUpdateParserTask() {
+        super(GoParserDataDefinitions.COMPILED_MODEL);
     }
 
     @Override
@@ -53,57 +40,27 @@ public final class ParseTreeNavigatorUpdateParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
-        synchronized (lock) {
-            GoParseTreeNavigatorPanel panel = GoParseTreeNavigatorPanel.getInstance();
-            if (panel == null) {
-                return;
-            }
-
-            JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
-            if (currentComponent == null) {
-                return;
-            }
-
-            Document document = currentComponent.getDocument();
-            if (document == null || !VersionedDocumentUtilities.getVersionedDocument(document).equals(snapshot.getVersionedDocument())) {
-                return;
-            }
-
-            Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
-            ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
-            if (parserData == null) {
-                return;
-            }
-
-            CompiledModel compiledModel = parserData.getData();
-
-            Future<ParserData<CurrentDeclarationContextData>> futureContextData = taskManager.getData(snapshot, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
-            ParserData<CurrentDeclarationContextData> parserContextData = futureContextData != null ? futureContextData.get() : null;
-            CurrentDeclarationContextData context = null;
-            if (parserContextData != null) {
-                context = parserContextData.getData();
-            }
-
-            panel.setCurrentFile(compiledModel.getResult().getFileObject());
-            panel.setParseTree(new ParseTreeNode(compiledModel.getResult().getResult()));
-        }
+    protected GoParseTreeNavigatorPanel getActiveNavigatorPanel() {
+        return GoParseTreeNavigatorPanel.getInstance();
     }
 
-    private static final class Definition extends ParserTaskDefinition {
+    @Override
+    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, GoParseTreeNavigatorPanel panel, CompiledModel data) {
+        panel.setCurrentFile(data.getResult().getFileObject());
+        panel.setParseTree(new ParseTreeNode(data.getResult().getResult()));
+    }
+
+    private static final class Definition extends AbstractDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 GoParserDataDefinitions.COMPILED_MODEL,
                 GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT,
                 GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
 
-        private static final Collection<ParserDataDefinition<?>> OUTPUTS =
-            Collections.<ParserDataDefinition<?>>emptyList();
-
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("Go Parse Tree Navigator Update", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
+            super("Go Parse Tree Navigator Update", INPUTS);
         }
     }
 

@@ -12,6 +12,7 @@ import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.Filters;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 
 public class GoDeclarationsPanelUI extends NavigatorPanelUI {
@@ -34,7 +35,7 @@ public class GoDeclarationsPanelUI extends NavigatorPanelUI {
         return new GoFilters(this);
     }
 
-    public void refresh(Description description, @NullAllowed String currentRule) {
+    public void refresh(@NonNull Description description, @NullAllowed String currentRule) {
         this.currentRuleName = currentRule;
         super.refresh(description);
     }
