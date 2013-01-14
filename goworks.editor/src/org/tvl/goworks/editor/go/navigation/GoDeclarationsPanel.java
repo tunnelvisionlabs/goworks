@@ -10,11 +10,9 @@ package org.tvl.goworks.editor.go.navigation;
 
 import org.antlr.netbeans.editor.navigation.AbstractNavigatorPanel;
 import org.netbeans.spi.navigator.NavigatorPanel.Registration;
-import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.tvl.goworks.editor.GoEditorKit;
-import org.tvl.goworks.editor.go.GoDataObject;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 
 @NbBundle.Messages({
@@ -27,7 +25,7 @@ public class GoDeclarationsPanel extends AbstractNavigatorPanel<GoDeclarationsPa
     private static volatile GoDeclarationsPanel INSTANCE;
 
     public GoDeclarationsPanel() {
-        super(GoEditorKit.GO_MIME_TYPE, GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
+        super(GoEditorKit.GO_MIME_TYPE, GoParserDataDefinitions.NAVIGATOR_ROOT, GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
     }
 
     @Override
@@ -43,28 +41,19 @@ public class GoDeclarationsPanel extends AbstractNavigatorPanel<GoDeclarationsPa
     @Override
     public void panelActivated(Lookup context) {
         INSTANCE = this;
-        scheduleTaskManagerUpdate(context.lookup(DataObject.class));
+        super.panelActivated(context);
     }
 
     @Override
     public void panelDeactivated() {
         INSTANCE = null;
-        scheduleTaskManagerUpdate(null);
+        super.panelDeactivated();
         getComponent().showWaitNode();
     }
 
     @Override
     public Lookup getLookup() {
         return getComponent().getLookup();
-    }
-
-    @Override
-    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
-        if (dataObject != null && !(dataObject instanceof GoDataObject)) {
-            return;
-        }
-
-        super.scheduleTaskManagerUpdate(dataObject);
     }
 
     @Override

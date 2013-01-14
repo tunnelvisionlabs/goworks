@@ -54,7 +54,6 @@ public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorU
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 GoParserDataDefinitions.COMPILED_MODEL,
-                GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT,
                 GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
 
         public static final Definition INSTANCE = new Definition();

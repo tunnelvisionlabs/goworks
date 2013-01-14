@@ -8,28 +8,16 @@
  */
 package org.tvl.goworks.editor.go.navigation;
 
-import java.util.concurrent.TimeUnit;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
-import org.antlr.netbeans.editor.text.VersionedDocument;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.netbeans.parsing.spi.ParseContext;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
-import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.works.editor.antlr4.navigation.TreeNavigatorPanel;
-import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.editor.NbEditorUtilities;
 import org.netbeans.spi.editor.highlighting.HighlightsLayer;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
 import org.netbeans.spi.editor.highlighting.ZOrder;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.tvl.goworks.editor.GoEditorKit;
-import org.tvl.goworks.editor.go.GoDataObject;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 
 /**
@@ -47,7 +35,7 @@ public class GoParseTreeNavigatorPanel extends TreeNavigatorPanel {
     private FileObject _currentFile;
 
     public GoParseTreeNavigatorPanel() {
-        super(GoEditorKit.GO_MIME_TYPE, GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
+        super(GoEditorKit.GO_MIME_TYPE, GoParserDataDefinitions.COMPILED_MODEL, GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
     }
 
     public static GoParseTreeNavigatorPanel getInstance() {
@@ -68,7 +56,6 @@ public class GoParseTreeNavigatorPanel extends TreeNavigatorPanel {
         super.panelActivated(context);
         INSTANCE = this;
         _currentFile = null;
-        scheduleTaskManagerUpdate(context.lookup(DataObject.class));
     }
 
     @Override
@@ -76,16 +63,6 @@ public class GoParseTreeNavigatorPanel extends TreeNavigatorPanel {
         super.panelDeactivated();
         INSTANCE = null;
         _currentFile = null;
-        scheduleTaskManagerUpdate(null);
-    }
-
-    @Override
-    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
-        if (dataObject != null && !(dataObject instanceof GoDataObject)) {
-            return;
-        }
-
-        super.scheduleTaskManagerUpdate(dataObject);
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=HighlightsLayerFactory.class)
