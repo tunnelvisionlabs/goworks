@@ -145,6 +145,22 @@
             </folder>
         </folder>
     </folder>
+    <folder name="QuickSearch">
+        <folder name="GoToSymbol">
+            <attr name="command" stringvalue="Go To Symbol"/>
+            <attr name="position" intvalue="0"/>
+            <file name="org-tvl-goworks-editor-go-quicksearch-GoToSymbolSearchProvider.instance">
+                <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#QuickSearch/GoToSymbol/org-tvl-goworks-editor-go-quicksearch-GoToSymbolSearchProvider.instance"/>
+            </file>
+        </folder>
+        <folder name="GoToType">
+            <attr name="command" stringvalue="Go To Type"/>
+            <attr name="position" intvalue="0"/>
+            <file name="org-tvl-goworks-editor-go-quicksearch-GoToTypeSearchProvider.instance">
+                <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#QuickSearch/GoToType/org-tvl-goworks-editor-go-quicksearch-GoToTypeSearchProvider.instance"/>
+            </file>
+        </folder>
+    </folder>
     <folder name="Templates">
         <folder name="Code">
             <attr name="displayName" bundlevalue="org.tvl.goworks.editor.go.Bundle#Templates/Code"/>
