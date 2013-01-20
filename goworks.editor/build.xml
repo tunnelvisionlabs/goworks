@@ -6,6 +6,21 @@
     <description>Builds, tests, and runs the project org.tvl.goworks.editor.</description>
     <import file="nbproject/build-impl.xml"/>
 
+    <target name="init-antlr4tool">
+        <property name="antlr4tool.name" value="antlr4"/>
+        <property name="antlr4tool.commit" value="2f68e57acc880045968069caf17cf61911e09943"/>
+    </target>
+
+    <target name="download-antlr4tool" depends="init-antlr4tool,harness.build-init">
+        <property name="modules.cache.dir" value="lib/cache"/>
+        <property name="antlr4tool.intermediatefile" value="${modules.cache.dir}/${antlr4tool.name}-${antlr4tool.commit}.jar"/>
+
+        <mkdir dir="${modules.cache.dir}"/>
+        <get src="http://tunnelvisionlabs.com/downloads/antlr/build/${antlr4tool.name}-${antlr4tool.commit}.jar"
+             dest="${antlr4tool.intermediatefile}"
+             skipexisting="true"/>
+    </target>
+
     <target name="clean-generated-sources">
         <delete failonerror="true" includeemptydirs="true">
             <fileset dir="${basedir}" includes="src/**/generated/**"/>
@@ -14,8 +29,8 @@
 
     <target name="clean" depends="projectized-common.clean,clean-generated-sources"/>
 
-    <target name="antlr-init">
-        <property name="antlr4.jar" value="${basedir}/../org-antlr-v4/release/modules/ext/antlr4.jar"/>
+    <target name="antlr-init" depends="download-antlr4tool">
+        <property name="antlr4.jar" value="${antlr4tool.intermediatefile}"/>
         <property name="antlr4_runtime.jar" value="${basedir}/../org-antlr-v4-runtime/release/modules/ext/antlr4_runtime.jar"/>
         <property name="st4.jar" value="${basedir}/../org-stringtemplate-v4/release/modules/ext/st4.jar"/>
         <property name="antlr3_runtime.jar" value="${basedir}/../org-antlr-runtime/release/modules/ext/antlr3_runtime.jar"/>
