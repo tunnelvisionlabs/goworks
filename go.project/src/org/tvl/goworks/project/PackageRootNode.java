@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Set;
 import javax.swing.Icon;
 import org.netbeans.api.annotations.common.StaticResource;
+import org.netbeans.api.project.Project;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.spi.search.SearchInfoDefinitionFactory;
 import org.openide.filesystems.FileObject;
@@ -56,13 +57,13 @@ final class PackageRootNode extends AbstractNode implements Runnable, FileStatus
     private volatile boolean _iconChange;
     private volatile boolean _nameChange;
 
-    public PackageRootNode(SourceGroup group) {
-        this(group, new PackageViewChildren(group));
+    public PackageRootNode(Project project, SourceGroup group) {
+        this(project, group, new PackageViewChildren(group));
     }
 
-    private PackageRootNode(SourceGroup group, Children children) {
+    private PackageRootNode(Project project, SourceGroup group, Children children) {
         super(children, new ProxyLookup(createLookup(group),
-            Lookups.singleton(SearchInfoDefinitionFactory.createSearchInfoBySubnodes(children))));
+            Lookups.fixed(project, SearchInfoDefinitionFactory.createSearchInfoBySubnodes(children))));
         this._group = group;
         this._file = group.getRootFolder();
         this._files = Collections.singleton(_file);

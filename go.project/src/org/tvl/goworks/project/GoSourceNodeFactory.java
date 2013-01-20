@@ -30,6 +30,7 @@ import org.openide.filesystems.FileObject;
 import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 import org.openide.util.ChangeSupport;
+import org.openide.util.lookup.Lookups;
 import org.openide.xml.XMLUtil;
 
 /**
@@ -176,7 +177,7 @@ public final class GoSourceNodeFactory implements NodeFactory {
         private final boolean trueSource;
 
         public PackageViewFilterNode(SourceGroupKey sourceGroupKey, Project project) {
-            super(PackageView.createPackageView(sourceGroupKey.group));
+            super(PackageView.createPackageView(sourceGroupKey.group), null, Lookups.singleton(project));
             this.project = project;
             this.nodeName = "Sources";
             trueSource = sourceGroupKey.trueSource;

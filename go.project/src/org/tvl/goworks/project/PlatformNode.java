@@ -37,8 +37,8 @@ class PlatformNode extends AbstractNode implements ChangeListener {
     @StaticResource
     private static final String PLATFORM_ICON = "org/tvl/goworks/project/ui/resources/platform.gif";
 
-    public PlatformNode(FileObject root) {
-        super(new PlatformChildren(root), Lookups.fixed());
+    public PlatformNode(GoProject project, FileObject root) {
+        super(new PlatformChildren(root), Lookups.singleton(project));
         setIconBaseWithExtension(PLATFORM_ICON);
     }
 
@@ -68,8 +68,8 @@ class PlatformNode extends AbstractNode implements ChangeListener {
         this.fireDisplayNameChange(null,null);
     }
 
-    public static PlatformNode create(FileObject root) {
-        return new PlatformNode(root);
+    public static PlatformNode create(GoProject project, FileObject root) {
+        return new PlatformNode(project, root);
     }
 
     private static class PlatformChildren extends Children.Keys<SourceGroup> {

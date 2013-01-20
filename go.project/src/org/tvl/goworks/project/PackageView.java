@@ -24,6 +24,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.queries.VisibilityQuery;
 import org.netbeans.spi.project.ui.PathFinder;
@@ -192,7 +193,7 @@ public class PackageView {
                 return new AbstractNode (Children.LEAF);
             }
 
-            return new PackageRootNode(group);
+            return new PackageRootNode(FileOwnerQuery.getOwner(root), group);
         }
     }
 

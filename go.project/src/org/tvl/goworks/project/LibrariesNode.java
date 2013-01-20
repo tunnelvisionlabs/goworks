@@ -45,7 +45,7 @@ public final class LibrariesNode extends AbstractNode {
     private final Action[] _actions;
 
     public LibrariesNode(String displayName, GoProject project, Action[] actions) {
-        super(new LibrariesChildren(project), Lookups.fixed(project));
+        super(new LibrariesChildren(project), Lookups.singleton(project));
         _displayName = displayName;
         _actions = actions;
     }
@@ -138,7 +138,7 @@ public final class LibrariesNode extends AbstractNode {
                 }
 
                 FileObject sourceRoot = FileUtil.toFileObject(gorootFile);
-                result = new Node[] { PlatformNode.create(sourceRoot) };
+                result = new Node[] { PlatformNode.create(_project, sourceRoot) };
                 break;
 
             default:
