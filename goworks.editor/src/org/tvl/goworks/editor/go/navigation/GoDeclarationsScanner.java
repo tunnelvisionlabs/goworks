@@ -102,7 +102,6 @@ public class GoDeclarationsScanner {
             }*/
 
             GoNode.DeclarationDescription rootDescription = new GoNode.DeclarationDescription();
-            rootDescription.setChildren(new ArrayList<Description>());
             rootDescription.setFileObject(model.getSnapshot().getVersionedDocument().getFileObject());
 
 //            for (CompiledFileModel importedParseResult : model.getImportedGroupResults()) {
@@ -308,7 +307,6 @@ public class GoDeclarationsScanner {
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(String.format("%s", signature));
             getCurrentParent().getChildren().add(description);
-            description.setChildren(new ArrayList<Description>());
             descriptionStack.push(description);
         }
 
@@ -336,7 +334,6 @@ public class GoDeclarationsScanner {
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(String.format("%s", signature));
             getCurrentParent().getChildren().add(description);
-            description.setChildren(new ArrayList<Description>());
             descriptionStack.push(description);
         }
 
@@ -464,7 +461,6 @@ public class GoDeclarationsScanner {
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
                 getCurrentParent().getChildren().add(description);
-                description.setChildren(new ArrayList<Description>());
                 descriptionStack.push(description);
             } else if (ctx.methodName() != null) {
                 MethodNameContext methodNameContext = ctx.methodName();
@@ -476,7 +472,6 @@ public class GoDeclarationsScanner {
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(signature);
                 getCurrentParent().getChildren().add(description);
-                description.setChildren(new ArrayList<Description>());
                 descriptionStack.push(description);
             }
         }
@@ -509,7 +504,6 @@ public class GoDeclarationsScanner {
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
-            description.setChildren(new ArrayList<Description>());
             descriptionStack.push(description);
         }
 
@@ -535,7 +529,6 @@ public class GoDeclarationsScanner {
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
-            description.setChildren(new ArrayList<Description>());
 
             ReceiverContext receiverContext = ctx.receiver();
             BaseTypeNameContext baseTypeNameContext = receiverContext != null ? receiverContext.baseTypeName() : null;
@@ -727,7 +720,6 @@ public class GoDeclarationsScanner {
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
-            description.setChildren(new ArrayList<Description>());
             descriptionStack.push(description);
             return true;
         }
