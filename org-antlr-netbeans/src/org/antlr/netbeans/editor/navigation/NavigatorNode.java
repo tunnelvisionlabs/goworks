@@ -12,7 +12,6 @@ import java.awt.Image;
 import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,13 +43,15 @@ public abstract class NavigatorNode extends AbstractNode {
 
     private static Node WAIT_NODE;
     private final NavigatorPanelUI ui;
+    private final Factory factory;
     private Description description;
     private OpenAction openAction;
 
     public NavigatorNode(@NonNull NavigatorPanelUI ui, @NonNull Description description, Factory nodeFactory) {
-        super(description.getChildren() == null ? Children.LEAF : new ElementChildren(ui, description.getChildren(), nodeFactory), prepareLookup(description));
+        super(description.getChildren().isEmpty() ? Children.LEAF : new ElementChildren(ui, description.getChildren(), nodeFactory), prepareLookup(description));
         this.ui = ui;
         this.description = description;
+        this.factory = nodeFactory;
         setDisplayName(description.getName());
     }
 
@@ -83,7 +84,7 @@ public abstract class NavigatorNode extends AbstractNode {
 
     @Override
     public Action[] getActions(boolean context) {
-        if (context || description.getName() == null || description.getFileObject() == null || (description.getChildren() != null && !description.getChildren().isEmpty())) {
+        if (context || description.getName() == null || description.getFileObject() == null || !description.getChildren().isEmpty()) {
             return getUI().getActions();
         } else {
             Action[] panelActions = getUI().getActions();
@@ -144,6 +145,11 @@ public abstract class NavigatorNode extends AbstractNode {
 
     public void refreshRecursively() {
         Children ch = getChildren();
+        if (!description.getChildren().isEmpty() && !(ch instanceof ElementChildren)) {
+            ch = new ElementChildren(ui, description.getChildren(), factory);
+            setChildren(ch);
+        }
+
         if (ch instanceof ElementChildren) {
             boolean scrollOnExpand = getUI().getScrollOnExpand();
             getUI().setScrollOnExpand(false);
@@ -159,11 +165,13 @@ public abstract class NavigatorNode extends AbstractNode {
 
     public void updateRecursively(Description newDescription) {
         Children children = getChildren();
+        if (!newDescription.getChildren().isEmpty() && !(children instanceof ElementChildren)) {
+            children = new ElementChildren(ui, newDescription.getChildren(), factory);
+            setChildren(children);
+        }
+
         if (children instanceof ElementChildren) {
-            Set<Description> oldChildren = Collections.emptySet();
-            if (description.getChildren() != null) {
-                oldChildren = new HashSet<Description>(description.getChildren());
-            }
+            Set<Description> oldChildren = new HashSet<Description>(description.getChildren());
 
             // Create a hashtable which maps Description to node.
             // We will then identify the nodes by the description. The trick is
@@ -175,9 +183,6 @@ public abstract class NavigatorNode extends AbstractNode {
             }
 
             Collection<Description> newChildren = newDescription.getChildren();
-            if (newChildren == null) {
-                newChildren = Collections.emptyList();
-            }
 
             // Now refresh keys
             ((ElementChildren)children).resetKeys(newChildren, getUI().getFilters());

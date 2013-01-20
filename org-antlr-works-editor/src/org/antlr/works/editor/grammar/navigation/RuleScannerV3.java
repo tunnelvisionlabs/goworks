@@ -8,13 +8,8 @@
  */
 package org.antlr.works.editor.grammar.navigation;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import org.antlr.grammar.v3.ANTLRParser;
-import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.OffsetRegion;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -47,16 +42,13 @@ public class RuleScannerV3 extends RuleScanner {
             }*/
 
             GrammarNode.GrammarNodeDescription rootDescription = new GrammarNode.GrammarNodeDescription();
-            rootDescription.setChildren(new ArrayList<Description>());
             rootDescription.setFileObject(model.getSnapshot().getVersionedDocument().getFileObject());
 
             GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription("1" + Bundle.LBL_ParserRules());
             parserRulesRootDescription.setHtmlHeader(Bundle.LBL_ParserRules());
-            parserRulesRootDescription.setChildren(new HashSet<Description>());
 
             GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription("2" + Bundle.LBL_LexerRules());
             lexerRulesRootDescription.setHtmlHeader(Bundle.LBL_LexerRules());
-            lexerRulesRootDescription.setChildren(new HashSet<Description>());
 
             for (CompiledFileModelV3 importedParseResult : model.getImportedGrammarResults()) {
                 processParseResult(null, importedParseResult, parserRulesRootDescription, lexerRulesRootDescription);
@@ -86,8 +78,12 @@ public class RuleScannerV3 extends RuleScanner {
                                     GrammarNode.GrammarNodeDescription lexerRulesRootDescription) {
 
         ANTLRParser.grammar__return parseResult = result.getResult();
+        if (parseResult == null) {
+            return;
+        }
+
         FileObject fileObject = result.getFileObject();
-        Tree tree = (Tree)parseResult.getTree();
+        Tree tree = parseResult.getTree();
         int childCount = tree.getChildCount();
         for (int i = 0; i < childCount; i++) {
             Object childObject = tree.getChild(i);
@@ -103,13 +99,8 @@ public class RuleScannerV3 extends RuleScanner {
                 }
 
                 GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
-
-                OffsetRegion span = getSpan(result, child);
-                if (span != null) {
-                    ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                }
-
+                ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
+                ruleDescription.setSpan(getSpan(snapshot, result, child));
                 ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                 if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -119,7 +110,7 @@ public class RuleScannerV3 extends RuleScanner {
                 }
             } else if (child.getText() != null && child.getText().startsWith("tokens")) {
                 for (int j = 0; j < child.getChildCount(); j++) {
-                    Tree tokenChild = child.getChild(j);
+                    CommonTree tokenChild = (CommonTree)child.getChild(j);
                     if ("=".equals(tokenChild.getText()) && tokenChild.getChildCount() == 2) {
                         String ruleName = tokenChild.getChild(0).getText();
                         if (ruleName == null || ruleName.length() == 0) {
@@ -127,13 +118,8 @@ public class RuleScannerV3 extends RuleScanner {
                         }
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
-
-                        OffsetRegion span = getSpan(result, child);
-                        if (span != null) {
-                            ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                        }
-
+                        ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
+                        ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                         if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -148,13 +134,8 @@ public class RuleScannerV3 extends RuleScanner {
                         }
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
-
-                        OffsetRegion span = getSpan(result, child);
-                        if (span != null) {
-                            ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                        }
-
+                        ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
+                        ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                         if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -166,6 +147,34 @@ public class RuleScannerV3 extends RuleScanner {
                 }
             }
         }
+    }
+
+    private int getElementOffset(CommonTree tree) {
+        switch (tree.getType()) {
+        case ANTLRParser.ASSIGN:
+        case ANTLRParser.RULE:
+            if (tree.getChildCount() > 0 && tree.getChild(0) instanceof CommonTree) {
+                CommonTree child = (CommonTree)tree.getChild(0);
+                if (child.getToken() instanceof CommonToken) {
+                    CommonToken token = (CommonToken)child.getToken();
+                    return token.getStartIndex();
+                }
+            }
+
+            break;
+
+        case ANTLRParser.TOKEN_REF:
+            break;
+
+        default:
+            throw new UnsupportedOperationException();
+        }
+
+        if (tree.getToken() instanceof CommonToken) {
+            return ((CommonToken)tree.getToken()).getStartIndex();
+        }
+
+        return 0;
     }
 
 }
