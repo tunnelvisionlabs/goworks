@@ -6,6 +6,12 @@
             <folder name="x-go">
                 <attr name="displayName" bundlevalue="org.tvl.goworks.editor.Bundle#Editors/text/x-go"/>
 
+                <folder name="Preferences">
+                    <folder name="Defaults">
+                        <file name="org-tvl-goworks-editor-go-preferences.xml" url="go/resources/DefaultPreferences.xml" />
+                    </folder>
+                </folder>
+
                 <folder name="FontsColors">
                     <folder name="NetBeans">
                         <folder name="Defaults">
