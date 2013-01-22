@@ -78,14 +78,11 @@ public final class GoActionProvider implements ActionProvider {
     // -J-Dorg.tvl.goworks.project.GoActionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoActionProvider.class.getName());
 
-    public static final String COMMAND_INSTALL = "build.install";
-
     private static final String[] supported = new String[] {
         ActionProvider.COMMAND_BUILD,
         ActionProvider.COMMAND_COMPILE_SINGLE,
         ActionProvider.COMMAND_REBUILD,
         ActionProvider.COMMAND_CLEAN,
-        COMMAND_INSTALL,
         ActionProvider.COMMAND_RUN,
         ActionProvider.COMMAND_DEBUG,
         ActionProvider.COMMAND_PROFILE,
@@ -123,9 +120,6 @@ public final class GoActionProvider implements ActionProvider {
         }
         else if (string.equals(COMMAND_CLEAN)) {
             handleCleanAction(lookup);
-        }
-        else if (string.equals(COMMAND_INSTALL)) {
-            handleInstallAction(lookup);
         }
         else if (string.equals(COMMAND_RUN)) {
             handleRunAction(lookup);
@@ -316,8 +310,8 @@ public final class GoActionProvider implements ActionProvider {
 
             @Override
             public List<ConvertedLine> convert(String line) {
-                if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName) || COMMAND_INSTALL.equals(commandName)) {
-                    String action = COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName) ? "Building" : "Installing";
+                if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName)) {
+                    String action = "Building";
                     if (PACKAGE_NAME_PATTERN.matcher(line).matches()) {
                         return Collections.singletonList(ConvertedLine.forText(action + " package " + line, null));
                     } else {
@@ -380,7 +374,7 @@ public final class GoActionProvider implements ActionProvider {
 
         List<String> args = new ArrayList<String>();
         if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName) || COMMAND_REBUILD.equals(commandName)) {
-            args.add("build");
+            args.add("install");
             args.add("-v");
 
             if (COMMAND_REBUILD.equals(commandName)) {
@@ -392,10 +386,6 @@ public final class GoActionProvider implements ActionProvider {
             args.add("clean");
             args.add("-i");
             args.add("-x");
-            args.add(packageName);
-        } else if (COMMAND_INSTALL.equals(commandName)) {
-            args.add("install");
-            args.add("-v");
             args.add(packageName);
         } else if (COMMAND_TEST.equals(commandName)) {
             args.add("test");
@@ -613,45 +603,6 @@ public final class GoActionProvider implements ActionProvider {
         execute(COMMAND_CLEAN, ioTab);
     }
 
-    private void handleInstallAction(Lookup lookup) throws IllegalArgumentException {
-        String projectName = ProjectUtils.getInformation(_project).getDisplayName();
-        InputOutput tab;
-        tab = IOProvider.getDefault().getIO(projectName + " (install)", false);
-        tab.closeInputOutput();
-
-        Action[] actions = new Action[] {
-        };
-
-        tab = IOProvider.getDefault().getIO(projectName + " (install)", actions);
-        try {
-            tab.getOut().reset();
-        } catch (IOException ex) {
-        }
-
-        final InputOutput ioTab = tab;
-
-        progressHandle = ProgressHandleFactory.createHandle(projectName + " (install)", new Cancellable() {
-
-            @Override
-            public boolean cancel() {
-                return false;
-            }
-
-        }, new AbstractAction() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ioTab.select();
-            }
-
-        });
-
-        progressHandle.setInitialDelay(0);
-        progressHandle.start();
-
-        execute(COMMAND_INSTALL, ioTab);
-    }
-
     private void handleRunAction(Lookup lookup) throws IllegalArgumentException {
         String projectName = ProjectUtils.getInformation(_project).getDisplayName();
         InputOutput tab;
@@ -769,8 +720,6 @@ public final class GoActionProvider implements ActionProvider {
             //return project != null && !project.isStandardLibrary();
             return false;
         } else if (command.equals(ActionProvider.COMMAND_CLEAN)) {
-            return project != null && !project.isStandardLibrary();
-        } else if (command.equals(COMMAND_INSTALL)) {
             return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_RUN)) {
             return false;
