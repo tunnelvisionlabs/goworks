@@ -8,7 +8,7 @@
 
     <target name="init-antlr4tool">
         <property name="antlr4tool.name" value="antlr4"/>
-        <property name="antlr4tool.commit" value="2f68e57acc880045968069caf17cf61911e09943"/>
+        <property name="antlr4tool.commit" value="4.0-opt"/>
     </target>
 
     <target name="download-antlr4tool" depends="init-antlr4tool,harness.build-init">
