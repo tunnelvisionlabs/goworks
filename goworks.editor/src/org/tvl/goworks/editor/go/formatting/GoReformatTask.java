@@ -23,12 +23,14 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
+import org.antlr.netbeans.util.NotificationIcons;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.extexecution.ExternalProcessBuilder;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.modules.editor.indent.spi.Context;
 import org.netbeans.modules.editor.indent.spi.ExtraLock;
 import org.netbeans.modules.editor.indent.spi.ReformatTask;
+import org.openide.awt.NotificationDisplayer;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.Utilities;
@@ -63,6 +65,7 @@ public class GoReformatTask implements ReformatTask {
     public static String runGofmt(String text, boolean useTabs, int tabWidth) {
         File goroot = new File(System.getenv("GOROOT"));
         if (!goroot.isDirectory()) {
+            displayError("The GOROOT environment variable does not point to an accessible Go installation.");
             throw new UnsupportedOperationException("Couldn't determine GOROOT.");
         }
 
@@ -73,6 +76,7 @@ public class GoReformatTask implements ReformatTask {
 
         FileObject binFolder = gorootObject.getFileObject("bin");
         if (binFolder == null || !binFolder.isFolder()) {
+            displayError(String.format("The Go installation directory environment variable does not contain a 'bin' directory. Expected: %s%sbin", gorootObject.getPath(), File.separatorChar));
             throw new UnsupportedOperationException("Couldn't determine Go bin directory.");
         }
 
@@ -82,6 +86,13 @@ public class GoReformatTask implements ReformatTask {
         }
 
         if (executable == null || !executable.isData()) {
+            String extension = Utilities.isWindows() ? ".exe" : "";
+            String expected = gorootObject.getPath() + File.separator + "bin" + File.separator + "gofmt" + extension;
+            if (File.separatorChar != '/') {
+                expected = expected.replace('/', File.separatorChar);
+            }
+
+            displayError(String.format("Couldn't find the Go tool. Expected: %s", expected));
             throw new UnsupportedOperationException("Couldn't find the Go tool.");
         }
 
@@ -193,6 +204,10 @@ public class GoReformatTask implements ReformatTask {
     @Override
     public ExtraLock reformatLock() {
         return null;
+    }
+
+    private static void displayError(String message) {
+        NotificationDisplayer.getDefault().notify("Error executing gofmt", NotificationIcons.ERROR, message, null);
     }
 
     @MimeRegistration(mimeType=GoEditorKit.GO_MIME_TYPE, service=ReformatTask.Factory.class)

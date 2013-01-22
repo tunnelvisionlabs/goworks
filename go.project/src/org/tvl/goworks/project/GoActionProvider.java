@@ -30,6 +30,7 @@ import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.antlr.netbeans.util.NotificationIcons;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.extexecution.ExecutionDescriptor;
 import org.netbeans.api.extexecution.print.ConvertedLine;
@@ -48,6 +49,7 @@ import org.netbeans.modules.nativeexecution.api.execution.PostMessageDisplayer;
 import org.netbeans.modules.nativeexecution.spi.ExecutionEnvironmentFactoryService;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
+import org.openide.awt.NotificationDisplayer;
 import org.openide.awt.StatusDisplayer;
 import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileObject;
@@ -337,7 +339,7 @@ public final class GoActionProvider implements ActionProvider {
         }
 
         Writer outputListener = null;
-        if (outputHandlers != null && !outputHandlers.isEmpty()) {
+        if (!outputHandlers.isEmpty()) {
             outputListener = new WriterRedirector(outputHandlers);
         }
 
@@ -345,6 +347,7 @@ public final class GoActionProvider implements ActionProvider {
 
         File goroot = new File(System.getenv("GOROOT"));
         if (!goroot.isDirectory()) {
+            displayError(commandName, "The GOROOT environment variable does not point to an accessible Go installation.");
             throw new UnsupportedOperationException("Couldn't determine GOROOT.");
         }
 
@@ -355,6 +358,7 @@ public final class GoActionProvider implements ActionProvider {
 
         FileObject binFolder = gorootObject.getFileObject("bin");
         if (binFolder == null || !binFolder.isFolder()) {
+            displayError(commandName, String.format("The Go installation directory environment variable does not contain a 'bin' directory. Expected: %s%sbin", gorootObject.getPath(), File.separatorChar));
             throw new UnsupportedOperationException("Couldn't determine Go bin directory.");
         }
 
@@ -364,6 +368,13 @@ public final class GoActionProvider implements ActionProvider {
         }
 
         if (executable == null || !executable.isData()) {
+            String extension = Utilities.isWindows() ? ".exe" : "";
+            String expected = gorootObject.getPath() + File.separator + "bin" + File.separator + "go" + extension;
+            if (File.separatorChar != '/') {
+                expected = expected.replace('/', File.separatorChar);
+            }
+
+            displayError(commandName, String.format("Couldn't find the Go tool. Expected: %s", expected));
             throw new UnsupportedOperationException("Couldn't find the Go tool.");
         }
 
@@ -427,6 +438,11 @@ public final class GoActionProvider implements ActionProvider {
 
         NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, COMMAND_BUILD);
         executorTask = es.run();
+    }
+
+    private void displayError(String command, String message) {
+        String title = String.format("Error executing \"go %s\"", command);
+        NotificationDisplayer.getDefault().notify(title, NotificationIcons.ERROR, message, null);
     }
 
     private class ExecutionEventListener implements ExecutionListener {
