@@ -78,6 +78,8 @@ public final class GoActionProvider implements ActionProvider {
     // -J-Dorg.tvl.goworks.project.GoActionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoActionProvider.class.getName());
 
+    private static final RequestProcessor RP = new RequestProcessor(GoActionProvider.class);
+
     private static final String[] supported = new String[] {
         ActionProvider.COMMAND_BUILD,
         ActionProvider.COMMAND_COMPILE_SINGLE,
@@ -284,11 +286,7 @@ public final class GoActionProvider implements ActionProvider {
 
         };
 
-        if (SwingUtilities.isEventDispatchThread()) {
-            RequestProcessor.getDefault().post(executor);
-        } else {
-            executor.run();
-        }
+        RP.post(executor);
     }
 
     private static final String PACKAGE_NAME_PATTERN_STRING = "\\w+(?:/\\w+)*";
