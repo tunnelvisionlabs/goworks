@@ -270,7 +270,17 @@ public final class GoActionProvider implements ActionProvider {
             @Override
             public void run() {
                 try {
-                    executeImpl(commandName, packageName, io, listener);
+                    if (COMMAND_REBUILD.equals(commandName)) {
+                        Future<Integer> result;
+                        result = executeImpl(COMMAND_CLEAN, packageName, io, listener);
+                        if (result.get() != 0) {
+                            return;
+                        }
+
+                        executeImpl(COMMAND_BUILD, packageName, io, listener);
+                    } else {
+                        executeImpl(commandName, packageName, io, listener);
+                    }
                 } catch (Throwable throwable) {
                     try {
                         io.getErr().println("Internal error occurred. Please report a bug.", null, true);
@@ -293,6 +303,10 @@ public final class GoActionProvider implements ActionProvider {
     private static final Pattern BUILD_ERROR_PATTERN = Pattern.compile("(\\w+(?:[\\\\/]\\w+)*[\\\\/]\\w+\\.go):(\\d+):\\s*(.*)");
 
     private Future<Integer> executeImpl(final String commandName, final String packageName, final InputOutput io, final ExecutionListener listener) {
+        if (COMMAND_REBUILD.equals(commandName)) {
+            throw new IllegalArgumentException("Expected 'clean' and 'build' as separate commands.");
+        }
+
         ExecutionEnvironmentFactoryService executionEnvironmentFactoryService =
             Lookup.getDefault().lookup(ExecutionEnvironmentFactoryService.class);
 
@@ -370,14 +384,9 @@ public final class GoActionProvider implements ActionProvider {
         }
 
         List<String> args = new ArrayList<String>();
-        if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName) || COMMAND_REBUILD.equals(commandName)) {
+        if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName)) {
             args.add("install");
             args.add("-v");
-
-            if (COMMAND_REBUILD.equals(commandName)) {
-                args.add("-a");
-            }
-
             args.add(packageName);
         } else if (COMMAND_CLEAN.equals(commandName)) {
             args.add("clean");
@@ -714,8 +723,7 @@ public final class GoActionProvider implements ActionProvider {
 
             return true;
         } else if (command.equals(ActionProvider.COMMAND_REBUILD)) {
-            //return project != null && !project.isStandardLibrary();
-            return false;
+            return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_CLEAN)) {
             return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_RUN)) {
