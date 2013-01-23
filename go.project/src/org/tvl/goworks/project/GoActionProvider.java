@@ -97,7 +97,6 @@ public final class GoActionProvider implements ActionProvider {
 
     private final List<ExecutionListener> listeners = new CopyOnWriteArrayList<ExecutionListener>();
     private ProgressHandle progressHandle;
-    private volatile Future<Integer> executorTask;
 
     public GoActionProvider(final GoProject project) {
         this._project = project;
@@ -293,7 +292,7 @@ public final class GoActionProvider implements ActionProvider {
     private static final Pattern PACKAGE_NAME_PATTERN = Pattern.compile(PACKAGE_NAME_PATTERN_STRING);
     private static final Pattern BUILD_ERROR_PATTERN = Pattern.compile("(\\w+(?:[\\\\/]\\w+)*[\\\\/]\\w+\\.go):(\\d+):\\s*(.*)");
 
-    private void executeImpl(final String commandName, final String packageName, final InputOutput io, final ExecutionListener listener) {
+    private Future<Integer> executeImpl(final String commandName, final String packageName, final InputOutput io, final ExecutionListener listener) {
         ExecutionEnvironmentFactoryService executionEnvironmentFactoryService =
             Lookup.getDefault().lookup(ExecutionEnvironmentFactoryService.class);
 
@@ -425,7 +424,7 @@ public final class GoActionProvider implements ActionProvider {
         descriptor.noReset(true);
 
         NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, COMMAND_BUILD);
-        executorTask = es.run();
+        return es.run();
     }
 
     private void displayError(String command, String message) {
