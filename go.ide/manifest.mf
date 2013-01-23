@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.tvl.goworks.ide/1
+OpenIDE-Module-Localizing-Bundle: com/tvl/goworks/ide/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
