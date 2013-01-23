@@ -8,4 +8,15 @@
             </folder>
         </folder>
     </folder>
+    <folder name="Menu">
+        <folder name="BuildProject">
+            <file name="org-netbeans-modules-project-ui-CompileSingle.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-RunSingle.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-TestSingle.shadow_hidden"/>
+        </folder>
+        <folder name="RunProject">
+            <file name="org-netbeans-modules-debugger-ui-actions-DebugFileAction.shadow_hidden"/>
+            <file name="org-netbeans-modules-debugger-ui-actions-DebugTestFileAction.shadow_hidden"/>
+        </folder>
+    </folder>
 </filesystem>
