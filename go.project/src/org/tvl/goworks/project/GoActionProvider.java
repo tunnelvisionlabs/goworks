@@ -741,11 +741,14 @@ public final class GoActionProvider implements ActionProvider {
 
     @Override
     public boolean isActionEnabled(String command, Lookup lookup) throws IllegalArgumentException {
-        GoProject project = lookup.lookup(GoProject.class);
+        if (_project == null) {
+            return false;
+        }
+
         if (command.equals(ActionProvider.COMMAND_BUILD)) {
-            return project != null && !project.isStandardLibrary();
+            return !_project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_COMPILE_SINGLE)) {
-            if (project == null || project.isStandardLibrary()) {
+            if (_project.isStandardLibrary()) {
                 return false;
             }
 
@@ -767,21 +770,21 @@ public final class GoActionProvider implements ActionProvider {
 
             return true;
         } else if (command.equals(ActionProvider.COMMAND_REBUILD)) {
-            return project != null && !project.isStandardLibrary();
+            return !_project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_CLEAN)) {
-            return project != null && !project.isStandardLibrary();
+            return !_project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_RUN)) {
-            return project != null && !project.isStandardLibrary();
+            return !_project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_DEBUG)) {
             return false;
         } else if (command.equals(ActionProvider.COMMAND_PROFILE)) {
             return false;
         } else if (command.equals(ActionProvider.COMMAND_TEST)) {
-            return project != null && !project.isStandardLibrary();
+            return !_project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_DELETE)) {
-            return project != null && !project.isStandardLibrary();
+            return !_project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_COPY)) {
-            return project != null && !project.isStandardLibrary();
+            return !_project.isStandardLibrary();
         } else {
             throw new IllegalArgumentException(command);
         }
