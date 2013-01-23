@@ -27,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.antlr.netbeans.util.NotificationIcons;
@@ -96,11 +95,9 @@ public final class GoActionProvider implements ActionProvider {
     private final GoProject _project;
 
     private final List<ExecutionListener> listeners = new CopyOnWriteArrayList<ExecutionListener>();
-    private ProgressHandle progressHandle;
 
     public GoActionProvider(final GoProject project) {
         this._project = project;
-        this.listeners.add(new ExecutionEventListener());
     }
 
     @Override
@@ -162,7 +159,7 @@ public final class GoActionProvider implements ActionProvider {
 
         final InputOutput ioTab = tab;
 
-        progressHandle = ProgressHandleFactory.createHandle(projectName + " (build)", new Cancellable() {
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (build)", new Cancellable() {
 
             @Override
             public boolean cancel() {
@@ -181,7 +178,7 @@ public final class GoActionProvider implements ActionProvider {
         progressHandle.setInitialDelay(0);
         progressHandle.start();
 
-        execute("build", ioTab);
+        execute("build", ioTab, progressHandle);
    }
 
     private void handleBuildPackageAction(Lookup lookup) throws IllegalArgumentException {
@@ -204,7 +201,7 @@ public final class GoActionProvider implements ActionProvider {
 
         final InputOutput ioTab = tab;
 
-        progressHandle = ProgressHandleFactory.createHandle(projectName + " (compile-single)", new Cancellable() {
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (compile-single)", new Cancellable() {
 
             @Override
             public boolean cancel() {
@@ -239,15 +236,36 @@ public final class GoActionProvider implements ActionProvider {
             return;
         }
 
-        execute("build", ioTab, relativePath.replace(File.separatorChar, '/'));
+        execute("build", ioTab, relativePath.replace(File.separatorChar, '/'), progressHandle);
    }
 
-    public void execute(String commandName, InputOutput io) {
-        execute(commandName, io, "./...");
+    public void execute(String commandName, InputOutput io, ProgressHandle progressHandle) {
+        execute(commandName, io, "./...", progressHandle);
     }
 
-    public void execute(final String commandName, final InputOutput io, final String packageName) {
+    public void execute(final String commandName, final InputOutput io, final String packageName, final ProgressHandle progressHandle) {
+        final ExecutionEventListener standardListener = new ExecutionEventListener(progressHandle, io);
         final ExecutionListener listener = new ExecutionListener() {
+
+            @Override
+            public void executionStarted(int pid) {
+                standardListener.executionStarted(pid);
+                for (ExecutionListener listener : listeners) {
+                    listener.executionStarted(pid);
+                }
+            }
+
+            @Override
+            public void executionFinished(int rc) {
+                standardListener.executionFinished(rc);
+                for (ExecutionListener listener : listeners) {
+                    listener.executionFinished(rc);
+                }
+            }
+
+        };
+
+        final ExecutionListener firstListener = new ExecutionListener() {
 
             @Override
             public void executionStarted(int pid) {
@@ -272,7 +290,7 @@ public final class GoActionProvider implements ActionProvider {
                 try {
                     if (COMMAND_REBUILD.equals(commandName)) {
                         Future<Integer> result;
-                        result = executeImpl(COMMAND_CLEAN, packageName, io, listener);
+                        result = executeImpl(COMMAND_CLEAN, packageName, io, firstListener);
                         if (result.get() != 0) {
                             return;
                         }
@@ -280,7 +298,7 @@ public final class GoActionProvider implements ActionProvider {
                         executeImpl(COMMAND_BUILD, packageName, io, listener);
                     } else if (COMMAND_RUN.equals(commandName)) {
                         Future<Integer> result;
-                        result = executeImpl(COMMAND_BUILD, packageName, io, listener);
+                        result = executeImpl(COMMAND_BUILD, packageName, io, firstListener);
                         if (result.get() != 0) {
                             return;
                         }
@@ -485,7 +503,14 @@ public final class GoActionProvider implements ActionProvider {
         NotificationDisplayer.getDefault().notify(title, NotificationIcons.ERROR, message, null);
     }
 
-    private class ExecutionEventListener implements ExecutionListener {
+    private static class ExecutionEventListener implements ExecutionListener {
+        private final ProgressHandle progressHandle;
+        private final InputOutput io;
+
+        public ExecutionEventListener(ProgressHandle progressHandle, InputOutput io) {
+            this.progressHandle = progressHandle;
+            this.io = io;
+        }
 
         @Override
         public void executionStarted(int pid) {
@@ -493,7 +518,13 @@ public final class GoActionProvider implements ActionProvider {
 
         @Override
         public void executionFinished(int rc) {
-            progressHandle.finish();
+            if (progressHandle != null) {
+                progressHandle.finish();
+            }
+
+            if (io != null) {
+                io.getOut().close();
+            }
         }
 
     }
@@ -592,7 +623,7 @@ public final class GoActionProvider implements ActionProvider {
 
         final InputOutput ioTab = tab;
 
-        progressHandle = ProgressHandleFactory.createHandle(projectName + " (rebuild)", new Cancellable() {
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (rebuild)", new Cancellable() {
 
             @Override
             public boolean cancel() {
@@ -611,7 +642,7 @@ public final class GoActionProvider implements ActionProvider {
         progressHandle.setInitialDelay(0);
         progressHandle.start();
 
-        execute(COMMAND_REBUILD, ioTab);
+        execute(COMMAND_REBUILD, ioTab, progressHandle);
     }
 
     private void handleCleanAction(Lookup lookup) throws IllegalArgumentException {
@@ -631,7 +662,7 @@ public final class GoActionProvider implements ActionProvider {
 
         final InputOutput ioTab = tab;
 
-        progressHandle = ProgressHandleFactory.createHandle(projectName + " (clean)", new Cancellable() {
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (clean)", new Cancellable() {
 
             @Override
             public boolean cancel() {
@@ -650,7 +681,7 @@ public final class GoActionProvider implements ActionProvider {
         progressHandle.setInitialDelay(0);
         progressHandle.start();
 
-        execute(COMMAND_CLEAN, ioTab);
+        execute(COMMAND_CLEAN, ioTab, progressHandle);
     }
 
     private void handleRunAction(Lookup lookup) throws IllegalArgumentException {
@@ -670,7 +701,7 @@ public final class GoActionProvider implements ActionProvider {
 
         final InputOutput ioTab = tab;
 
-        progressHandle = ProgressHandleFactory.createHandle(projectName + " (run)", new Cancellable() {
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (run)", new Cancellable() {
 
             @Override
             public boolean cancel() {
@@ -689,7 +720,7 @@ public final class GoActionProvider implements ActionProvider {
         progressHandle.setInitialDelay(0);
         progressHandle.start();
 
-        execute(COMMAND_RUN, ioTab);
+        execute(COMMAND_RUN, ioTab, progressHandle);
     }
 
     private void handleDebugAction(Lookup lookup) throws IllegalArgumentException {
@@ -717,7 +748,7 @@ public final class GoActionProvider implements ActionProvider {
 
         final InputOutput ioTab = tab;
 
-        progressHandle = ProgressHandleFactory.createHandle(projectName + " (test)", new Cancellable() {
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (test)", new Cancellable() {
 
             @Override
             public boolean cancel() {
@@ -736,7 +767,7 @@ public final class GoActionProvider implements ActionProvider {
         progressHandle.setInitialDelay(0);
         progressHandle.start();
 
-        execute(COMMAND_TEST, ioTab);
+        execute(COMMAND_TEST, ioTab, progressHandle);
     }
 
     @Override
