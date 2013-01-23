@@ -278,6 +278,14 @@ public final class GoActionProvider implements ActionProvider {
                         }
 
                         executeImpl(COMMAND_BUILD, packageName, io, listener);
+                    } else if (COMMAND_RUN.equals(commandName)) {
+                        Future<Integer> result;
+                        result = executeImpl(COMMAND_BUILD, packageName, io, listener);
+                        if (result.get() != 0) {
+                            return;
+                        }
+
+                        executeImpl(COMMAND_RUN, packageName, io, listener);
                     } else {
                         executeImpl(commandName, packageName, io, listener);
                     }
@@ -313,7 +321,7 @@ public final class GoActionProvider implements ActionProvider {
         final ExecutionEnvironment executionEnvironment = executionEnvironmentFactoryService.getLocal();
 
         final String workingDirectory = _project.getProjectDirectory().getPath().replace('/', File.separatorChar);
-        boolean showInput = true;
+        boolean showInput = COMMAND_RUN.equals(commandName);
         final boolean unbuffer = true;
         final boolean statusEx = false;
 
@@ -350,53 +358,83 @@ public final class GoActionProvider implements ActionProvider {
 
         final ProcessChangeListener processChangeListener = new ProcessChangeListener(listener, outputListener, convertor, io);
 
-        File goroot = new File(System.getenv("GOROOT"));
-        if (!goroot.isDirectory()) {
-            displayError(commandName, "The GOROOT environment variable does not point to an accessible Go installation.");
-            throw new UnsupportedOperationException("Couldn't determine GOROOT.");
-        }
-
-        FileObject gorootObject = FileUtil.toFileObject(goroot);
-        if (gorootObject == null || !gorootObject.isFolder()) {
-            throw new UnsupportedOperationException("Couldn't determine GOROOT.");
-        }
-
-        FileObject binFolder = gorootObject.getFileObject("bin");
-        if (binFolder == null || !binFolder.isFolder()) {
-            displayError(commandName, String.format("The Go installation directory environment variable does not contain a 'bin' directory. Expected: %s%sbin", gorootObject.getPath(), File.separatorChar));
-            throw new UnsupportedOperationException("Couldn't determine Go bin directory.");
-        }
-
-        FileObject executable = binFolder.getFileObject("go", "");
-        if (executable == null && Utilities.isWindows()) {
-            executable = binFolder.getFileObject("go", "exe");
-        }
-
-        if (executable == null || !executable.isData()) {
-            String extension = Utilities.isWindows() ? ".exe" : "";
-            String expected = gorootObject.getPath() + File.separator + "bin" + File.separator + "go" + extension;
-            if (File.separatorChar != '/') {
-                expected = expected.replace('/', File.separatorChar);
+        FileObject executable;
+        List<String> args = new ArrayList<String>();
+        if (COMMAND_RUN.equals(commandName)) {
+            FileObject projectDirectory = _project.getProjectDirectory();
+            if (projectDirectory == null || !projectDirectory.isFolder()) {
+                throw new UnsupportedOperationException("Couldn't determine the project directory.");
             }
 
-            displayError(commandName, String.format("Couldn't find the Go tool. Expected: %s", expected));
-            throw new UnsupportedOperationException("Couldn't find the Go tool.");
-        }
+            FileObject binFolder = projectDirectory.getFileObject("bin");
+            if (binFolder == null || !binFolder.isFolder()) {
+                displayError(commandName, String.format("The build directory could not be found. Expected: %s%sbin", projectDirectory.getPath(), File.separatorChar));
+                throw new UnsupportedOperationException("Couldn't determine build directory.");
+            }
 
-        List<String> args = new ArrayList<String>();
-        if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName)) {
-            args.add("install");
-            args.add("-v");
-            args.add(packageName);
-        } else if (COMMAND_CLEAN.equals(commandName)) {
-            args.add("clean");
-            args.add("-i");
-            args.add("-x");
-            args.add(packageName);
-        } else if (COMMAND_TEST.equals(commandName)) {
-            args.add("test");
-            args.add("-v");
-            args.add(packageName);
+            executable = binFolder.getFileObject("main", "");
+            if (executable == null && Utilities.isWindows()) {
+                executable = binFolder.getFileObject("main", "exe");
+            }
+
+            if (executable == null || !executable.isData()) {
+                String extension = Utilities.isWindows() ? ".exe" : "";
+                String expected = projectDirectory.getPath() + File.separator + "bin" + File.separator + "main" + extension;
+                if (File.separatorChar != '/') {
+                    expected = expected.replace('/', File.separatorChar);
+                }
+
+                displayError(commandName, String.format("Couldn't find the target executable. Expected: %s", expected));
+                throw new UnsupportedOperationException("Couldn't find the target executable.");
+            }
+        } else {
+            File goroot = new File(System.getenv("GOROOT"));
+            if (!goroot.isDirectory()) {
+                displayError(commandName, "The GOROOT environment variable does not point to an accessible Go installation.");
+                throw new UnsupportedOperationException("Couldn't determine GOROOT.");
+            }
+
+            FileObject gorootObject = FileUtil.toFileObject(goroot);
+            if (gorootObject == null || !gorootObject.isFolder()) {
+                throw new UnsupportedOperationException("Couldn't determine GOROOT.");
+            }
+
+            FileObject binFolder = gorootObject.getFileObject("bin");
+            if (binFolder == null || !binFolder.isFolder()) {
+                displayError(commandName, String.format("The Go installation directory environment variable does not contain a 'bin' directory. Expected: %s%sbin", gorootObject.getPath(), File.separatorChar));
+                throw new UnsupportedOperationException("Couldn't determine Go bin directory.");
+            }
+
+            executable = binFolder.getFileObject("go", "");
+            if (executable == null && Utilities.isWindows()) {
+                executable = binFolder.getFileObject("go", "exe");
+            }
+
+            if (executable == null || !executable.isData()) {
+                String extension = Utilities.isWindows() ? ".exe" : "";
+                String expected = gorootObject.getPath() + File.separator + "bin" + File.separator + "go" + extension;
+                if (File.separatorChar != '/') {
+                    expected = expected.replace('/', File.separatorChar);
+                }
+
+                displayError(commandName, String.format("Couldn't find the Go tool. Expected: %s", expected));
+                throw new UnsupportedOperationException("Couldn't find the Go tool.");
+            }
+
+            if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName)) {
+                args.add("install");
+                args.add("-v");
+                args.add(packageName);
+            } else if (COMMAND_CLEAN.equals(commandName)) {
+                args.add("clean");
+                args.add("-i");
+                args.add("-x");
+                args.add(packageName);
+            } else if (COMMAND_TEST.equals(commandName)) {
+                args.add("test");
+                args.add("-v");
+                args.add(packageName);
+            }
         }
 
         NativeProcessBuilder nativeProcessBuilder = NativeProcessBuilder.newProcessBuilder(executionEnvironment)
@@ -437,7 +475,13 @@ public final class GoActionProvider implements ActionProvider {
     }
 
     private void displayError(String command, String message) {
-        String title = String.format("Error executing \"go %s\"", command);
+        String title;
+        if (COMMAND_RUN.equals(command)) {
+            title = "Error running the project";
+        } else {
+            title = String.format("Error executing \"go %s\"", command);
+        }
+
         NotificationDisplayer.getDefault().notify(title, NotificationIcons.ERROR, message, null);
     }
 
@@ -727,7 +771,7 @@ public final class GoActionProvider implements ActionProvider {
         } else if (command.equals(ActionProvider.COMMAND_CLEAN)) {
             return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_RUN)) {
-            return false;
+            return project != null && !project.isStandardLibrary();
         } else if (command.equals(ActionProvider.COMMAND_DEBUG)) {
             return false;
         } else if (command.equals(ActionProvider.COMMAND_PROFILE)) {
