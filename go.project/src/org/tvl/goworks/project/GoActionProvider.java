@@ -418,13 +418,13 @@ public final class GoActionProvider implements ActionProvider {
 
         NativeExecutionDescriptor descriptor =
             new NativeExecutionDescriptor()
-            .controllable(true)
-            .frontWindow(true)
-            .inputVisible(showInput)
+            .controllable(false) // don't enable the rerun or stop buttons in the IO tab
+            .frontWindow(true) // select the IO tab before execution
+            .inputVisible(showInput) // true to allow input from user
             .inputOutput(io)
             .outLineBased(!unbuffer)
             .showProgress(true)
-            .postMessageDisplayer(new PostMessageDisplayer.Default(COMMAND_BUILD))
+            .postMessageDisplayer(new PostMessageDisplayer.Default(commandName))
             .postExecution(processChangeListener)
             .errConvertorFactory(processChangeListener)
             .outConvertorFactory(processChangeListener)
@@ -432,7 +432,7 @@ public final class GoActionProvider implements ActionProvider {
 
         descriptor.noReset(true);
 
-        NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, COMMAND_BUILD);
+        NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, commandName);
         return es.run();
     }
 
