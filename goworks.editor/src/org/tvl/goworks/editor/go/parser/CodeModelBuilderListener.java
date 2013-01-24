@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -301,12 +302,14 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents={Dependents.PARENTS, Dependents.SELF}),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0, dependents=Dependents.SELF),
+    })
     public void exitType(TypeContext ctx) {
-        // handled by child contexts
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
+        TypeModelImpl type = popTypeModel(ctx.typeName(), ctx.typeLiteral(), ctx.type());
+        _typeModelStack.push(type);
     }
 
     @Override
@@ -331,27 +334,61 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0, dependents=Dependents.SELF),
+    })
     public void exitTypeLiteral(TypeLiteralContext ctx) {
-        // handled by child contexts
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
+        @NonNull
+        TypeModelImpl result = _unknownType;
+        if (ctx.getChildCount() > 0) {
+            ParseTree<Token> child = ctx.getChild(0);
+            if (child instanceof RuleNode) {
+                RuleContext<Token> ruleContext = ((RuleNode<Token>)child).getRuleContext();
+                switch (ruleContext.getRuleIndex()) {
+                case GoParser.RULE_arrayType:
+                case GoParser.RULE_structType:
+                case GoParser.RULE_pointerType:
+                case GoParser.RULE_functionType:
+                case GoParser.RULE_interfaceType:
+                case GoParser.RULE_sliceType:
+                case GoParser.RULE_mapType:
+                case GoParser.RULE_channelType:
+                    result = popTypeModel((ParserRuleContext<Token>)ruleContext);
+                    break;
+                    
+                default:
+                    break;
+                }
+            }
         }
+
+        _typeModelStack.push(result);
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceTypeName, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
+    })
     public void exitInterfaceTypeName(InterfaceTypeNameContext ctx) {
-        // handled by child contexts
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
+        _typeModelStack.push(popTypeModel(ctx.typeName()));
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0, dependents=Dependents.SELF),
+    })
     public void exitArrayType(ArrayTypeContext ctx) {
-        TypeModelImpl elementType = _typeModelStack.pop();
+        TypeModelImpl elementType = popTypeModel(ctx.elementType());
         _typeModelStack.push(new TypeArrayModelImpl(elementType));
     }
 
@@ -369,9 +406,12 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_pointerType, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0, dependents=Dependents.SELF),
+    })
     public void exitPointerType(PointerTypeContext ctx) {
-        TypeModelImpl elementType = _typeModelStack.pop();
+        TypeModelImpl elementType = popTypeModel(ctx.baseType());
         _typeModelStack.push(new TypePointerModelImpl(elementType));
     }
 
@@ -408,9 +448,12 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_sliceType, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0, dependents=Dependents.SELF),
+    })
     public void exitSliceType(SliceTypeContext ctx) {
-        TypeModelImpl elementType = _typeModelStack.pop();
+        TypeModelImpl elementType = popTypeModel(ctx.elementType());
         _typeModelStack.push(new TypeSliceModelImpl(elementType));
     }
 
@@ -421,29 +464,18 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0, dependents=Dependents.SELF),
     })
     public void exitMapType(MapTypeContext ctx) {
-        TypeModelImpl valueType;
-        if (ctx.elementType() != null) {
-            valueType = _typeModelStack.pop();
-        }
-        else {
-            valueType = _unknownType;
-        }
-
-        TypeModelImpl keyType;
-        if (ctx.keyType() != null) {
-            keyType = _typeModelStack.pop();
-        }
-        else {
-            keyType = _unknownType;
-        }
-
+        TypeModelImpl valueType = popTypeModel(ctx.elementType());
+        TypeModelImpl keyType = popTypeModel(ctx.keyType());
         _typeModelStack.push(new TypeMapModelImpl(keyType, valueType));
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0, dependents=Dependents.SELF),
+    })
     public void exitChannelType(ChannelTypeContext ctx) {
-        TypeModelImpl elementType = _typeModelStack.pop();
+        TypeModelImpl elementType = popTypeModel(ctx.elementType());
         ChannelKind channelKind = ChannelKind.SendReceive;
         if (ctx.send != null) {
             channelKind = ChannelKind.Send;
@@ -465,14 +497,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             name = ctx.IDENTIFIER().getSymbol().getText();
         }
 
-        TypeModelImpl type;
-        if (ctx.type() != null) {
-            type = _typeModelStack.pop();
-        }
-        else {
-            type = _unknownType;
-        }
-
+        TypeModelImpl type = popTypeModel(ctx.type());
         TypeModelImpl model = new TypeAliasModelImpl(name, type, _fileModel, ctx.IDENTIFIER(), ctx);
         _typeContainerStack.peek().add(model);
     }
@@ -486,11 +511,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitConstSpec(ConstSpecContext ctx) {
-        TypeModelImpl type = null;
-        if (ctx.type() != null) {
-            type = _typeModelStack.pop();
-        }
-
+        TypeModelImpl type = popTypeModel(ctx.type(), null);
         IdentifierListContext idList = ctx.identifierList();
         ExpressionListContext expressionList = ctx.expressionList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
@@ -522,7 +543,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0, dependents=Dependents.SELF),
     })
     public void exitVarSpec(VarSpecContext ctx) {
-        TypeModelImpl explicitType = ctx.type() != null ? _typeModelStack.pop() : _unknownType;
+        TypeModelImpl explicitType = popTypeModel(ctx.type());
         IdentifierListContext idList = ctx.identifierList();
         ExpressionListContext expressionList = ctx.expressionList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
@@ -595,7 +616,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             _functionModelStack.pop();
             _parameterContainerStack.pop();
         } else if (ctx.interfaceTypeName() != null) {
-            _implementedTypesContainerStack.peek().add(_typeModelStack.pop());
+            _implementedTypesContainerStack.peek().add(popTypeModel(ctx.interfaceTypeName()));
         }
     }
 
@@ -623,7 +644,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         String name = nameNode != null ? nameNode.getSymbol().getText() : "_";
 
         if (ctx.baseTypeName() != null) {
-            TypeModelImpl type = _typeModelStack.pop();
+            TypeModelImpl type = popTypeModel(ctx.baseTypeName());
             if (ctx.ptr != null) {
                 type = new TypePointerModelImpl(type);
             }
@@ -676,9 +697,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitResult(ResultContext ctx) {
-        if (ctx.type() != null) {
-            _parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, _typeModelStack.pop(), _fileModel, null, ctx));
-        }
+        _parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, popTypeModel(ctx.type()), _fileModel, null, ctx));
     }
 
     @Override
@@ -692,7 +711,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             return;
         }
 
-        TypeModelImpl parameterType = ctx.type() != null ? _typeModelStack.pop() : new GoCompletionQuery.UnknownTypeModelImpl(_fileModel);
+        TypeModelImpl parameterType = popTypeModel(ctx.type());
         if (ctx.ellip != null) {
             parameterType = new VariadicParameterSliceModelImpl(parameterType);
         }
@@ -717,11 +736,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0, dependents=Dependents.SELF),
     })
     public void exitFieldDecl(FieldDeclContext ctx) {
-        TypeModelImpl fieldType = null;
-        if (ctx.type() != null || ctx.anonymousField() != null) {
-            fieldType = _typeModelStack.pop();
-        }
-
+        TypeModelImpl fieldType = popTypeModel(ctx.type(), ctx.anonymousField());
         IdentifierListContext idList = ctx.identifierList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
         if (ids == null && ctx.anonymousField() != null) {
@@ -748,9 +763,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitTypeAssertionExpr(TypeAssertionExprContext ctx) {
-        if (ctx.type() != null) {
-            _typeModelStack.pop();
-        }
+        popTypeModel(ctx.type());
     }
 
     @Override
@@ -759,9 +772,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiverType, version=3, dependents=Dependents.SELF),
     })
     public void exitMethodExpr(MethodExprContext ctx) {
-        if (ctx.receiverType() != null) {
-            _typeModelStack.pop();
-        }
+        popTypeModel(ctx.receiverType());
     }
 
     @Override
@@ -770,10 +781,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitConversion(ConversionContext ctx) {
-        if (ctx.type() != null) {
-            TypeModelImpl type = _typeModelStack.pop();
-            putExpressionType(ctx, type);
-        }
+        TypeModelImpl type = popTypeModel(ctx.type());
+        putExpressionType(ctx, type);
     }
 
     @Override
@@ -881,10 +890,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitBuiltinArgs(BuiltinArgsContext ctx) {
-        if (ctx.type() != null) {
-            TypeModelImpl type = _typeModelStack.pop();
-            putExpressionType(ctx, type);
-        }
+        TypeModelImpl type = popTypeModel(ctx.type());
+        putExpressionType(ctx, type);
     }
 
     @Override
@@ -893,16 +900,18 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitTypeList(TypeListContext ctx) {
-        int typeCount = ctx.type().size();
-        for (int i = 0; i < typeCount; i++) {
-            _typeModelStack.pop();
+        for (TypeContext type : ctx.type()) {
+            popTypeModel(type);
         }
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionType, version=0, dependents=Dependents.SELF),
+    })
     public void exitFunctionLiteral(FunctionLiteralContext ctx) {
-        TypeModelImpl type = _typeModelStack.pop();
+        TypeModelImpl type = popTypeModel(ctx.functionType());
         putExpressionType(ctx, type);
     }
 
@@ -936,9 +945,12 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0, dependents=Dependents.PARENTS)
+    @RuleDependencies({
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalType, version=0, dependents=Dependents.SELF),
+    })
     public void exitCompositeLiteral(CompositeLiteralContext ctx) {
-        TypeModelImpl type = _typeModelStack.pop();
+        TypeModelImpl type = popTypeModel(ctx.literalType());
         putExpressionType(ctx, type);
     }
 
@@ -995,6 +1007,41 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         }
 
         _expressionTypes.put(context, type);
+    }
+
+    @NonNull
+    private TypeModelImpl popTypeModel(@NullAllowed ParserRuleContext<Token> context) {
+        return popTypeModel(context, _unknownType);
+    }
+
+    @NonNull
+    private TypeModelImpl popTypeModel(@NullAllowed ParserRuleContext<Token> context, @NullAllowed TypeModelImpl defaultType) {
+        if (context != null) {
+            return _typeModelStack.pop();
+        }
+
+        return defaultType;
+    }
+
+    @NonNull
+    private TypeModelImpl popTypeModel(ParserRuleContext<?>... contexts) {
+        int count = 0;
+        for (ParserRuleContext<?> context : contexts) {
+            if (context != null) {
+                count++;
+            }
+        }
+
+        switch (count) {
+        case 0:
+            return _unknownType;
+
+        case 1:
+            return _typeModelStack.pop();
+
+        default:
+            throw new IllegalStateException();
+        }
     }
 
     private static String createAnonymousTypeName(ParserRuleContext<Token> context) {
