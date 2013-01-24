@@ -21,6 +21,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
+import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser;
 import org.tvl.goworks.editor.go.parser.generated.GoParserBaseVisitor;
 
@@ -105,6 +106,11 @@ public class GoParser extends AbstractGoParser {
         }
 
         return true;
+    }
+
+    @Override
+    protected boolean isBuiltInMethodName(Token token) {
+        return token != null && SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(token.getText());
     }
 
     protected static final class CompositeLiteralAllowedVisitor extends GoParserBaseVisitor<Boolean> {

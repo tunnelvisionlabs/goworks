@@ -75,6 +75,8 @@ public void setCheckPackageNames(boolean checkPackageNames) {
 }
 
 protected abstract boolean isLiteralAllowed(Token nextToken, OperandContext context);
+
+protected abstract boolean isBuiltInMethodName(Token token);
 }
 
 type
@@ -360,7 +362,8 @@ functionLiteral
     ;
 
 expression
-    :   conversion
+    :   // force a context-sensitive predicate so it only affects decisions in this rule
+		{!isBuiltInMethodName(_input.LT(1)/*$ctx*/)}? conversion
         # conversionOrCallExpr
     |   builtinCall
         # builtinCallExpr
