@@ -1034,7 +1034,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         }
     }
 
-    private static String createAnonymousTypeName(ParserRuleContext<Token> context) {
+    @NonNull
+    private static String createAnonymousTypeName(@NonNull ParserRuleContext<Token> context) {
         return String.format("$%s_%d", GoParser.ruleNames[context.getRuleIndex()], context.getStart().getStartIndex());
     }
 }
