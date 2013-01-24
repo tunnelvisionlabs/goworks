@@ -61,6 +61,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.AndExprContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.AnonymousFieldContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ArrayTypeContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.BasicLiteralContext;
@@ -96,6 +97,7 @@ import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.PackageClause
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.PackageNameContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ParameterDeclContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.PointerTypeContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.QualifiedIdentifierContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ReceiverContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ResultContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.SliceTypeContext;
@@ -314,10 +316,13 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
     })
     public void exitTypeName(TypeNameContext ctx) {
-        String pkgName = ctx.qualifiedIdentifier().packageName() != null ? ctx.qualifiedIdentifier().packageName().IDENTIFIER().getSymbol().getText() : null;
+        QualifiedIdentifierContext qualifiedIdentifierContext = ctx.qualifiedIdentifier();
+        PackageNameContext packageNameContext = qualifiedIdentifierContext != null ? qualifiedIdentifierContext.packageName() : null;
+        TerminalNode<Token> packageName = packageNameContext != null ? packageNameContext.IDENTIFIER() : null;
+        String pkgName = packageName != null ? packageName.getSymbol().getText() : null;
         String typeName;
-        if (ctx.qualifiedIdentifier().IDENTIFIER() != null) {
-            typeName = ctx.qualifiedIdentifier().IDENTIFIER().getSymbol().getText();
+        if (qualifiedIdentifierContext != null && qualifiedIdentifierContext.IDENTIFIER() != null) {
+            typeName = qualifiedIdentifierContext.IDENTIFIER().getSymbol().getText();
         } else {
             typeName = "?";
         }
@@ -718,7 +723,10 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         IdentifierListContext idList = ctx.identifierList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
         if (ids == null && ctx.anonymousField() != null) {
-            TerminalNode<Token> name = ctx.anonymousField().typeName().qualifiedIdentifier().IDENTIFIER();
+            AnonymousFieldContext anonymousFieldContext = ctx.anonymousField();
+            TypeNameContext typeNameContext = anonymousFieldContext != null ? anonymousFieldContext.typeName() : null;
+            QualifiedIdentifierContext qualifiedIdentifierContext = typeNameContext != null ? typeNameContext.qualifiedIdentifier() : null;
+            TerminalNode<Token> name = qualifiedIdentifierContext != null ? qualifiedIdentifierContext.IDENTIFIER() : null;
             if (name != null) {
                 ids = Collections.singletonList(name);
             }
