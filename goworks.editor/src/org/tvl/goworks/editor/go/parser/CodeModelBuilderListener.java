@@ -840,6 +840,16 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
                 // type unchanged
                 break;
 
+            case GoLexer.Star:
+                if (type instanceof TypePointerModelImpl) {
+                    type = ((TypePointerModelImpl)type).getElementType();
+                } else {
+                    LOGGER.log(Level.WARNING, "Unary operator '*' is currently only supported for trivial (non-aliased) pointer element types.");
+                    return;
+                }
+
+                break;
+
             default:
                 LOGGER.log(Level.WARNING, "Unsupported unary operator: {0}", ctx.op.getText());
                 return;
