@@ -29,6 +29,8 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
 import org.openide.filesystems.FileObject;
@@ -526,7 +528,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
                 if (ctx.type() != null) {
                     varType = explicitType;
                 } else if (i < expressions.size()) {
-                    varType = _expressionTypes.get(expressions.get(i));
+                    varType = getExpressionType(expressions.get(i));
                 }
 
                 if (varType == null) {
@@ -760,7 +762,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitConversion(ConversionContext ctx) {
         if (ctx.type() != null) {
             TypeModelImpl type = _typeModelStack.pop();
-            _expressionTypes.put(ctx, type);
+            putExpressionType(ctx, type);
         }
     }
 
@@ -770,12 +772,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0),
     })
     public void exitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
-        if (ctx.conversion() != null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.conversion());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
-        }
+        putExpressionType(ctx, getExpressionType(ctx.conversion()));
     }
 
     @Override
@@ -784,10 +781,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
     })
     public void exitBuiltinCallExpr(BuiltinCallExprContext ctx) {
-        TypeModelImpl type = _expressionTypes.get(ctx.builtinCall());
-        if (type != null) {
-            _expressionTypes.put(ctx, type);
-        }
+        putExpressionType(ctx, getExpressionType(ctx.builtinCall()));
     }
 
     @Override
@@ -803,27 +797,21 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         }
 
         BuiltinArgsContext args = ctx.builtinArgs();
-        if (args == null || args.type() == null) {
+        if (args == null) {
             return;
         }
 
         if ("make".equals(functionName)) {
-            TypeModelImpl type = _expressionTypes.get(args.type());
-            _expressionTypes.put(ctx, type);
+            putExpressionType(ctx, getExpressionType(args.type()));
         } else if ("new".equals(functionName)) {
-            TypeModelImpl type = _expressionTypes.get(args.type());
-            _expressionTypes.put(ctx, new TypePointerModelImpl(type));
+            putExpressionType(ctx, new TypePointerModelImpl(getExpressionType(args.type())));
         }
     }
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS)
     public void exitUnaryExpr(UnaryExprContext ctx) {
-        TypeModelImpl type = _expressionTypes.get(ctx.expression());
-        if (type == null) {
-            return;
-        }
-
+        TypeModelImpl type = getExpressionType(ctx.expression());
         if (ctx.op != null) {
             switch (ctx.op.getType()) {
             case GoLexer.Amp:
@@ -856,25 +844,25 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             }
         }
 
-        _expressionTypes.put(ctx, type);
+        putExpressionType(ctx, type);
     }
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS)
     public void exitCompareExpr(CompareExprContext ctx) {
-        _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
+        putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
     }
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS)
     public void exitAndExpr(AndExprContext ctx) {
-        _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
+        putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
     }
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS)
     public void exitOrExpr(OrExprContext ctx) {
-        _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
+        putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.BOOL);
     }
 
     @Override
@@ -885,7 +873,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitBuiltinArgs(BuiltinArgsContext ctx) {
         if (ctx.type() != null) {
             TypeModelImpl type = _typeModelStack.pop();
-            _expressionTypes.put(ctx.type(), type);
+            putExpressionType(ctx, type);
         }
     }
 
@@ -905,7 +893,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionLiteral, version=0, dependents=Dependents.PARENTS)
     public void exitFunctionLiteral(FunctionLiteralContext ctx) {
         TypeModelImpl type = _typeModelStack.pop();
-        _expressionTypes.put(ctx, type);
+        putExpressionType(ctx, type);
     }
 
     @Override
@@ -918,25 +906,13 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void exitOperand(OperandContext ctx) {
         if (ctx.literal() != null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.literal());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
+            putExpressionType(ctx, getExpressionType(ctx.literal()));
         } else if (ctx.qualifiedIdentifier()!= null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.qualifiedIdentifier());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
+            putExpressionType(ctx, getExpressionType(ctx.qualifiedIdentifier()));
         } else if (ctx.methodExpr()!= null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.methodExpr());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
+            putExpressionType(ctx, getExpressionType(ctx.methodExpr()));
         } else if (ctx.expression()!= null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.expression());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
+            putExpressionType(ctx, getExpressionType(ctx.expression()));
         }
     }
 
@@ -946,19 +922,14 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_operand, version=0),
     })
     public void exitOperandExpr(OperandExprContext ctx) {
-        if (ctx.operand() != null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.operand());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
-        }
+        putExpressionType(ctx, getExpressionType(ctx.operand()));
     }
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_compositeLiteral, version=0, dependents=Dependents.PARENTS)
     public void exitCompositeLiteral(CompositeLiteralContext ctx) {
         TypeModelImpl type = _typeModelStack.pop();
-        _expressionTypes.put(ctx, type);
+        putExpressionType(ctx, type);
     }
 
     @Override
@@ -970,20 +941,11 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void exitLiteral(LiteralContext ctx) {
         if (ctx.basicLiteral() != null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.basicLiteral());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
+            putExpressionType(ctx, getExpressionType(ctx.basicLiteral()));
         } else if (ctx.compositeLiteral() != null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.compositeLiteral());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
+            putExpressionType(ctx, getExpressionType(ctx.compositeLiteral()));
         } else if (ctx.functionLiteral() != null) {
-            TypeModelImpl type = _expressionTypes.get(ctx.functionLiteral());
-            if (type != null) {
-                _expressionTypes.put(ctx, type);
-            }
+            putExpressionType(ctx, getExpressionType(ctx.functionLiteral()));
         }
     }
 
@@ -991,16 +953,38 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_basicLiteral, version=0, dependents=Dependents.PARENTS)
     public void exitBasicLiteral(BasicLiteralContext ctx) {
         if (ctx.INT_LITERAL() != null) {
-            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.INT);
+            putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.INT);
         } else if (ctx.FLOAT_LITERAL() != null) {
-            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.FLOAT64);
+            putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.FLOAT64);
         } else if (ctx.IMAGINARY_LITERAL() != null) {
-            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.COMPLEX128);
+            putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.COMPLEX128);
         } else if (ctx.CharLiteral() != null) {
-            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.RUNE);
+            putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.RUNE);
         } else if (ctx.StringLiteral() != null) {
-            _expressionTypes.put(ctx, (TypeModelImpl)IntrinsicTypeModels.STRING);
+            putExpressionType(ctx, (TypeModelImpl)IntrinsicTypeModels.STRING);
         }
+    }
+
+    @NonNull
+    private TypeModelImpl getExpressionType(@NullAllowed ParserRuleContext<Token> context) {
+        if (context == null) {
+            return _unknownType;
+        }
+
+        TypeModelImpl result = _expressionTypes.get(context);
+        if (result == null) {
+            return _unknownType;
+        }
+
+        return result;
+    }
+
+    private void putExpressionType(@NonNull ParserRuleContext<Token> context, @NonNull TypeModelImpl type) {
+        if (type == _unknownType) {
+            return;
+        }
+
+        _expressionTypes.put(context, type);
     }
 
     private static String createAnonymousTypeName(ParserRuleContext<Token> context) {
