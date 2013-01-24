@@ -514,23 +514,21 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         TypeModelImpl type = popTypeModel(ctx.type(), null);
         IdentifierListContext idList = ctx.identifierList();
         ExpressionListContext expressionList = ctx.expressionList();
-        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
-        List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : null;
-        if (ids != null) {
-            for (int i = 0; i < ids.size(); i++) {
-                TerminalNode<Token> id = ids.get(i);
-                String unevaluatedValue;
-                if (expressions != null && expressions.size() > i) {
-                    unevaluatedValue = expressions.get(i).getText();
-                } else {
-                    unevaluatedValue = null;
-                }
-
-                String evaluatedValue = null;
-
-                ConstModelImpl model = new ConstModelImpl(id.getSymbol().getText(), _fileModel, unevaluatedValue, evaluatedValue, type, id, ctx);
-                _constContainerStack.peek().add(model);
+        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
+        List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : Collections.<ExpressionContext>emptyList();
+        for (int i = 0; i < ids.size(); i++) {
+            TerminalNode<Token> id = ids.get(i);
+            String unevaluatedValue;
+            if (expressions.size() > i) {
+                unevaluatedValue = expressions.get(i).getText();
+            } else {
+                unevaluatedValue = null;
             }
+
+            String evaluatedValue = null;
+
+            ConstModelImpl model = new ConstModelImpl(id.getSymbol().getText(), _fileModel, unevaluatedValue, evaluatedValue, type, id, ctx);
+            _constContainerStack.peek().add(model);
         }
     }
 
@@ -548,24 +546,18 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         ExpressionListContext expressionList = ctx.expressionList();
         List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
         List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : Collections.<ExpressionContext>emptyList();
-        if (!ids.isEmpty()) {
-            boolean isGlobal = _varContainerStack.peek() == _fileModel.getVars();
-            for (int i = 0; i < ids.size(); i++) {
-                TerminalNode<Token> id = ids.get(i);
-                TypeModelImpl varType = null;
-                if (ctx.type() != null) {
-                    varType = explicitType;
-                } else if (i < expressions.size()) {
-                    varType = getExpressionType(expressions.get(i));
-                }
-
-                if (varType == null) {
-                    varType = _unknownType;
-                }
-
-                VarModelImpl model = new VarModelImpl(id.getSymbol().getText(), isGlobal ? VarKind.GLOBAL : VarKind.LOCAL, varType, _fileModel, id, ctx);
-                _varContainerStack.peek().add(model);
+        boolean isGlobal = !ids.isEmpty() && _varContainerStack.peek() == _fileModel.getVars();
+        for (int i = 0; i < ids.size(); i++) {
+            TerminalNode<Token> id = ids.get(i);
+            TypeModelImpl varType = _unknownType;
+            if (ctx.type() != null) {
+                varType = explicitType;
+            } else if (i < expressions.size()) {
+                varType = getExpressionType(expressions.get(i));
             }
+
+            VarModelImpl model = new VarModelImpl(id.getSymbol().getText(), isGlobal ? VarKind.GLOBAL : VarKind.LOCAL, varType, _fileModel, id, ctx);
+            _varContainerStack.peek().add(model);
         }
     }
 
@@ -738,8 +730,8 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitFieldDecl(FieldDeclContext ctx) {
         TypeModelImpl fieldType = popTypeModel(ctx.type(), ctx.anonymousField());
         IdentifierListContext idList = ctx.identifierList();
-        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : null;
-        if (ids == null && ctx.anonymousField() != null) {
+        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
+        if (ctx.anonymousField() != null) {
             AnonymousFieldContext anonymousFieldContext = ctx.anonymousField();
             TypeNameContext typeNameContext = anonymousFieldContext != null ? anonymousFieldContext.typeName() : null;
             QualifiedIdentifierContext qualifiedIdentifierContext = typeNameContext != null ? typeNameContext.qualifiedIdentifier() : null;
@@ -749,11 +741,9 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             }
         }
 
-        if (ids != null && !ids.isEmpty()) {
-            for (TerminalNode<Token> id : ids) {
-                FieldModelImpl model = new FieldModelImpl(id.getSymbol().getText(), fieldType, ctx.anonymousField() != null, _fileModel, id, ctx);
-                _structModelStack.peek().getFields().add(model);
-            }
+        for (TerminalNode<Token> id : ids) {
+            FieldModelImpl model = new FieldModelImpl(id.getSymbol().getText(), fieldType, ctx.anonymousField() != null, _fileModel, id, ctx);
+            _structModelStack.peek().getFields().add(model);
         }
     }
 
