@@ -321,9 +321,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         }
 
         _typeModelStack.push(new TypeReferenceModelImpl(pkgName, typeName, _fileModel));
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -349,9 +346,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitArrayType(ArrayTypeContext ctx) {
         TypeModelImpl elementType = _typeModelStack.pop();
         _typeModelStack.push(new TypeArrayModelImpl(elementType));
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -365,9 +359,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0, dependents=Dependents.PARENTS)
     public void exitStructType(StructTypeContext ctx) {
         _typeModelStack.push(_structModelStack.pop());
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -375,9 +366,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitPointerType(PointerTypeContext ctx) {
         TypeModelImpl elementType = _typeModelStack.pop();
         _typeModelStack.push(new TypePointerModelImpl(elementType));
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -393,9 +381,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitFunctionType(FunctionTypeContext ctx) {
         _parameterContainerStack.pop();
         _typeModelStack.push((TypeFunctionModelImpl)_functionModelStack.pop());
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -413,9 +398,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         _typeModelStack.push(_interfaceModelStack.pop());
         _implementedTypesContainerStack.pop();
         _functionContainerStack.pop();
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -423,9 +405,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitSliceType(SliceTypeContext ctx) {
         TypeModelImpl elementType = _typeModelStack.pop();
         _typeModelStack.push(new TypeSliceModelImpl(elementType));
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -452,9 +431,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         }
 
         _typeModelStack.push(new TypeMapModelImpl(keyType, valueType));
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
@@ -469,9 +445,6 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         }
 
         _typeModelStack.push(new TypeChannelModelImpl(elementType, channelKind));
-        if (_typeModelStack.isEmpty()) {
-            throw new IllegalStateException();
-        }
     }
 
     @Override
