@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +32,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.antlr.netbeans.util.NotificationIcons;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.extexecution.ExecutionDescriptor;
 import org.netbeans.api.extexecution.print.ConvertedLine;
 import org.netbeans.api.extexecution.print.LineConvertor;
@@ -390,14 +392,26 @@ public final class GoActionProvider implements ActionProvider {
                 throw new UnsupportedOperationException("Couldn't determine build directory.");
             }
 
-            executable = binFolder.getFileObject("main", "");
+            String binaryName = null;
+            String[] projectBinaries = getProjectBinaries();
+            if (projectBinaries.length == 0) {
+                displayError(commandName, "Couldn't identify a binary produced by this project.");
+                throw new UnsupportedOperationException("Couldn't identify a binary produced by this project.");
+            }
+
+            binaryName = projectBinaries[0];
+            if (projectBinaries.length > 1) {
+                displayWarning(commandName, String.format("Found multiple binaries produced by this project; using '%s'. All binaries: %s", binaryName, Arrays.toString(projectBinaries)));
+            }
+
+            executable = binFolder.getFileObject(binaryName, "");
             if (executable == null && Utilities.isWindows()) {
-                executable = binFolder.getFileObject("main", "exe");
+                executable = binFolder.getFileObject(binaryName, "exe");
             }
 
             if (executable == null || !executable.isData()) {
                 String extension = Utilities.isWindows() ? ".exe" : "";
-                String expected = projectDirectory.getPath() + File.separator + "bin" + File.separator + "main" + extension;
+                String expected = projectDirectory.getPath() + "/bin/" + binaryName + extension;
                 if (File.separatorChar != '/') {
                     expected = expected.replace('/', File.separatorChar);
                 }
@@ -490,6 +504,28 @@ public final class GoActionProvider implements ActionProvider {
 
         NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, commandName);
         return es.run();
+    }
+
+    private String[] getProjectBinaries() {
+        Lookup lookup = MimeLookup.getLookup("text/x-go");
+        ProjectBinaryResolver resolver = lookup.lookup(ProjectBinaryResolver.class);
+        String[] result = resolver.findProjectBinaries(_project);
+        if (result == null) {
+            return new String[0];
+        }
+
+        return result;
+    }
+
+    private void displayWarning(String command, String message) {
+        String title;
+        if (COMMAND_RUN.equals(command)) {
+            title = "Running the project";
+        } else {
+            title = String.format("Executing \"go %s\"", command);
+        }
+
+        NotificationDisplayer.getDefault().notify(title, NotificationIcons.WARNING, message, null);
     }
 
     private void displayError(String command, String message) {
