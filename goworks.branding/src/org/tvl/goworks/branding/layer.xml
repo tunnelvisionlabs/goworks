@@ -18,5 +18,10 @@
             <file name="org-netbeans-modules-debugger-ui-actions-DebugFileAction.shadow_hidden"/>
             <file name="org-netbeans-modules-debugger-ui-actions-DebugTestFileAction.shadow_hidden"/>
         </folder>
+        <folder name="Source">
+            <file name="org-netbeans-modules-editor-completion-CompletionActionsMainMenu$CompletionShow.instance_hidden"/>
+            <file name="org-netbeans-modules-editor-completion-CompletionActionsMainMenu$DocumentationShow.instance_hidden"/>
+            <file name="org-netbeans-modules-editor-completion-CompletionActionsMainMenu$ToolTipShow.instance_hidden"/>
+        </folder>
     </folder>
 </filesystem>
