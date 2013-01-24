@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.StaticResource;
 import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Children;
@@ -38,10 +39,14 @@ import org.openide.util.NbBundle;
 })
 public final class GoFileNode extends DataNode implements ChangeListener {
 
+    @StaticResource
     private static final String EXECUTABLE_BADGE_URL = "org/tvl/goworks/editor/go/resources/executable-badge.png";
+    @StaticResource
     private static final String NEEDS_COMPILE_BADGE_URL = "org/tvl/goworks/editor/go/resources/needs-compile.png";
 
+    @StaticResource
     private static final String GO_ICON_BASE = "org/tvl/goworks/editor/go/resources/class.png"; // NOI18N
+    @StaticResource
     private static final String CLASS_ICON_BASE = "org/tvl/goworks/editor/go/resources/clazz.gif"; // NOI18N
 
     private static final Image NEEDS_COMPILE;
