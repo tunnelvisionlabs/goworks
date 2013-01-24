@@ -2519,7 +2519,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 typeArgument = treeDecorator.getProperty(args.type(), GoAnnotations.CODE_CLASS);
             } else {
                 ArgumentListContext argumentList = args.argumentList();
-                ExpressionListContext exprList = argumentList.expressionList();
+                ExpressionListContext exprList = argumentList != null ? argumentList.expressionList() : null;
                 if (exprList != null) {
                     List<? extends ExpressionContext> exprs = exprList.expression();
                     if (exprs != null && !exprs.isEmpty()) {
