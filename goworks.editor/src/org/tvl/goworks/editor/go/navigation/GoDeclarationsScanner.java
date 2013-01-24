@@ -598,7 +598,8 @@ public class GoDeclarationsScanner {
                 throw new IllegalArgumentException();
             }
 
-            if (context.getParent() == null) {
+            // this handles the case of null parent and literalType for a compositeLiteral
+            if (!(context.getParent() instanceof TypeLiteralContext)) {
                 return true;
             }
 
