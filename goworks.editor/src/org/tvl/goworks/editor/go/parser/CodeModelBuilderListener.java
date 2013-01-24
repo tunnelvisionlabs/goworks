@@ -236,6 +236,10 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         String packagePath;
         if (sourceRoot != null) {
             packagePath = FileUtil.getRelativePath(sourceRoot, packageFolder);
+            if (packagePath == null) {
+                LOGGER.log(Level.WARNING, "Found source file in unexpected folder ''{0}'', which is not under the source root ''{1}''.", new Object[] { packageFolder, sourceRoot });
+                packagePath = FileUtil.getRelativePath(_project.getProjectDirectory(), packageFolder);
+            }
             assert packagePath != null;
         } else {
             packagePath = packageFolder.getNameExt();
