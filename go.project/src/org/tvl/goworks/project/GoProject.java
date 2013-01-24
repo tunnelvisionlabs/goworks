@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -31,7 +30,6 @@ import org.netbeans.spi.project.ProjectState;
 import org.netbeans.spi.project.ui.ProjectOpenedHook;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
-import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
@@ -103,20 +101,6 @@ public class GoProject implements Project {
 
         projects.remove(this);
         return new ArrayList<GoProject>(projects);
-    }
-
-    FileObject getProjectDataFolder(boolean create) {
-        FileObject result =
-                projectDir.getFileObject(GoProjectFactory.PROJECT_DIR);
-        if (result == null && create) {
-            try {
-                result = projectDir.createFolder(GoProjectFactory.PROJECT_DIR);
-            } catch (IOException ioe) {
-                LOGGER.log(Level.WARNING, "An exception occurred while getting the project data folder.", ioe);
-                Exceptions.printStackTrace(ioe);
-            }
-        }
-        return result;
     }
 
     //The project type's capabilities are registered in the project's lookup:
