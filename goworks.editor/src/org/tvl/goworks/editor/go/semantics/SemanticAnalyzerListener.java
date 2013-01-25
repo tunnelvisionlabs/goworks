@@ -2505,15 +2505,80 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=2, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1),
-        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_argumentList, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expressionList, version=1, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchGuard, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchStmt, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeCaseClause, version=3, dependents={Dependents.SELF, Dependents.DESCENDANTS}),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSwitchCase, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeList, version=0, dependents=Dependents.SELF),
     })
     public void exitBuiltinCall(BuiltinCallContext ctx) {
-        CodeElementReference typeArgument = CodeElementReference.UNKNOWN;
         BuiltinArgsContext args = ctx.builtinArgs();
+        if (ctx.IDENTIFIER() != null
+            && !SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.IDENTIFIER().getText())
+            && (args == null || args.type() == null))
+        {
+            // not a built in function, and no type was passed to it
+
+            // HACK: copied from enterQualifiedIdentifier
+            TerminalNode<Token> local = getVisibleLocal(ctx.IDENTIFIER());
+            if (local != null) {
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.VAR_REF);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, local);
+                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
+                VarKind varType = treeDecorator.getProperty(local, GoAnnotations.VAR_TYPE);
+                if (varType != VarKind.UNDEFINED) {
+                    treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.VAR_TYPE, varType);
+                }
+
+                if (local.getParent().getRuleContext() instanceof TypeSwitchGuardContext) {
+                    TypeSwitchGuardContext typeSwitchGuardContext = (TypeSwitchGuardContext)local.getParent().getRuleContext();
+                    TypeSwitchStmtContext typeSwitchStmtContext = (TypeSwitchStmtContext)typeSwitchGuardContext.getParent();
+                    for (TypeCaseClauseContext typeCaseClauseContext : typeSwitchStmtContext.typeCaseClause()) {
+                        if (ParseTrees.isAncestorOf(typeCaseClauseContext, ctx)) {
+                            TypeListContext typeListContext = typeCaseClauseContext.typeSwitchCase() != null ? typeCaseClauseContext.typeSwitchCase().typeList() : null;
+                            if (typeListContext != null && typeListContext.type().size() == 1) {
+                                treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EXPLICIT_TYPE, typeListContext.type(0));
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            } else {
+                TerminalNode<Token> constant = getVisibleConstant(ctx.IDENTIFIER());
+                if (constant != null) {
+                    treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+                    treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, constant);
+                    treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
+                } else {
+                    // check built-ins
+                    if (SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(ctx.IDENTIFIER().getSymbol().getText())) {
+                        treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.FUNC_REF);
+                        treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.BUILTIN, true);
+                    } else if (SemanticHighlighter.PREDEFINED_TYPES.contains(ctx.IDENTIFIER().getSymbol().getText())) {
+                        treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.TYPE_REF);
+                        treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.TYPE_KIND, TypeKind.INTRINSIC);
+                        treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.BUILTIN, true);
+                    } else if (SemanticHighlighter.PREDEFINED_CONSTANTS.contains(ctx.IDENTIFIER().getSymbol().getText())) {
+                        treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+                        treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.BUILTIN, true);
+                    } else {
+                        unresolvedIdentifiers.add(ctx.IDENTIFIER());
+                    }
+                }
+            }
+
+            treeDecorator.putProperty(ctx, GoAnnotations.EXPR_TYPE, new CallResultReference(new UnqualifiedIdentifierElementReference(ctx.IDENTIFIER())));
+            return;
+        }
+
+        CodeElementReference typeArgument = CodeElementReference.UNKNOWN;
         if (args != null) {
             if (args.type() != null) {
                 typeArgument = treeDecorator.getProperty(args.type(), GoAnnotations.CODE_CLASS);
