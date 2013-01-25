@@ -693,7 +693,9 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
     })
     public void exitResult(ResultContext ctx) {
-        _parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, popTypeModel(ctx.type()), _fileModel, null, ctx));
+        if (ctx.type() != null) {
+            _parameterContainerStack.peek().add(new ParameterModelImpl("_", VarKind.RETURN, popTypeModel(ctx.type()), _fileModel, null, ctx));
+        }
     }
 
     @Override
