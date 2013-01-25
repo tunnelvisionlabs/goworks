@@ -1778,7 +1778,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0, dependents=Dependents.PARENTS),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinArgs, version=2, dependents=Dependents.SELF),
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
             })
@@ -1836,8 +1836,130 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     result.freeze();
                     return Collections.singletonList(result);
                 } else {
+                    assert !SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(name);
+
+                    Collection<? extends CodeElementModel> methodResults = analyzeUnqualifiedIdentifier(ctx.IDENTIFIER());
+                    List<CodeElementModel> results = new ArrayList<CodeElementModel>();
+                    for (CodeElementModel model : methodResults) {
+                        if (model instanceof TypeModel) {
+                            results.add(model);
+                        } else if (model instanceof FunctionModel) {
+                            // some calls look like conversions
+                            Collection<? extends AbstractCodeElementModel> returnValues;
+                            if (model instanceof FunctionModelImpl) {
+                                returnValues = ((FunctionModelImpl)model).getReturnValues();
+                            } else if (model instanceof TypeFunctionModelImpl) {
+                                returnValues = ((TypeFunctionModelImpl)model).getReturnValues();
+                            } else {
+                                LOGGER.log(Level.WARNING, "Unsupported {0} implementation: {1}.", new Object[] { FunctionModel.class.getSimpleName(), model.getClass().getName() } );
+                                continue;
+                            }
+
+                            if (returnValues.size() > 1) {
+                                returnValues = Collections.singletonList(new BundledReturnTypeModel(returnValues));
+                            }
+
+                            results.addAll(returnValues);
+                        }
+                    }
+
+                    setTargetProperty(ctx, results);
+                    return results;
+                }
+            }
+
+            /**
+             * Hack! Copied from {@link #visitQualifiedIdentifier}.
+             */
+            @NonNull
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=3, dependents=Dependents.DESCENDANTS),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=3, dependents=Dependents.DESCENDANTS),
+            })
+            private Collection<? extends CodeElementModel> analyzeUnqualifiedIdentifier(@NullAllowed TerminalNode<Token> nameNode) {
+                if (nameNode == null) {
                     return Collections.emptyList();
                 }
+
+                // HACK! copied from visitQualifiedIdentifier
+                Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars = Collections.emptyList();
+                List<CodeElementModel> contextModels = new ArrayList<CodeElementModel>();
+                List<ImportDeclarationModel> possibleImports = new ArrayList<ImportDeclarationModel>();
+                contextModels.add(getFileModel().getPackage());
+                for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
+                    if (importDeclarationModel.isMergeWithLocal()) {
+                        possibleImports.add(importDeclarationModel);
+                    }
+                }
+
+                ParseTree<Token> functionContext = getTopContext(parser, nameNode.getParent().getRuleContext(), new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
+                if (functionContext != null) {
+                    vars = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                    vars.addAll(localsAnalyzer.getReceiverParameters(functionContext));
+                    vars.addAll(localsAnalyzer.getParameters(functionContext));
+                    vars.addAll(localsAnalyzer.getReturnParameters(functionContext));
+                    vars.addAll(localsAnalyzer.getConstants(functionContext));
+                    vars.addAll(localsAnalyzer.getLocals(functionContext));
+                }
+
+                PackageModel builtinPackage = CodeModelCacheImpl.getInstance().getUniquePackage(getFileModel().getPackage().getProject(), "builtin");
+                if (builtinPackage != null) {
+                    contextModels.add(builtinPackage);
+                }
+
+                for (ImportDeclarationModel importDeclarationModel : possibleImports) {
+                    Collection<? extends PackageModel> resolved = CodeModelCacheImpl.getInstance().resolvePackages(importDeclarationModel);
+                    if (resolved != null) {
+                        contextModels.addAll(resolved);
+                    }
+                }
+
+                Set<CodeElementModel> members = new HashSet<CodeElementModel>();
+                String name = nameNode.getSymbol().getText();
+                for (Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer> entry : vars) {
+                    if (ParseTrees.isAncestorOf(entry.getItem2(), nameNode)) {
+                        // prevent stack overflow from redeclaration of a variable
+                        continue;
+                    }
+
+                    if (!name.equals(entry.getItem1().getText())) {
+                        continue;
+                    }
+
+                    Collection<? extends CodeElementModel> varTypes = visit(entry.getItem2());
+                    ArrayList<CodeElementModel> unbundledTypes = new ArrayList<CodeElementModel>();
+                    for (CodeElementModel varType : varTypes) {
+                        if (varType instanceof BundledReturnTypeModel) {
+                            List<? extends CodeElementModel> returnValues = ((BundledReturnTypeModel)varType).getReturnValues();
+                            if (returnValues.size() > entry.getItem3()) {
+                                unbundledTypes.add(((BundledReturnTypeModel)varType).getReturnValues().get(entry.getItem3()));
+                            }
+                        } else if (entry.getItem3() == 0) {
+                            unbundledTypes.add(varType);
+                        }
+                    }
+
+                    varTypes = unbundledTypes;
+                    if (varTypes.isEmpty()) {
+                        varTypes = Collections.singleton(new UnknownTypeModelImpl(getFileModel()));
+                    }
+
+                    for (CodeElementModel unresolvedVarType : varTypes) {
+                        for (TypeModelImpl varType : resolveType(unresolvedVarType, false, false)) {
+                            // TODO: use proper var kind
+                            VarModelImpl varModel = new VarModelImpl(name, VarKind.LOCAL, varType, getFileModel(), entry.getItem1(), entry.getItem2());
+                            members.add(varModel);
+                        }
+                    }
+                }
+
+                if (members.isEmpty()) {
+                    for (CodeElementModel model : contextModels) {
+                        members.addAll(model.getMembers(name));
+                    }
+                }
+
+                return members;
             }
 
             @Override
@@ -2461,10 +2583,10 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
             @Override
             @RuleDependencies({
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=0),
-                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0, dependents=Dependents.PARENTS),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=3, dependents=Dependents.DESCENDANTS),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodDecl, version=3, dependents=Dependents.DESCENDANTS),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0, dependents=Dependents.SELF),
             })
             public Collection<? extends CodeElementModel> visitQualifiedIdentifier(QualifiedIdentifierContext ctx) {
                 // first check for the "semi-special" literals
