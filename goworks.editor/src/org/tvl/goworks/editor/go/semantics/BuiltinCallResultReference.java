@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.antlr.v4.runtime.Token;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
@@ -74,7 +75,8 @@ public class BuiltinCallResultReference extends CodeElementReference {
             return Collections.emptyList();
         }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        LOGGER.log(Level.WARNING, "Unexpected {0} for non-builtin function ''{1}''", new Object[] { BuiltinCallResultReference.class.getName(), name.getText() });
+        return Collections.emptyList();
     }
 
 }
