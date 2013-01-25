@@ -61,6 +61,7 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypeStructModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VarModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.VariadicParameterSliceModelImpl;
 import org.tvl.goworks.editor.go.completion.GoCompletionQuery;
+import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.AndExprContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.AnonymousFieldContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ArrayTypeContext;
@@ -785,9 +786,23 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=0, dependents=Dependents.SELF),
     })
     public void exitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
-        putExpressionType(ctx, getExpressionType(ctx.conversion()));
+        TypeModelImpl type = getExpressionType(ctx.conversion());
+        if (type != _unknownType) {
+            ConversionContext conversionContext = ctx.conversion();
+            TypeContext typeContext = conversionContext.type();
+            if (typeContext != null && typeContext.typeName() != null) {
+                if (!SemanticHighlighter.PREDEFINED_TYPES.contains(typeContext.typeName().getText())) {
+                    LOGGER.log(Level.FINE, "{0}: Cannot distinguish conversion from call for type or method ''{1}''", new Object[] { _fileModel.getName(), typeContext.typeName().getText() });
+                    type = _unknownType;
+                }
+            }
+        }
+
+        putExpressionType(ctx, type);
     }
 
     @Override
