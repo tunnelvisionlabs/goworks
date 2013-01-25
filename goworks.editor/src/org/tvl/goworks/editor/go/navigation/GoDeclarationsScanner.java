@@ -31,6 +31,7 @@ import org.antlr.v4.runtime.misc.Tuple3;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
+import org.tvl.goworks.editor.go.highlighter.SemanticHighlighter;
 import org.tvl.goworks.editor.go.navigation.GoNode.DeclarationDescription;
 import org.tvl.goworks.editor.go.parser.CompiledFileModel;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
@@ -39,9 +40,13 @@ import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ArrayTypeCont
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.BaseTypeNameContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.BlockContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.BodyContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.BuiltinCallExprContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.CallExprContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ChannelTypeContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.CompositeLiteralContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ConstSpecContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ConversionContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ConversionOrCallExprContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExpressionContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExpressionListContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.FieldDeclContext;
@@ -766,6 +771,42 @@ public class GoDeclarationsScanner {
             }
 
             return aggregate + ", " + nextResult;
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS)
+        public String visitBuiltinCallExpr(BuiltinCallExprContext ctx) {
+            return "";
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS)
+        public String visitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
+            return super.visitConversionOrCallExpr(ctx);
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_conversion, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=0, dependents=Dependents.SELF),
+        })
+        public String visitConversion(ConversionContext ctx) {
+            if (ctx.type() != null) {
+                String result = visit(ctx.type());
+                if (!result.matches("\\w+(?:\\.\\w+)?") || SemanticHighlighter.PREDEFINED_TYPES.contains(result)) {
+                    return result;
+                }
+
+                LOGGER.log(Level.FINE, "Cannot distinguish conversion from call for type or method ''{0}''", result);
+            }
+
+            return "";
+        }
+
+        @Override
+        @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1, dependents=Dependents.PARENTS)
+        public String visitCallExpr(CallExprContext ctx) {
+            return "";
         }
 
         @Override
