@@ -2404,10 +2404,17 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             @Override
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=3, dependents=Dependents.PARENTS)
+            @RuleDependencies({
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeName, version=3, dependents=Dependents.PARENTS),
+                @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_qualifiedIdentifier, version=0, dependents=Dependents.SELF),
+            })
             public Collection<? extends CodeElementModel> visitTypeName(TypeNameContext ctx) {
-                assert ctx.getChildCount() <= 1 : "Unknown typeName syntax.";
-                Collection<? extends CodeElementModel> result = visit(ctx.getChild(0));
+                QualifiedIdentifierContext qualifiedIdentifierContext = ctx.qualifiedIdentifier();
+                if (qualifiedIdentifierContext == null) {
+                    return Collections.emptyList();
+                }
+
+                Collection<? extends CodeElementModel> result = visit(ctx.qualifiedIdentifier());
                 setTargetProperty(ctx, result);
                 return result;
             }
