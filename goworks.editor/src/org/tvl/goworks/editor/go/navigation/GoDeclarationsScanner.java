@@ -187,9 +187,10 @@ public class GoDeclarationsScanner {
             String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
             for (TerminalNode<Token> identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                String signature = identifier.getSymbol().getText() + type;
+                String name = identifier.getSymbol().getText();
+                String signature = name + type;
 
-                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.CONSTANT);
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.CONSTANT);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(signature);
                 getCurrentParent().getChildren().add(description);
@@ -224,9 +225,10 @@ public class GoDeclarationsScanner {
                 }
 
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                String signature = identifier.getSymbol().getText() + varType;
+                String name = identifier.getSymbol().getText();
+                String signature = name + varType;
 
-                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.VARIABLE);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(signature);
                 getCurrentParent().getChildren().add(description);
@@ -248,9 +250,10 @@ public class GoDeclarationsScanner {
             List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
             for (TerminalNode<Token> identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                String signature = String.format("%s", identifier.getSymbol().getText());
+                String name = identifier.getSymbol().getText();
+                String signature = name;
 
-                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.VARIABLE);
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.VARIABLE);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
                 getCurrentParent().getChildren().add(description);
@@ -275,9 +278,10 @@ public class GoDeclarationsScanner {
                 String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
                 for (TerminalNode<Token> identifier : identifiers) {
                     Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
-                    String signature = identifier.getSymbol().getText() + type;
+                    String name = identifier.getSymbol().getText();
+                    String signature = name + type;
 
-                    GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FIELD);
+                    GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.FIELD);
                     description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                     description.setHtmlHeader(signature);
                     getCurrentParent().getChildren().add(description);
@@ -306,9 +310,10 @@ public class GoDeclarationsScanner {
             }
 
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
-            String signature = typeNameStack.isEmpty() ? "?interface?" : typeNameStack.peek();
+            String name = typeNameStack.isEmpty() ? "?interface?" : typeNameStack.peek();
+            String signature = name;
 
-            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.INTERFACE);
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.INTERFACE);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(String.format("%s", signature));
             getCurrentParent().getChildren().add(description);
@@ -333,9 +338,10 @@ public class GoDeclarationsScanner {
             }
 
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
-            String signature = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
+            String name = typeNameStack.isEmpty() ? "?struct?" : typeNameStack.peek();
+            String signature = name;
 
-            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.STRUCT);
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.STRUCT);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(String.format("%s", signature));
             getCurrentParent().getChildren().add(description);
@@ -462,7 +468,7 @@ public class GoDeclarationsScanner {
                 String name = interfaceTypeNameContext.typeName() != null ? interfaceTypeNameContext.typeName().getText() : "?";
                 String signature = name;
 
-                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.INTERFACE);
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.INTERFACE);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(String.format("%s", Description.htmlEscape(signature)));
                 getCurrentParent().getChildren().add(description);
@@ -473,7 +479,7 @@ public class GoDeclarationsScanner {
                 String name = methodNameContext.IDENTIFIER() != null ? methodNameContext.IDENTIFIER().getText() : "?";
                 String signature = HtmlSignatureVisitor.COLORED.visit(ctx);
 
-                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
+                GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.METHOD);
                 description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
                 description.setHtmlHeader(signature);
                 getCurrentParent().getChildren().add(description);
@@ -505,7 +511,7 @@ public class GoDeclarationsScanner {
             String name = ctx.IDENTIFIER() != null ? ctx.IDENTIFIER().getText() : "?";
             String signature = HtmlSignatureVisitor.COLORED.visit(ctx);
 
-            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.FUNCTION);
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.FUNCTION);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
@@ -530,7 +536,7 @@ public class GoDeclarationsScanner {
             String name = ctx.methodName() != null && ctx.methodName().IDENTIFIER() != null ? ctx.methodName().IDENTIFIER().getSymbol().getText() : "?";
             String signature = HtmlSignatureVisitor.COLORED.visit(ctx);
 
-            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.METHOD);
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.METHOD);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
@@ -722,7 +728,7 @@ public class GoDeclarationsScanner {
             Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
             String name = typeNameStack.isEmpty() ? "?" : typeNameStack.peek();
             String signature = String.format("%s : <font color='808080'>%s</font>", Description.htmlEscape(name), HtmlSignatureVisitor.UNCOLORED.visit(ctx.getParent()));
-            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(signature, DeclarationKind.TYPEDEF);
+            GoNode.DeclarationDescription description = new GoNode.DeclarationDescription(name, DeclarationKind.TYPEDEF);
             description.setOffset(snapshot, getCurrentParent().getFileObject(), sourceInterval.a);
             description.setHtmlHeader(signature);
             getCurrentParent().getChildren().add(description);
