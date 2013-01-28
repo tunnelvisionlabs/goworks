@@ -2597,6 +2597,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     } else if ("iota".equals(identifier.getText())) {
                         return Collections.singletonList(IntrinsicTypeModels.INT);
                     }
+
+                    TypeModel intrinsic = IntrinsicTypeModels.getIntrinsicType(identifier.getText());
+                    if (intrinsic != null) {
+                        return Collections.singletonList(intrinsic);
+                    }
                 }
 
                 Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars = Collections.emptyList();

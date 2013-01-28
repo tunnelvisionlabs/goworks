@@ -20,7 +20,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.annotations.common.NonNull;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
+import org.tvl.goworks.editor.go.codemodel.IntrinsicTypeModels;
 import org.tvl.goworks.editor.go.codemodel.PackageModel;
+import org.tvl.goworks.editor.go.codemodel.TypeModel;
 
 /**
  *
@@ -38,6 +40,11 @@ public class UnqualifiedIdentifierElementReference extends CodeElementReference 
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         if (identifier != null) {
+            TypeModel intrinsicType = IntrinsicTypeModels.getIntrinsicType(identifier.getText());
+            if (intrinsicType != null) {
+                return Collections.singletonList(intrinsicType);
+            }
+
             Collection<? extends CodeElementModel> result = annotatedParseTree.getTreeDecorator().getProperty(identifier, GoAnnotations.MODELS);
             if (result != null) {
                 return result;
