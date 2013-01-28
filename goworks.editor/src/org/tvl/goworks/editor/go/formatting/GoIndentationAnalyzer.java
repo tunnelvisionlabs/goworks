@@ -8,6 +8,8 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
@@ -158,16 +160,32 @@ public class GoIndentationAnalyzer {
         private final GoCodeStyle codeStyle;
         @NonNull
         private final TerminalNode<? extends Token> initialNode;
+        @NonNull
+        private final List<ParseTree<? extends Token>> path = new ArrayList<ParseTree<? extends Token>>();
 
         public GoIndentationVisitor(@NonNull GoCodeStyle codeStyle, @NonNull TerminalNode<? extends Token> initialNode) {
             this.codeStyle = codeStyle;
             this.initialNode = initialNode;
         }
 
+        private IndentationData visitParent(ParseTree<? extends Token> tree) {
+            if (tree == null) {
+                return BaseIndentationData.NO_INDENT;
+            }
+
+            path.add(tree);
+            return super.visit(tree.getParent());
+        }
+
         @Override
         public IndentationData visit(ParseTree<? extends Token> tree) {
             if (tree == null) {
                 return BaseIndentationData.NO_INDENT;
+            }
+
+            // always pass left edge to parent
+            if (!path.isEmpty() && path.get(path.size() - 1) == tree.getChild(0)) {
+                return visitParent(tree);
             }
 
             return super.visit(tree);
@@ -199,7 +217,7 @@ public class GoIndentationAnalyzer {
                 throw new UnsupportedOperationException("Unexpected terminal.");
             }
 
-            return visit(node.getParent());
+            return visitParent(node);
         }
 
         @Override
@@ -276,7 +294,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_elementNameOrIndex, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitElementNameOrIndex(ElementNameOrIndexContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -404,7 +422,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_recvExpr, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitRecvExpr(RecvExprContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -412,7 +430,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_topLevelDecl, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitTopLevelDecl(TopLevelDeclContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -468,7 +486,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_arrayLength, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitArrayLength(ArrayLengthContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -508,7 +526,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_emptyStmt, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitEmptyStmt(EmptyStmtContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -524,7 +542,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_baseType, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitBaseType(BaseTypeContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -588,7 +606,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_typeLiteral, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitTypeLiteral(TypeLiteralContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -612,7 +630,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_typeName, version = 3, dependents = Dependents.PARENTS)
         })
         public IndentationData visitTypeName(TypeNameContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -668,7 +686,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_expression, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitBuiltinCallExpr(BuiltinCallExprContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -700,7 +718,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_body, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitBody(BodyContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -732,7 +750,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_simpleStmt, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitSimpleStmt(SimpleStmtContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -756,7 +774,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_interfaceTypeName, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitInterfaceTypeName(InterfaceTypeNameContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -772,7 +790,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_value, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitValue(ValueContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -820,7 +838,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_key, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitKey(KeyContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -828,7 +846,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_declaration, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitDeclaration(DeclarationContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -852,7 +870,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_condition, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitCondition(ConditionContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -860,7 +878,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_expression, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitConversionOrCallExpr(ConversionOrCallExprContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -876,7 +894,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_elementType, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitElementType(ElementTypeContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -892,7 +910,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_statement, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitStatement(StatementContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -916,7 +934,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_sourceFile, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitSourceFile(SourceFileContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return BaseIndentationData.NO_INDENT;
         }
 
         @Override
@@ -980,7 +998,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_result, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitResult(ResultContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1012,7 +1030,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_initStmt, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitInitStmt(InitStmtContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1060,7 +1078,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_keyType, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitKeyType(KeyTypeContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1092,7 +1110,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_expressionStmt, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitExpressionStmt(ExpressionStmtContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1108,7 +1126,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_switchStmt, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitSwitchStmt(SwitchStmtContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1116,7 +1134,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_postStmt, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitPostStmt(PostStmtContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1148,7 +1166,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_operand, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitOperand(OperandContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1188,7 +1206,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_channel, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitChannel(ChannelContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
 
         @Override
@@ -1196,7 +1214,7 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_literal, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitLiteral(LiteralContext ctx) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new IllegalStateException("Should have been passed to parent.");
         }
     }
 }
