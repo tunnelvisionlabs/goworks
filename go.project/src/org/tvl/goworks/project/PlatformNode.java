@@ -10,9 +10,11 @@ package org.tvl.goworks.project;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.event.ChangeEvent;
@@ -26,6 +28,7 @@ import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.Lookups;
 
 /**
@@ -44,7 +47,23 @@ class PlatformNode extends AbstractNode implements ChangeListener {
 
     @Override
     public String getDisplayName() {
-        return "Go 1.0.3";
+        Children children = getChildren();
+        if (children instanceof PlatformChildren) {
+            PlatformChildren platformChildren = (PlatformChildren)children;
+            FileObject versionFile = platformChildren.root.getFileObject("VERSION");
+            if (versionFile.isData()) {
+                try {
+                    String text = versionFile.asText();
+                    if (Pattern.matches("go(\\d+(\\.\\d+)*)", text)) {
+                        return "Go " + text.substring(2);
+                    }
+                } catch (IOException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
+        }
+
+        return "Go (unknown version)";
     }
 
     @Override
