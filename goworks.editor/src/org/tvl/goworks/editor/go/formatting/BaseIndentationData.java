@@ -10,6 +10,8 @@ package org.tvl.goworks.editor.go.formatting;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
 
 /**
@@ -32,7 +34,7 @@ public class BaseIndentationData implements IndentationData {
         }
     }
 
-    public BaseIndentationData(ParseTree<Token> target, IndentationBase base, int offset, int priority) {
+    public BaseIndentationData(@NullAllowed ParseTree<Token> target, @NonNull IndentationBase base, int offset, int priority) {
         Parameters.notNull("base", base);
         if (target == null && base != IndentationBase.LINE_START) {
             throw new IllegalArgumentException("target must be provided for base " + base);
@@ -41,6 +43,22 @@ public class BaseIndentationData implements IndentationData {
         this.target = target;
         this.base = base;
         this.offset = offset;
+        this.priority = priority;
+    }
+
+    public BaseIndentationData(@NonNull IndentationData reference, int relativeOffset) {
+        Parameters.notNull("reference", reference);
+        this.target = reference.getTarget();
+        this.base = reference.getBase();
+        this.offset = reference.getOffset() + relativeOffset;
+        this.priority = reference.getPriority();
+    }
+
+    public BaseIndentationData(@NonNull IndentationData reference, int relativeOffset, int priority) {
+        Parameters.notNull("reference", reference);
+        this.target = reference.getTarget();
+        this.base = reference.getBase();
+        this.offset = reference.getOffset() + relativeOffset;
         this.priority = priority;
     }
 

@@ -457,6 +457,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         Collection<? extends CodeElementModel> resolvedQualifier = treeDecorator.getProperty(qualifier, GoAnnotations.MODELS);
         if (resolvedQualifier == null) {
             CodeElementReference qualifierCodeClass = treeDecorator.getProperty(qualifier, GoAnnotations.CODE_CLASS);
+            assert qualifierCodeClass != null;
             if (qualifierCodeClass != CodeElementReference.MISSING) {
                 resolvedQualifier = qualifierCodeClass.resolve(annotatedParseTree, currentPackage, resolvedPackages);
             }
@@ -464,6 +465,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
         if (resolvedQualifier == null) {
             CodeElementReference qualifierExprType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPR_TYPE);
+            assert qualifierExprType != null;
             if (qualifierExprType != CodeElementReference.MISSING) {
                 resolvedQualifier = qualifierExprType.resolve(annotatedParseTree, currentPackage, resolvedPackages);
             }

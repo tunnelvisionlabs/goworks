@@ -37,6 +37,8 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -363,6 +365,19 @@ public class GoIndentTask implements IndentTask {
         return codeStyle;
     }
 
+    @RuleDependencies({
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_constDecl, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_typeDecl, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_varDecl, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_importDecl, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_block, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_literalValue, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_structType, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_interfaceType, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_exprSwitchStmt, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_typeSwitchStmt, version = 0),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_selectStmt, version = 0),
+    })
     private int getIndent(ParseTree<Token> node) throws BadLocationException {
 //        System.out.println(node.toStringTree(parser));
         int nodeLineStart = -1;
@@ -378,6 +393,33 @@ public class GoIndentTask implements IndentTask {
             }
 
             switch (ruleContext.getRuleIndex()) {
+            case GoParser.RULE_constDecl:
+            case GoParser.RULE_typeDecl:
+            case GoParser.RULE_varDecl:
+            case GoParser.RULE_importDecl:
+            {
+                TerminalNode<Token> leftParen = ruleContext.getToken(GoParser.LeftParen, 0);
+                if (leftParen == null) {
+                    continue;
+                }
+
+                // get the indent of the line where the block starts
+                int blockLineOffset = context.lineStartOffset(leftParen.getSymbol().getStartIndex());
+                int blockIndent = context.lineIndent(blockLineOffset);
+                if (nodeLineStart == blockLineOffset) {
+                    return blockIndent;
+                }
+
+                if (node instanceof TerminalNode) {
+                    // no extra indent if the first node on the line is the closing brace of the block
+                    if (node == ruleContext.getToken(GoParser.RightParen, 0)) {
+                        return blockIndent;
+                    }
+                }
+
+                return blockIndent + getCodeStyle().getIndentSize();
+            }
+
             case GoParser.RULE_block:
             case GoParser.RULE_literalValue:
             case GoParser.RULE_structType:
@@ -385,6 +427,7 @@ public class GoIndentTask implements IndentTask {
             case GoParser.RULE_exprSwitchStmt:
             case GoParser.RULE_typeSwitchStmt:
             case GoParser.RULE_selectStmt:
+            {
                 TerminalNode<Token> leftBrace = ruleContext.getToken(GoParser.LeftBrace, 0);
                 if (leftBrace == null) {
                     continue;
@@ -415,6 +458,7 @@ public class GoIndentTask implements IndentTask {
                 }
 
                 return blockIndent + getCodeStyle().getIndentSize();
+            }
 
             default:
                 if (current.getParent() == null) {

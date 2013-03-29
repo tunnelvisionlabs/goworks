@@ -77,6 +77,7 @@
                     <attr name="regex4" stringvalue="\s*default[:\s]"/>
                     <attr name="regex5" stringvalue="\s*else[\s\{]"/>
                     <attr name="regex6" stringvalue="\s*\w*\s*:"/>
+                    <attr name="regex7" stringvalue="\s*\)"/>
                 </file>
 <!--                <folder name="CompletionProviders">
                     <file name="org-antlr-works-editor-grammar-GrammarCompletionProvider.instance"/>
