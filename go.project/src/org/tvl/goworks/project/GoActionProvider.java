@@ -493,7 +493,7 @@ public final class GoActionProvider implements ActionProvider {
             .inputVisible(showInput) // true to allow input from user
             .inputOutput(io)
             .outLineBased(!unbuffer)
-            .showProgress(true)
+            .showProgress(false)
             .postMessageDisplayer(new PostMessageDisplayer.Default(commandName))
             .postExecution(processChangeListener)
             .errConvertorFactory(processChangeListener)
