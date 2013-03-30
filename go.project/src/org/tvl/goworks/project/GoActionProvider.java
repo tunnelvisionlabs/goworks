@@ -28,10 +28,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.antlr.netbeans.util.NotificationIcons;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.extexecution.ExecutionDescriptor;
 import org.netbeans.api.extexecution.print.ConvertedLine;
@@ -60,6 +62,7 @@ import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.text.Line;
 import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
+import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NotImplementedException;
 import org.openide.util.Parameters;
@@ -78,6 +81,9 @@ import org.tvl.goworks.project.testing.GoTestOutputWriter;
 public final class GoActionProvider implements ActionProvider {
     // -J-Dorg.tvl.goworks.project.GoActionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GoActionProvider.class.getName());
+
+    @StaticResource
+    private static final String STOP_IMAGE = "org/tvl/goworks/project/ui/resources/stop.png";
 
     private static final RequestProcessor RP = new RequestProcessor(GoActionProvider.class);
 
@@ -727,6 +733,12 @@ public final class GoActionProvider implements ActionProvider {
         tab.closeInputOutput();
 
         Action[] actions = new Action[] {
+            new AbstractAction("Stop", new ImageIcon(ImageUtilities.loadImage(STOP_IMAGE, false))) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    throw new UnsupportedOperationException("Not supported yet.");
+                }
+            }
         };
 
         tab = IOProvider.getDefault().getIO(projectName + " (run)", actions);
