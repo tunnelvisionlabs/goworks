@@ -509,9 +509,12 @@ public final class GoActionProvider implements ActionProvider {
         descriptor.noReset(true);
 
         NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, commandName);
-        return es.run();
+        _running = es.run();
+        
+        return _running;
     }
 
+    private Future<Integer> _running;
     private String[] getProjectBinaries() {
         Lookup lookup = MimeLookup.getLookup("text/x-go");
         ProjectBinaryResolver resolver = lookup.lookup(ProjectBinaryResolver.class);
@@ -736,7 +739,10 @@ public final class GoActionProvider implements ActionProvider {
             new AbstractAction("Stop", new ImageIcon(ImageUtilities.loadImage(STOP_IMAGE, false))) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet.");
+                    if ( _running != null && !_running.isCancelled() && !_running.isDone() )
+                    {
+                        _running.cancel(true);
+                    }
                 }
             }
         };
