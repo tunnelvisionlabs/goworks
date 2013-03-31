@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -103,6 +104,8 @@ public final class GoActionProvider implements ActionProvider {
     private final GoProject _project;
 
     private final List<ExecutionListener> listeners = new CopyOnWriteArrayList<ExecutionListener>();
+
+    private WeakReference<Future<Integer>> _running;
 
     public GoActionProvider(final GoProject project) {
         this._project = project;
@@ -509,12 +512,11 @@ public final class GoActionProvider implements ActionProvider {
         descriptor.noReset(true);
 
         NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, commandName);
-        _running = es.run();
-        
-        return _running;
+        Future<Integer> future = es.run();
+        _running = new WeakReference<Future<Integer>>(future);
+        return future;
     }
 
-    private Future<Integer> _running;
     private String[] getProjectBinaries() {
         Lookup lookup = MimeLookup.getLookup("text/x-go");
         ProjectBinaryResolver resolver = lookup.lookup(ProjectBinaryResolver.class);
@@ -739,9 +741,10 @@ public final class GoActionProvider implements ActionProvider {
             new AbstractAction("Stop", new ImageIcon(ImageUtilities.loadImage(STOP_IMAGE, false))) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if ( _running != null && !_running.isCancelled() && !_running.isDone() )
-                    {
-                        _running.cancel(true);
+                    WeakReference<Future<Integer>> weakFuture = _running;
+                    Future<Integer> future = weakFuture != null ? weakFuture.get() : null;
+                    if (future != null && !future.isCancelled() && !future.isDone()) {
+                        future.cancel(true);
                     }
                 }
             }
