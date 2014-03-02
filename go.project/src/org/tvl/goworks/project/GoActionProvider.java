@@ -98,6 +98,7 @@ public final class GoActionProvider implements ActionProvider {
         ActionProvider.COMMAND_DEBUG,
         ActionProvider.COMMAND_PROFILE,
         ActionProvider.COMMAND_TEST,
+        ActionProvider.COMMAND_TEST_SINGLE,
         ActionProvider.COMMAND_DELETE,
         ActionProvider.COMMAND_COPY
     };
@@ -142,6 +143,9 @@ public final class GoActionProvider implements ActionProvider {
         }
         else if (string.equals(COMMAND_TEST)) {
             handleTestAction(lookup);
+        }
+        else if (string.equals(COMMAND_TEST_SINGLE)) {
+            handleTestPackageAction(lookup);
         }
         else if (string.equalsIgnoreCase(ActionProvider.COMMAND_DELETE)) {
             DefaultProjectOperations.performDefaultDeleteOperation(_project);
@@ -485,6 +489,7 @@ public final class GoActionProvider implements ActionProvider {
                 break;
 
             case COMMAND_TEST:
+            case COMMAND_TEST_SINGLE:
                 args.add("test");
                 args.add("-v");
                 args.add(packageName);
@@ -841,6 +846,61 @@ public final class GoActionProvider implements ActionProvider {
         execute(COMMAND_TEST, ioTab, progressHandle);
     }
 
+    private void handleTestPackageAction(Lookup lookup) throws IllegalArgumentException {
+        String projectName = ProjectUtils.getInformation(_project).getDisplayName();
+        InputOutput tab;
+        tab = IOProvider.getDefault().getIO(projectName + " (test-single)", false);
+        tab.closeInputOutput();
+
+        Action[] actions = new Action[] {
+        };
+
+        tab = IOProvider.getDefault().getIO(projectName + " (test-single)", actions);
+        try {
+            tab.getOut().reset();
+        } catch (IOException ex) {
+        }
+
+        final InputOutput ioTab = tab;
+
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (test-single)", new Cancellable() {
+
+            @Override
+            public boolean cancel() {
+                return false;
+            }
+
+        }, new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ioTab.select();
+            }
+
+        });
+
+        progressHandle.setInitialDelay(0);
+        progressHandle.start();
+
+        DataObject dataFolder = lookup.lookup(DataObject.class);
+        if (dataFolder == null) {
+            return;
+        }
+
+        FileObject fileObject = dataFolder.getPrimaryFile();
+        if (fileObject == null || !fileObject.isFolder()) {
+            return;
+        }
+
+        FileObject sourceRoot = _project.getSourceRoot();
+        String relativePath = FileUtil.getRelativePath(sourceRoot, fileObject);
+        if (relativePath == null) {
+            return;
+        }
+
+        execute(COMMAND_TEST, ioTab, relativePath.replace(File.separatorChar, '/'), progressHandle);
+    }
+
     @Override
     public boolean isActionEnabled(String command, Lookup lookup) throws IllegalArgumentException {
         if (_project == null) {
@@ -849,9 +909,11 @@ public final class GoActionProvider implements ActionProvider {
 
         switch (command) {
         case ActionProvider.COMMAND_BUILD:
+        case ActionProvider.COMMAND_TEST:
             return !_project.isStandardLibrary();
 
         case ActionProvider.COMMAND_COMPILE_SINGLE:
+        case ActionProvider.COMMAND_TEST_SINGLE:
             if (_project.isStandardLibrary()) {
                 return false;
             }
@@ -888,9 +950,6 @@ public final class GoActionProvider implements ActionProvider {
 
         case ActionProvider.COMMAND_PROFILE:
             return false;
-
-        case ActionProvider.COMMAND_TEST:
-            return !_project.isStandardLibrary();
 
         case ActionProvider.COMMAND_DELETE:
             return !_project.isStandardLibrary();
