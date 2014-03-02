@@ -202,7 +202,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected ParseTree<Token> getParseTree(ParserData<? extends GoAnnotatedParseTree> parserData) {
+    protected ParseTree getParseTree(ParserData<? extends GoAnnotatedParseTree> parserData) {
         GoAnnotatedParseTree annotatedParseTree = parserData != null ? parserData.getData() : null;
         return annotatedParseTree != null ? annotatedParseTree.getParseTree() : null;
     }
@@ -461,7 +461,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void visitTerminal(TerminalNode<? extends Token> node) {
+        public void visitTerminal(TerminalNode node) {
             Token symbol = node.getSymbol();
             if (symbol.getType() != GoParser.IDENTIFIER) {
                 return;

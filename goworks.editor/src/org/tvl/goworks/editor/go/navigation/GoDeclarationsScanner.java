@@ -183,9 +183,9 @@ public class GoDeclarationsScanner {
             }
 
             IdentifierListContext idListContext = ctx.identifierList();
-            List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
+            List<? extends TerminalNode> identifiers = idListContext.IDENTIFIER();
             String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
-            for (TerminalNode<Token> identifier : identifiers) {
+            for (TerminalNode identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String name = identifier.getSymbol().getText();
                 String signature = name + type;
@@ -210,11 +210,11 @@ public class GoDeclarationsScanner {
 
             IdentifierListContext idListContext = ctx.identifierList();
             ExpressionListContext expressionListContext = ctx.expressionList();
-            List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
+            List<? extends TerminalNode> identifiers = idListContext.IDENTIFIER();
             List<? extends ExpressionContext> expressions = expressionListContext != null ? expressionListContext.expression() : Collections.<ExpressionContext>emptyList();
             String type = ctx.type() != null ? HtmlSignatureVisitor.UNCOLORED.visit(ctx.type()) : "";
             for (int i = 0; i < identifiers.size(); i++) {
-                TerminalNode<Token> identifier = identifiers.get(i);
+                TerminalNode identifier = identifiers.get(i);
                 String varType = type;
                 if (varType.isEmpty() && expressions.size() == identifiers.size()) {
                     varType = HtmlSignatureVisitor.UNCOLORED.visit(expressions.get(i));
@@ -247,8 +247,8 @@ public class GoDeclarationsScanner {
             }
 
             IdentifierListContext idListContext = ctx.identifierList();
-            List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
-            for (TerminalNode<Token> identifier : identifiers) {
+            List<? extends TerminalNode> identifiers = idListContext.IDENTIFIER();
+            for (TerminalNode identifier : identifiers) {
                 Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                 String name = identifier.getSymbol().getText();
                 String signature = name;
@@ -274,9 +274,9 @@ public class GoDeclarationsScanner {
 
             IdentifierListContext idListContext = ctx.identifierList();
             if (idListContext != null) {
-                List<? extends TerminalNode<Token>> identifiers = idListContext.IDENTIFIER();
+                List<? extends TerminalNode> identifiers = idListContext.IDENTIFIER();
                 String type = ctx.type() != null ? String.format(" : <font color='808080'>%s</font>", HtmlSignatureVisitor.UNCOLORED.visit(ctx.type())) : "";
-                for (TerminalNode<Token> identifier : identifiers) {
+                for (TerminalNode identifier : identifiers) {
                     Interval sourceInterval = new Interval(identifier.getSymbol().getStartIndex(), ParseTrees.getStopSymbol(ctx).getStopIndex());
                     String name = identifier.getSymbol().getText();
                     String signature = name + type;
@@ -604,7 +604,7 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
         })
-        private boolean isAnonymousType(ParserRuleContext<Token> context) {
+        private boolean isAnonymousType(ParserRuleContext context) {
             if (!(context instanceof InterfaceTypeContext) && !(context instanceof StructTypeContext)) {
                 throw new IllegalArgumentException();
             }
@@ -668,7 +668,7 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0),
         })
-        private boolean isTypeAlias(ParserRuleContext<Token> context, boolean topLevelOnly) {
+        private boolean isTypeAlias(ParserRuleContext context, boolean topLevelOnly) {
             switch (context.getRuleIndex()) {
             case GoParser.RULE_qualifiedIdentifier:
             case GoParser.RULE_arrayType:
@@ -720,7 +720,7 @@ public class GoDeclarationsScanner {
             return ParseTrees.findAncestor(typeSpecContext, BodyContext.class) == null;
         }
 
-        private boolean handleEnterTypeAlias(ParserRuleContext<Token> ctx) {
+        private boolean handleEnterTypeAlias(ParserRuleContext ctx) {
             if (!isTypeAlias(ctx, false)) {
                 return false;
             }
@@ -736,7 +736,7 @@ public class GoDeclarationsScanner {
             return true;
         }
 
-        private boolean handleExitTypeAlias(ParserRuleContext<Token> context) {
+        private boolean handleExitTypeAlias(ParserRuleContext context) {
             if (!isTypeAlias(context, false)) {
                 return false;
             }
@@ -962,7 +962,7 @@ public class GoDeclarationsScanner {
         })
         public String visitIdentifierList(IdentifierListContext ctx) {
             StringBuilder result = new StringBuilder();
-            for (TerminalNode<Token> node : ctx.IDENTIFIER()) {
+            for (TerminalNode node : ctx.IDENTIFIER()) {
                 if (result.length() > 0) {
                     result.append(", ");
                 }

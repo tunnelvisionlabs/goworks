@@ -10,7 +10,6 @@ package org.tvl.goworks.editor.go.completion;
 
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.PredictionMode;
@@ -31,7 +30,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
 
     private final int QID_DECISION;
 
-    public CompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
+    public CompletionParserATNSimulator(@NonNull Parser parser, ATN atn) {
         super(parser, atn);
         setPredictionMode(PredictionMode.SLL);
         QID_DECISION = GoParserFactory.getQidDecision(atn);
@@ -52,7 +51,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
     }
 
     @Override
-    public int adaptivePredict(TokenStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
+    public int adaptivePredict(TokenStream input, int decision, ParserRuleContext outerContext) {
         if (decision == QID_DECISION && QID_DECISION >= 0) {
             if (input.LA(1) == GoParser.IDENTIFIER) {
                 if (input.LA(2) == GoParser.Dot) {

@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotToken;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
@@ -28,17 +27,17 @@ import org.tvl.goworks.editor.go.codemodel.impl.TypePointerModelImpl;
  */
 public class ReceiverTypeReference extends CodeElementReference {
 
-    private final TerminalNode<? extends Token> name;
+    private final TerminalNode name;
     private final boolean pointer;
 
-    public ReceiverTypeReference(TerminalNode<? extends Token> name, boolean pointer) {
+    public ReceiverTypeReference(TerminalNode name, boolean pointer) {
         this.name = name;
         this.pointer = pointer;
     }
 
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
-        TerminalNode<? extends Token> localTarget = annotatedParseTree.getTreeDecorator().getProperty(name, GoAnnotations.LOCAL_TARGET);
+        TerminalNode localTarget = annotatedParseTree.getTreeDecorator().getProperty(name, GoAnnotations.LOCAL_TARGET);
 
         Collection<? extends CodeElementModel> types = currentPackage.getTypes(name.getText());
         if (localTarget == null) {

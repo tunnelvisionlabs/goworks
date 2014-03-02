@@ -297,10 +297,10 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         private final List<Token> markedOccurrences = new ArrayList<>();
 
         private final Token currentToken;
-        private final TerminalNode<? extends Token> currentNode;
+        private final TerminalNode currentNode;
 
         @NullAllowed
-        private final TerminalNode<? extends Token> referencedToken;
+        private final TerminalNode referencedToken;
         @NonNull
         private final Collection<? extends CodeElementModel> referencedElements;
 
@@ -321,9 +321,9 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @Override
-        public void visitTerminal(TerminalNode<? extends Token> node) {
+        public void visitTerminal(TerminalNode node) {
             Token symbol = node.getSymbol();
-            TerminalNode<? extends Token> otherReferenced = findReferencedToken(node);
+            TerminalNode otherReferenced = findReferencedToken(node);
             if (referencedToken != null && otherReferenced != null) {
                 if (referencedToken.equals(otherReferenced)) {
                     markedOccurrences.add(symbol);
@@ -355,8 +355,8 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @CheckForNull
-        private TerminalNode<? extends Token> findReferencedToken(TerminalNode<? extends Token> node) {
-            TerminalNode<? extends Token> target = annotatedParseTree.getTreeDecorator().getProperty(node, GoAnnotations.LOCAL_TARGET);
+        private TerminalNode findReferencedToken(TerminalNode node) {
+            TerminalNode target = annotatedParseTree.getTreeDecorator().getProperty(node, GoAnnotations.LOCAL_TARGET);
             if (target != null) {
                 return target;
             }
@@ -369,7 +369,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @NonNull
-        private Collection<? extends CodeElementModel> findReferencedElements(TerminalNode<? extends Token> symbol) {
+        private Collection<? extends CodeElementModel> findReferencedElements(TerminalNode symbol) {
             Collection<? extends CodeElementModel> models = annotatedParseTree.getTreeDecorator().getProperty(symbol, GoAnnotations.MODELS);
             if (models == null) {
                 return Collections.emptyList();

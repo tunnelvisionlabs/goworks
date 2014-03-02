@@ -24,7 +24,7 @@ public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceMo
     private final FreezableArrayList<FunctionModelImpl> interfaceMethods = new FreezableArrayList<>();
     private final FreezableArrayList<TypeModelImpl> implementedInterfaces = new FreezableArrayList<>();
 
-    public TypeInterfaceModelImpl(@NonNull String name, @NonNull FileModelImpl fileModel, @NullAllowed ParserRuleContext<?> span) {
+    public TypeInterfaceModelImpl(@NonNull String name, @NonNull FileModelImpl fileModel, @NullAllowed ParserRuleContext span) {
         super(name, fileModel, null, span);
     }
 

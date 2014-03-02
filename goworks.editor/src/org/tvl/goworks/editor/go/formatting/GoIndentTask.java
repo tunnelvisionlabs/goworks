@@ -165,14 +165,14 @@ public class GoIndentTask implements IndentTask {
             LOGGER.log(Level.FINE, "Reindent from anchor region: {0}.", region);
         }
 
-        TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<>(tagger, new SnapshotPositionRegion(snapshot, region));
-        TokenSource<Token> tokenSource = new CodeCompletionTokenSource(endPosition.getOffset(), taggerTokenSource);
+        TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
+        TokenSource tokenSource = new CodeCompletionTokenSource(endPosition.getOffset(), taggerTokenSource);
         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-        Map<RuleContext<Token>, CaretReachedException> parseTrees;
+        Map<RuleContext, CaretReachedException> parseTrees;
         CodeCompletionGoParser parser = ParserFactory.DEFAULT.getParser(tokens);
         parser.setBuildParseTree(true);
-        parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
+        parser.setErrorHandler(new CodeCompletionErrorStrategy());
         @SuppressWarnings("LocalVariableHidesMemberVariable")
         FileModel fileModel = getFileModel();
         if (fileModel != null) {
@@ -202,14 +202,14 @@ public class GoIndentTask implements IndentTask {
             return false;
         }
 
-        NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels =
+        NavigableMap<Integer, List<Map.Entry<RuleContext, CaretReachedException>>> indentLevels =
             new TreeMap<>();
-        for (Map.Entry<RuleContext<Token>, CaretReachedException> parseTree : parseTrees.entrySet()) {
+        for (Map.Entry<RuleContext, CaretReachedException> parseTree : parseTrees.entrySet()) {
             if (parseTree.getValue() == null) {
                 continue;
             }
 
-            ParseTree<Token> firstNodeOnLine = findFirstNodeAfterOffset(parseTree.getKey(), endPositionOnLine.getContainingLine().getStart().getOffset());
+            ParseTree firstNodeOnLine = findFirstNodeAfterOffset(parseTree.getKey(), endPositionOnLine.getContainingLine().getStart().getOffset());
             if (firstNodeOnLine == null) {
                 firstNodeOnLine = parseTree.getValue().getFinalContext();
             }
@@ -220,12 +220,12 @@ public class GoIndentTask implements IndentTask {
 
             int indentationLevel = getIndent(firstNodeOnLine);
 
-//                TerminalNode<Token> startNode = ParseTrees.getStartNode(parseTree.getKey());
+//                TerminalNode startNode = ParseTrees.getStartNode(parseTree.getKey());
 //                //int startLine = new SnapshotPosition(snapshot, startNode.getSymbol().getStartIndex()).getContainingLine();
 //                int lineStartOffset = context.lineStartOffset(startNode.getSymbol().getStartIndex());
 //                int outerIndent = context.lineIndent(lineStartOffset);
 
-            List<Map.Entry<RuleContext<Token>, CaretReachedException>> indentList =
+            List<Map.Entry<RuleContext, CaretReachedException>> indentList =
                 indentLevels.get(indentationLevel);
             if (indentList == null) {
                 indentList = new ArrayList<>();
@@ -326,8 +326,8 @@ public class GoIndentTask implements IndentTask {
         return null;
     }
 
-    private TerminalNode<Token> findFirstNodeAfterOffset(ParseTree<Token> tree, int offset) {
-        TerminalNode<Token> lastNode = ParseTrees.getStopNode(tree);
+    private TerminalNode findFirstNodeAfterOffset(ParseTree tree, int offset) {
+        TerminalNode lastNode = ParseTrees.getStopNode(tree);
         if (lastNode == null) {
             return null;
         }
@@ -339,11 +339,11 @@ public class GoIndentTask implements IndentTask {
         }
 
         if (tree instanceof TerminalNode) {
-            return (TerminalNode<Token>)tree;
+            return (TerminalNode)tree;
         }
 
         for (int i = 0; i < tree.getChildCount(); i++) {
-            TerminalNode<Token> node = findFirstNodeAfterOffset(tree.getChild(i), offset);
+            TerminalNode node = findFirstNodeAfterOffset(tree.getChild(i), offset);
             if (node != null) {
                 return node;
             }
@@ -373,16 +373,16 @@ public class GoIndentTask implements IndentTask {
         @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_typeSwitchStmt, version = 0),
         @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_selectStmt, version = 0),
     })
-    private int getIndent(ParseTree<Token> node) throws BadLocationException {
+    private int getIndent(ParseTree node) throws BadLocationException {
 //        System.out.println(node.toStringTree(parser));
         int nodeLineStart = -1;
 
-        for (ParseTree<Token> current = node; current != null; current = current.getParent()) {
+        for (ParseTree current = node; current != null; current = current.getParent()) {
             if (!(current instanceof RuleNode)) {
                 continue;
             }
 
-            ParserRuleContext<Token> ruleContext = (ParserRuleContext<Token>)((RuleNode<Token>)current).getRuleContext();
+            ParserRuleContext ruleContext = (ParserRuleContext)((RuleNode)current).getRuleContext();
             if (nodeLineStart == -1) {
                 nodeLineStart = context.lineStartOffset(ruleContext.start.getStartIndex());
             }
@@ -393,7 +393,7 @@ public class GoIndentTask implements IndentTask {
             case GoParser.RULE_varDecl:
             case GoParser.RULE_importDecl:
             {
-                TerminalNode<Token> leftParen = ruleContext.getToken(GoParser.LeftParen, 0);
+                TerminalNode leftParen = ruleContext.getToken(GoParser.LeftParen, 0);
                 if (leftParen == null) {
                     continue;
                 }
@@ -423,7 +423,7 @@ public class GoIndentTask implements IndentTask {
             case GoParser.RULE_typeSwitchStmt:
             case GoParser.RULE_selectStmt:
             {
-                TerminalNode<Token> leftBrace = ruleContext.getToken(GoParser.LeftBrace, 0);
+                TerminalNode leftBrace = ruleContext.getToken(GoParser.LeftBrace, 0);
                 if (leftBrace == null) {
                     continue;
                 }
@@ -440,7 +440,7 @@ public class GoIndentTask implements IndentTask {
                     if (node == ruleContext.getToken(GoParser.RightBrace, 0)) {
                         return blockIndent;
                     } else {
-                        Token symbol = ((TerminalNode<Token>)node).getSymbol();
+                        Token symbol = ((TerminalNode)node).getSymbol();
                         switch (symbol.getType()) {
                         case GoParser.Case:
                         case GoParser.Default:

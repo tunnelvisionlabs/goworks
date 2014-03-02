@@ -9,7 +9,6 @@
 package org.tvl.goworks.editor.go.semantics;
 
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -30,7 +29,7 @@ public class SemanticAnalyzerParseTreeWalker extends ParseTreeWalker {
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0)
-    public <Symbol extends Token> void walk(ParseTreeListener<? super Symbol> listener, ParseTree<Symbol> t) {
+    public void walk(ParseTreeListener listener, ParseTree t) {
         if (backgroundAnalysis && t instanceof BodyContext) {
             return;
         }

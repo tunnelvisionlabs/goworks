@@ -21,7 +21,7 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
 public class TypeStructModelImpl extends TypeModelImpl implements StructModel {
     private final FreezableArrayList<FieldModelImpl> fields = new FreezableArrayList<>();
 
-    public TypeStructModelImpl(String name, FileModelImpl fileModel, ParserRuleContext<?> span) {
+    public TypeStructModelImpl(String name, FileModelImpl fileModel, ParserRuleContext span) {
         super(name, fileModel, null, span);
     }
 

@@ -34,25 +34,25 @@ public class GoParserFactory {
     public static final GoParserFactory DEFAULT = new GoParserFactory();
 
     @NonNull
-    protected GoParser createParser(@NonNull TokenStream<? extends Token> input) {
+    protected GoParser createParser(@NonNull TokenStream input) {
         GoParser parser = new GoParserWrapper(input);
         return parser;
     }
 
     @NonNull
-    public final GoParser getParser(@NonNull TokenStream<? extends Token> input) {
+    public final GoParser getParser(@NonNull TokenStream input) {
         return getParser(input, ParserConfiguration.PRECISE);
     }
 
     @NonNull
-    public GoParser getParser(@NonNull TokenStream<? extends Token> input, @NonNull ParserConfiguration configuration) {
+    public GoParser getParser(@NonNull TokenStream input, @NonNull ParserConfiguration configuration) {
         GoParser result = createParser(input);
         configureParser(result, configuration);
         return result;
     }
 
-    protected void configureParser(@NonNull Parser<? extends Token> parser, @NonNull ParserConfiguration configuration) {
-        ParserATNSimulator<?> interpreter = parser.getInterpreter();
+    protected void configureParser(@NonNull Parser parser, @NonNull ParserConfiguration configuration) {
+        ParserATNSimulator interpreter = parser.getInterpreter();
 
         // common configuration
         interpreter.force_global_context = false;
@@ -67,7 +67,7 @@ public class GoParserFactory {
             interpreter.setPredictionMode(PredictionMode.SLL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = true;
-            parser.setErrorHandler(new BailErrorStrategy<>());
+            parser.setErrorHandler(new BailErrorStrategy());
             break;
 
         case SLL:
@@ -82,7 +82,7 @@ public class GoParserFactory {
             interpreter.setPredictionMode(PredictionMode.LL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = true;
-            parser.setErrorHandler(new BailErrorStrategy<>());
+            parser.setErrorHandler(new BailErrorStrategy());
             break;
 
         case HYBRID_SLL:
@@ -97,7 +97,7 @@ public class GoParserFactory {
             interpreter.setPredictionMode(PredictionMode.LL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = false;
-            parser.setErrorHandler(new DefaultErrorStrategy<>());
+            parser.setErrorHandler(new DefaultErrorStrategy());
             parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
             break;
 
@@ -136,27 +136,27 @@ public class GoParserFactory {
 
     private static final class GoParserWrapper extends GoParser {
 
-        public GoParserWrapper(TokenStream<? extends Token> input) {
+        public GoParserWrapper(TokenStream input) {
             super(input);
             _interp = new GoParserATNSimulator(this, _ATN);
         }
 
     }
 
-    protected static class GoParserATNSimulator extends ParserATNSimulator<Token> {
+    protected static class GoParserATNSimulator extends ParserATNSimulator {
 
         private final SemanticContext.Predicate qidPredicate;
 
         private final int QID_DECISION;
 
-        public GoParserATNSimulator(Parser<Token> parser, ATN atn) {
+        public GoParserATNSimulator(Parser parser, ATN atn) {
             super(parser, atn);
             QID_DECISION = getQidDecision(atn);
             qidPredicate = getQidPredicate(atn);
         }
 
         @Override
-        public int adaptivePredict(TokenStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
+        public int adaptivePredict(TokenStream input, int decision, ParserRuleContext outerContext) {
             if (decision == QID_DECISION && QID_DECISION >= 0) {
                 if (input.LA(1) == GoParser.IDENTIFIER) {
                     if (input.LA(2) == GoParser.Dot) {

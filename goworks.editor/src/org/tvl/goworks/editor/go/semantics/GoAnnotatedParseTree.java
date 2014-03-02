@@ -8,7 +8,6 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.annotations.common.NonNull;
@@ -21,42 +20,42 @@ import org.tvl.goworks.editor.go.codemodel.VarKind;
  */
 public class GoAnnotatedParseTree extends AnnotatedParseTree {
 
-    public GoAnnotatedParseTree(@NonNull ParseTree<Token> parseTree) {
+    public GoAnnotatedParseTree(@NonNull ParseTree parseTree) {
         super(parseTree);
     }
 
     @NonNull
-    public CodeElementReference getTarget(ParseTree<? extends Token> parseTree) {
+    public CodeElementReference getTarget(ParseTree parseTree) {
         return getTreeDecorator().getProperty(parseTree, GoAnnotations.PROP_ELEMENT_REFERENCE);
     }
 
-    public NodeType getNodeType(TerminalNode<? extends Token> node) {
+    public NodeType getNodeType(TerminalNode node) {
         return getTreeDecorator().getProperty(node, GoAnnotations.NODE_TYPE);
     }
 
-    public VarKind getVarType(TerminalNode<? extends Token> node) {
+    public VarKind getVarType(TerminalNode node) {
         return getTreeDecorator().getProperty(node, GoAnnotations.VAR_TYPE);
     }
 
-    public TypeKind getTypeKind(TerminalNode<? extends Token> node) {
+    public TypeKind getTypeKind(TerminalNode node) {
         return getTreeDecorator().getProperty(node, GoAnnotations.TYPE_KIND);
     }
 
-    public boolean isGlobal(TerminalNode<? extends Token> node) {
+    public boolean isGlobal(TerminalNode node) {
         return getTreeDecorator().getProperty(node, GoAnnotations.GLOBAL);
     }
 
-    public boolean isDeclaration(TerminalNode<? extends Token> node) {
+    public boolean isDeclaration(TerminalNode node) {
         return getNodeType(node).isDeclaration();
     }
 
-    public boolean isResolved(TerminalNode<? extends Token> node) {
+    public boolean isResolved(TerminalNode node) {
         return getTreeDecorator().getProperty(node, GoAnnotations.RESOLVED)
             || isDeclaration(node)
             || isBuiltin(node);
     }
 
-    public boolean isBuiltin(TerminalNode<? extends Token> node) {
+    public boolean isBuiltin(TerminalNode node) {
         return getTreeDecorator().getProperty(node, GoAnnotations.BUILTIN);
     }
 

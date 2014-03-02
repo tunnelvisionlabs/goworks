@@ -13,7 +13,6 @@ import java.util.List;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -154,21 +153,21 @@ import org.tvl.goworks.editor.go.parser.generated.GoParserVisitor;
  */
 public class GoIndentationAnalyzer {
 
-    private static class GoIndentationVisitor extends AbstractParseTreeVisitor<Token, IndentationData> implements GoParserVisitor<Token, IndentationData> {
+    private static class GoIndentationVisitor extends AbstractParseTreeVisitor<IndentationData> implements GoParserVisitor<IndentationData> {
 
         @NonNull
         private final GoCodeStyle codeStyle;
         @NonNull
-        private final TerminalNode<? extends Token> initialNode;
+        private final TerminalNode initialNode;
         @NonNull
-        private final List<ParseTree<? extends Token>> path = new ArrayList<>();
+        private final List<ParseTree> path = new ArrayList<>();
 
-        public GoIndentationVisitor(@NonNull GoCodeStyle codeStyle, @NonNull TerminalNode<? extends Token> initialNode) {
+        public GoIndentationVisitor(@NonNull GoCodeStyle codeStyle, @NonNull TerminalNode initialNode) {
             this.codeStyle = codeStyle;
             this.initialNode = initialNode;
         }
 
-        private static int getDepth(ParseTree<?> tree) {
+        private static int getDepth(ParseTree tree) {
             int i = 0;
             while (tree != null) {
                 i++;
@@ -178,7 +177,7 @@ public class GoIndentationAnalyzer {
             return i;
         }
 
-        private static int getPriority(ParseTree<?> tree) {
+        private static int getPriority(ParseTree tree) {
             return 0;
         }
 
@@ -194,7 +193,7 @@ public class GoIndentationAnalyzer {
             return new BaseIndentationData(reference, -codeStyle.getIndentSize());
         }
 
-        private IndentationData visitParent(ParseTree<? extends Token> tree) {
+        private IndentationData visitParent(ParseTree tree) {
             if (tree == null) {
                 return BaseIndentationData.NO_INDENT;
             }
@@ -207,7 +206,7 @@ public class GoIndentationAnalyzer {
         @RuleDependencies({
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_labeledStmt, version = 0)
         })
-        public IndentationData visit(ParseTree<? extends Token> tree) {
+        public IndentationData visit(ParseTree tree) {
             if (tree == null) {
                 return BaseIndentationData.NO_INDENT;
             }
@@ -236,17 +235,17 @@ public class GoIndentationAnalyzer {
         }
 
         @Override
-        protected boolean shouldVisitNextChild(RuleNode<? extends Token> node, IndentationData currentResult) {
+        protected boolean shouldVisitNextChild(RuleNode node, IndentationData currentResult) {
             throw new UnsupportedOperationException("Expected explicit traversal and value computation.");
         }
 
         @Override
-        public IndentationData visitChildren(RuleNode<? extends Token> node) {
+        public IndentationData visitChildren(RuleNode node) {
             throw new UnsupportedOperationException("Expected explicit traversal and value computation.");
         }
 
         @Override
-        public IndentationData visitTerminal(TerminalNode<? extends Token> node) {
+        public IndentationData visitTerminal(TerminalNode node) {
             if (node != initialNode) {
                 throw new UnsupportedOperationException("Unexpected terminal.");
             }
@@ -255,7 +254,7 @@ public class GoIndentationAnalyzer {
         }
 
         @Override
-        public IndentationData visitErrorNode(ErrorNode<? extends Token> node) {
+        public IndentationData visitErrorNode(ErrorNode node) {
             return BaseIndentationData.UNKNOWN;
         }
 
@@ -884,14 +883,14 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_sourceFileBody, version = 1, dependents = Dependents.PARENTS)
         })
         public IndentationData visitSourceFileBody(SourceFileBodyContext ctx) {
-            ParseTree<? extends Token> reference = path.isEmpty() ? null : path.get(path.size() - 1);
+            ParseTree reference = path.isEmpty() ? null : path.get(path.size() - 1);
             if (reference == null) {
                 return BaseIndentationData.NO_INDENT;
             }
 
-            ParseTree<Token> tree = null;
+            ParseTree tree = null;
             for (int i = 0; i < ctx.getChildCount(); i++) {
-                ParseTree<Token> child = ctx.getChild(i);
+                ParseTree child = ctx.getChild(i);
                 if (child instanceof TerminalNode) {
                     continue;
                 }
@@ -1099,7 +1098,7 @@ public class GoIndentationAnalyzer {
              * indent `}` to match `{`.
              */
 
-            ParseTree<? extends Token> last = path.isEmpty() ? null : path.get(path.size() - 1);
+            ParseTree last = path.isEmpty() ? null : path.get(path.size() - 1);
             if (last instanceof FieldDeclContext) {
                 FieldDeclContext previous = null;
                 for (FieldDeclContext fieldDeclContext : ctx.fieldDecl()) {
@@ -1164,9 +1163,9 @@ public class GoIndentationAnalyzer {
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_importDecl, version = 0, dependents = Dependents.PARENTS)
         })
         public IndentationData visitImportDecl(ImportDeclContext ctx) {
-            ParseTree<? extends Token> lastNode = path.isEmpty() ? null : path.get(path.size() - 1);
+            ParseTree lastNode = path.isEmpty() ? null : path.get(path.size() - 1);
             if (ctx.getChildCount() > 0 && lastNode instanceof TerminalNode) {
-                switch (((TerminalNode<? extends Token>)lastNode).getSymbol().getType()) {
+                switch (((TerminalNode)lastNode).getSymbol().getType()) {
                 case GoParser.LeftParen:
                 case GoParser.RightParen:
                     return visitParent(ctx);

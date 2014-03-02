@@ -9,7 +9,6 @@
 package org.tvl.goworks.editor.go.completion;
 
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.completion.AbstractForestParser;
 
 /**
@@ -23,7 +22,7 @@ public class GoForestParser extends AbstractForestParser<CodeCompletionGoParser>
     }
 
     @Override
-    protected RuleContext<Token> parseImpl(CodeCompletionGoParser parser) {
+    protected RuleContext parseImpl(CodeCompletionGoParser parser) {
         return parser.sourceFileBody();
     }
 

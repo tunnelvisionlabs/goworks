@@ -26,7 +26,7 @@ public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunction
 
     private String simpleName;
 
-    public TypeFunctionModelImpl(String name, FileModelImpl fileModel, ParserRuleContext<?> span) {
+    public TypeFunctionModelImpl(String name, FileModelImpl fileModel, ParserRuleContext span) {
         super(name, fileModel, null, span);
     }
 

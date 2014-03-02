@@ -108,7 +108,7 @@ public final class CurrentMemberContextParserTask implements ParserTask {
 
     private class TaskTokenStream extends CommonTokenStream {
 
-        public TaskTokenStream(TokenSource<? extends Token> tokenSource) {
+        public TaskTokenStream(TokenSource tokenSource) {
             super(tokenSource);
         }
 

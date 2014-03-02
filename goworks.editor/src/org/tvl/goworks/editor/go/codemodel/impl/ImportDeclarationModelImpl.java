@@ -28,7 +28,7 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
     private final boolean mergeWithLocal;
     private final OffsetRegion span;
 
-    public ImportDeclarationModelImpl(@NonNull String path, @NullAllowed String alias, boolean mergeWithLocal, @NonNull FileModelImpl file, ParserRuleContext<?> span) {
+    public ImportDeclarationModelImpl(@NonNull String path, @NullAllowed String alias, boolean mergeWithLocal, @NonNull FileModelImpl file, ParserRuleContext span) {
         super(getAlias(path, alias), file);
         this.path = path;
         this.alias = alias;

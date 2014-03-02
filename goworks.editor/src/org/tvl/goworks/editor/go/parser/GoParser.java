@@ -33,7 +33,7 @@ public class GoParser extends AbstractGoParser {
 	private final Set<String> packageNames = new HashSet<>();
     private DocumentSnapshot snapshot;
 
-    public GoParser(TokenStream<? extends Token> input) {
+    public GoParser(TokenStream input) {
         super(input);
         CharStream charStream = input != null ? input.getTokenSource().getInputStream() : null;
         if (charStream instanceof DocumentSnapshotCharStream) {
@@ -53,7 +53,7 @@ public class GoParser extends AbstractGoParser {
     }
 
     @Override
-    public void setInputStream(TokenStream<? extends Token> input) {
+    public void setInputStream(TokenStream input) {
         super.setInputStream(input);
 
         CharStream charStream = input != null ? input.getTokenSource().getInputStream() : null;
@@ -96,7 +96,7 @@ public class GoParser extends AbstractGoParser {
             return true;
         }
 
-        for (ParserRuleContext<Token> current = context; current != null; current = current.getParent()) {
+        for (ParserRuleContext current = context; current != null; current = current.getParent()) {
             Boolean allowed = CompositeLiteralAllowedVisitor.INSTANCE.visit(current);
             if (allowed == null) {
                 continue;
@@ -118,8 +118,8 @@ public class GoParser extends AbstractGoParser {
 
         @RuleDependency(recognizer=GoParser.class, rule=RULE_expression, version=1)
         @Override
-        public Boolean visitChildren(RuleNode<? extends Token> node) {
-            RuleContext<? extends Token> ruleContext = node.getRuleContext();
+        public Boolean visitChildren(RuleNode node) {
+            RuleContext ruleContext = node.getRuleContext();
             if (ruleContext instanceof ExpressionContext) {
                 return visitExpression((ExpressionContext)ruleContext);
             }
@@ -133,7 +133,7 @@ public class GoParser extends AbstractGoParser {
         }
 
         @Override
-        protected boolean shouldVisitNextChild(RuleNode<? extends Token> node, Boolean currentResult) {
+        protected boolean shouldVisitNextChild(RuleNode node, Boolean currentResult) {
             return false;
         }
 
@@ -161,7 +161,7 @@ public class GoParser extends AbstractGoParser {
             @RuleDependency(recognizer=GoParser.class, rule=RULE_goStmt, version=0),
         })
         private Boolean visitExpression(ExpressionContext ctx) {
-            ParserRuleContext<Token> parent = ctx.getParent();
+            ParserRuleContext parent = ctx.getParent();
             if (parent == null) {
                 return null;
             }

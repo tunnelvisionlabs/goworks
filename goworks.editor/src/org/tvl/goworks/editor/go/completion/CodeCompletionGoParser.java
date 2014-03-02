@@ -20,7 +20,7 @@ import org.tvl.goworks.editor.go.parser.GoParser;
  */
 public class CodeCompletionGoParser extends GoParser implements CodeCompletionParser {
 
-    public CodeCompletionGoParser(TokenStream<? extends Token> input) {
+    public CodeCompletionGoParser(TokenStream input) {
         super(input);
         _interp = new CompletionParserATNSimulator(this, _ATN);
     }

@@ -68,7 +68,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                     return;
                 }
 
-                ParserRuleContext<Token> referenceParseTree = null;
+                ParserRuleContext referenceParseTree = null;
                 try {
                     Future<ParserData<CompiledModel>> futureRefParseTreeData = taskManager.getData(snapshot, GoParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
                     ParserData<CompiledModel> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;

@@ -71,7 +71,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                 ParserData<CompiledModel> compiledModelData = futureCompiledModelData != null ? futureCompiledModelData.get() : null;
                 CompiledModel compiledModel = compiledModelData != null ? compiledModelData.getData() : null;
                 CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;
-                ParserRuleContext<Token> parseResult = compiledFileModel != null ? compiledFileModel.getResult() : null;
+                ParserRuleContext parseResult = compiledFileModel != null ? compiledFileModel.getResult() : null;
                 Token[] tokens = compiledFileModel != null ? compiledFileModel.getTokens() : null;
 
                 if (anchorPointsResult == null && snapshot.getVersionedDocument().getDocument() != null) {

@@ -103,7 +103,7 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
     }
 
     @Override
-    protected TokenSourceWithStateV4<Token, GoHighlighterLexerState> createLexer(CharStream input, GoHighlighterLexerState startState) {
+    protected TokenSourceWithStateV4<GoHighlighterLexerState> createLexer(CharStream input, GoHighlighterLexerState startState) {
         if (lexerWrapper == null) {
             lexerWrapper = new GoHighlighterLexerWrapper(input, startState);
         } else {

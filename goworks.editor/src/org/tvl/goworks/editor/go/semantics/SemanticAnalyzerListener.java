@@ -231,22 +231,22 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @NonNull
     private final ObjectDecorator<Tree> treeDecorator;
 
-    private final Deque<Map<String, TerminalNode<Token>>> visibleLocals = new ArrayDeque<>();
-    private final Deque<Map<String, TerminalNode<Token>>> visibleConstants = new ArrayDeque<>();
-    private final Deque<Map<String, TerminalNode<Token>>> visibleFunctions = new ArrayDeque<>();
-    private final Deque<Map<String, TerminalNode<Token>>> visibleTypes = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode>> visibleLocals = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode>> visibleConstants = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode>> visibleFunctions = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode>> visibleTypes = new ArrayDeque<>();
 
-    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleLocals = new ArrayDeque<>();
-    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleConstants = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode>> pendingVisibleLocals = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode>> pendingVisibleConstants = new ArrayDeque<>();
 
-    private final List<TerminalNode<Token>> unresolvedIdentifiers = new ArrayList<>();
-    private final List<TerminalNode<Token>> unresolvedQualifiedIdentifiers = new ArrayList<>();
+    private final List<TerminalNode> unresolvedIdentifiers = new ArrayList<>();
+    private final List<TerminalNode> unresolvedQualifiedIdentifiers = new ArrayList<>();
 
     // label references are resolved at the end of a function
-    private final Deque<Map<String, TerminalNode<Token>>> visibleLabels = new ArrayDeque<>();
-    private final Deque<Collection<TerminalNode<Token>>> unresolvedLabels = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode>> visibleLabels = new ArrayDeque<>();
+    private final Deque<Collection<TerminalNode>> unresolvedLabels = new ArrayDeque<>();
 
-    private final Map<String, List<TerminalNode<Token>>> importedPackages = new HashMap<>();
+    private final Map<String, List<TerminalNode>> importedPackages = new HashMap<>();
 
     private BigInteger _iota = BigInteger.ZERO;
 
@@ -270,14 +270,14 @@ public class SemanticAnalyzerListener implements GoParserListener {
         PackageModel currentPackage = codeModelCache.getUniquePackage((GoProject)project, currentPackagePath);
 
         Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<>();
-        for (Map.Entry<String, List<TerminalNode<Token>>> entry : importedPackages.entrySet()) {
+        for (Map.Entry<String, List<TerminalNode>> entry : importedPackages.entrySet()) {
             Collection<PackageModel> packages = resolvedPackages.get(entry.getKey());
             if (packages == null) {
                 packages = new ArrayList<>();
                 resolvedPackages.put(entry.getKey(), packages);
             }
 
-            for (TerminalNode<Token> importToken : entry.getValue()) {
+            for (TerminalNode importToken : entry.getValue()) {
                 Collection<? extends CodeElementModel> resolved = treeDecorator.getProperty(importToken, GoAnnotations.MODELS);
                 for (CodeElementModel model : resolved) {
                     if (!(model instanceof PackageModel)) {
@@ -289,14 +289,14 @@ public class SemanticAnalyzerListener implements GoParserListener {
             }
         }
 
-        for (TerminalNode<Token> node : unresolvedIdentifiers) {
+        for (TerminalNode node : unresolvedIdentifiers) {
             resolveIdentifier(node, currentPackage, resolvedPackages);
         }
 
         boolean updatedResolution;
         do {
             updatedResolution = false;
-            for (TerminalNode<Token> node : unresolvedQualifiedIdentifiers) {
+            for (TerminalNode node : unresolvedQualifiedIdentifiers) {
                 try {
                     updatedResolution |= resolveQualifiedIdentifier(node, currentPackage, resolvedPackages);
                 } catch (RuntimeException | Error ex) {
@@ -321,12 +321,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
         return packagePath;
     }
 
-    private void resolveIdentifier(TerminalNode<Token> node,
+    private void resolveIdentifier(TerminalNode node,
                                    PackageModel currentPackage,
                                    Map<String, ? extends Collection<? extends PackageModel>> importedPackages) {
         // check again for a top-level definition in the current file
         Token token = node.getSymbol();
-        TerminalNode<Token> target = getVisibleDeclaration(node);
+        TerminalNode target = getVisibleDeclaration(node);
         if (target != null) {
             boolean resolved = true;
             switch (treeDecorator.getProperty(target, GoAnnotations.NODE_TYPE)) {
@@ -391,7 +391,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         }
     }
 
-    private boolean resolveIdentifier(TerminalNode<Token> node, PackageModel packageModel) {
+    private boolean resolveIdentifier(TerminalNode node, PackageModel packageModel) {
         Token token = node.getSymbol();
         Collection<? extends CodeElementModel> members = packageModel.getMembers(token.getText());
         for (CodeElementModel model : members) {
@@ -439,14 +439,14 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0)
-    private boolean resolveQualifiedIdentifier(TerminalNode<Token> node, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
+    private boolean resolveQualifiedIdentifier(TerminalNode node, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         Token token = node.getSymbol();
         if (treeDecorator.getProperty(node, GoAnnotations.NODE_TYPE) != NodeType.UNDEFINED) {
             // already resolved
             return false;
         }
 
-        ParserRuleContext<Token> qualifier = treeDecorator.getProperty(node, GoAnnotations.QUALIFIER);
+        ParserRuleContext qualifier = treeDecorator.getProperty(node, GoAnnotations.QUALIFIER);
         if (qualifier == null) {
             // don't have the information necessary to resolve
             return false;
@@ -477,7 +477,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     return false;
                 }
 
-                TerminalNode<Token> unqualifiedLink = treeDecorator.getProperty(qualifier, GoAnnotations.UNQUALIFIED_LINK);
+                TerminalNode unqualifiedLink = treeDecorator.getProperty(qualifier, GoAnnotations.UNQUALIFIED_LINK);
                 if (unqualifiedLink != null) {
                     Map<? extends ObjectProperty<?>, ?> properties = treeDecorator.getProperties(unqualifiedLink);
                     treeDecorator.putProperties(qualifier, properties);
@@ -514,9 +514,9 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 }
             } else if (qualifierNodeType == NodeType.VAR_REF) {
                 // must be referring to something within the current file since it's resolved internally
-                TerminalNode<Token> target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
+                TerminalNode target = treeDecorator.getProperty(qualifier, GoAnnotations.LOCAL_TARGET);
                 assert target != null && treeDecorator.getProperty(target, GoAnnotations.NODE_TYPE) == NodeType.VAR_DECL;
-                ParserRuleContext<Token> explicitType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPLICIT_TYPE);
+                ParserRuleContext explicitType = treeDecorator.getProperty(qualifier, GoAnnotations.EXPLICIT_TYPE);
                 if (explicitType == null && target != null) {
                     explicitType = treeDecorator.getProperty(target, GoAnnotations.EXPLICIT_TYPE);
                 }
@@ -528,7 +528,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
                     resolvedQualifier = Collections.emptyList();
                 } else {
-                    ParserRuleContext<Token> implicitType = target != null ? treeDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE) : null;
+                    ParserRuleContext implicitType = target != null ? treeDecorator.getProperty(target, GoAnnotations.IMPLICIT_TYPE) : null;
                     int implicitIndex = target != null ? treeDecorator.getProperty(target, GoAnnotations.IMPLICIT_INDEX) : -1;
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING, "Unable to resolve implicit type for qualifier: {0}", qualifier.toString(Arrays.asList(GoParser.ruleNames)));
@@ -568,7 +568,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         return true;
     }
 
-    private void setNodeType(TerminalNode<Token> node, CodeElementModel model) {
+    private void setNodeType(TerminalNode node, CodeElementModel model) {
         NodeType nodeType;
         VarKind varType = VarKind.UNDEFINED;
         TypeKind typeKind = TypeKind.UNDEFINED;
@@ -600,7 +600,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_arrayType, version=0)
-    private boolean resolveQualifierType(ParserRuleContext<Token> qualifier,
+    private boolean resolveQualifierType(ParserRuleContext qualifier,
                                          PackageModel currentPackage,
                                          Map<String, Collection<PackageModel>> resolvedPackages) {
 
@@ -612,7 +612,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     private class QualifierTypeResolver extends GoParserBaseListener {
 
-        public boolean resolveType(ParserRuleContext<Token> qualifier) {
+        public boolean resolveType(ParserRuleContext qualifier) {
             ParseTreeWalker.DEFAULT.walk(this, qualifier);
             return treeDecorator.getProperty(qualifier, GoAnnotations.MODELS) != null;
         }
@@ -847,7 +847,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
             }
 
-            TerminalNode<Token> localTarget = treeDecorator.getProperty(ctx, GoAnnotations.LOCAL_TARGET);
+            TerminalNode localTarget = treeDecorator.getProperty(ctx, GoAnnotations.LOCAL_TARGET);
             if (localTarget != null) {
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, localTarget);
             }
@@ -951,7 +951,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void exitSelectorExpr(SelectorExprContext ctx) {
         CodeElementReference exprType = CodeElementReference.UNKNOWN;
-        TerminalNode<Token> node = ctx.IDENTIFIER();
+        TerminalNode node = ctx.IDENTIFIER();
         if (node != null) {
             assert ctx.expression() != null;
             exprType = new SelectedElementReference(treeDecorator.getProperty(ctx.expression(), GoAnnotations.EXPR_TYPE), node.getSymbol());
@@ -1513,7 +1513,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 treeDecorator.putProperty(ctx.identifierList(), GoAnnotations.VAR_TYPE, VarKind.PARAMETER);
             }
 
-            for (TerminalNode<Token> id : ctx.identifierList().IDENTIFIER()) {
+            for (TerminalNode id : ctx.identifierList().IDENTIFIER()) {
                 visibleLocals.peek().put(id.getSymbol().getText(), id);
             }
         }
@@ -1587,7 +1587,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
         String name = null;
         String path = null;
-        TerminalNode<Token> target = null;
+        TerminalNode target = null;
         if (ctx.importPath() != null && ctx.importPath().StringLiteral() != null) {
             target = ctx.importPath().StringLiteral();
             path = target.getText();
@@ -1631,7 +1631,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 treeDecorator.putProperty(target, GoAnnotations.RESOLVED, true);
             }
 
-            List<TerminalNode<Token>> packageList = importedPackages.get(name);
+            List<TerminalNode> packageList = importedPackages.get(name);
             if (packageList == null) {
                 packageList = new ArrayList<>();
                 importedPackages.put(name, packageList);
@@ -1693,7 +1693,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     public void exitLiteralType(LiteralTypeContext ctx) {
         CodeElementReference codeClass = CodeElementReference.UNKNOWN;
         if (ctx.getChildCount() == 1) {
-            ParseTree<Token> child = ctx.getChild(0);
+            ParseTree child = ctx.getChild(0);
             assert child instanceof StructTypeContext
                 || child instanceof ArrayTypeContext
                 || child instanceof SliceTypeContext
@@ -1701,12 +1701,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 || child instanceof TypeNameContext;
             codeClass = treeDecorator.getProperty(child, GoAnnotations.CODE_CLASS);
         } else if (ctx.getChildCount() > 1) {
-            ParseTree<Token> firstChild = ctx.getChild(0);
-            assert firstChild instanceof TerminalNode<?>
-                && ((TerminalNode<?>)firstChild).getSymbol() instanceof Token
-                && ((Token)((TerminalNode<?>)firstChild).getSymbol()).getType() == GoParser.LeftBrack;
+            ParseTree firstChild = ctx.getChild(0);
+            assert firstChild instanceof TerminalNode
+                && ((TerminalNode)firstChild).getSymbol() instanceof Token
+                && ((Token)((TerminalNode)firstChild).getSymbol()).getType() == GoParser.LeftBrack;
 
-            ParseTree<Token> lastChild = ctx.getChild(ctx.getChildCount() - 1);
+            ParseTree lastChild = ctx.getChild(ctx.getChildCount() - 1);
             assert lastChild instanceof ElementTypeContext;
             codeClass = new ArrayTypeReference(treeDecorator.getProperty(lastChild, GoAnnotations.CODE_CLASS));
         }
@@ -1895,15 +1895,15 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0)
     public void enterBody(BodyContext ctx) {
         pushVarScope();
-        visibleLabels.push(new HashMap<String, TerminalNode<Token>>());
-        unresolvedLabels.push(new ArrayList<TerminalNode<Token>>());
+        visibleLabels.push(new HashMap<String, TerminalNode>());
+        unresolvedLabels.push(new ArrayList<TerminalNode>());
     }
 
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0)
     public void exitBody(BodyContext ctx) {
-        for (TerminalNode<Token> labelReference : unresolvedLabels.peek()) {
-            TerminalNode<Token> target = visibleLabels.peek().get(labelReference.getText());
+        for (TerminalNode labelReference : unresolvedLabels.peek()) {
+            TerminalNode target = visibleLabels.peek().get(labelReference.getText());
             if (target == null) {
                 continue;
             }
@@ -1948,10 +1948,10 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
             // check known imports
             if (ctx.packageName().IDENTIFIER() != null) {
-                List<? extends TerminalNode<Token>> imports = ParseTrees.emptyIfNull(importedPackages.get(ctx.packageName().IDENTIFIER().getSymbol().getText()));
-                TerminalNode<Token> bestImport = null;
+                List<? extends TerminalNode> imports = ParseTrees.emptyIfNull(importedPackages.get(ctx.packageName().IDENTIFIER().getSymbol().getText()));
+                TerminalNode bestImport = null;
                 boolean resolvedImport = false;
-                for (TerminalNode<Token> importToken : imports) {
+                for (TerminalNode importToken : imports) {
                     if (bestImport == null || (!resolvedImport && treeDecorator.getProperty(importToken, GoAnnotations.RESOLVED))) {
                         bestImport = importToken;
                         resolvedImport = treeDecorator.getProperty(importToken, GoAnnotations.RESOLVED);
@@ -1992,7 +1992,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 break;
             }
 
-            TerminalNode<Token> local = getVisibleLocal(ctx.IDENTIFIER());
+            TerminalNode local = getVisibleLocal(ctx.IDENTIFIER());
             if (local != null) {
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.VAR_REF);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, local);
@@ -2020,7 +2020,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                 return;
             }
 
-            TerminalNode<Token> constant = getVisibleConstant(ctx.IDENTIFIER());
+            TerminalNode constant = getVisibleConstant(ctx.IDENTIFIER());
             if (constant != null) {
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, constant);
@@ -2532,7 +2532,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             // not a built in function, and no type was passed to it
 
             // HACK: copied from enterQualifiedIdentifier
-            TerminalNode<Token> local = getVisibleLocal(ctx.IDENTIFIER());
+            TerminalNode local = getVisibleLocal(ctx.IDENTIFIER());
             if (local != null) {
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.VAR_REF);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, local);
@@ -2557,7 +2557,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     }
                 }
             } else {
-                TerminalNode<Token> constant = getVisibleConstant(ctx.IDENTIFIER());
+                TerminalNode constant = getVisibleConstant(ctx.IDENTIFIER());
                 if (constant != null) {
                     treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
                     treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.LOCAL_TARGET, constant);
@@ -2682,7 +2682,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         NodeType nodeType = treeDecorator.getProperty(ctx, GoAnnotations.NODE_TYPE);
         VarKind varType = treeDecorator.getProperty(ctx, GoAnnotations.VAR_TYPE);
         boolean variadic = treeDecorator.getProperty(ctx, GoAnnotations.VARIADIC);
-        ParserRuleContext<Token> explicitType = treeDecorator.getProperty(ctx, GoAnnotations.EXPLICIT_TYPE);
+        ParserRuleContext explicitType = treeDecorator.getProperty(ctx, GoAnnotations.EXPLICIT_TYPE);
         boolean global =
             (varType != VarKind.LOCAL && varType != VarKind.RECEIVER && varType != VarKind.PARAMETER && varType != VarKind.RETURN)
             || treeDecorator.getProperty(ctx, GoAnnotations.GLOBAL);
@@ -2697,7 +2697,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             return;
         }
 
-        for (TerminalNode<Token> terminalNode : ctx.IDENTIFIER()) {
+        for (TerminalNode terminalNode : ctx.IDENTIFIER()) {
             Token token = terminalNode.getSymbol();
             if (nodeType == NodeType.VAR_DECL) {
                 if (varType != VarKind.FIELD) {
@@ -2917,7 +2917,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         if (ctx.defeq != null) {
             if (ctx.e1 != null && ctx.e1.start == ParseTrees.getStopSymbol(ctx.e1)) {
                 Token token = ctx.e1.start;
-                TerminalNode<Token> startNode = ParseTrees.getStartNode(ctx.e1);
+                TerminalNode startNode = ParseTrees.getStartNode(ctx.e1);
                 pendingVisibleLocals.peek().put(token.getText(), startNode);
                 treeDecorator.putProperty(startNode, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
                 treeDecorator.putProperty(startNode, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
@@ -2927,7 +2927,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
             if (ctx.e2 != null && ctx.e2.start == ParseTrees.getStopSymbol(ctx.e2)) {
                 Token token = ctx.e2.start;
-                TerminalNode<Token> startNode = ParseTrees.getStartNode(ctx.e2);
+                TerminalNode startNode = ParseTrees.getStartNode(ctx.e2);
                 pendingVisibleLocals.peek().put(token.getText(), startNode);
                 treeDecorator.putProperty(startNode, GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
                 treeDecorator.putProperty(startNode, GoAnnotations.VAR_TYPE, VarKind.LOCAL);
@@ -3079,7 +3079,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    public void visitTerminal(TerminalNode<? extends Token> node) {
+    public void visitTerminal(TerminalNode node) {
         Token symbol = node.getSymbol();
         switch (symbol.getType()) {
         case GoParser.Const:
@@ -3092,15 +3092,15 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     @Override
-    public void visitErrorNode(ErrorNode<? extends Token> node) {
+    public void visitErrorNode(ErrorNode node) {
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void enterEveryRule(ParserRuleContext ctx) {
     }
 
-    private static final Set<Class<? extends ParserRuleContext<?>>> EXPR_TYPE_CONTEXTS =
-        new HashSet<Class<? extends ParserRuleContext<?>>>() {{
+    private static final Set<Class<? extends ParserRuleContext>> EXPR_TYPE_CONTEXTS =
+        new HashSet<Class<? extends ParserRuleContext>>() {{
             add(ExpressionContext.class);
             add(ConversionOrCallExprContext.class);
             add(BuiltinCallContext.class);
@@ -3132,8 +3132,8 @@ public class SemanticAnalyzerListener implements GoParserListener {
             add(RangeClauseContext.class);
         }};
 
-    private static final Set<Class<? extends ParserRuleContext<?>>> CODE_CLASS_CONTEXTS =
-        new HashSet<Class<? extends ParserRuleContext<?>>>() {{
+    private static final Set<Class<? extends ParserRuleContext>> CODE_CLASS_CONTEXTS =
+        new HashSet<Class<? extends ParserRuleContext>>() {{
             add(TypeContext.class);
             add(TypeNameContext.class);
             add(TypeLiteralContext.class);
@@ -3187,7 +3187,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_literalType, version=0),
     })
     @SuppressWarnings("element-type-mismatch")
-    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void exitEveryRule(ParserRuleContext ctx) {
         if (EXPR_TYPE_CONTEXTS.contains(ctx.getClass())) {
             if (treeDecorator.getProperty(ctx, GoAnnotations.EXPR_TYPE) == CodeElementReference.MISSING) {
                 LOGGER.log(Level.WARNING, "Expected EXPR_TYPE data for context {0}.", ctx.getClass().getSimpleName());
@@ -3202,13 +3202,13 @@ public class SemanticAnalyzerListener implements GoParserListener {
     }
 
     private void pushVarScope() {
-        visibleLocals.push(new HashMap<String, TerminalNode<Token>>());
-        visibleConstants.push(new HashMap<String, TerminalNode<Token>>());
-        visibleFunctions.push(new HashMap<String, TerminalNode<Token>>());
-        visibleTypes.push(new HashMap<String, TerminalNode<Token>>());
+        visibleLocals.push(new HashMap<String, TerminalNode>());
+        visibleConstants.push(new HashMap<String, TerminalNode>());
+        visibleFunctions.push(new HashMap<String, TerminalNode>());
+        visibleTypes.push(new HashMap<String, TerminalNode>());
 
-        pendingVisibleLocals.push(new HashMap<String, TerminalNode<Token>>());
-        pendingVisibleConstants.push(new HashMap<String, TerminalNode<Token>>());
+        pendingVisibleLocals.push(new HashMap<String, TerminalNode>());
+        pendingVisibleConstants.push(new HashMap<String, TerminalNode>());
     }
 
     private void popVarScope() {
@@ -3230,33 +3230,33 @@ public class SemanticAnalyzerListener implements GoParserListener {
         visibleConstants.peek().putAll(pendingVisibleConstants.peek());
         pendingVisibleConstants.peek().clear();
     }
-    private TerminalNode<Token> getVisibleDeclaration(TerminalNode<Token> reference) {
-        TerminalNode<Token> result = getVisibleLocal(reference);
+    private TerminalNode getVisibleDeclaration(TerminalNode reference) {
+        TerminalNode result = getVisibleLocal(reference);
         result = result != null ? result : getVisibleConstant(reference);
         result = result != null ? result : getVisibleFunction(reference);
         result = result != null ? result : getVisibleType(reference);
         return result;
     }
 
-    private TerminalNode<Token> getVisibleLocal(TerminalNode<Token> reference) {
+    private TerminalNode getVisibleLocal(TerminalNode reference) {
         return getVisibleElement(visibleLocals, reference);
     }
 
-    private TerminalNode<Token> getVisibleConstant(TerminalNode<Token> reference) {
+    private TerminalNode getVisibleConstant(TerminalNode reference) {
         return getVisibleElement(visibleConstants, reference);
     }
 
-    private TerminalNode<Token> getVisibleFunction(TerminalNode<Token> reference) {
+    private TerminalNode getVisibleFunction(TerminalNode reference) {
         return getVisibleElement(visibleFunctions, reference);
     }
 
-    private TerminalNode<Token> getVisibleType(TerminalNode<Token> reference) {
+    private TerminalNode getVisibleType(TerminalNode reference) {
         return getVisibleElement(visibleTypes, reference);
     }
 
-    private TerminalNode<Token> getVisibleElement(Collection<Map<String, TerminalNode<Token>>> elements, TerminalNode<Token> reference) {
-        for (Map<String, TerminalNode<Token>> localCollection : elements) {
-            TerminalNode<Token> local = localCollection.get(reference.getText());
+    private TerminalNode getVisibleElement(Collection<Map<String, TerminalNode>> elements, TerminalNode reference) {
+        for (Map<String, TerminalNode> localCollection : elements) {
+            TerminalNode local = localCollection.get(reference.getText());
             if (local != null) {
                 return local;
             }

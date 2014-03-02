@@ -67,12 +67,12 @@ public class GoParserAnchorListener extends GoParserBaseListener {
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void enterEveryRule(ParserRuleContext ctx) {
         checkCancellation();
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void exitEveryRule(ParserRuleContext ctx) {
         checkCancellation();
     }
 
@@ -88,18 +88,18 @@ public class GoParserAnchorListener extends GoParserBaseListener {
         handleExitAnchor(ctx, ctx.getRuleIndex());
     }
 
-    private void handleEnterAnchor(ParserRuleContext<Token> ctx) {
+    private void handleEnterAnchor(ParserRuleContext ctx) {
         anchorPositions.push(ctx.getStart().getStartIndex());
     }
 
-    private void handleExitAnchor(ParserRuleContext<Token> ctx, int anchorId) {
+    private void handleExitAnchor(ParserRuleContext ctx, int anchorId) {
         int start = anchorPositions.pop();
         int stop = ctx.getStop() != null ? ctx.getStop().getStopIndex() + 1 : snapshot.length();
         TrackingPositionRegion.Bias trackingMode = ctx.getStop() != null ? TrackingPositionRegion.Bias.Exclusive : TrackingPositionRegion.Bias.Forward;
         anchors.add(createAnchor(ctx, start, stop, trackingMode, anchorId));
     }
 
-    private Anchor createAnchor(ParserRuleContext<Token> ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
+    private Anchor createAnchor(ParserRuleContext ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
         TrackingPositionRegion trackingSpan = snapshot.createTrackingRegion(start, stop - start, trackingMode);
             return new TemplateAnchor(trackingSpan, rule);
 //        }

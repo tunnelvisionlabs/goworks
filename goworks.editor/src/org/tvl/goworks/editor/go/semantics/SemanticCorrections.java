@@ -13,7 +13,6 @@ import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.annotations.common.NonNull;
 import org.tvl.goworks.editor.go.parser.GoParser;
@@ -27,16 +26,16 @@ import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.PackageNameCo
  */
 public class SemanticCorrections {
     @NonNull
-    private final ParserRuleContext<?> parseTree;
+    private final ParserRuleContext parseTree;
     @NonNull
     private final TreeCorrectionGoParser correctionParser;
     @NonNull
     private final TreeCorrectionParserATNSimulator correctionSimulator;
 
     @NonNull
-    private final List<ParserRuleContext<?>> invalidContexts = new ArrayList<>();
+    private final List<ParserRuleContext> invalidContexts = new ArrayList<>();
 
-    public SemanticCorrections(@NonNull ParserRuleContext<?> parseTree, @NonNull TokenStream<? extends Token> input, @NonNull DocumentSnapshot snapshot) {
+    public SemanticCorrections(@NonNull ParserRuleContext parseTree, @NonNull TokenStream input, @NonNull DocumentSnapshot snapshot) {
         this.parseTree = parseTree;
         this.correctionParser = new TreeCorrectionGoParser(input);
         this.correctionSimulator = correctionParser.getInterpreter();

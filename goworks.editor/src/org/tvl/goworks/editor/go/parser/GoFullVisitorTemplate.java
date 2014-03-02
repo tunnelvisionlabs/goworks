@@ -149,7 +149,7 @@ import org.tvl.goworks.editor.go.parser.generated.GoParserVisitor;
  *
  * @author Sam Harwell
  */
-abstract class GoFullVisitorTemplate extends AbstractParseTreeVisitor<Token, Void> implements GoParserVisitor<Token, Void> {
+abstract class GoFullVisitorTemplate extends AbstractParseTreeVisitor<Void> implements GoParserVisitor<Void> {
 
     private GoFullVisitorTemplate() {
     }

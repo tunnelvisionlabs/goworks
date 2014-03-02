@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.annotations.common.NonNull;
@@ -31,7 +30,7 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public TypeModelImpl(@NonNull String name, @NonNull FileModelImpl fileModel, @NullAllowed TerminalNode<? extends Token> seek, @NullAllowed ParserRuleContext<?> span) {
+    public TypeModelImpl(@NonNull String name, @NonNull FileModelImpl fileModel, @NullAllowed TerminalNode seek, @NullAllowed ParserRuleContext span) {
         super(name, fileModel);
         this.seek = getOffsetRegion(seek);
         this.span = getOffsetRegion(span);

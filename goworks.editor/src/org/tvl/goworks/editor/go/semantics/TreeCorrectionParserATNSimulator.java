@@ -32,11 +32,11 @@ import org.antlr.v4.runtime.misc.IntervalSet;
  *
  * @author Sam Harwell
  */
-public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> {
+public class TreeCorrectionParserATNSimulator extends ParserATNSimulator {
     private final Map<Integer, IntervalSet> suppressedRules = new HashMap<>();
     private int startIndex;
 
-    public TreeCorrectionParserATNSimulator(Parser<Token> parser, ATN atn) {
+    public TreeCorrectionParserATNSimulator(Parser parser, ATN atn) {
         super(parser, atn);
     }
 
@@ -51,7 +51,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     }
 
     @Override
-    public int adaptivePredict(TokenStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
+    public int adaptivePredict(TokenStream input, int decision, ParserRuleContext outerContext) {
         boolean ll1opt = optimize_ll1;
         try {
             startIndex = input.index();
@@ -66,7 +66,7 @@ public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> 
     }
 
     @Override
-    public SimulatorState<Token> getStartState(DFA dfa, TokenStream<? extends Token> input, ParserRuleContext<Token> outerContext, boolean useContext) {
+    public SimulatorState getStartState(DFA dfa, TokenStream input, ParserRuleContext outerContext, boolean useContext) {
         // force execATN for special decisions
         if (getSuppressedSet(startIndex).isNil()) {
             return null;

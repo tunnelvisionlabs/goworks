@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
@@ -29,7 +28,7 @@ public class VarModelImpl extends AbstractCodeElementModel implements VarModel {
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public VarModelImpl(String name, VarKind kind, TypeModelImpl varType, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    public VarModelImpl(String name, VarKind kind, TypeModelImpl varType, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, file);
         this.kind = kind;
         this.varType = varType;

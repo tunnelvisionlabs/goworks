@@ -8,7 +8,6 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
@@ -22,7 +21,7 @@ public class BaseIndentationData implements IndentationData {
     public static final BaseIndentationData NO_INDENT = new BaseIndentationData(0, 0);
     public static final BaseIndentationData UNKNOWN = new BaseIndentationData(0, -1);
 
-    private final ParseTree<Token> target;
+    private final ParseTree target;
     private final IndentationBase base;
     private final int offset;
     private final int priority;
@@ -34,7 +33,7 @@ public class BaseIndentationData implements IndentationData {
         }
     }
 
-    public BaseIndentationData(@NullAllowed ParseTree<Token> target, @NonNull IndentationBase base, int offset, int priority) {
+    public BaseIndentationData(@NullAllowed ParseTree target, @NonNull IndentationBase base, int offset, int priority) {
         Parameters.notNull("base", base);
         if (target == null && base != IndentationBase.LINE_START) {
             throw new IllegalArgumentException("target must be provided for base " + base);
@@ -63,7 +62,7 @@ public class BaseIndentationData implements IndentationData {
     }
 
     @Override
-    public ParseTree<Token> getTarget() {
+    public ParseTree getTarget() {
         return target;
     }
 

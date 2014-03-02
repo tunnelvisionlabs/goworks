@@ -2141,22 +2141,22 @@ abstract class GoFullListenerTemplate implements GoParserListener {
     }
 
     @Override
-    public void visitTerminal(TerminalNode<? extends Token> node) {
+    public void visitTerminal(TerminalNode node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void visitErrorNode(ErrorNode<? extends Token> node) {
+    public void visitErrorNode(ErrorNode node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void enterEveryRule(ParserRuleContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void exitEveryRule(ParserRuleContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

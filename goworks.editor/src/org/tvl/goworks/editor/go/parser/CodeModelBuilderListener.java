@@ -128,9 +128,9 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
 
         @Override
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0)
-        public <Symbol extends Token> void walk(ParseTreeListener<? super Symbol> listener, ParseTree<Symbol> t) {
+        public void walk(ParseTreeListener listener, ParseTree t) {
             if (t instanceof RuleNode) {
-                RuleNode<Symbol> ruleNode = (RuleNode<Symbol>)t;
+                RuleNode ruleNode = (RuleNode)t;
                 if (ruleNode.getRuleContext() instanceof BodyContext) {
                     return;
                 }
@@ -210,7 +210,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
      */
     private final Deque<TypeModelImpl> _typeModelStack = new ArrayDeque<>();
 
-    private final Map<ParserRuleContext<Token>, TypeModelImpl> _expressionTypes = new HashMap<>();
+    private final Map<ParserRuleContext, TypeModelImpl> _expressionTypes = new HashMap<>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, Token[] tokens) {
         Project project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
@@ -326,7 +326,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitTypeName(TypeNameContext ctx) {
         QualifiedIdentifierContext qualifiedIdentifierContext = ctx.qualifiedIdentifier();
         PackageNameContext packageNameContext = qualifiedIdentifierContext != null ? qualifiedIdentifierContext.packageName() : null;
-        TerminalNode<Token> packageName = packageNameContext != null ? packageNameContext.IDENTIFIER() : null;
+        TerminalNode packageName = packageNameContext != null ? packageNameContext.IDENTIFIER() : null;
         String pkgName = packageName != null ? packageName.getSymbol().getText() : null;
         String typeName;
         if (qualifiedIdentifierContext != null && qualifiedIdentifierContext.IDENTIFIER() != null) {
@@ -354,9 +354,9 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @NonNull
         TypeModelImpl result = _unknownType;
         if (ctx.getChildCount() > 0) {
-            ParseTree<Token> child = ctx.getChild(0);
+            ParseTree child = ctx.getChild(0);
             if (child instanceof RuleNode) {
-                RuleContext<Token> ruleContext = ((RuleNode<Token>)child).getRuleContext();
+                RuleContext ruleContext = ((RuleNode)child).getRuleContext();
                 switch (ruleContext.getRuleIndex()) {
                 case GoParser.RULE_arrayType:
                 case GoParser.RULE_structType:
@@ -366,7 +366,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
                 case GoParser.RULE_sliceType:
                 case GoParser.RULE_mapType:
                 case GoParser.RULE_channelType:
-                    result = popTypeModel((ParserRuleContext<Token>)ruleContext);
+                    result = popTypeModel((ParserRuleContext)ruleContext);
                     break;
                     
                 default:
@@ -519,10 +519,10 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         TypeModelImpl type = popTypeModel(ctx.type(), null);
         IdentifierListContext idList = ctx.identifierList();
         ExpressionListContext expressionList = ctx.expressionList();
-        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
+        List<? extends TerminalNode> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode>emptyList();
         List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : Collections.<ExpressionContext>emptyList();
         for (int i = 0; i < ids.size(); i++) {
-            TerminalNode<Token> id = ids.get(i);
+            TerminalNode id = ids.get(i);
             String unevaluatedValue;
             if (expressions.size() > i) {
                 unevaluatedValue = expressions.get(i).getText();
@@ -549,11 +549,11 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         TypeModelImpl explicitType = popTypeModel(ctx.type());
         IdentifierListContext idList = ctx.identifierList();
         ExpressionListContext expressionList = ctx.expressionList();
-        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
+        List<? extends TerminalNode> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode>emptyList();
         List<? extends ExpressionContext> expressions = expressionList != null ? expressionList.expression() : Collections.<ExpressionContext>emptyList();
         boolean isGlobal = !ids.isEmpty() && _varContainerStack.peek() == _fileModel.getVars();
         for (int i = 0; i < ids.size(); i++) {
-            TerminalNode<Token> id = ids.get(i);
+            TerminalNode id = ids.get(i);
             TypeModelImpl varType = _unknownType;
             if (ctx.type() != null) {
                 varType = explicitType;
@@ -572,7 +572,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0, dependents=Dependents.SELF),
     })
     public void enterMethodDecl(MethodDeclContext ctx) {
-        TerminalNode<Token> nameNode = ctx.methodName() != null ? ctx.methodName().IDENTIFIER() : null;
+        TerminalNode nameNode = ctx.methodName() != null ? ctx.methodName().IDENTIFIER() : null;
         String name = nameNode != null ? nameNode.getSymbol().getText() : createAnonymousTypeName(ctx);
         FunctionModelImpl model = new FunctionModelImpl(name, _fileModel, nameNode, ctx);
         _functionContainerStack.peek().add(model);
@@ -594,7 +594,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     })
     public void enterMethodSpec(MethodSpecContext ctx) {
         if (ctx.methodName() != null) {
-            TerminalNode<Token> nameNode = ctx.methodName().IDENTIFIER();
+            TerminalNode nameNode = ctx.methodName().IDENTIFIER();
             FunctionModelImpl model = new FunctionModelImpl(nameNode.getSymbol().getText(), _fileModel, nameNode, ctx);
             _functionContainerStack.peek().add(model);
             _functionModelStack.push(model);
@@ -637,7 +637,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0, dependents=Dependents.SELF),
     })
     public void exitReceiver(ReceiverContext ctx) {
-        TerminalNode<? extends Token> nameNode = ctx.IDENTIFIER();
+        TerminalNode nameNode = ctx.IDENTIFIER();
         String name = nameNode != null ? nameNode.getSymbol().getText() : "_";
 
         if (ctx.baseTypeName() != null) {
@@ -654,7 +654,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     @Override
     @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_functionDecl, version=0, dependents=Dependents.PARENTS)
     public void enterFunctionDecl(FunctionDeclContext ctx) {
-        TerminalNode<Token> nameNode = ctx.IDENTIFIER();
+        TerminalNode nameNode = ctx.IDENTIFIER();
         String name = nameNode != null ? nameNode.getText() : "?";
         FunctionModelImpl model = new FunctionModelImpl(name, _fileModel, nameNode, ctx);
 
@@ -717,7 +717,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
 
         boolean isReturnParameter = _functionModelStack.peek().getReturnValues() == _parameterContainerStack.peek();
         if (ctx.identifierList() != null) {
-            for (TerminalNode<Token> id : ctx.identifierList().IDENTIFIER()) {
+            for (TerminalNode id : ctx.identifierList().IDENTIFIER()) {
                 _parameterContainerStack.peek().add(new ParameterModelImpl(id.getSymbol().getText(), isReturnParameter ? VarKind.RETURN : VarKind.PARAMETER, parameterType, _fileModel, id, ctx));
             }
         } else {
@@ -737,18 +737,18 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     public void exitFieldDecl(FieldDeclContext ctx) {
         TypeModelImpl fieldType = popTypeModel(ctx.type(), ctx.anonymousField());
         IdentifierListContext idList = ctx.identifierList();
-        List<? extends TerminalNode<Token>> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode<Token>>emptyList();
+        List<? extends TerminalNode> ids = idList != null ? idList.IDENTIFIER() : Collections.<TerminalNode>emptyList();
         if (ctx.anonymousField() != null) {
             AnonymousFieldContext anonymousFieldContext = ctx.anonymousField();
             TypeNameContext typeNameContext = anonymousFieldContext != null ? anonymousFieldContext.typeName() : null;
             QualifiedIdentifierContext qualifiedIdentifierContext = typeNameContext != null ? typeNameContext.qualifiedIdentifier() : null;
-            TerminalNode<Token> name = qualifiedIdentifierContext != null ? qualifiedIdentifierContext.IDENTIFIER() : null;
+            TerminalNode name = qualifiedIdentifierContext != null ? qualifiedIdentifierContext.IDENTIFIER() : null;
             if (name != null) {
                 ids = Collections.singletonList(name);
             }
         }
 
-        for (TerminalNode<Token> id : ids) {
+        for (TerminalNode id : ids) {
             FieldModelImpl model = new FieldModelImpl(id.getSymbol().getText(), fieldType, ctx.anonymousField() != null, _fileModel, id, ctx);
             _structModelStack.peek().getFields().add(model);
         }
@@ -1003,7 +1003,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @NonNull
-    private TypeModelImpl getExpressionType(@NullAllowed ParserRuleContext<Token> context) {
+    private TypeModelImpl getExpressionType(@NullAllowed ParserRuleContext context) {
         if (context == null) {
             return _unknownType;
         }
@@ -1016,7 +1016,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
         return result;
     }
 
-    private void putExpressionType(@NonNull ParserRuleContext<Token> context, @NonNull TypeModelImpl type) {
+    private void putExpressionType(@NonNull ParserRuleContext context, @NonNull TypeModelImpl type) {
         if (type == _unknownType) {
             return;
         }
@@ -1025,12 +1025,12 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @NonNull
-    private TypeModelImpl popTypeModel(@NullAllowed ParserRuleContext<Token> context) {
+    private TypeModelImpl popTypeModel(@NullAllowed ParserRuleContext context) {
         return popTypeModel(context, _unknownType);
     }
 
     @NonNull
-    private TypeModelImpl popTypeModel(@NullAllowed ParserRuleContext<Token> context, @NullAllowed TypeModelImpl defaultType) {
+    private TypeModelImpl popTypeModel(@NullAllowed ParserRuleContext context, @NullAllowed TypeModelImpl defaultType) {
         if (context != null) {
             return _typeModelStack.pop();
         }
@@ -1039,9 +1039,9 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @NonNull
-    private TypeModelImpl popTypeModel(ParserRuleContext<?>... contexts) {
+    private TypeModelImpl popTypeModel(ParserRuleContext... contexts) {
         int count = 0;
-        for (ParserRuleContext<?> context : contexts) {
+        for (ParserRuleContext context : contexts) {
             if (context != null) {
                 count++;
             }
@@ -1060,7 +1060,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
     }
 
     @NonNull
-    private static String createAnonymousTypeName(@NonNull ParserRuleContext<Token> context) {
+    private static String createAnonymousTypeName(@NonNull ParserRuleContext context) {
         return String.format("$%s_%d", GoParser.ruleNames[context.getRuleIndex()], context.getStart().getStartIndex());
     }
 }

@@ -10,7 +10,6 @@ package org.tvl.goworks.editor.go.parser;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot;
 import org.antlr.works.editor.antlr4.classification.SimpleLexerState;
@@ -36,14 +35,14 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
     }
 
     @Override
-    protected TokenSourceWithStateV4<Token, SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
+    protected TokenSourceWithStateV4<SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
         GoLexerWrapper lexer = new GoLexerWrapper(input);
         startState.apply(lexer);
         return lexer;
     }
 
     @Override
-    protected TokenSource<Token> getEffectiveTokenSource(TokenSourceWithStateV4<Token, SimpleLexerState> lexer) {
+    protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<SimpleLexerState> lexer) {
         return lexer;
     }
 
@@ -52,7 +51,7 @@ class GoTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<Simple
         return new GoTokensTaskTaggerSnapshot(this, targetSnapshot);
     }
 
-    private static class GoLexerWrapper extends GoLexer implements TokenSourceWithStateV4<Token, SimpleLexerState> {
+    private static class GoLexerWrapper extends GoLexer implements TokenSourceWithStateV4<SimpleLexerState> {
 
         public GoLexerWrapper(CharStream input) {
             super(input);

@@ -13,7 +13,6 @@ import java.util.Map;
 import org.antlr.netbeans.semantics.ObjectDecorator;
 import org.antlr.netbeans.semantics.ObjectProperty;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -30,16 +29,16 @@ import org.openide.util.Parameters;
 public class AnnotatedParseTree {
 
     private final ObjectDecorator<Tree> treeAnnotations = new ObjectDecorator<>(new IdentityHashMap<Tree, Map<ObjectProperty<?>, Object>>());
-    private ParseTree<Token> parseTree;
+    private ParseTree parseTree;
 
-    public AnnotatedParseTree(@NonNull ParseTree<Token> parseTree) {
+    public AnnotatedParseTree(@NonNull ParseTree parseTree) {
         Parameters.notNull("parseTree", parseTree);
 
         this.parseTree = parseTree;
     }
 
     @NonNull
-    public ParseTree<Token> getParseTree() {
+    public ParseTree getParseTree() {
         return parseTree;
     }
 
@@ -47,11 +46,11 @@ public class AnnotatedParseTree {
         return treeAnnotations;
     }
 
-    public final void setParseTree(@NonNull ParseTree<Token> parseTree) {
+    public final void setParseTree(@NonNull ParseTree parseTree) {
         setParseTree(parseTree, true);
     }
 
-    public void setParseTree(@NonNull ParseTree<Token> parseTree, boolean compactAnnotations) {
+    public void setParseTree(@NonNull ParseTree parseTree, boolean compactAnnotations) {
         Parameters.notNull("parseTree", parseTree);
 
         if (this.parseTree != parseTree && compactAnnotations) {
@@ -68,25 +67,25 @@ public class AnnotatedParseTree {
     public void compactAnnotations() {
         final Map<Tree, Tree> map = new IdentityHashMap<>();
 
-        ParseTreeListener<Token> listener = new ParseTreeListener<Token>() {
+        ParseTreeListener listener = new ParseTreeListener() {
 
             @Override
-            public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+            public void enterEveryRule(ParserRuleContext ctx) {
                 map.put(ctx, ctx);
             }
 
             @Override
-            public void visitTerminal(TerminalNode<? extends Token> node) {
+            public void visitTerminal(TerminalNode node) {
                 map.put(node, node);
             }
 
             @Override
-            public void visitErrorNode(ErrorNode<? extends Token> node) {
+            public void visitErrorNode(ErrorNode node) {
                 map.put(node, node);
             }
 
             @Override
-            public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+            public void exitEveryRule(ParserRuleContext ctx) {
             }
 
         };

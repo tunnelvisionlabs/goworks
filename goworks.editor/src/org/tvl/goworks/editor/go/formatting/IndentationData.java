@@ -8,7 +8,6 @@
  */
 package org.tvl.goworks.editor.go.formatting;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
@@ -23,7 +22,7 @@ public interface IndentationData {
      * Gets the target element to use as an anchor for indenting this element.
      */
     @CheckForNull
-    ParseTree<Token> getTarget();
+    ParseTree getTarget();
     /**
      * Gets a base position relative to {@link #getTarget} to use as an indentation
      * anchor.

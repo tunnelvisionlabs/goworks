@@ -31,9 +31,9 @@ import org.tvl.goworks.editor.go.codemodel.TypeModel;
 public class UnqualifiedIdentifierElementReference extends CodeElementReference {
 
     @NonNull
-    private final TerminalNode<Token> identifier;
+    private final TerminalNode identifier;
 
-    public UnqualifiedIdentifierElementReference(@NonNull TerminalNode<Token> identifier) {
+    public UnqualifiedIdentifierElementReference(@NonNull TerminalNode identifier) {
         this.identifier = identifier;
     }
 
@@ -50,7 +50,7 @@ public class UnqualifiedIdentifierElementReference extends CodeElementReference 
                 return result;
             }
 
-            TerminalNode<? extends Token> decl;
+            TerminalNode decl;
             if (annotatedParseTree.getTreeDecorator().getProperty(identifier, GoAnnotations.EXPLICIT_TYPE) != null) {
                 decl = identifier;
             } else {
@@ -87,14 +87,14 @@ public class UnqualifiedIdentifierElementReference extends CodeElementReference 
             {
                 CodeElementReference varType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.EXPR_TYPE);
                 if (varType == CodeElementReference.MISSING) {
-                    ParseTree<Token> explicitType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.EXPLICIT_TYPE);
+                    ParseTree explicitType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.EXPLICIT_TYPE);
                     if (explicitType != null) {
                         varType = annotatedParseTree.getTreeDecorator().getProperty(explicitType, GoAnnotations.CODE_CLASS);
                         if (annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.VARIADIC)) {
                             varType = new VariadicParameterTypeReference(varType);
                         }
                     } else {
-                        ParseTree<Token> implicitType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.IMPLICIT_TYPE);
+                        ParseTree implicitType = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.IMPLICIT_TYPE);
                         if (implicitType == null) {
                             LOGGER.log(Level.FINE, "Unable to find an explicit or implicit type for the tree.");
                             return Collections.emptyList();

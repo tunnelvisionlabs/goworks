@@ -9,7 +9,6 @@
 package org.tvl.goworks.editor.go.codemodel.impl;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.tvl.goworks.editor.go.codemodel.ParameterModel;
 import org.tvl.goworks.editor.go.codemodel.VarKind;
@@ -20,7 +19,7 @@ import org.tvl.goworks.editor.go.codemodel.VarKind;
  */
 public class ParameterModelImpl extends VarModelImpl implements ParameterModel {
 
-    public ParameterModelImpl(String name, VarKind kind, TypeModelImpl varType, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    public ParameterModelImpl(String name, VarKind kind, TypeModelImpl varType, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, kind, varType, file, seek, span);
     }
 

@@ -8,7 +8,6 @@
  */
 package org.tvl.goworks.editor.go.semantics;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.tvl.goworks.editor.go.parser.GoParser;
 
@@ -18,7 +17,7 @@ import org.tvl.goworks.editor.go.parser.GoParser;
  */
 public class TreeCorrectionGoParser extends GoParser {
 
-    public TreeCorrectionGoParser(TokenStream<? extends Token> input) {
+    public TreeCorrectionGoParser(TokenStream input) {
         super(input);
     }
 

@@ -19,7 +19,7 @@ import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
  *
  * @author Sam Harwell
  */
-public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<Token, GoHighlighterLexerState> {
+public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<GoHighlighterLexerState> {
     private static final Map<GoHighlighterLexerState, GoHighlighterLexerState> sharedStates =
         new HashMap<>();
 
@@ -108,12 +108,12 @@ public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<Token, 
     }
 
     @Override
-    public TokenFactory<? extends Token> getTokenFactory() {
+    public TokenFactory getTokenFactory() {
         return lexer.getTokenFactory();
     }
 
     @Override
-    public void setTokenFactory(TokenFactory<? extends Token> tokenFactory) {
+    public void setTokenFactory(TokenFactory tokenFactory) {
         lexer.setTokenFactory(tokenFactory);
     }
 }
