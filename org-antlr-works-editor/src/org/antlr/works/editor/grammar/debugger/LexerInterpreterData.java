@@ -10,47 +10,73 @@ package org.antlr.works.editor.grammar.debugger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.v4.Tool;
-import org.antlr.v4.automata.ATNSerializer;
-import org.antlr.v4.misc.Utils;
+import org.antlr.v4.parse.ANTLRParser;
+import org.antlr.v4.runtime.atn.ATNSerializer;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.LexerGrammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
-import org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent.TokenDescriptor;
-import org.antlr.works.editor.grammar.debugger.TracingLexer.LexerAction;
+import org.openide.filesystems.FileObject;
 
 /**
  *
  * @author Sam Harwell
  */
-public class LexerInterpreterData {
+public class LexerInterpreterData extends AbstractInterpreterData {
+    private static final Logger LOGGER = Logger.getLogger(LexerInterpreterData.class.getName());
 
-    public String grammarFileName;
-    public String serializedAtn;
-    public List<TokenDescriptor> tokenNames;
-    public List<String> ruleNames;
     public List<String> modeNames;
-    public Map<Integer, Collection<LexerAction>> actionsMap;
 
     public static LexerInterpreterData buildFromSnapshot(DocumentSnapshot snapshot) {
-        Tool tool = new TracingTool();
+        Tool tool = new LexerTracingTool();
 
         ANTLRStringStream stream = new ANTLRStringStream(snapshot.getText());
         stream.name = snapshot.getVersionedDocument().getFileObject().getNameExt();
-        GrammarRootAST ast = tool.load(stream.name, stream);
+        GrammarRootAST ast = tool.parse(stream.name, stream);
+        if (ast.grammarType == ANTLRParser.PARSER) {
+            // load the correct lexer
+            String vocabName = ast.getOptionString("tokenVocab");
+
+            // try to find a lexer in the same folder with this name
+            FileObject containingFolder = snapshot.getVersionedDocument().getFileObject().getParent();
+            if (containingFolder == null) {
+                LOGGER.log(Level.WARNING, "Could not find source for token vocabulary.");
+                return null;
+            }
+
+            FileObject sourceFileObject = containingFolder.getFileObject(vocabName, "g4");
+            if (sourceFileObject == null) {
+                sourceFileObject = containingFolder.getFileObject(vocabName, "g3");
+            }
+
+            if (sourceFileObject == null) {
+                sourceFileObject = containingFolder.getFileObject(vocabName, "g");
+            }
+
+            if (sourceFileObject == null) {
+                LOGGER.log(Level.WARNING, "Could not find source for token vocabulary.");
+                return null;
+            }
+
+            VersionedDocument sourceDocument = VersionedDocumentUtilities.getVersionedDocument(sourceFileObject);
+            return buildFromSnapshot(sourceDocument.getCurrentSnapshot());
+        }
+
         Grammar grammar = tool.createGrammar(ast);
         tool.process(grammar, false);
 
-        TracingLexerGrammar lexerGrammar;
+        LexerGrammar lexerGrammar;
         if (grammar instanceof LexerGrammar) {
-            lexerGrammar = (TracingLexerGrammar)grammar;
+            lexerGrammar = (LexerGrammar)grammar;
         } else {
-            lexerGrammar = (TracingLexerGrammar)grammar.implicitLexer;
+            lexerGrammar = grammar.implicitLexer;
         }
 
         if (lexerGrammar == null) {
@@ -59,51 +85,11 @@ public class LexerInterpreterData {
 
         LexerInterpreterData data = new LexerInterpreterData();
         data.grammarFileName = lexerGrammar.fileName;
-        data.serializedAtn = ATNSerializer.getSerializedAsString(lexerGrammar, lexerGrammar.atn);
+        data.serializedAtn = ATNSerializer.getSerializedAsString(lexerGrammar.atn, Arrays.asList(lexerGrammar.getRuleNames()));
         data.tokenNames = new ArrayList<>(Arrays.asList(getTokenNames(lexerGrammar)));
         data.ruleNames = new ArrayList<>(lexerGrammar.rules.keySet());
         data.modeNames = new ArrayList<>(lexerGrammar.modes.keySet());
-        data.actionsMap = lexerGrammar._actionsMap;
         return data;
-    }
-
-    public static TokenDescriptor[] getTokenNames(LexerGrammar grammar) {
-        int numTokens = grammar.getMaxTokenType();
-        List<String> typeToStringLiteralList = new ArrayList<>(grammar.typeToStringLiteralList);
-        Utils.setSize(typeToStringLiteralList, numTokens + 1);
-        for (Map.Entry<String, Integer> entry : grammar.stringLiteralToTypeMap.entrySet()) {
-            if (entry.getValue() < 0 || entry.getValue() >= typeToStringLiteralList.size()) {
-                continue;
-            }
-
-            typeToStringLiteralList.set(entry.getValue(), entry.getKey());
-        }
-
-        TokenDescriptor[] tokenNames = new TokenDescriptor[numTokens+1];
-        for (int i = 0; i < tokenNames.length; i++) {
-            tokenNames[i] = new TokenDescriptor();
-        }
-
-        for (String tokenName : grammar.tokenNameToTypeMap.keySet()) {
-            Integer ttype = grammar.tokenNameToTypeMap.get(tokenName);
-            if (ttype < 0 || ttype >= tokenNames.length) {
-                continue;
-            }
-
-            if ( tokenName!=null && tokenName.startsWith(Grammar.AUTO_GENERATED_TOKEN_NAME_PREFIX) ) {
-                if (ttype < typeToStringLiteralList.size()) {
-                    String literal = typeToStringLiteralList.get(ttype);
-                    if (literal != null) {
-                        tokenNames[ttype].literal = literal;
-                    }
-                }
-            }
-
-            tokenNames[ttype].name = tokenName;
-            tokenNames[ttype].value = ttype;
-        }
-
-        return tokenNames;
     }
 
 }

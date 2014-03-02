@@ -60,7 +60,7 @@ import org.openide.windows.TopComponent;
                                      preferredID = "LexerDebuggerControllerTopComponent")
 @Messages({
     "CTL_LexerDebuggerControllerAction=Lexer Debugger Controller",
-    "CTL_LexerDebuggerControllerTopComponent=Lexer Debugger Controller Window",
+    "CTL_LexerDebuggerControllerTopComponent=Lexer",
     "HINT_LexerDebuggerControllerTopComponent=This is a lexer debugger controller window"
 })
 public final class LexerDebuggerControllerTopComponent extends TopComponent {
@@ -323,10 +323,6 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             public void valueChanged(ListSelectionEvent e) {
                 JList<?> list = (JList<?>)e.getSource();
                 JTextComponent editor = EditorRegistry.lastFocusedComponent();
-                final TraceToken[] tokens = getEditorTokens(editor);
-                if (tokens.length == 0) {
-                    return;
-                }
 
                 boolean showAtnTmp = false;
                 boolean showDfaTmp = false;
@@ -341,36 +337,18 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 final boolean showAtn = showAtnTmp;
                 final boolean showDfa = showDfaTmp;
 
-                final List<TraceToken> selectedTokens = new ArrayList<>();
-                if (showAtn || showDfa) {
-                    LexerDebuggerEditorKit kit = (LexerDebuggerEditorKit)editor.getUI().getEditorKit(editor);
-                    kit.processTrace(editor.getDocument(), new AbstractLexerTraceListener() {
-                        int tokenIndex = 0;
-                        boolean atn = false;
-
-                        @Override
-                        public void matchATN() {
-                            atn = true;
-                        }
-
-                        @Override
-                        public void failOverToATN() {
-                            atn = true;
-                        }
-
-                        @Override
-                        public void emit(int startIndex, int stopIndex, int type, int channel) {
-                            if ((atn && showAtn) || (!atn && showDfa)) {
-                                selectedTokens.add(tokens[tokenIndex]);
-                            }
-
-                            tokenIndex++;
-                            atn = false;
-                        }
-                    });
+                TupleIntInt[] highlightedCharacters;
+                if (showAtn) {
+                    TupleIntInt[] atnCharacters = getEditorAtnCharacters(editor);
+                    highlightedCharacters = atnCharacters;
+                } else if (showDfa) {
+                    TupleIntInt[] dfaCharacters = getEditorDfaCharacters(editor);
+                    highlightedCharacters = dfaCharacters;
+                } else {
+                    highlightedCharacters = new TupleIntInt[0];
                 }
 
-                editor.getDocument().putProperty(LexerDebuggerEditorKit.PROP_SELECTED_TOKENS, selectedTokens);
+                editor.getDocument().putProperty(LexerDebuggerEditorKit.PROP_SELECTED_CHARACTERS, highlightedCharacters);
             }
         });
     }
@@ -433,9 +411,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             }
         });
         jScrollPane1.setViewportView(tblTokenTypes);
-        tblTokenTypes.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title0")); // NOI18N
-        tblTokenTypes.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title1")); // NOI18N
-        tblTokenTypes.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title2")); // NOI18N
+        if (tblTokenTypes.getColumnModel().getColumnCount() > 0) {
+            tblTokenTypes.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title0")); // NOI18N
+            tblTokenTypes.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title1")); // NOI18N
+            tblTokenTypes.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title2")); // NOI18N
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -626,7 +606,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 List<TokenDescriptor> tokenDescriptors = tokenDescriptorArray != null ? Arrays.asList(tokenDescriptorArray) : Collections.<TokenDescriptor>emptyList();
                 List<String> modeNames = modeNamesArray != null ? Arrays.asList(modeNamesArray) : Collections.<String>emptyList();
                 if (tokenDescriptors.isEmpty()) {
-                    LexerInterpreterData lexerInterpreterData = (LexerInterpreterData)document.getProperty(LexerDebuggerEditorKit.PROP_INTERP_DATA);
+                    LexerInterpreterData lexerInterpreterData = (LexerInterpreterData)document.getProperty(LexerDebuggerEditorKit.PROP_LEXER_INTERP_DATA);
                     if (lexerInterpreterData != null) {
                         tokenDescriptors = lexerInterpreterData.tokenNames;
                         modeNames = lexerInterpreterData.modeNames;
@@ -791,6 +771,37 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         }
 
         return ((LexerDebuggerEditorKit)kit).getTokens(document);
+    }
+
+    private static TupleIntInt[] getEditorAtnCharacters(@NonNull JTextComponent component) {
+        return getEditorTransitions(component, true);
+    }
+
+    private static TupleIntInt[] getEditorDfaCharacters(@NonNull JTextComponent component) {
+        return getEditorTransitions(component, false);
+    }
+
+    private static TupleIntInt[] getEditorTransitions(@NonNull JTextComponent component, boolean atn) {
+        TextUI ui = component.getUI();
+        if (ui == null) {
+            return new TupleIntInt[0];
+        }
+
+        EditorKit kit = ui.getEditorKit(component);
+        if (!(kit instanceof LexerDebuggerEditorKit)) {
+            return new TupleIntInt[0];
+        }
+
+        Document document = component.getDocument();
+        if (document == null) {
+            return new TupleIntInt[0];
+        }
+
+        if (atn) {
+            return ((LexerDebuggerEditorKit)kit).getAtnTransitions(document);
+        } else {
+            return ((LexerDebuggerEditorKit)kit).getDfaTransitions(document);
+        }
     }
 
     private static class TraceTokenListCellRenderer extends DefaultListCellRenderer {

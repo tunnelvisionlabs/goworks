@@ -96,7 +96,7 @@ public final class InterpretCurrentLexerAction implements ActionListener {
             EditorCookie ec = od.getLookup().lookup(EditorCookie.class);
             Document opened = ec.openDocument();
             if (opened != null) {
-                opened.putProperty(LexerDebuggerEditorKit.PROP_INTERP_DATA, lexerInterpreterData);
+                opened.putProperty(LexerDebuggerEditorKit.PROP_LEXER_INTERP_DATA, lexerInterpreterData);
                 OpenCookie oc = od.getLookup().lookup(OpenCookie.class);
                 if (oc != null) {
                     doOpen(oc);

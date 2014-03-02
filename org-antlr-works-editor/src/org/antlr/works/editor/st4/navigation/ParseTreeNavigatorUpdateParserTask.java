@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -46,7 +47,7 @@ public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorU
     @Override
     protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, TemplateParseTreeNavigatorPanel panel, ParserRuleContext data) {
         panel.setCurrentFile(snapshot.getVersionedDocument().getFileObject());
-        panel.setParseTree(new ParseTreeNode(data));
+        panel.setParseTree(new ParseTreeNode(data, Arrays.asList(TemplateParser.ruleNames)));
     }
 
     private static final class Definition extends AbstractDefinition {

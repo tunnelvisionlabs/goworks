@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See harness/README in the NetBeans platform -->
+<!-- for some information on what you could do (e.g. targets to override). -->
+<!-- If you delete this file and reopen the project it will be recreated. -->
+<project name="org.antlr.v4.runtime" default="netbeans" basedir=".">
+    <description>Builds, tests, and runs the project org.antlr.v4.annotations.</description>
+    <import file="nbproject/build-impl.xml"/>
+
+    <target name="init-artifact">
+        <property name="artifact.name" value="antlr4_annotations"/>
+        <property name="artifact.commit" value="4.2"/>
+        <property name="modules.ext.dir" value="release/modules/ext"/>
+        <property name="artifact.file" value="${modules.ext.dir}/${artifact.name}.jar"/>
+    </target>
+
+    <target name="clean" depends="projectized-common.clean,init-artifact">
+        <delete includeemptydirs="true" failonerror="false" file="${artifact.file}"/>
+    </target>
+
+    <target name="download-artifact" depends="init-artifact,harness.build-init">
+        <property name="modules.cache.dir" value="lib/cache"/>
+        <property name="artifact.intermediatefile" value="${modules.cache.dir}/${artifact.name}-${artifact.commit}.jar"/>
+
+        <mkdir dir="${modules.ext.dir}"/>
+        <mkdir dir="${modules.cache.dir}"/>
+        <get src="http://tunnelvisionlabs.com/downloads/antlr/build/${artifact.name}-${artifact.commit}.jar"
+             dest="${artifact.intermediatefile}"
+             skipexisting="true"/>
+        <copy file="${artifact.intermediatefile}" tofile="${artifact.file}"/>
+    </target>
+
+    <target name="build-init" depends="harness.build-init,download-artifact"/>
+</project>

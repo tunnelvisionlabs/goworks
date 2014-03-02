@@ -22,6 +22,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,7 @@ import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codegen.CodeGenerator;
 import org.antlr.works.editor.grammar.codegen.CodeGenerator.OutputWriterStream;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
@@ -125,6 +127,10 @@ public final class RunInTestRigAction implements ActionListener {
 
         FileModel fileModel = getFileModel(fileObject);
         List<String> availableRules = getAvailableRules(fileModel);
+        if (fileModel != null) {
+            String initialStartRule = RunInTestRigAction.getFirstRule(fileModel, true);
+            wizard.putProperty(RunInTestRigWizardPanel.START_RULE, initialStartRule);
+        }
         wizard.putProperty(RunInTestRigWizardPanel.AVAILABLE_RULES, availableRules.toArray(new String[availableRules.size()]));
         if (DialogDisplayer.getDefault().notify(wizard) == WizardDescriptor.FINISH_OPTION) {
             File inputFile = new File(RunInTestRigWizardOptions.getInputFile(wizard));
@@ -178,10 +184,15 @@ public final class RunInTestRigAction implements ActionListener {
     }
 
     @CheckForNull
-    private static FileModel getFileModel(FileObject fileObject) {
-        ParserTaskManager parserTaskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+    public static FileModel getFileModel(FileObject fileObject) {
         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
         DocumentSnapshot snapshot = versionedDocument.getCurrentSnapshot();
+        return getFileModel(snapshot);
+    }
+
+    @CheckForNull
+    public static FileModel getFileModel(DocumentSnapshot snapshot) {
+        ParserTaskManager parserTaskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         Future<ParserData<FileModel>> futureData = parserTaskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL);
         if (futureData == null) {
             return null;
@@ -201,8 +212,58 @@ public final class RunInTestRigAction implements ActionListener {
         return data.getData();
     }
 
+    @CheckForNull
+    public static String getFirstRule(@NonNull FileModel fileModel, boolean preferExplicitEof) {
+        List<RuleModel> rules = new ArrayList<>(fileModel.getRules());
+        Collections.sort(rules, new Comparator<RuleModel>() {
+            @Override
+            public int compare(RuleModel o1, RuleModel o2) {
+                return Integer.compare(getStart(o1), getStart(o2));
+            }
+
+            private int getStart(RuleModel ruleModel) {
+                if (ruleModel == null) {
+                    return Integer.MAX_VALUE;
+                }
+
+                CodeElementPositionRegion seek = ruleModel.getSeek();
+                if (seek == null) {
+                    return Integer.MAX_VALUE;
+                }
+
+                return seek.getOffsetRegion().getStart();
+            }
+        });
+
+        RuleModel firstRule = null;
+        for (RuleModel ruleModel : rules) {
+            if (ruleModel.getRuleKind() != RuleKind.PARSER) {
+                continue;
+            }
+
+            if (firstRule == null) {
+                firstRule = ruleModel;
+            }
+
+            if (ruleModel.hasExplicitEof()) {
+                // no need to keep looking after we get to an explicit EOF rule
+                return ruleModel.getName();
+            }
+
+            if (!preferExplicitEof) {
+                break;
+            }
+        }
+
+        if (firstRule != null) {
+            return firstRule.getName();
+        }
+
+        return null;
+    }
+
     @NonNull
-    private static List<String> getAvailableRules(@NullAllowed FileModel fileModel) {
+    public static List<String> getAvailableRules(@NullAllowed FileModel fileModel) {
         if (fileModel == null) {
             return Collections.emptyList();
         }
