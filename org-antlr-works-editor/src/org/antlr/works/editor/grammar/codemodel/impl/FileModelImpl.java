@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
@@ -25,15 +26,15 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @NullAllowed
     private final FileObject fileObject;
     @NonNull
-    private final FreezableArrayList<ImportDeclarationModelImpl> importDeclarations = new FreezableArrayList<ImportDeclarationModelImpl>();
+    private final FreezableArrayList<ImportDeclarationModelImpl> importDeclarations = new FreezableArrayList<>();
     @NonNull
-    private final FreezableArrayList<TokenVocabDeclarationModelImpl> tokenVocabDeclarations = new FreezableArrayList<TokenVocabDeclarationModelImpl>();
+    private final FreezableArrayList<TokenVocabDeclarationModelImpl> tokenVocabDeclarations = new FreezableArrayList<>();
     @NonNull
-    private final FreezableArrayList<ModeModelImpl> modes = new FreezableArrayList<ModeModelImpl>();
+    private final FreezableArrayList<ModeModelImpl> modes = new FreezableArrayList<>();
     @NonNull
-    private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<RuleModelImpl>();
-    @SuppressWarnings("unchecked")
-    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<AbstractCodeElementModel>(importDeclarations, tokenVocabDeclarations, rules);
+    private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<>();
+    @NonNull
+    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(Arrays.asList(importDeclarations, tokenVocabDeclarations, rules));
 
     public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed Project project, @NonNull String packagePath) {
         super(fileObject.getNameExt(), project, packagePath);

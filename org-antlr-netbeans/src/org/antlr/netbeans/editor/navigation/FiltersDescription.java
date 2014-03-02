@@ -22,11 +22,11 @@ public final class FiltersDescription {
     }
 
     /** List of <FilterItem> describing filters properties */
-    private List<FilterItem> filters;
+    private final List<FilterItem> filters;
 
     /** Creates a new instance of FiltersDescription */
     public FiltersDescription() {
-        filters = new ArrayList<FilterItem>();
+        filters = new ArrayList<>();
     }
 
     public void addFilter (String name, String displayName, String tooltip,

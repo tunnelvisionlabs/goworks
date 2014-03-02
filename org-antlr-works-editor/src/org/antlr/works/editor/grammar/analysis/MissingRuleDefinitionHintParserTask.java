@@ -92,7 +92,7 @@ public final class MissingRuleDefinitionHintParserTask implements ParserTask {
         Listener listener = new Listener(grammarAnnotatedParseTree);
         ParseTreeWalker.DEFAULT.walk(listener, grammarAnnotatedParseTree.getParseTree());
 
-        List<ErrorDescription> hints = new ArrayList<ErrorDescription>();
+        List<ErrorDescription> hints = new ArrayList<>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
                 hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.ERROR, "Missing rule definition", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
@@ -126,7 +126,7 @@ public final class MissingRuleDefinitionHintParserTask implements ParserTask {
         }
 
         @Override
-        public void visitTerminal(TerminalNode<? extends Token> node) {
+        public void visitTerminal(TerminalNode node) {
             Token token = node.getSymbol();
             if (_grammarAnnotatedParseTree.getTokenDecorator().getProperty(token, GrammarTreeProperties.PROP_MISSING_DEF)) {
                 String text = token.getText();

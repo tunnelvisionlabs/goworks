@@ -44,14 +44,14 @@
 
 package com.tvl.spi.editor.completion.support;
 
+import com.tvl.spi.editor.completion.CompletionResultSet;
+import com.tvl.spi.editor.completion.CompletionTask;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import com.tvl.spi.editor.completion.CompletionResultSet;
-import com.tvl.spi.editor.completion.CompletionTask;
 import org.openide.util.RequestProcessor;
 
 /**
@@ -100,6 +100,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      *  <br>
      *  It may be null to indicate that no component was provided.
      */
+    @SuppressWarnings({"LeakingThisInConstructor", "null"})
     public AsyncCompletionTask(@NonNull AsyncCompletionQuery query, @NullAllowed JTextComponent component) {
         assert (query != null) : "Query must be non-null";
         this.query = query;
@@ -138,7 +139,9 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
     /**
      * Called by completion infrastructure in AWT thread to populate
      * the given result set with data.
+     * @param resultSet
      */
+    @Override
     public void query(CompletionResultSet resultSet) {
         assert (resultSet != null);
         assert (SwingUtilities.isEventDispatchThread());
@@ -160,7 +163,9 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      * gets modified).
      * <br>
      * The results should be fired into the newly provided completion listener.
+     * @param resultSet
      */
+    @Override
     public void refresh(CompletionResultSet resultSet) {
         assert (SwingUtilities.isEventDispatchThread());
         assert !cancelled : "refresh() called on canceled task"; // NOI18N
@@ -176,6 +181,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
     /**
      * Called by completion infrastructure to cancel the running task.
      */
+    @Override
     public void cancel() {
         cancelled = true;
         synchronized (this) {
@@ -236,6 +242,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      * This method will be run() from the RequestProcessor during
      * performing of the query.
      */
+    @Override
     public void run() {
         // First check whether there was not request yet to stop the query: (queryResultSet == null)
         CompletionResultSet resultSet = queryResultSet;
@@ -253,6 +260,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
             if (refreshResultSet != null) {
                 // Post refresh computation into AWT thread
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         refreshImpl();
                     }
@@ -265,6 +273,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
         return cancelled;
     }
 
+    @Override
     public String toString() {
         return "AsyncCompletionTask: query=" + query; // NOI18N
     }

@@ -46,7 +46,12 @@
 package com.tvl.modules.editor.completion;
 
 import com.tvl.spi.editor.completion.CompletionDocumentation;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -56,7 +61,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.plaf.TextUI;
@@ -65,11 +81,9 @@ import javax.swing.text.EditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
 import javax.swing.text.html.HTMLDocument;
-
-import org.netbeans.editor.*;
-import org.netbeans.editor.ext.ExtKit;
 import org.netbeans.api.annotations.common.StaticResource;
-
+import org.netbeans.editor.BaseKit;
+import org.netbeans.editor.ext.ExtKit;
 import org.openide.awt.HtmlBrowser;
 import org.openide.awt.StatusDisplayer;
 import org.openide.util.ImageUtilities;
@@ -117,13 +131,14 @@ public class DocumentationScrollPane extends JScrollPane {
     private HTMLDocView view;
     
     // doc browser history
-    private List<CompletionDocumentation> history = new ArrayList<CompletionDocumentation>(5);
+    private List<CompletionDocumentation> history = new ArrayList<>(5);
     private int currentHistoryIndex = -1;
     protected CompletionDocumentation currentDocumentation = null;
     
     private Dimension documentationPreferredSize;
 
     /** Creates a new instance of ScrollJavaDocPane */
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public DocumentationScrollPane(JTextComponent editorComponent) {
         super();
  
@@ -434,7 +449,7 @@ public class DocumentationScrollPane extends JScrollPane {
     }
 
     private class MouseEventListener extends MouseAdapter {        
-        private JButton button;
+        private final JButton button;
         
         MouseEventListener(JButton button) {
             this.button = button;
@@ -465,7 +480,8 @@ public class DocumentationScrollPane extends JScrollPane {
     }
 
     private class HyperlinkAction implements HyperlinkListener {
-        
+
+        @Override
         public void hyperlinkUpdate(HyperlinkEvent e) {
             if (e != null && HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
                 final String desc = e.getDescription();
@@ -491,13 +507,14 @@ public class DocumentationScrollPane extends JScrollPane {
     }
     
     private class DocPaneAction extends AbstractAction {
-        private int action;
+        private final int action;
         
         private DocPaneAction(int action) {
             this.action = action;
         }
-        
-        public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
             switch (action) {
 		case ACTION_JAVADOC_ESCAPE:
 		    CompletionImpl.get().hideDocumentation(false);

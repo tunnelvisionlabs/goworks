@@ -31,25 +31,24 @@ import org.openide.util.Parameters;
  *
  * @author Sam Harwell
  */
-public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symbol> {
+public class TaggerTokenSource implements TokenSource {
     private final DocumentSnapshot snapshot;
-    private final Tagger<TokenTag<Symbol>> tagger;
+    private final Tagger<TokenTag<Token>> tagger;
     private final SnapshotPositionRegion region;
-    private final Iterable<TaggedPositionRegion<TokenTag<Symbol>>> tags;
-    private final Iterator<TaggedPositionRegion<TokenTag<Symbol>>> tagIterator;
-    private TokenTag<Symbol> previousTag;
+    private final Iterable<TaggedPositionRegion<TokenTag<Token>>> tags;
+    private final Iterator<TaggedPositionRegion<TokenTag<Token>>> tagIterator;
+    private TokenTag<Token> previousTag;
     private CharStream input;
-    private Tuple2<? extends TokenSource<Symbol>, CharStream> tokenFactorySourcePair;
+    private Tuple2<? extends TokenSource, CharStream> tokenFactorySourcePair;
     private int line = -1;
     private int charPositionInLine = -1;
-    @SuppressWarnings("unchecked")
-    private TokenFactory<? extends Symbol> tokenFactory = (TokenFactory<? extends Symbol>)CommonTokenFactory.DEFAULT;
+    private TokenFactory tokenFactory = CommonTokenFactory.DEFAULT;
 
-    public TaggerTokenSource(@NonNull Tagger<TokenTag<Symbol>> tagger, DocumentSnapshot snapshot) {
+    public TaggerTokenSource(@NonNull Tagger<TokenTag<Token>> tagger, DocumentSnapshot snapshot) {
         this(tagger, new SnapshotPositionRegion(snapshot, 0, snapshot.length()));
     }
 
-    public TaggerTokenSource(@NonNull Tagger<TokenTag<Symbol>> tagger, @NonNull SnapshotPositionRegion region) {
+    public TaggerTokenSource(@NonNull Tagger<TokenTag<Token>> tagger, @NonNull SnapshotPositionRegion region) {
         this.snapshot = region.getSnapshot();
         this.tagger = tagger;
         this.region = region;
@@ -58,7 +57,7 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
     }
 
     @Override
-    public Symbol nextToken() {
+    public Token nextToken() {
         if (previousTag != null && previousTag.getToken().getType() == Token.EOF) {
             return previousTag.getToken();
         }
@@ -66,14 +65,14 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
         if (tagIterator.hasNext()) {
             previousTag = tagIterator.next().getTag();
         } else {
-            TokenSource<Symbol> source = this;
+            TokenSource source = this;
             String text = null;
             int channel = Token.DEFAULT_CHANNEL;
             int start = snapshot.length();
             int stop = start - 1;
-            int line = snapshot.getLineCount();
-            int charPositionInLine = snapshot.findLineFromLineNumber(line - 1).getLength();
-            previousTag = new TokenTag<Symbol>(tokenFactory.create(getTokenFactorySourcePair(), Token.EOF, text, channel, start, stop, line, charPositionInLine));
+            int lineCount = snapshot.getLineCount();
+            int lineLength = snapshot.findLineFromLineNumber(lineCount - 1).getLength();
+            previousTag = new TokenTag<>(tokenFactory.create(getTokenFactorySourcePair(), Token.EOF, text, channel, start, stop, lineCount, lineLength));
         }
 
         line = -1;
@@ -126,7 +125,7 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
     }
 
     @NonNull
-    protected Tuple2<? extends TokenSource<Symbol>, CharStream> getTokenFactorySourcePair() {
+    protected Tuple2<? extends TokenSource, CharStream> getTokenFactorySourcePair() {
         if (tokenFactorySourcePair == null) {
             tokenFactorySourcePair = Tuple.create(this, getInputStream());
         }
@@ -145,12 +144,12 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
     }
 
     @Override
-    public TokenFactory<? extends Symbol> getTokenFactory() {
+    public TokenFactory getTokenFactory() {
         return tokenFactory;
     }
 
     @Override
-    public void setTokenFactory(TokenFactory<? extends Symbol> tokenFactory) {
+    public void setTokenFactory(TokenFactory tokenFactory) {
         Parameters.notNull("tokenFactory", tokenFactory);
         this.tokenFactory = tokenFactory;
     }

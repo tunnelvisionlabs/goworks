@@ -44,8 +44,29 @@
 
 package com.tvl.modules.editor.completion;
 
-import java.awt.*;
-import java.awt.event.*;
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionController.Selection;
+import com.tvl.spi.editor.completion.CompletionControllerProvider;
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionProvider;
+import com.tvl.spi.editor.completion.CompletionResultSet;
+import com.tvl.spi.editor.completion.CompletionTask;
+import com.tvl.spi.editor.completion.LazyCompletionItem;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
@@ -59,18 +80,32 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JViewport;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.plaf.TextUI;
-import javax.swing.text.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.EditorKit;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.Keymap;
 import javax.swing.undo.UndoableEdit;
-
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
@@ -78,11 +113,10 @@ import org.netbeans.api.editor.settings.KeyBindingSettings;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.editor.BaseKit;
 import org.netbeans.editor.GuardedDocument;
-import org.netbeans.lib.editor.util.swing.DocumentUtilities;
-import org.netbeans.lib.editor.util.swing.DocumentListenerPriority;
 import org.netbeans.editor.Utilities;
 import org.netbeans.editor.ext.ExtKit;
-import com.tvl.spi.editor.completion.*;
+import org.netbeans.lib.editor.util.swing.DocumentListenerPriority;
+import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.openide.ErrorManager;
 import org.openide.text.CloneableEditorSupport;
 import org.openide.util.Exceptions;
@@ -111,6 +145,7 @@ import org.openide.util.WeakListeners;
 @NbBundle.Messages({
     "completion-no-suggestions=No suggestions"
 })
+@SuppressWarnings("ClassWithMultipleLoggers")
 public class CompletionImpl extends MouseAdapter implements DocumentListener,
 CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChangeListener, ChangeListener {
     
@@ -198,12 +233,14 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         return singleton;
     }
 
-    static LazyListModel.Filter filter = new LazyListModel.Filter() {
+    static LazyListModel.Filter<Object> filter = new LazyListModel.Filter<Object>() {
+        @Override
         public boolean accept(Object obj) {
             if (obj instanceof LazyCompletionItem)
                 return ((LazyCompletionItem)obj).accept();
             return true;
         }
+        @Override
         public void scheduleUpdate(Runnable run) {
             SwingUtilities.invokeLater( run );
         }
@@ -232,7 +269,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     
     /** Mapping of mime-type to service provider type to array of providers. Changed in AWT only. */
     private HashMap<String, HashMap<Class<?>, Object[]>> providersCache =
-        new HashMap<String, HashMap<Class<?>, Object[]>>();
+        new HashMap<>();
 
     /**
      * Result of the completion query.
@@ -286,8 +323,10 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     private static CompletionImplProfile profile;
     
     private final LookupListener shortcutsTracker = new LookupListener() {
+        @Override
         public void resultChanged(LookupEvent ev) {
             Utilities.runInEventDispatchThread(new Runnable(){
+                @Override
                 public void run(){
                     installKeybindings();
                 }
@@ -297,9 +336,11 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
 
     private Point lastViewPosition; // Visible view in JViewport
     
+    @SuppressWarnings("LeakingThisInConstructor")
     private CompletionImpl() {
         EditorRegistry.addPropertyChangeListener(this);
         completionAutoPopupTimer = new Timer(0, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 Result localCompletionResult;
                 synchronized (CompletionImpl.this) {
@@ -317,6 +358,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         completionAutoPopupTimer.setRepeats(false);
         
         docAutoPopupTimer = new Timer(0, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 SelectedCompletionItem selectedItem = layout.getSelectedCompletionItem();
                 CompletionItem currentSelectedItem = selectedItem != null ? selectedItem.getItem() : null;
@@ -326,6 +368,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         });
         docAutoPopupTimer.setRepeats(false);
         pleaseWaitTimer = new Timer(PLEASE_WAIT_TIMEOUT, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 String waitText = PLEASE_WAIT;
                 boolean politeWaitText = false;
@@ -335,8 +378,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                 }
                 List<CompletionResultSetImpl> resultSets;
                 if (localCompletionResult != null && (resultSets = localCompletionResult.getResultSets()) != null) {
-                    for (Iterator it = resultSets.iterator(); it.hasNext();) {
-                        CompletionResultSetImpl resultSet = (CompletionResultSetImpl)it.next();
+                    for (Iterator<CompletionResultSetImpl> it = resultSets.iterator(); it.hasNext();) {
+                        CompletionResultSetImpl resultSet = it.next();
                         if (resultSet != null && resultSet.getWaitText() != null) {
                             waitText = resultSet.getWaitText();
                             politeWaitText = true;
@@ -373,8 +416,9 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     int getSortType() {
         return alphaSort ? CompletionResultSet.TEXT_SORT_TYPE : CompletionResultSet.PRIORITY_SORT_TYPE;
     }
-    
-    public void insertUpdate(javax.swing.event.DocumentEvent e) {
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
         // Ignore insertions done outside of the AWT (various content generation)
         if (!SwingUtilities.isEventDispatchThread()) {
             return;
@@ -415,27 +459,28 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         }
     }
     
-    public void removeUpdate(javax.swing.event.DocumentEvent e) {
+    @Override
+    @SuppressWarnings("UnnecessaryReturnStatement")
+    public void removeUpdate(DocumentEvent e) {
         // Ignore insertions done outside of the AWT (various content generation)
         if (!SwingUtilities.isEventDispatchThread()) {
             return;
         }
     }
     
-    public void changedUpdate(javax.swing.event.DocumentEvent e) {
+    @Override
+    public void changedUpdate(DocumentEvent e) {
     }
     
-    public synchronized void caretUpdate(javax.swing.event.CaretEvent e) {
+    @Override
+    public synchronized void caretUpdate(CaretEvent e) {
         assert (SwingUtilities.isEventDispatchThread());
 
         if (ensureActiveProviders()) {
             // Check whether there is an active result being computed but not yet displayed
             // Caret update should be notified AFTER document modifications
             // thank to document listener priorities
-            Result localCompletionResult;
-            synchronized (this) {
-                localCompletionResult = completionResult;
-            }
+            Result localCompletionResult = completionResult;
             if (autoModEndOffset >= 0 && e.getDot() != autoModEndOffset
                     && (completionAutoPopupTimer.isRunning() || localCompletionResult != null)
                     && (!layout.isCompletionVisible() || pleaseWaitDisplayed)
@@ -448,21 +493,26 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         dispatchKeyEvent(e);
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         dispatchKeyEvent(e);
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
         dispatchKeyEvent(e);
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         hideAll();
     }
@@ -472,6 +522,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         hideAll();
     }
     
+    @Override
     public void stateChanged(ChangeEvent e) {
         // From JViewport
         boolean hide = true;
@@ -499,7 +550,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     /**
      * Called from AWT when selection in the completion list pane changes.
      */
-    public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
         assert (SwingUtilities.isEventDispatchThread());
 
         documentationCancel();
@@ -511,6 +563,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     /**
      * Expected to be called from the AWT only.
      */
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         assert (SwingUtilities.isEventDispatchThread()); // expected in AWT only
 
@@ -542,7 +595,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                 }
             }
             activeComponent = (component != null)
-                    ? new WeakReference<JTextComponent>(component)
+                    ? new WeakReference<>(component)
                     : null;
             layout.setEditorComponent(getActiveComponent());
             stopProfiling();
@@ -560,7 +613,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             if (document != null)
                 DocumentUtilities.addDocumentListener(document, this,
                         DocumentListenerPriority.AFTER_CARET_UPDATE);
-            activeDocument = (document != null) ? new WeakReference<Document>(document) : null;
+            activeDocument = (document != null) ? new WeakReference<>(document) : null;
             cancel = true;
         }
         if (cancel)
@@ -667,7 +720,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         
         HashMap<Class<?>, Object[]> providers = providersCache.get(mimeType);
         if (providers == null) {
-            providers = new HashMap<Class<?>, Object[]>();
+            providers = new HashMap<>();
             providersCache.put(mimeType, providers);
         }
 
@@ -713,7 +766,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         KeyStroke ks = KeyStroke.getKeyStrokeForEvent(e);
         JTextComponent comp = getActiveComponent();
         boolean compEditable = (comp != null && comp.isEditable());
-        Document doc = comp.getDocument();
+        Document doc = comp != null ? comp.getDocument() : null;
+        @SuppressWarnings("null") // doc is only non-null if comp is non-null
         boolean guardedPos = doc instanceof GuardedDocument && ((GuardedDocument)doc).isPosGuarded(comp.getSelectionEnd());
         Object obj = inputMap.get(ks);
         if (obj != null) {
@@ -906,78 +960,77 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                 return;
             }
         }
-        if (localCompletionResult != null) {
-            CharSequence commonText = null;
-            int anchorOffset = -1;
+
+        CharSequence commonText = null;
+        int anchorOffset = -1;
 outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getResultSets()) {
-                List<? extends CompletionItem> resultItems = resultSet.getItems();
-                if (resultItems.size() > 0) {
-                    if (anchorOffset >= -1) {
-                        if (anchorOffset > -1 && anchorOffset != resultSet.getAnchorOffset())
-                            anchorOffset = -2;
-                        else
-                            anchorOffset = resultSet.getAnchorOffset();
-                    }
-                    for (CompletionItem item : resultItems) {
-                        CharSequence text = item.getInsertPrefix();
-                        if (text == null) {
-                            commonText = null;
-                            break outer;
-                        }
-                        if (commonText == null) {
-                            commonText = text;
-                        } else {
-                            // Get the largest common part
-                            if (text.length() < commonText.length())
-                                commonText = commonText.subSequence(0, text.length());
-                            for (int commonInd = 0; commonInd < commonText.length(); commonInd++) {
-                                if (text.charAt(commonInd) != commonText.charAt(commonInd)) {
-                                    if (commonInd == 0) {
-                                        commonText = null;
-                                        break outer; // no common text
-                                    }
-                                    commonText = commonText.subSequence(0, commonInd);
-                                    break;
-                                }
-                            }
-                        }
-                    }
+            List<? extends CompletionItem> resultItems = resultSet.getItems();
+            if (resultItems.size() > 0) {
+                if (anchorOffset >= -1) {
+                    if (anchorOffset > -1 && anchorOffset != resultSet.getAnchorOffset())
+                        anchorOffset = -2;
+                    else
+                        anchorOffset = resultSet.getAnchorOffset();
                 }
-            }
-            if (commonText != null && anchorOffset >= 0) {
-                int caretOffset = c.getSelectionStart();
-                if (caretOffset - anchorOffset < commonText.length()) {
-
-                    final int finalAnchorOffset = anchorOffset;
-                    final int finalCaretOffset = caretOffset;
-                    final CharSequence finalCommonText = commonText;
-                    final Document doc = getActiveDocument();
-
-                    Runnable operation = new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                doc.remove(finalAnchorOffset, finalCaretOffset - finalAnchorOffset);
-                                doc.insertString(finalAnchorOffset, finalCommonText.toString(), null);
-                            } catch (BadLocationException e) {
-                            }
-                        }
-                    };
-
-                    // Insert the missing end part of the prefix
-                    if (doc instanceof BaseDocument) {
-                        ((BaseDocument)doc).runAtomic(operation);
+                for (CompletionItem item : resultItems) {
+                    CharSequence text = item.getInsertPrefix();
+                    if (text == null) {
+                        commonText = null;
+                        break outer;
+                    }
+                    if (commonText == null) {
+                        commonText = text;
                     } else {
-                        operation.run();
+                        // Get the largest common part
+                        if (text.length() < commonText.length())
+                            commonText = commonText.subSequence(0, text.length());
+                        for (int commonInd = 0; commonInd < commonText.length(); commonInd++) {
+                            if (text.charAt(commonInd) != commonText.charAt(commonInd)) {
+                                if (commonInd == 0) {
+                                    commonText = null;
+                                    break outer; // no common text
+                                }
+                                commonText = commonText.subSequence(0, commonInd);
+                                break;
+                            }
+                        }
                     }
-
-                    return;
                 }
             }
-            SelectedCompletionItem item = layout.getSelectedCompletionItem();
-            if (item != null)
-                localCompletionResult.getController().defaultAction(item.getItem(), item.isSelected());
         }
+        if (commonText != null && anchorOffset >= 0) {
+            int caretOffset = c.getSelectionStart();
+            if (caretOffset - anchorOffset < commonText.length()) {
+
+                final int finalAnchorOffset = anchorOffset;
+                final int finalCaretOffset = caretOffset;
+                final CharSequence finalCommonText = commonText;
+                final Document doc = getActiveDocument();
+
+                Runnable operation = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            doc.remove(finalAnchorOffset, finalCaretOffset - finalAnchorOffset);
+                            doc.insertString(finalAnchorOffset, finalCommonText.toString(), null);
+                        } catch (BadLocationException e) {
+                        }
+                    }
+                };
+
+                // Insert the missing end part of the prefix
+                if (doc instanceof BaseDocument) {
+                    ((BaseDocument)doc).runAtomic(operation);
+                } else {
+                    operation.run();
+                }
+
+                return;
+            }
+        }
+        SelectedCompletionItem item = layout.getSelectedCompletionItem();
+        if (item != null)
+            localCompletionResult.getController().defaultAction(item.getItem(), item.isSelected());
     }
     
     /**
@@ -1048,7 +1101,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         }
         
         // Collect and sort the gathered completion items
-        List<CompletionItem> resultItems = new ArrayList<CompletionItem>(size);
+        List<CompletionItem> resultItems = new ArrayList<>(size);
         String title = null;
         int anchorOffset = -1;
         if (size > 0) {
@@ -1065,7 +1118,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             }
         }
         
-        final ArrayList<CompletionItem> sortedResultItems = new ArrayList<CompletionItem>(size = resultItems.size());
+        final ArrayList<CompletionItem> sortedResultItems = new ArrayList<>(size = resultItems.size());
         if (size > 0) {
             result.getController().sortItems(resultItems, getSortType());
             int cnt = 0;
@@ -1084,7 +1137,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             }
         }
 
-        List<CompletionItem> declarationItems = new ArrayList<CompletionItem>(declarationItemsSize);
+        List<CompletionItem> declarationItems = new ArrayList<>(declarationItemsSize);
         if (declarationItemsSize > 0) {
             for (int i = 0; i < completionResultSets.size(); i++) {
                 CompletionResultSetImpl resultSet = completionResultSets.get(i);
@@ -1095,7 +1148,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             }
         }
 
-        final ArrayList<CompletionItem> sortedDeclarationItems = new ArrayList<CompletionItem>(declarationItemsSize = declarationItems.size());
+        final ArrayList<CompletionItem> sortedDeclarationItems = new ArrayList<>(declarationItemsSize = declarationItems.size());
         if (declarationItemsSize > 0) {
             result.getController().sortItems(resultItems, getSortType());
             sortedDeclarationItems.addAll(declarationItems);
@@ -1118,6 +1171,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         final int displayAnchorOffset = anchorOffset;
         final boolean displayAdditionalItems = hasAdditionalItems;
         Runnable requestShowRunnable = new Runnable() {
+            @Override
             public void run() {
                 synchronized(CompletionImpl.this) {
                     if (result != completionResult)
@@ -1130,10 +1184,9 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
 
                 CompletionController.Selection selection = result.getController().getSelection(sortedResultItems, sortedDeclarationItems);
                 // the CompletionController should be returning a valid selection
-                assert selection != null
-                    && (sortedResultItems.isEmpty()
+                assert (sortedResultItems.isEmpty()
                         || selection.getIndex() >= 0 && selection.getIndex() < sortedResultItems.size());
-                if (selection == null || selection.getIndex() < 0 || selection.getIndex() > sortedResultItems.size()) {
+                if (selection.getIndex() < 0 || selection.getIndex() > sortedResultItems.size()) {
                     selection = CompletionController.Selection.DEFAULT;
                 }
 
@@ -1240,6 +1293,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     void requestShowDocumentationPane(Result result) {
         final CompletionResultSetImpl resultSet = findFirstValidResult(result.getResultSets());
         runInAWT(new Runnable() {
+            @Override
             public void run() {
                 synchronized (CompletionImpl.this) {
                     if (resultSet != null) {
@@ -1268,7 +1322,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         CompletionTask docTask;
         SelectedCompletionItem selectedItem = layout.getSelectedCompletionItem();
         if (selectedItem != null) {
-            lastSelectedItem = new WeakReference<CompletionItem>(selectedItem.getItem());
+            lastSelectedItem = new WeakReference<>(selectedItem.getItem());
             docTask = selectedItem.getItem().createDocumentationTask();
             if (docTask != null) { // attempt the documentation for selected item
                 CompletionResultSetImpl resultSet = new CompletionResultSetImpl(
@@ -1365,6 +1419,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     void requestShowToolTipPane(Result result) {
         final CompletionResultSetImpl resultSet = findFirstValidResult(result.getResultSets());
         runInAWT(new Runnable() {
+            @Override
             public void run() {
                 if (resultSet != null) {
                     layout.showToolTip(
@@ -1528,7 +1583,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     
     private static String getKeyStrokeAsText (KeyStroke keyStroke) {
         int modifiers = keyStroke.getModifiers ();
-        StringBuffer sb = new StringBuffer ();
+        StringBuilder sb = new StringBuilder ();
         sb.append('\'');
         if ((modifiers & InputEvent.CTRL_DOWN_MASK) > 0)
             sb.append ("Ctrl+"); //NOI18N
@@ -1604,8 +1659,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             CompletionResultSetImpl result = resultSets.get(i);
             if (!result.isFinished()) {
                 if (LOG.isLoggable(Level.FINE)) {
-                    LOG.fine("CompletionTask: " + result.getTask() // NOI18N
-                            + " not finished yet\n"); // NOI18N
+                    LOG.log(Level.FINE, "CompletionTask: {0} not finished yet\n", result.getTask()); // NOI18N
                 }
                 return false;
             }
@@ -1660,7 +1714,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     }
     
     void testSetActiveComponent(JTextComponent component) {
-        activeComponent = new WeakReference<JTextComponent>(component);
+        activeComponent = new WeakReference<>(component);
     }
 
     // ..........................................................................
@@ -1682,6 +1736,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             this.queryType = queryType;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             autoModEndOffset = -1;
             showCompletion(true, false, false, queryType);
@@ -1689,12 +1744,14 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     }
 
     private final class DocShowAction extends AbstractAction {
+        @Override
         public void actionPerformed(ActionEvent e) {
             showDocumentation();
         }
     }
 
     private final class ToolTipShowAction extends AbstractAction {
+        @Override
         public void actionPerformed(ActionEvent e) {
             showToolTip();
         }
@@ -1729,6 +1786,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             this.type = type;
         }
 
+        @Override
         public void run() {
             switch (opCode) {
                 case SHOW_COMPLETION:
@@ -1824,7 +1882,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         private CompletionController controller;
         
         Result(int resultSetsSize) {
-            resultSets = new ArrayList<CompletionResultSetImpl>(resultSetsSize);
+            resultSets = new ArrayList<>(resultSetsSize);
         }
 
         /**
@@ -1844,8 +1902,8 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
                     }
 
                     JTextComponent component = getActiveComponent();
-                    List<CompletionTask> tasks = new ArrayList<CompletionTask>();
-                    List<Integer> queryTypes = new ArrayList<Integer>();
+                    List<CompletionTask> tasks = new ArrayList<>();
+                    List<Integer> queryTypes = new ArrayList<>();
                     for (CompletionResultSetImpl resultSet : resultSets) {
                         tasks.add(resultSet.getTask());
                         queryTypes.add(resultSet.getQueryType());

@@ -33,7 +33,7 @@ public final class CollapsiblePanel extends JPanel {
     private int orientation;
     private boolean armed;
     private boolean expanded;
-    private int minimumHeight = 8;
+    private final int minimumHeight = 8;
 
     private final Icon up = new UpIcon ();
     private final Icon down = new DownIcon ();
@@ -52,7 +52,7 @@ public final class CollapsiblePanel extends JPanel {
 
         if (result == null) {
             result = new MouseAdapterImpl();
-            mouseAdapter = new WeakReference<MouseAdapterImpl>(result);
+            mouseAdapter = new WeakReference<>(result);
         }
 
         return result;

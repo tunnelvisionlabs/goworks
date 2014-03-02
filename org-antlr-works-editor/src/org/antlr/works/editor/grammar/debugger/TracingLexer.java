@@ -38,7 +38,7 @@ public class TracingLexer extends Lexer {
         if (data.actionsMap != null) {
             _actions = data.actionsMap;
         } else {
-            _actions = new HashMap<Integer, Collection<LexerAction>>();
+            _actions = new HashMap<>();
         }
     }
 
@@ -76,7 +76,7 @@ public class TracingLexer extends Lexer {
     }
 
     @Override
-    public void action(RuleContext<Integer> _localctx, int ruleIndex, int actionIndex) {
+    public void action(RuleContext _localctx, int ruleIndex, int actionIndex) {
         Collection<LexerAction> actions = _actions.get(actionIndex);
         if (actions == null) {
             return;

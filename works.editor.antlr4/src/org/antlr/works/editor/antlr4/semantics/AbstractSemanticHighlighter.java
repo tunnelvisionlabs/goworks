@@ -54,6 +54,7 @@ import org.openide.util.WeakSet;
 /**
  *
  * @author Sam Harwell
+ * @param <SemanticData>
  */
 public abstract class AbstractSemanticHighlighter<SemanticData> extends AbstractHighlightsContainer {
     // -J-Dorg.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter.level=FINE
@@ -66,7 +67,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
     private final DataListener dataListener;
     private final OffsetsBag container;
 
-    private final Set<JTextComponent> components = new WeakSet<JTextComponent>();
+    private final Set<JTextComponent> components = new WeakSet<>();
 
     protected AbstractSemanticHighlighter(@NonNull StyledDocument document, @NonNull ParserDataDefinition<? extends SemanticData> semanticDataDefinition) {
         Parameters.notNull("document", document);
@@ -123,7 +124,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
     protected void addComponent(JTextComponent component) {
         components.add(component);
         if (components.size() == 1) {
-            taskManager.addDataListener(semanticDataDefinition, new WeakDataListener<SemanticData>(semanticDataDefinition, dataListener));
+            taskManager.addDataListener(semanticDataDefinition, new WeakDataListener<>(semanticDataDefinition, dataListener));
         }
     }
 
@@ -207,7 +208,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
             }
 
             final DocumentSnapshot snapshot = parserData.getSnapshot();
-            if (snapshot == null || !versionedDocument.equals(snapshot.getVersionedDocument())) {
+            if (!versionedDocument.equals(snapshot.getVersionedDocument())) {
                 return;
             }
 
@@ -226,7 +227,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
         private final ParserDataDefinition<? extends T> dataDefinition;
 
         public WeakDataListener(@NonNull ParserDataDefinition<? extends T> dataDefinition, @NonNull ParserDataListener<T> listener) {
-            this._listener = new WeakReference<ParserDataListener<T>>(listener);
+            this._listener = new WeakReference<>(listener);
             this.dataDefinition = dataDefinition;
         }
 

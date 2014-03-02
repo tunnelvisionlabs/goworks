@@ -8,11 +8,11 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
@@ -25,17 +25,17 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 public abstract class RuleModelImpl extends AbstractCodeElementModel implements RuleModel {
-    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<ParameterModelImpl> locals = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<LabelModelImpl> labels = new FreezableArrayList<LabelModelImpl>();
-    @SuppressWarnings("unchecked")
-    private final ProxyCollection<AbstractCodeElementModel> members = new ProxyCollection<AbstractCodeElementModel>(parameters, returnValues, locals, labels);
+    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<>();
+    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<>();
+    private final FreezableArrayList<ParameterModelImpl> locals = new FreezableArrayList<>();
+    private final FreezableArrayList<LabelModelImpl> labels = new FreezableArrayList<>();
+    @NonNull
+    private final ProxyCollection<AbstractCodeElementModel> members = new ProxyCollection<AbstractCodeElementModel>(Arrays.asList(parameters, returnValues, locals, labels));
 
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public RuleModelImpl(String name, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    public RuleModelImpl(String name, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, file);
         this.seek = getOffsetRegion(seek);
         this.span = getOffsetRegion(span);

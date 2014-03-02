@@ -44,9 +44,9 @@
 
 package com.tvl.spi.editor.completion.support;
 
+import com.tvl.spi.editor.completion.CompletionResultSet;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import com.tvl.spi.editor.completion.CompletionResultSet;
 
 /**
  * Defines query processing of an asynchronous completion task.
@@ -76,6 +76,7 @@ public abstract class AsyncCompletionQuery {
      * position and decide whether the completion should be hidden
      * if the typed character is inappropriate e.g. ";" for java completion.
      *
+     * @param component
      * @since 1.3
      */
     protected void preQueryUpdate(JTextComponent component) {        

@@ -54,8 +54,8 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
     // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionProvider.class.getName());
 
-    private static String grammarCompletionAutoPopupTriggers = "$";
-    private static String grammarCompletionSelectors = " :;[]<>";
+    private static final String grammarCompletionAutoPopupTriggers = "$";
+    private static final String grammarCompletionSelectors = " :;[]<>";
 
     @Override
     protected AbstractCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend) {
@@ -130,11 +130,11 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
     }
 
     public static Collection<Description> getRulesFromGrammar(ParserTaskManager taskManager, DocumentSnapshot snapshot, boolean ignoreLexerOnlyRules) {
-        Map<String, Description> rules = new HashMap<String, Description>();
+        Map<String, Description> rules = new HashMap<>();
 
         Description rootDescription = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         if (rootDescription != null) {
-            Queue<Description> workList = new ArrayDeque<Description>();
+            Queue<Description> workList = new ArrayDeque<>();
             workList.add(rootDescription);
 
             while (!workList.isEmpty()) {

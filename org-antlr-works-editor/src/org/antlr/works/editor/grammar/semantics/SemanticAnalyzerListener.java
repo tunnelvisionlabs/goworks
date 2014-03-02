@@ -109,13 +109,13 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     private final ObjectDecorator<Tree> treeDecorator;
     private final ObjectDecorator<Token> tokenDecorator;
 
-    private final Map<String, Token> declaredRules = new HashMap<String, Token>();
-    private final Map<String, Token> declaredTokens = new HashMap<String, Token>();
-    private final Map<String, Token> declaredModes = new HashMap<String, Token>();
+    private final Map<String, Token> declaredRules = new HashMap<>();
+    private final Map<String, Token> declaredTokens = new HashMap<>();
+    private final Map<String, Token> declaredModes = new HashMap<>();
 
-    private final List<Token> unresolvedRuleReferences = new ArrayList<Token>();
-    private final List<Token> unresolvedTokenReferences = new ArrayList<Token>();
-    private final List<Token> unresolvedModeReferences = new ArrayList<Token>();
+    private final List<Token> unresolvedRuleReferences = new ArrayList<>();
+    private final List<Token> unresolvedTokenReferences = new ArrayList<>();
+    private final List<Token> unresolvedModeReferences = new ArrayList<>();
 
     public SemanticAnalyzerListener(@NonNull ObjectDecorator<Tree> treeDecorator, @NonNull ObjectDecorator<Token> tokenDecorator) {
         Parameters.notNull("treeDecorator", treeDecorator);
@@ -135,7 +135,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
         // ensure parserRuleSpec is an ancestor of terminal
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=3, dependents=Dependents.DESCENDANTS),
     })
-    public void visitTerminal(TerminalNode<? extends Token> node) {
+    public void visitTerminal(TerminalNode node) {
         NodeType nodeType = treeDecorator.getProperty(node.getParent(), GrammarTreeProperties.PROP_NODE_TYPE);
         if (nodeType == NodeType.UNDEFINED) {
             nodeType = null;
@@ -188,7 +188,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
         case GrammarParser.STRING_LITERAL:
             switch (ruleIndex) {
             case GrammarParser.RULE_terminal:
-                RuleNode<? extends Token> ruleNode = ParseTrees.findAncestor(node, GrammarParser.RULE_parserRuleSpec);
+                RuleNode ruleNode = ParseTrees.findAncestor(node, GrammarParser.RULE_parserRuleSpec);
                 if (ruleNode != null) {
                     nodeType = NodeType.TOKEN_REF;
                     unresolvedTokenReferences.add(symbol);
@@ -213,16 +213,16 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void visitErrorNode(ErrorNode<? extends Token> node) {
+    public void visitErrorNode(ErrorNode node) {
         visitTerminal(node);
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void enterEveryRule(ParserRuleContext ctx) {
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void exitEveryRule(ParserRuleContext ctx) {
     }
 
     @Override
@@ -568,11 +568,9 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
             }
 
-            if (decl != null) {
-                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
-                if (decl != token && tokenDecorator.getProperty(decl, GrammarTreeProperties.PROP_MISSING_DEF)) {
-                    tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
-                }
+            tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
+            if (decl != token && tokenDecorator.getProperty(decl, GrammarTreeProperties.PROP_MISSING_DEF)) {
+                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
             }
         }
 
@@ -601,9 +599,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_IMPLICIT_DEF, true);
             }
 
-            if (decl != null) {
-                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
-            }
+            tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
         }
 
         for (Token token : unresolvedModeReferences) {

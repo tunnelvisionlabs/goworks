@@ -59,8 +59,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import javax.swing.Action;
@@ -113,8 +113,9 @@ public final class CompletionLayout {
     private final DocPopup docPopup;
     private final TipPopup tipPopup;
     
-    private Stack<CompletionLayoutPopup> visiblePopups;
+    private final List<CompletionLayoutPopup> visiblePopups;
     
+    @SuppressWarnings("LeakingThisInConstructor")
     CompletionLayout() {
         completionPopup = new CompletionPopup();
         completionPopup.setLayout(this);
@@ -125,7 +126,7 @@ public final class CompletionLayout {
         tipPopup = new TipPopup();
         tipPopup.setLayout(this);
         tipPopup.setPreferDisplayAboveCaret(true);
-        visiblePopups = new Stack<CompletionLayoutPopup>();
+        visiblePopups = new ArrayList<>();
     }
     
     public JTextComponent getEditorComponent() {
@@ -136,7 +137,7 @@ public final class CompletionLayout {
 
     public void setEditorComponent(JTextComponent editorComponent) {
         hideAll();
-        this.editorComponentRef = new WeakReference<JTextComponent>(editorComponent);
+        this.editorComponentRef = new WeakReference<>(editorComponent);
     }
 
     private void hideAll() {
@@ -152,7 +153,7 @@ public final class CompletionLayout {
     CompletionController.Selection selection) {
         completionPopup.show(data, declarationData, title, anchorOffset, listSelectionListener, additionalItemsText, shortcutHint, controller, selection);
         if (!visiblePopups.contains(completionPopup))
-            visiblePopups.push(completionPopup);
+            visiblePopups.add(completionPopup);
     }
     
     public boolean hideCompletion() {
@@ -190,7 +191,7 @@ public final class CompletionLayout {
     public void showDocumentation(CompletionDocumentation doc, int anchorOffset) {
         docPopup.show(doc, anchorOffset);
         if (!visiblePopups.contains(docPopup))
-            visiblePopups.push(docPopup);
+            visiblePopups.add(docPopup);
     }
     
     public boolean hideDocumentation() {
@@ -216,7 +217,7 @@ public final class CompletionLayout {
     public void showToolTip(JToolTip toolTip, int anchorOffset) {
         tipPopup.show(toolTip, anchorOffset);
         if (!visiblePopups.contains(tipPopup))
-            visiblePopups.push(tipPopup);
+            visiblePopups.add(tipPopup);
     }
     
     public boolean hideToolTip() {
@@ -435,6 +436,7 @@ public final class CompletionLayout {
             return isVisible() ? completionScrollPane.getSelectedIndex() : -1;
         }
 
+        @Override
         public void processKeyEvent(KeyEvent evt) {
             if (isVisible()) {
                 Object actionMapKey = completionScrollPane.getInputMap().get(
@@ -482,7 +484,8 @@ public final class CompletionLayout {
                 getLayout().updateLayout(this);
             } // otherwise leave present doc displayed
         }
-        
+
+        @Override
         public void processKeyEvent(KeyEvent evt) {
             if (isVisible()) {
                 Object actionMapKey = getDocumentationScrollPane().getInputMap().get(
@@ -504,6 +507,7 @@ public final class CompletionLayout {
             }
         }
 
+        @Override
         protected int getAnchorHorizontalShift() {
             return COMPLETION_ANCHOR_HORIZONTAL_SHIFT;
         }
@@ -528,6 +532,7 @@ public final class CompletionLayout {
             }
 	}
 
+        @Override
         public void processKeyEvent(KeyEvent evt) {
             if (isVisible()) {
 		if (KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0).equals(

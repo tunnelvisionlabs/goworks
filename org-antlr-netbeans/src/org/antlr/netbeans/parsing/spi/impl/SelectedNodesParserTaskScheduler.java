@@ -44,7 +44,7 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
     private class RefreshImpl implements Callable<Void> {
 
         @Override
-        public Void call() throws Exception {
+        public Void call() {
             final Node[] nodes = TopComponent.getRegistry().getActivatedNodes();
             if (nodes.length == 1) {
                 final DataObject dataObject = nodes[0].getLookup().lookup(DataObject.class);
@@ -52,11 +52,9 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
                     final FileObject fileObject = dataObject.getPrimaryFile();
                     if (fileObject.isValid() && EditorSettings.getDefault().getAllMimeTypes().contains(fileObject.getMIMEType())) {
                         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
-                        if (versionedDocument != null) {
-                            ParseContext context = new ParseContext(SelectedNodesParserTaskScheduler.this.getClass(), versionedDocument);
-                            schedule(context);
-                            return null;
-                        }
+                        ParseContext context = new ParseContext(SelectedNodesParserTaskScheduler.this.getClass(), versionedDocument);
+                        schedule(context);
+                        return null;
                     }
                 }
             }

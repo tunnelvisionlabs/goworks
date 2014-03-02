@@ -36,7 +36,6 @@ import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.AltListContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.AlternativeContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.AtomContext;
@@ -145,8 +144,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             diagram = null;
         }
 
-        this.snapshot = new WeakReference<DocumentSnapshot>(context.getSnapshot());
-        this.context = new WeakReference<GrammarParser.RuleSpecContext>(ruleSpecContext);
+        this.snapshot = new WeakReference<>(context.getSnapshot());
+        this.context = new WeakReference<>(ruleSpecContext);
         if (ruleSpecContext != null) {
             try {
                 SyntaxBuilderListener listener = new SyntaxBuilderListener(context.getGrammarType(), context.getSnapshot());
@@ -155,9 +154,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 this.jScrollPane1.setViewportView(diagram);
                 this.jScrollPane1.validate();
                 this.diagram.getRule().updatePositions();
-            } catch (NullPointerException ex) {
-                clearDiagram();
-            } catch (IllegalArgumentException ex) {
+            } catch (NullPointerException | IllegalArgumentException ex) {
                 clearDiagram();
             }
         }
@@ -274,10 +271,10 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
         private final int grammarType;
         private final DocumentSnapshot snapshot;
-        private final Deque<JComponent> nodes = new ArrayDeque<JComponent>();
+        private final Deque<JComponent> nodes = new ArrayDeque<>();
 
         private Rule RuleSpec;
-        private ParserRuleContext<Token> outermostAtom;
+        private ParserRuleContext outermostAtom;
 
         public SyntaxBuilderListener(int grammarType, DocumentSnapshot snapshot) {
             Parameters.notNull("snapshot", snapshot);
@@ -435,7 +432,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.PARENTS),
         })
-        public void enterEveryAtom(ParserRuleContext<Token> ctx) {
+        public void enterEveryAtom(ParserRuleContext ctx) {
             if (outermostAtom != null) {
                 return;
             }
@@ -456,8 +453,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             boolean range = hasChild && ctx.children.get(0) instanceof GrammarParser.RangeContext;
             boolean notset = hasChild && ctx.children.get(0) instanceof GrammarParser.NotSetContext;
             boolean charSet = hasChild
-                && ctx.children.get(0) instanceof TerminalNode<?>
-                && ((TerminalNode<Token>)ctx.children.get(0)).getSymbol().getType() == GrammarParser.LEXER_CHAR_SET;
+                && ctx.children.get(0) instanceof TerminalNode
+                && ((TerminalNode)ctx.children.get(0)).getSymbol().getType() == GrammarParser.LEXER_CHAR_SET;
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
@@ -475,8 +472,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 Terminal terminal = null;
                 GrammarParser.RangeContext rangeContext = (GrammarParser.RangeContext)ctx.children.get(0);
                 if (rangeContext.children != null && rangeContext.children.size() == 3) {
-                    Token start = ((TerminalNode<Token>)rangeContext.children.get(0)).getSymbol();
-                    Token end = ((TerminalNode<Token>)rangeContext.children.get(2)).getSymbol();
+                    Token start = ((TerminalNode)rangeContext.children.get(0)).getSymbol();
+                    Token end = ((TerminalNode)rangeContext.children.get(2)).getSymbol();
                     if (start != null && end != null) {
                         terminal = new RangeTerminal(start.getText(), end.getText(), sourceSpan);
                     }
@@ -494,12 +491,12 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 if (notSetContext.setElement() != null) {
                     elementContexts = Collections.singletonList(notSetContext.setElement());
                 } else {
-                    elementContexts = new ArrayList<AbstractGrammarParser.SetElementContext>(notSetContext.blockSet().setElement());
+                    elementContexts = new ArrayList<>(notSetContext.blockSet().setElement());
                 }
 
                 nodes.peek().add(new SetTerminal(elementContexts, sourceSpan, true));
             } else if (charSet) {
-                nodes.peek().add(new SetTerminal((TerminalNode<Token>)ctx.children.get(0), sourceSpan));
+                nodes.peek().add(new SetTerminal((TerminalNode)ctx.children.get(0), sourceSpan));
             } else {
                 nodes.peek().add(new Terminal("???", sourceSpan));
             }

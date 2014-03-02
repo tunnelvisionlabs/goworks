@@ -54,7 +54,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
 import javax.swing.JEditorPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -93,9 +92,11 @@ public class HTMLDocView extends JEditorPane {
         
         //add listeners for selection support
         addMouseListener(new MouseListener() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 getHighlighter().removeAllHighlights();
             }
+            @Override
             public void mousePressed(MouseEvent e) {
                 getHighlighter().removeAllHighlights();
                 selectionAnchor = positionCaret(e);
@@ -106,12 +107,16 @@ public class HTMLDocView extends JEditorPane {
                 }
             }
 
+            @Override
             public void mouseReleased(MouseEvent e) {}
+            @Override
             public void mouseEntered(MouseEvent e) {}
+            @Override
             public void mouseExited(MouseEvent e) {}
         });
         
         addMouseMotionListener(new MouseMotionListener() {
+            @Override
             public void mouseDragged(MouseEvent e) {
                 try {
                     if (highlight == null) {
@@ -128,6 +133,7 @@ public class HTMLDocView extends JEditorPane {
                 }
             }
 
+            @Override
             public void mouseMoved(MouseEvent e) {}
         });
     }
@@ -145,6 +151,7 @@ public class HTMLDocView extends JEditorPane {
     /** Sets the javadoc content as HTML document */
     public void setContent(final String content, final String reference) {
         SwingUtilities.invokeLater(new Runnable(){
+            @Override
             public void run(){
                 Reader in = new StringReader("<HTML><BODY>"+content+"</BODY></HTML>");//NOI18N                
                 try{
@@ -154,6 +161,7 @@ public class HTMLDocView extends JEditorPane {
                     setCaretPosition(0);
                     if (reference != null) {
                         SwingUtilities.invokeLater(new Runnable(){
+                            @Override
                             public void run(){
                                 scrollToReference(reference);
                             }
@@ -161,15 +169,14 @@ public class HTMLDocView extends JEditorPane {
                     } else {
                         scrollRectToVisible(new Rectangle(0,0,0,0));
                     }
-                }catch(IOException ioe){
-                    ioe.printStackTrace();
-                }catch(BadLocationException ble){
-                    ble.printStackTrace();
+                } catch (IOException | BadLocationException ioe) {
+                    Exceptions.printStackTrace(ioe);
                 }
             }
         });
     }
     
+    @Override
     protected EditorKit createDefaultEditorKit() {
         // it is extremelly slow to init it
         if (htmlKit == null){
@@ -201,7 +208,8 @@ public class HTMLDocView extends JEditorPane {
         Coloring c = Coloring.fromAttributeSet(fcs.getFontColors(FontColorNames.DEFAULT_COLORING));
         java.awt.Font f = c.getFont();
         css.addRule(new StringBuilder("body { font-size: ").append(f.getSize()) // NOI18N
-                .append("; font-family: ").append(getFont().getFamily()).append("; color: " + getForegroundColor() + ";}").toString()); // NOI18N
+                .append("; font-family: ").append(getFont().getFamily()) // NOI18N
+                .append("; color: ").append(getForegroundColor()).append(";}").toString()); // NOI18N
                 // do not use monospaced font, just adjust fontsize
         css.addStyleSheet(htmlKit.getStyleSheet());
         htmlKit.setStyleSheet(css);

@@ -44,17 +44,17 @@
 
 package com.tvl.modules.editor.completion;
 
+import com.tvl.spi.editor.completion.CompletionDocumentation;
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionProvider;
+import com.tvl.spi.editor.completion.CompletionResultSet;
+import com.tvl.spi.editor.completion.CompletionTask;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JToolTip;
-import com.tvl.spi.editor.completion.CompletionDocumentation;
-import com.tvl.spi.editor.completion.CompletionItem;
-import com.tvl.spi.editor.completion.CompletionProvider;
-import com.tvl.spi.editor.completion.CompletionResultSet;
-import com.tvl.spi.editor.completion.CompletionTask;
 
 /**
  *
@@ -110,6 +110,7 @@ public final class CompletionResultSetImpl {
     
     private int estimatedItemWidth;
     
+    @SuppressWarnings("LeakingThisInConstructor")
     CompletionResultSetImpl(CompletionImpl completionImpl,
     Object resultId, CompletionTask task, int queryType) {
         assert (completionImpl != null);
@@ -190,7 +191,7 @@ public final class CompletionResultSetImpl {
 
         if (items == null) {
             int estSize = (estimatedItemCount == -1) ? 10 : estimatedItemCount;
-            items = new ArrayList<CompletionItem>(estSize);
+            items = new ArrayList<>(estSize);
         }
         items.add(item);
         return items.size() < 1000;
@@ -209,7 +210,7 @@ public final class CompletionResultSetImpl {
         checkNotFinished();
 
         if (declarationItems == null) {
-            declarationItems = new ArrayList<CompletionItem>(1);
+            declarationItems = new ArrayList<>(1);
         }
 
         declarationItems.add(item);

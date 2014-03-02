@@ -38,6 +38,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <TState>
  */
 public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
     private static final boolean FULL_CHECKS = false;
@@ -48,7 +49,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
     private final Object lock = new Object();
     private final StyledDocument document;
     private final DocumentListenerImpl documentListener;
-    private final ArrayList<TState> lineStates = new ArrayList<TState>();
+    private final ArrayList<TState> lineStates = new ArrayList<>();
     private final boolean propagateChangedImmediately;
 
     private Integer firstDirtyLine;
@@ -90,7 +91,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
     @Override
     public HighlightsSequence getHighlights(int startOffset, int endOffset) {
-        List<Highlight> highlights = new ArrayList<Highlight>();
+        List<Highlight> highlights = new ArrayList<>();
         getHighlights(startOffset, endOffset, highlights, null, true, false);
         return new HighlightsList(highlights);
     }
@@ -168,31 +169,28 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                     else
                         startLineCurrent = NbDocument.findLineNumber(document, token.getStartIndex());
 
-//                    if (previousToken == null || previousTokenLine < startLineCurrent - 1)
-//                    {
-                        // endLinePrevious is the line number the previous token ended on
-                        int endLinePrevious;
-                        if (previousToken != null)
-                            endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
-                        else
-                            endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
+                    // endLinePrevious is the line number the previous token ended on
+                    int endLinePrevious;
+                    if (previousToken != null)
+                        endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
+                    else
+                        endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
 
-                        if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                    if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                    {
+                        int firstMultilineLine = endLinePrevious;
+                        if (previousToken == null || previousTokenEndsLine)
+                            firstMultilineLine++;
+
+                        for (int i = firstMultilineLine; i < startLineCurrent; i++)
                         {
-                            int firstMultilineLine = endLinePrevious;
-                            if (previousToken == null || previousTokenEndsLine)
-                                firstMultilineLine++;
+                            if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
+                                extendMultiLineSpanToLine = i + 1;
 
-                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
-                            {
-                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                    extendMultiLineSpanToLine = i + 1;
-
-                                if (inBounds || propagate)
-                                    setLineState(i, lineStates.get(i).createMultiLineState());
-                            }
+                            if (inBounds || propagate)
+                                setLineState(i, lineStates.get(i).createMultiLineState());
                         }
-//                    }
+                    }
                 }
 
                 if (token.getType() == Token.EOF)
@@ -383,7 +381,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
         start = NbDocument.findLineOffset(document, startLine);
         int length = end - start;
-        ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
+        ParseRequest<TState> request = new ParseRequest<>(new OffsetRegion(start, length), state);
         return request;
     }
 
@@ -542,7 +540,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                     lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
                     TState endLineState = lineStates.get(lineNumberFromPosition);
-                    List<TState> insertedElements = new ArrayList<TState>();
+                    List<TState> insertedElements = new ArrayList<>();
                     for (int i = 0; i < lineCountDelta; i++) {
                         insertedElements.add(endLineState);
                     }

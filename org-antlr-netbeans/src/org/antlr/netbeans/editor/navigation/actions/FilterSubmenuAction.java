@@ -24,9 +24,11 @@ import org.openide.util.actions.Presenter;
 public class FilterSubmenuAction extends AbstractAction implements Presenter.Popup {
     private static final String PROP_FILTER_NAME = "nbFilterName";
 
-    private FiltersManager filters;
+    private final FiltersManager filters;
 
-    /** Creates a new instance of FilterSubmenuAction */
+    /** Creates a new instance of FilterSubmenuAction
+     * @param filters
+     */
     public FilterSubmenuAction(FiltersManager filters) {
         this.filters = filters;
     }

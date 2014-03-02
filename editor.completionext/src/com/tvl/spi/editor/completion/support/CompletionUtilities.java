@@ -44,6 +44,7 @@
 
 package com.tvl.spi.editor.completion.support;
 
+import com.tvl.modules.editor.completion.PatchedHtmlRenderer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -51,7 +52,6 @@ import java.awt.Graphics;
 import javax.swing.ImageIcon;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import com.tvl.modules.editor.completion.PatchedHtmlRenderer;
 
 /**
  * Various code completion utilities including completion item
@@ -103,6 +103,8 @@ public final class CompletionUtilities {
      *  next to the icon. It may be null which means no left text will be displayed.
      * @param rightHtmlText html text aligned on the right edge of the item's
      *  rendering area. It may be null which means no right text will be displayed.
+     * @param g
+     * @param defaultFont
      * @return &gt;=0 preferred rendering width of the item.
      */
     public static int getPreferredWidth(String leftHtmlText, String rightHtmlText,

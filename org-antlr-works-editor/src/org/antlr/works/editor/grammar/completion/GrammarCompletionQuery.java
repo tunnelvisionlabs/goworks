@@ -140,7 +140,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0, dependents=Dependents.PARENTS),
         })
         protected void runImpl(BaseDocument document) {
-            results = new ArrayList<CompletionItem>();
+            results = new ArrayList<>();
             possibleDeclaration = true;
             possibleReference = true;
             possibleKeyword = true;
@@ -158,10 +158,10 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
             DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
-            Map<RuleContext<Token>, CaretReachedException> parseTrees = null;
+            Map<RuleContext, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
 
-            final Collection<Description> rules = new ArrayList<Description>();
+            final Collection<Description> rules = new ArrayList<>();
 
             GrammarReferenceAnchors anchors = findNearestAnchors(taskManager, snapshot);
             int grammarType = anchors.getGrammarType();
@@ -190,13 +190,13 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     LOGGER.log(Level.FINE, "Code completion from anchor region: {0}.", region);
                 }
 
-                TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
-                TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
+                TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
+                TokenSource tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                 CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
                 CodeCompletionGrammarParser parser = ParserFactory.DEFAULT.getParser(tokens);
                 parser.setBuildParseTree(true);
-                parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
+                parser.setErrorHandler(new CodeCompletionErrorStrategy());
                 ATN atn = parser.getATN();
                 parseTrees = forestParser.getParseTrees(parser);
 
@@ -208,7 +208,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     possibleReference = false;
 
                     declarationOrReferenceLoop:
-                    for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+                    for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
                         CaretReachedException ex = entry.getValue();
                         if (ex == null || ex.getTransitions() == null) {
                             continue;
@@ -218,9 +218,9 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             caretToken = ex.getCaretToken();
                         }
 
-                        RuleContext<Token> finalContext = entry.getValue().getFinalContext();
+                        RuleContext finalContext = entry.getValue().getFinalContext();
                         if (finalContext != null && finalContext.getRuleIndex() == GrammarParser.RULE_id) {
-                            RuleContext<Token> parent = finalContext.getParent();
+                            RuleContext parent = finalContext.getParent();
                             int parentIndex = parent != null ? parent.getRuleIndex() : -1;
                             switch (parentIndex) {
                             case GrammarParser.RULE_lexerCommandName:
@@ -243,9 +243,9 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         }
 
                         Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                        IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
-                        Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
-                        Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
+                        IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<>();
+                        Deque<PredictionContext> workList = new ArrayDeque<>();
+                        Deque<Integer> stateWorkList = new ArrayDeque<>();
                         for (Map.Entry<ATNConfig, List<Transition>> transitionEntry : transitions.entrySet()) {
                             boolean currentActionConfig = false;
                             visited.clear();
@@ -323,7 +323,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (parseTrees != null) {
-                    Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
+                    Map<String, CompletionItem> intermediateResults = new HashMap<>();
 
                     // Keyword analysis
                     analyzeKeywords(parseTrees, intermediateResults);
@@ -365,9 +365,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
             try {
                 anchors = result.get().getData();
-            } catch (InterruptedException ex) {
-                anchors = null;
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
                 anchors = null;
             }
@@ -409,9 +407,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             Tagger<TokenTag<Token>> tagger = null;
             try {
                 tagger = futureTokensData.get().getData();
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             }
 
@@ -436,19 +432,19 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0, dependents=Dependents.SELF),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=3, dependents=Dependents.PARENTS),
         })
-        private void analyzeKeywords(Map<RuleContext<Token>, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {
+        private void analyzeKeywords(Map<RuleContext, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {
             boolean maybeLexerCommand = false;
 
             IntervalSet remainingKeywords = new IntervalSet(KeywordCompletionItem.KEYWORD_TYPES);
-            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
                 CaretReachedException caretReachedException = entry.getValue();
                 if (caretReachedException == null || caretReachedException.getTransitions() == null) {
                     continue;
                 }
 
-                RuleContext<Token> finalContext = caretReachedException.getFinalContext();
+                RuleContext finalContext = caretReachedException.getFinalContext();
                 if (finalContext.getRuleIndex() == GrammarParser.RULE_id) {
-                    RuleContext<Token> parent = finalContext.getParent();
+                    RuleContext parent = finalContext.getParent();
                     if (parent != null && parent.getRuleIndex() == GrammarParser.RULE_lexerCommandName) {
                         maybeLexerCommand = true;
                     }
@@ -494,25 +490,25 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                                        boolean hasNonActionConfig,
                                        int grammarType,
                                        Collection<Description> rules,
-                                       Map<RuleContext<Token>, CaretReachedException> parseTrees,
+                                       Map<RuleContext, CaretReachedException> parseTrees,
                                        Map<String, CompletionItem> intermediateResults) {
             FileModel fileModel = null;
             boolean fileModelDataFailed = false;
             boolean inExpression = false;
 
-            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
-                RuleContext<Token> finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
                 if (finalContext == null) {
                     continue;
                 }
 
-                ParseTree<Token> expressionRoot = null;
+                ParseTree expressionRoot = null;
                 if (finalContext instanceof ActionScopeExpressionContext
                     || finalContext instanceof ActionExpressionContext) {
                     expressionRoot = finalContext;
                 }
 
-                for (ParseTree<Token> tree : ParseTrees.getAncestors(finalContext)) {
+                for (ParseTree tree : ParseTrees.getAncestors(finalContext)) {
                     if (tree instanceof ActionScopeExpressionContext
                         || tree instanceof ActionExpressionContext) {
                         expressionRoot = tree;
@@ -549,9 +545,9 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
             }
 
-            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
-                ParseTree<Token> parseTree = entry.getKey();
-                RuleContext<Token> finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                ParseTree parseTree = entry.getKey();
+                RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
                 LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
                 ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
 
@@ -618,10 +614,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
             try {
                 return futureFileModelData.get().getData();
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-                return null;
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
                 return null;
             }

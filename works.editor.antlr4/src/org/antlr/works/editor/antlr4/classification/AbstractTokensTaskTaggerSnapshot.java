@@ -38,6 +38,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <TState>
  */
 public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateInfo<TState>> extends AbstractTagger<TokenTag<Token>> {
     // -J-Dorg.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot.level=FINE
@@ -47,7 +48,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     private final DocumentSnapshot snapshot;
 
     private final Object lock = new Object();
-    private final ArrayList<TState> lineStates = new ArrayList<TState>();
+    private final ArrayList<TState> lineStates = new ArrayList<>();
 
     private Integer firstDirtyLine;
     private Integer lastDirtyLine;
@@ -78,10 +79,13 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         Integer firstChangedLine = null;
         Integer lastChangedLine = null;
 
-        for (DocumentVersion version = reference.snapshot.getVersion(); version.getVersionNumber() < snapshot.getVersion().getVersionNumber(); version = version.getNext()) {
+        for (DocumentVersion version = reference.snapshot.getVersion(); version != null && version.getVersionNumber() < snapshot.getVersion().getVersionNumber(); version = version.getNext()) {
             DocumentSnapshot source = version.getSnapshot();
-            DocumentSnapshot target = version.getNext().getSnapshot();
+            DocumentVersion targetVersion = version.getNext();
+            assert targetVersion != null;
+            DocumentSnapshot target = targetVersion.getSnapshot();
             NormalizedDocumentChangeCollection changes = version.getChanges();
+            assert changes != null;
             for (int i = changes.size() - 1; i >= 0; i--) {
                 DocumentChange change = changes.get(i);
                 int lineCountDelta = change.getLineCountDelta();
@@ -97,7 +101,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                     lineStates.subList(oldStartLine, oldStartLine + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
                     TState endLineState = lineStates.get(oldStartLine);
-                    ArrayList<TState> insertedElements = new ArrayList<TState>();
+                    ArrayList<TState> insertedElements = new ArrayList<>();
                     for (int j = 0; j < lineCountDelta; j++) {
                         insertedElements.add(endLineState);
                     }
@@ -179,7 +183,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     }
 
     public List<TaggedPositionRegion<TokenTag<Token>>> getHighlights(int startOffset, int endOffset) {
-        List<TaggedPositionRegion<TokenTag<Token>>> tags = new ArrayList<TaggedPositionRegion<TokenTag<Token>>>();
+        List<TaggedPositionRegion<TokenTag<Token>>> tags = new ArrayList<>();
         boolean updateOffsets = true;
 
         if (endOffset == Integer.MAX_VALUE) {
@@ -212,7 +216,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                 return tags;
             }
 
-            TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState);
+            TokenSourceWithStateV4<TState> lexer = createLexer(input, startState);
             lexer.setTokenFactory(new DocumentSnapshotTokenFactory(getEffectiveTokenSource(lexer)));
 
             Token previousToken = null;
@@ -239,31 +243,28 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                     else
                         startLineCurrent = snapshot.findLineNumber(token.getStartIndex());
 
-//                    if (previousToken == null || previousToken.getLine() < startLineCurrent - 1)
-//                    {
-                        // endLinePrevious is the line number the previous token ended on
-                        int endLinePrevious;
-                        if (previousToken != null)
-                            endLinePrevious = snapshot.findLineNumber(previousToken.getStopIndex() + 1);
-                        else
-                            endLinePrevious = snapshot.findLineNumber(span.getStart()) - 1;
+                    // endLinePrevious is the line number the previous token ended on
+                    int endLinePrevious;
+                    if (previousToken != null)
+                        endLinePrevious = snapshot.findLineNumber(previousToken.getStopIndex() + 1);
+                    else
+                        endLinePrevious = snapshot.findLineNumber(span.getStart()) - 1;
 
-                        if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                    if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                    {
+                        int firstMultilineLine = endLinePrevious;
+                        if (previousToken == null || previousTokenEndsLine)
+                            firstMultilineLine++;
+
+                        for (int i = firstMultilineLine; i < startLineCurrent; i++)
                         {
-                            int firstMultilineLine = endLinePrevious;
-                            if (previousToken == null || previousTokenEndsLine)
-                                firstMultilineLine++;
+                            if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
+                                extendMultiLineSpanToLine = i + 1;
 
-                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
-                            {
-                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                    extendMultiLineSpanToLine = i + 1;
-
-                                if (inBounds)
-                                    setLineState(i, lineStates.get(i).createMultiLineState());
-                            }
+                            if (inBounds)
+                                setLineState(i, lineStates.get(i).createMultiLineState());
                         }
-//                    }
+                    }
                 }
 
                 if (token.getType() == Token.EOF)
@@ -374,7 +375,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
 
     protected abstract TState getStartState();
 
-    protected TokenSource<Token> getEffectiveTokenSource(TokenSourceWithStateV4<Token, TState> lexer) {
+    protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<TState> lexer) {
         return lexer;
     }
 
@@ -405,7 +406,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
 
         start = snapshot.findLineFromLineNumber(startLine).getStart().getOffset();
         int length = end - start;
-        ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
+        ParseRequest<TState> request = new ParseRequest<>(new OffsetRegion(start, length), state);
         return request;
     }
 
@@ -414,7 +415,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return startLineCurrent > endLinePrevious + 1;
     }
 
-    protected boolean isMultiLineToken(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
+    protected boolean isMultiLineToken(TokenSourceWithStateV4<TState> lexer, Token token) {
         /*if (lexer != null && lexer.getLine() > token.getLine()) {
             return true;
         }*/
@@ -424,7 +425,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return startLine != stopLine;
     }
 
-    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
+    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<TState> lexer, Token token) {
         CharStream charStream = lexer.getInputStream();
         if (charStream != null) {
             int nextCharIndex = token.getStopIndex() + 1;
@@ -469,19 +470,19 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return input;
     }
 
-    protected abstract TokenSourceWithStateV4<Token, TState> createLexer(CharStream input, TState startState);
+    protected abstract TokenSourceWithStateV4<TState> createLexer(CharStream input, TState startState);
 
     protected Collection<TaggedPositionRegion<TokenTag<Token>>> getTagsForToken(Token token) {
         TokenTag<Token> tag = highlightToken(token);
         if (tag != null) {
-            return Collections.<TaggedPositionRegion<TokenTag<Token>>>singleton(new BaseTaggedPositionRegion<TokenTag<Token>>(new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1)), tag));
+            return Collections.<TaggedPositionRegion<TokenTag<Token>>>singleton(new BaseTaggedPositionRegion<>(new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1)), tag));
         }
 
         return Collections.emptyList();
     }
 
     protected TokenTag<Token> highlightToken(Token token) {
-        return new TokenTag<Token>(token);
+        return new TokenTag<>(token);
     }
 
     public void forceRehighlightLines(int startLine, int endLineInclusive) {

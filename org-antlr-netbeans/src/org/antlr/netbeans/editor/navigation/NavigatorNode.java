@@ -171,13 +171,13 @@ public abstract class NavigatorNode extends AbstractNode {
         }
 
         if (children instanceof ElementChildren) {
-            Set<Description> oldChildren = new HashSet<Description>(description.getChildren());
+            Set<Description> oldChildren = new HashSet<>(description.getChildren());
 
             // Create a hashtable which maps Description to node.
             // We will then identify the nodes by the description. The trick is
             // that the new and old description are equal and have the same hashcode
             Node[] nodes = children.getNodes(true);
-            HashMap<Description, NavigatorNode> oldD2node = new HashMap<Description, NavigatorNode>();
+            HashMap<Description, NavigatorNode> oldD2node = new HashMap<>();
             for (Node node : nodes) {
                 oldD2node.put(((NavigatorNode)node).description, (NavigatorNode)node);
             }
@@ -295,7 +295,7 @@ public abstract class NavigatorNode extends AbstractNode {
 
     private static class WaitNode extends AbstractNode {
 
-        private Image waitIcon = ImageUtilities.loadImage("org/antlr/netbeans/editor/navigation/resources/wait.gif");
+        private final Image waitIcon = ImageUtilities.loadImage("org/antlr/netbeans/editor/navigation/resources/wait.gif");
 
         public WaitNode() {
             super(Children.LEAF);

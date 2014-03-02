@@ -35,7 +35,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -104,10 +103,10 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
         Listener listener = new Listener();
         ParseTreeWalker.DEFAULT.walk(listener, grammarAnnotatedParseTree.getParseTree());
 
-        List<ErrorDescription> hints = new ArrayList<ErrorDescription>();
+        List<ErrorDescription> hints = new ArrayList<>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
-                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.WARNING, "Factor label out of set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
+                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.VERIFIER, "Factor label out of set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
             } catch (BadLocationException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -125,7 +124,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
 
     private static final class Listener extends GrammarParserBaseListener {
         private final IntervalSet _ignoreRanges = new IntervalSet();
-        private final Map<ParserRuleContext<?>, Set<String>> _labels = new HashMap<ParserRuleContext<?>, Set<String>>();
+        private final Map<ParserRuleContext, Set<String>> _labels = new HashMap<>();
         private final IntervalSet _rewriteRanges = new IntervalSet();
 
         public List<Interval> getRewriteRanges() {
@@ -174,7 +173,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
         public void exitLabeledElement(LabeledElementContext ctx) {
             if (ctx.label != null)  {
                 String label = ctx.label.getText();
-                for (ParserRuleContext<?> tree = ctx; tree != null; tree = tree.getParent()) {
+                for (ParserRuleContext tree = ctx; tree != null; tree = tree.getParent()) {
                     addLabel(tree, label);
                 }
             }
@@ -192,7 +191,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
                 return;
             }
 
-            List<AlternativeContext> alternatives = new ArrayList<AlternativeContext>(labeledAlts.size());
+            List<AlternativeContext> alternatives = new ArrayList<>(labeledAlts.size());
             for (LabeledAltContext labeledAltContext : labeledAlts) {
                 AlternativeContext alternative = labeledAltContext.alternative();
                 if (alternative == null) {
@@ -205,10 +204,10 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
             processAlternatives(alternatives);
         }
 
-        private void addLabel(ParserRuleContext<?> tree, String label) {
+        private void addLabel(ParserRuleContext tree, String label) {
             Set<String> labels = _labels.get(tree);
             if (labels == null) {
-                labels = new HashSet<String>();
+                labels = new HashSet<>();
                 _labels.put(tree, labels);
             }
 
@@ -241,15 +240,15 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
                 }
             }
 
-            TerminalNode<Token> firstNode = ParseTrees.getStartNode(alternatives.get(0));
-            TerminalNode<Token> lastNode = ParseTrees.getStopNode(alternatives.get(alternatives.size() - 1));
+            TerminalNode firstNode = ParseTrees.getStartNode(alternatives.get(0));
+            TerminalNode lastNode = ParseTrees.getStopNode(alternatives.get(alternatives.size() - 1));
 
             int startIndex = firstNode.getSymbol().getStartIndex();
             int stopIndex = lastNode.getSymbol().getStopIndex();
             _rewriteRanges.add(startIndex, stopIndex);
         }
 
-        private void ignore(ParseTree<?> ctx) {
+        private void ignore(ParseTree ctx) {
             Interval interval = ctx.getSourceInterval();
             _ignoreRanges.add(interval.a, interval.b);
         }

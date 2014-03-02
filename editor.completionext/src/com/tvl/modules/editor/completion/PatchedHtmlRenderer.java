@@ -53,14 +53,16 @@ import java.awt.Shape;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 import java.util.StringTokenizer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import org.openide.ErrorManager;
+import org.openide.awt.HtmlRenderer.Renderer;
 import org.openide.util.Utilities;
 
 /**
@@ -71,7 +73,7 @@ public final class PatchedHtmlRenderer {
 
     /** Stack object used during HTML rendering to hold previous colors in
      * the case of nested color entries. */
-    private static Stack<Color> colorStack = new Stack<Color>();
+    private static final Deque<Color> colorStack = new ArrayDeque<>();
 
     /**
      * Constant used by {@link #renderString renderString}, {@link #renderPlainString renderPlainString},
@@ -206,13 +208,9 @@ public final class PatchedHtmlRenderer {
                         } else {
                             Shape shape = g.getClip();
 
-                            if (s != null) {
-                                Area area = new Area(shape);
-                                area.intersect(new Area(new Rectangle(x, y, w, h)));
-                                g.setClip(area);
-                            } else {
-                                g.setClip(new Rectangle(x, y, w, h));
-                            }
+                            Area area = new Area(shape);
+                            area.intersect(new Area(new Rectangle(x, y, w, h)));
+                            g.setClip(area);
 
                             g.drawString("...", x, y); // NOI18N
                             g.setClip(shape);
@@ -347,7 +345,7 @@ public final class PatchedHtmlRenderer {
         }
 
         //Thread safety - avoid allocating memory for the common case
-        Stack<Color> colorStack = SwingUtilities.isEventDispatchThread() ? PatchedHtmlRenderer.colorStack : new Stack<Color>();
+        Deque<Color> localColorStack = SwingUtilities.isEventDispatchThread() ? PatchedHtmlRenderer.colorStack : new ArrayDeque<Color>();
 
         g.setColor(defaultColor);
         g.setFont(f);
@@ -356,7 +354,7 @@ public final class PatchedHtmlRenderer {
         int origX = x;
         boolean done = false; //flag if rendering completed, either by finishing the string or running out of space
         boolean inTag = false; //flag if the current position is inside a tag, and the tag should be processed rather than rendering
-        boolean inClosingTag = false; //flag if the current position is inside a closing tag
+        boolean inClosingTag; //flag if the current position is inside a closing tag
         boolean strikethrough = false; //flag if a strikethrough line should be painted
         boolean underline = false; //flag if an underline should be painted
         boolean bold = false; //flag if text is currently bold
@@ -398,7 +396,7 @@ public final class PatchedHtmlRenderer {
             (paint ..., give up or skip to the next line)
          */
         //Clear any junk left behind from a previous rendering loop
-        colorStack.clear();
+        localColorStack.clear();
 
         //Enter the painting loop
         while (!done) {
@@ -545,10 +543,10 @@ public final class PatchedHtmlRenderer {
                     case 'F': //NOI18N
                     case 'f': //NOI18N
 
-                        if (colorStack.isEmpty()) {
+                        if (localColorStack.isEmpty()) {
                             g.setColor(defaultColor);
                         } else {
-                            g.setColor(colorStack.pop());
+                            g.setColor(localColorStack.pop());
                         }
 
                         break;
@@ -641,7 +639,7 @@ public final class PatchedHtmlRenderer {
                     case 'F': //NOI18N
 
                         Color c = findColor(chars, pos, tagEnd);
-                        colorStack.push(g.getColor());
+                        localColorStack.push(g.getColor());
 
                         if (background != null) {
                             //c = org.openide.awt.HtmlLabelUI.ensureContrastingColor(c, background);
@@ -760,12 +758,12 @@ public final class PatchedHtmlRenderer {
 
                 //Flag that the current line is longer than the available width,
                 //and should be wrapped without finding a word boundary
-                boolean brutalWrap = false;
+                boolean brutalWrap;
 
                 //Work out the per-character avg width of the string, for estimating
                 //when we'll be out of space and should start the ... in truncate
                 //mode
-                double chWidth = r.getWidth() / length;;
+                double chWidth = r.getWidth() / length;
 
                 if (style == STYLE_TRUNCATE) {
                     double newWidth = widthPainted + r.getWidth();
@@ -1014,7 +1012,7 @@ public final class PatchedHtmlRenderer {
      * fonts in the entire IDE are displayed 12px below where they should be.
      * Embarrassing and awful.
      */
-    private static final Font deriveFont(Font f, int style) {
+    private static Font deriveFont(Font f, int style) {
         //      return f.deriveFont(style);
         // see #49973 for details.
         Font result = Utilities.isMac() ? new Font(f.getName(), style, f.getSize()) : f.deriveFont(style);
@@ -1027,7 +1025,7 @@ public final class PatchedHtmlRenderer {
      * with the resulting character, and the position of that character
      * in the array will be returned as the new position to render from,
      * causing the renderer to skip the intervening characters */
-    private static final int substEntity(char[] ch, int pos) {
+    private static int substEntity(char[] ch, int pos) {
         //There are no 1 character entities, abort
         if (pos >= (ch.length - 2)) {
             return -1;
@@ -1073,7 +1071,7 @@ public final class PatchedHtmlRenderer {
      * and replaces the trailing ; with the referenced character, returning
      * the position of it so the renderer can continue from there.
      */
-    private static final int substNumericEntity(char[] ch, int pos) {
+    private static int substNumericEntity(char[] ch, int pos) {
         for (int i = pos; i < ch.length; i++) {
             if (ch[i] == ';') {
                 try {
@@ -1104,7 +1102,7 @@ public final class PatchedHtmlRenderer {
         if (!STRICT_HTML) {
             if (ErrorManager.getDefault().isLoggable(ErrorManager.WARNING)) {
                 if (badStrings == null) {
-                    badStrings = new HashSet<String>();
+                    badStrings = new HashSet<>();
                 }
 
                 if (!badStrings.contains(msg)) {

@@ -43,6 +43,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <TState>
  */
 public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
     // -J-Dorg.antlr.works.editor.antlr4.highlighting.ANTLRHighlighterBaseV4.level=FINE
@@ -56,7 +57,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
     private final Object lock = new Object();
     private final StyledDocument document;
     private final DocumentListenerImpl documentListener;
-    private final ArrayList<TState> lineStates = new ArrayList<TState>();
+    private final ArrayList<TState> lineStates = new ArrayList<>();
     private final boolean propagateChangedImmediately;
 
     private Integer firstDirtyLine;
@@ -115,7 +116,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             public Iterator<Highlight> iterator() {
                 return new Iterator<Highlight>() {
 
-                    private final Deque<Highlight> buffer = new ArrayDeque<Highlight>();
+                    private final Deque<Highlight> buffer = new ArrayDeque<>();
 
                     private Highlight _current;
                     private boolean _complete;
@@ -185,8 +186,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     private void scan() {
 
                         synchronized (lock) {
-                            TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState);
-                            try {
+                            try (TokenSourceWithStateV4<TState> lexer = createLexer(input, startState)) {
                                 while (true)
                                 {
                                     // TODO: perform this under a read lock
@@ -202,28 +202,25 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                     else
                                         startLineCurrent = NbDocument.findLineNumber(document, token.getStartIndex());
 
-                //                    if (previousToken == null || previousTokenLine < startLineCurrent - 1)
-                //                    {
-                                        // endLinePrevious is the line number the previous token ended on
-                                        int endLinePrevious;
-                                        if (previousToken != null)
-                                            endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
-                                        else
-                                            endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
+                                    // endLinePrevious is the line number the previous token ended on
+                                    int endLinePrevious;
+                                    if (previousToken != null)
+                                        endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
+                                    else
+                                        endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
 
-                                        if (updateOffsets && (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine)))
+                                    if (updateOffsets && (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine)))
+                                    {
+                                        int firstMultilineLine = endLinePrevious;
+                                        if (previousToken == null || previousTokenEndsLine)
+                                            firstMultilineLine++;
+
+                                        for (int i = firstMultilineLine; i < startLineCurrent; i++)
                                         {
-                                            int firstMultilineLine = endLinePrevious;
-                                            if (previousToken == null || previousTokenEndsLine)
-                                                firstMultilineLine++;
-
-                                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
-                                            {
-                                                if (inBounds)
-                                                    setLineState(i, lineStates.get(i).createMultiLineState());
-                                            }
+                                            if (inBounds)
+                                                setLineState(i, lineStates.get(i).createMultiLineState());
                                         }
-                //                    }
+                                    }
 
                                     if (token.getType() == Token.EOF) {
                                         _complete = true;
@@ -307,8 +304,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                 if (!_complete) {
                                     startState = lexer.getCurrentState();
                                 }
-                            } finally {
-                                lexer.close();
                             }
                         }
                     }
@@ -381,8 +376,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                 return null;
             }
 
-            TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState);
-            try {
+            try (TokenSourceWithStateV4<TState> lexer = createLexer(input, startState)) {
                 Token previousToken = null;
     //            int previousTokenLine = 0;
                 boolean previousTokenEndsLine = false;
@@ -408,35 +402,32 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         else
                             startLineCurrent = NbDocument.findLineNumber(document, token.getStartIndex());
 
-    //                    if (previousToken == null || previousTokenLine < startLineCurrent - 1)
-    //                    {
-                            // endLinePrevious is the line number the previous token ended on
-                            int endLinePrevious;
-                            if (previousToken != null)
-                                endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
-                            else
-                                endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
+                        // endLinePrevious is the line number the previous token ended on
+                        int endLinePrevious;
+                        if (previousToken != null)
+                            endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
+                        else
+                            endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
 
-                            if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                        if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                        {
+                            int firstMultilineLine = endLinePrevious;
+                            if (previousToken == null || previousTokenEndsLine)
+                                firstMultilineLine++;
+
+                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
                             {
-                                int firstMultilineLine = endLinePrevious;
-                                if (previousToken == null || previousTokenEndsLine)
-                                    firstMultilineLine++;
+                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
+                                    extendMultiLineSpanToLine = i + 1;
 
-                                for (int i = firstMultilineLine; i < startLineCurrent; i++)
-                                {
-                                    if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                        extendMultiLineSpanToLine = i + 1;
-
-                                    if (inBounds || propagate) {
-                                        if (setLineState(i, lineStates.get(i).createMultiLineState())) {
-                                            firstUpdatedLine = Math.min(firstUpdatedLine, i);
-                                            lastUpdatedLine = Math.max(lastUpdatedLine, i + 1);
-                                        }
+                                if (inBounds || propagate) {
+                                    if (setLineState(i, lineStates.get(i).createMultiLineState())) {
+                                        firstUpdatedLine = Math.min(firstUpdatedLine, i);
+                                        lastUpdatedLine = Math.max(lastUpdatedLine, i + 1);
                                     }
                                 }
                             }
-    //                    }
+                        }
                     }
 
                     if (token.getType() == Token.EOF)
@@ -528,8 +519,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         break;
                     }
                 }
-            } finally {
-                lexer.close();
             }
         }
 
@@ -650,7 +639,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
         start = NbDocument.findLineOffset(document, startLine);
         int length = end - start;
-        ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
+        ParseRequest<TState> request = new ParseRequest<>(new OffsetRegion(start, length), state);
         return request;
     }
 
@@ -659,7 +648,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return startLineCurrent > endLinePrevious + 1;
     }
 
-    protected boolean isMultiLineToken(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
+    protected boolean isMultiLineToken(TokenSourceWithStateV4<TState> lexer, Token token) {
         /*if (lexer != null && lexer.getLine() > token.getLine()) {
             return true;
         }*/
@@ -669,7 +658,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return startLine != stopLine;
     }
 
-    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
+    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<TState> lexer, Token token) {
         CharStream charStream = lexer.getInputStream();
         if (charStream != null) {
             int nextCharIndex = token.getStopIndex() + 1;
@@ -723,7 +712,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return input;
     }
 
-    protected abstract TokenSourceWithStateV4<Token, TState> createLexer(CharStream input, TState startState);
+    protected abstract TokenSourceWithStateV4<TState> createLexer(CharStream input, TState startState);
 
     protected Collection<Highlight> getHighlightsForToken(Token token) {
         AttributeSet attributes = highlightToken(token);
@@ -827,7 +816,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
                     TState endLineState = lineStates.get(lineNumberFromPosition);
-                    List<TState> insertedElements = new ArrayList<TState>();
+                    List<TState> insertedElements = new ArrayList<>();
                     for (int i = 0; i < lineCountDelta; i++) {
                         insertedElements.add(endLineState);
                     }

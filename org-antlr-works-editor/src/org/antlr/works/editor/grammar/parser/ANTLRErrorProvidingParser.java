@@ -39,7 +39,7 @@ import org.netbeans.spi.editor.hints.Severity;
  */
 public class ANTLRErrorProvidingParser extends ANTLRParser {
     
-    private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+    private final List<SyntaxError> syntaxErrors = new ArrayList<>();
     private final DocumentSnapshot snapshot;
 
     public ANTLRErrorProvidingParser(TokenStream input, DocumentSnapshot snapshot) {
@@ -135,7 +135,7 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
         @Override
         public String getText()
         {
-            String badText = null;
+            String badText;
             if (start instanceof Token) {
                 int i = start.getTokenIndex();
                 int j = stop.getTokenIndex();

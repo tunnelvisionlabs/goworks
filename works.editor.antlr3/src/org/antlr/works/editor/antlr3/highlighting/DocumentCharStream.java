@@ -146,13 +146,13 @@ public class DocumentCharStream implements CharStream {
     @Override
     public int mark() {
         if (markers == null) {
-            markers = new ArrayList<CharStreamState>();
+            markers = new ArrayList<>();
             // depth 0 means no backtracking, leave blank
             markers.add(null);
         }
 
         markDepth++;
-        CharStreamState state = null;
+        CharStreamState state;
         if (markDepth >= markers.size()) {
             state = new CharStreamState();
             markers.add(state);

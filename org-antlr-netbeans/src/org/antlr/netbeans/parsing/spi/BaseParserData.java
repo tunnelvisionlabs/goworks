@@ -9,6 +9,7 @@
 package org.antlr.netbeans.parsing.spi;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.misc.ObjectEqualityComparator;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
@@ -16,6 +17,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public class BaseParserData<T> implements ParserData<T> {
     @NonNull
@@ -68,16 +70,16 @@ public class BaseParserData<T> implements ParserData<T> {
         return this.definition.equals(other.definition)
             && this.context.equals(other.context)
             && this.snapshot.equals(other.snapshot)
-            && (this.data == other.data || (this.data != null && this.data.equals(other.data)));
+            && ObjectEqualityComparator.INSTANCE.equals(this.data, other.data);
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + (this.context != null ? this.context.hashCode() : 0);
-        hash = 67 * hash + (this.definition != null ? this.definition.hashCode() : 0);
-        hash = 67 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
-        hash = 67 * hash + (this.data != null ? this.data.hashCode() : 0);
+        hash = 67 * hash + this.context.hashCode();
+        hash = 67 * hash + this.definition.hashCode();
+        hash = 67 * hash + this.snapshot.hashCode();
+        hash = 67 * hash + ObjectEqualityComparator.INSTANCE.hashCode(this.data);
         return hash;
     }
 

@@ -57,7 +57,7 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
         synchronized (lock) {
             old = occurrences;
-            occurrences = new ArrayList<Mark>(marks);
+            occurrences = new ArrayList<>(marks);
             nue = occurrences;
         }
 
@@ -66,9 +66,12 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
     }
 
     public static Collection<Mark> createMarks(final VersionedDocument document, final Collection<SnapshotPosition> bag, final Color color, final String tooltip) {
-        final List<Mark> result = new LinkedList<Mark>();
-
         final Document doc = document.getDocument();
+        if (doc == null) {
+            return Collections.emptyList();
+        }
+
+        final List<Mark> result = new LinkedList<>();
         doc.render(new Runnable() {
             @Override
             public void run() {
@@ -94,10 +97,10 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
     private static class MarkImpl implements Mark {
 
-        private Document doc;
-        private Position startOffset;
-        private Color color;
-        private String tooltip;
+        private final Document doc;
+        private final Position startOffset;
+        private final Color color;
+        private final String tooltip;
 
         public MarkImpl(Document doc, Position startOffset, Color color, String tooltip) {
             this.doc = doc;
@@ -113,12 +116,14 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
         @Override
         public Status getStatus() {
-            return Status.STATUS_OK;
+            // needs to be STATUS_WARNING or marks will be hidden by warnings in the error stripe
+            return Status.STATUS_WARNING;
         }
 
         @Override
         public int getPriority() {
-            return PRIORITY_DEFAULT;
+            // high priority
+            return 0;
         }
 
         @Override
