@@ -398,7 +398,7 @@ public class FormatSpaces extends JPanel implements TreeCellRenderer, MouseListe
         }
 
         private List<Item> getAllItems() {
-            List<Item> result = new LinkedList<FormatSpaces.Item>();
+            List<Item> result = new LinkedList<>();
             DefaultMutableTreeNode root = (DefaultMutableTreeNode) ((FormatSpaces) panel).model.getRoot();
             @SuppressWarnings("rawtypes")
             Enumeration children = root.depthFirstEnumeration();

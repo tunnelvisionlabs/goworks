@@ -26,7 +26,7 @@ public class GoToSymbolSearchProvider implements SearchProvider {
 
     @Override
     public void evaluate(SearchRequest request, SearchResponse response) {
-        Set<GoProject> projects = new HashSet<GoProject>();
+        Set<GoProject> projects = new HashSet<>();
 
         for (Project project : OpenProjects.getDefault().getOpenProjects()) {
             if (project instanceof GoProject) {

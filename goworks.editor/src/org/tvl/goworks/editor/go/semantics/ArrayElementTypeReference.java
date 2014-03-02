@@ -41,7 +41,7 @@ public class ArrayElementTypeReference extends CodeElementReference {
             return indexableType;
         }
 
-        List<CodeElementModel> resolvedTypes = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> resolvedTypes = new ArrayList<>();
         for (CodeElementModel model : indexableType) {
             if (model instanceof VarModel) {
                 model = ((VarModel)model).getVarType();
@@ -54,7 +54,7 @@ public class ArrayElementTypeReference extends CodeElementReference {
             }
         }
 
-        Collection<CodeElementModel> elements = new ArrayList<CodeElementModel>();
+        Collection<CodeElementModel> elements = new ArrayList<>();
         for (CodeElementModel arrayModel : resolvedTypes) {
             if (!(arrayModel instanceof TypeModel)) {
                 elements.add(arrayModel);

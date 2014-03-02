@@ -118,7 +118,7 @@ class PlatformNode extends AbstractNode implements ChangeListener {
                 return Collections.emptyList();
             }
 
-            List<SourceGroup> result = new ArrayList<SourceGroup>();
+            List<SourceGroup> result = new ArrayList<>();
             final FileObject sourceRoot = root.getFileObject("src/pkg");
             if (sourceRoot != null && sourceRoot.isFolder()) {
                 result.add(new SourceGroup() {

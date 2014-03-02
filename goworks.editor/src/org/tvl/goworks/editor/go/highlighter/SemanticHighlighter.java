@@ -190,9 +190,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             ParserData<FileModel> fileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
             fileModel = fileModelData != null ? fileModelData.getData() : null;
             annotatedParseTree = parserData != null ? parserData.getData() : null;
-        } catch (InterruptedException ex) {
-            LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
         }
 
@@ -209,7 +207,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         return annotatedParseTree != null ? annotatedParseTree.getParseTree() : null;
     }
 
-    private final Set<Token> resolvedTokens = new HashSet<Token>();
+    private final Set<Token> resolvedTokens = new HashSet<>();
 
     @Override
     protected void addHighlights(List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
@@ -222,7 +220,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     @Override
     protected void updateHighlights(OffsetsBag targetContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
-        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<Tuple2<OffsetRegion, AttributeSet>>();
+        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<>();
         resolvedTokens.clear();
 
         addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getPackageDeclarations(), packageDeclarationAttributes);
@@ -288,40 +286,40 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         private final FileModel fileModel;
         private final GoAnnotatedParseTree annotatedTree;
 
-        private final List<Token> packageDeclarations = new ArrayList<Token>();
-        private final List<Token> packageUses = new ArrayList<Token>();
-        private final List<Token> globalConstDeclarations = new ArrayList<Token>();
-        private final List<Token> globalConstUses = new ArrayList<Token>();
-        private final List<Token> localConstDeclarations = new ArrayList<Token>();
-        private final List<Token> localConstUses = new ArrayList<Token>();
-        private final List<Token> funcDeclarations = new ArrayList<Token>();
-        private final List<Token> funcUses = new ArrayList<Token>();
-        private final List<Token> methodDeclarations = new ArrayList<Token>();
-        private final List<Token> methodUses = new ArrayList<Token>();
-        private final List<Token> typeDeclarations = new ArrayList<Token>();
-        private final List<Token> typeUses = new ArrayList<Token>();
-        private final List<Token> structDeclarations = new ArrayList<Token>();
-        private final List<Token> structUses = new ArrayList<Token>();
-        private final List<Token> interfaceDeclarations = new ArrayList<Token>();
-        private final List<Token> interfaceUses = new ArrayList<Token>();
-        private final List<Token> builtinTypeUses = new ArrayList<Token>();
-        private final List<Token> builtinConstUses = new ArrayList<Token>();
-        private final List<Token> builtinFunctionUses = new ArrayList<Token>();
-        private final List<Token> parameterDeclarations = new ArrayList<Token>();
-        private final List<Token> parameterUses = new ArrayList<Token>();
-        private final List<Token> returnParameterDeclarations = new ArrayList<Token>();
-        private final List<Token> returnParameterUses = new ArrayList<Token>();
-        private final List<Token> varUses = new ArrayList<Token>();
-        private final List<Token> globalVarDeclarations = new ArrayList<Token>();
-        private final List<Token> globalVarUses = new ArrayList<Token>();
-        private final List<Token> fieldVarDeclarations = new ArrayList<Token>();
-        private final List<Token> fieldVarUses = new ArrayList<Token>();
-        private final List<Token> localVarDeclarations = new ArrayList<Token>();
-        private final List<Token> localVarUses = new ArrayList<Token>();
-        private final List<Token> labelDeclarations = new ArrayList<Token>();
-        private final List<Token> labelUses = new ArrayList<Token>();
+        private final List<Token> packageDeclarations = new ArrayList<>();
+        private final List<Token> packageUses = new ArrayList<>();
+        private final List<Token> globalConstDeclarations = new ArrayList<>();
+        private final List<Token> globalConstUses = new ArrayList<>();
+        private final List<Token> localConstDeclarations = new ArrayList<>();
+        private final List<Token> localConstUses = new ArrayList<>();
+        private final List<Token> funcDeclarations = new ArrayList<>();
+        private final List<Token> funcUses = new ArrayList<>();
+        private final List<Token> methodDeclarations = new ArrayList<>();
+        private final List<Token> methodUses = new ArrayList<>();
+        private final List<Token> typeDeclarations = new ArrayList<>();
+        private final List<Token> typeUses = new ArrayList<>();
+        private final List<Token> structDeclarations = new ArrayList<>();
+        private final List<Token> structUses = new ArrayList<>();
+        private final List<Token> interfaceDeclarations = new ArrayList<>();
+        private final List<Token> interfaceUses = new ArrayList<>();
+        private final List<Token> builtinTypeUses = new ArrayList<>();
+        private final List<Token> builtinConstUses = new ArrayList<>();
+        private final List<Token> builtinFunctionUses = new ArrayList<>();
+        private final List<Token> parameterDeclarations = new ArrayList<>();
+        private final List<Token> parameterUses = new ArrayList<>();
+        private final List<Token> returnParameterDeclarations = new ArrayList<>();
+        private final List<Token> returnParameterUses = new ArrayList<>();
+        private final List<Token> varUses = new ArrayList<>();
+        private final List<Token> globalVarDeclarations = new ArrayList<>();
+        private final List<Token> globalVarUses = new ArrayList<>();
+        private final List<Token> fieldVarDeclarations = new ArrayList<>();
+        private final List<Token> fieldVarUses = new ArrayList<>();
+        private final List<Token> localVarDeclarations = new ArrayList<>();
+        private final List<Token> localVarUses = new ArrayList<>();
+        private final List<Token> labelDeclarations = new ArrayList<>();
+        private final List<Token> labelUses = new ArrayList<>();
 
-        private final Set<Token> unresolvedIdentifiers = new HashSet<Token>();
+        private final Set<Token> unresolvedIdentifiers = new HashSet<>();
 
         public SemanticAnalyzerListener(@NonNull FileModel fileModel, @NonNull GoAnnotatedParseTree annotatedTree) {
             Parameters.notNull("fileModel", fileModel);

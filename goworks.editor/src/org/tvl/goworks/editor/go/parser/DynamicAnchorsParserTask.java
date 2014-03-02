@@ -58,7 +58,7 @@ public final class DynamicAnchorsParserTask implements ParserTask {
         List<Anchor> anchors = referenceData != null ? referenceData.getData() : null;
         assert anchors != null;
 
-        BaseParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(context, GoParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, snapshot, anchors);
+        BaseParserData<List<Anchor>> result = new BaseParserData<>(context, GoParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, snapshot, anchors);
         results.addResult(result);
     }
 

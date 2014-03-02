@@ -200,13 +200,7 @@ public class GoHighlighter extends ANTLRHighlighterBaseV4<GoHighlighterLexerStat
             CompletionQueryResult result;
             try {
                 result = futureQuery.get(5, TimeUnit.SECONDS);
-            } catch (InterruptedException ex) {
-                LOGGER.log(Level.WARNING, "An exception occurred while resolving a tooltip query.", ex);
-                return "";
-            } catch (ExecutionException ex) {
-                LOGGER.log(Level.WARNING, "An exception occurred while resolving a tooltip query.", ex);
-                return "";
-            } catch (TimeoutException ex) {
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 LOGGER.log(Level.WARNING, "An exception occurred while resolving a tooltip query.", ex);
                 return "";
             }

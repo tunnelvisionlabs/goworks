@@ -32,7 +32,7 @@ public class VariadicParameterTypeReference extends CodeElementReference {
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         Collection<? extends CodeElementModel> types = type.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-        List<CodeElementModel> sliceTypes = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> sliceTypes = new ArrayList<>();
         for (CodeElementModel model : types) {
             if (!(model instanceof TypeModelImpl)) {
                 continue;

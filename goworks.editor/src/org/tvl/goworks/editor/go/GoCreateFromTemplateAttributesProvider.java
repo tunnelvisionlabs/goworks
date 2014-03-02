@@ -28,7 +28,7 @@ public class GoCreateFromTemplateAttributesProvider implements CreateFromTemplat
             return null;
         }
 
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("package", target.getName());
         return attributes;
     }

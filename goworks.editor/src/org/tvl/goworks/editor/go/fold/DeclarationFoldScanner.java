@@ -35,7 +35,7 @@ public class DeclarationFoldScanner extends AbstractAntlrFoldScanner<CompiledMod
     protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> result) {
         DocumentSnapshot snapshot = result.getSnapshot();
 
-        final List<FoldInfo> folds = new ArrayList<FoldInfo>();
+        final List<FoldInfo> folds = new ArrayList<>();
         CompiledModel model = result.getData();
         if (model == null) {
             return Collections.emptyList();

@@ -45,7 +45,7 @@ public final class NavigatorUIVisibleParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE)) {
-            BaseParserData<Boolean> data = new BaseParserData<Boolean>(context, GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE, snapshot, GoDeclarationsPanel.getInstance() != null);
+            BaseParserData<Boolean> data = new BaseParserData<>(context, GoParserDataDefinitions.NAVIGATOR_UI_VISIBLE, snapshot, GoDeclarationsPanel.getInstance() != null);
             results.addResult(data);
         }
     }

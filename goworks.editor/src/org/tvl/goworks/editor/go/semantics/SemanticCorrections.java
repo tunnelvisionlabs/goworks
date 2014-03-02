@@ -34,7 +34,7 @@ public class SemanticCorrections {
     private final TreeCorrectionParserATNSimulator correctionSimulator;
 
     @NonNull
-    private final List<ParserRuleContext<?>> invalidContexts = new ArrayList<ParserRuleContext<?>>();
+    private final List<ParserRuleContext<?>> invalidContexts = new ArrayList<>();
 
     public SemanticCorrections(@NonNull ParserRuleContext<?> parseTree, @NonNull TokenStream<? extends Token> input, @NonNull DocumentSnapshot snapshot) {
         this.parseTree = parseTree;

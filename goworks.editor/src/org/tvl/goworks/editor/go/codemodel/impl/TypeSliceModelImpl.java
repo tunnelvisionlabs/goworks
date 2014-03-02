@@ -31,7 +31,7 @@ public class TypeSliceModelImpl extends TypeWrapperModelImpl implements TypeSlic
             return Collections.singletonList(this);
         }
 
-        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getElementType().resolve());
+        List<TypeModelImpl> resolved = new ArrayList<>(getElementType().resolve());
         for (int i = 0; i < resolved.size(); i++) {
             resolved.set(i, new TypeSliceModelImpl(resolved.get(i)));
         }

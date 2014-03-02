@@ -148,9 +148,7 @@ public class GoIndentTask implements IndentTask {
         Tagger<TokenTag<Token>> tagger = null;
         try {
             tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
-        } catch (InterruptedException ex) {
-            LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
         }
 
@@ -167,7 +165,7 @@ public class GoIndentTask implements IndentTask {
             LOGGER.log(Level.FINE, "Reindent from anchor region: {0}.", region);
         }
 
-        TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
+        TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<>(tagger, new SnapshotPositionRegion(snapshot, region));
         TokenSource<Token> tokenSource = new CodeCompletionTokenSource(endPosition.getOffset(), taggerTokenSource);
         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
@@ -178,7 +176,7 @@ public class GoIndentTask implements IndentTask {
         @SuppressWarnings("LocalVariableHidesMemberVariable")
         FileModel fileModel = getFileModel();
         if (fileModel != null) {
-            Set<String> packageNames = new HashSet<String>();
+            Set<String> packageNames = new HashSet<>();
             for (ImportDeclarationModel model : fileModel.getImportDeclarations()) {
                 String name = model.getName();
                 if (!name.isEmpty() && !name.equals(".")) {
@@ -205,7 +203,7 @@ public class GoIndentTask implements IndentTask {
         }
 
         NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels =
-            new TreeMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>>();
+            new TreeMap<>();
         for (Map.Entry<RuleContext<Token>, CaretReachedException> parseTree : parseTrees.entrySet()) {
             if (parseTree.getValue() == null) {
                 continue;
@@ -230,7 +228,7 @@ public class GoIndentTask implements IndentTask {
             List<Map.Entry<RuleContext<Token>, CaretReachedException>> indentList =
                 indentLevels.get(indentationLevel);
             if (indentList == null) {
-                indentList = new ArrayList<Map.Entry<RuleContext<Token>, CaretReachedException>>();
+                indentList = new ArrayList<>();
                 indentLevels.put(indentationLevel, indentList);
             }
 
@@ -264,10 +262,7 @@ public class GoIndentTask implements IndentTask {
             try {
                 fileModel = futureFileModelData != null ? futureFileModelData.get().getData() : null;
                 fileModelDataFailed = fileModel != null;
-            } catch (InterruptedException ex) {
-                LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
-                fileModelDataFailed = true;
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
                 fileModelDataFailed = true;
             }

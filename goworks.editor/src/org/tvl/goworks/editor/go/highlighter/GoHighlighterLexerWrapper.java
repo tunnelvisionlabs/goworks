@@ -21,7 +21,7 @@ import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
  */
 public class GoHighlighterLexerWrapper implements TokenSourceWithStateV4<Token, GoHighlighterLexerState> {
     private static final Map<GoHighlighterLexerState, GoHighlighterLexerState> sharedStates =
-        new HashMap<GoHighlighterLexerState, GoHighlighterLexerState>();
+        new HashMap<>();
 
     private final GoHighlighterLexer lexer;
 

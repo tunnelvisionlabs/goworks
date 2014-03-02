@@ -44,7 +44,7 @@ final class GoSourcesImpl implements Sources, ChangeListener {
     private final ChangeSupport _changeSupport = new ChangeSupport(this);
 
     private boolean _dirty;
-    private final Map<String,SourceGroup[]> _cachedGroups = new ConcurrentHashMap<String,SourceGroup[]>();
+    private final Map<String,SourceGroup[]> _cachedGroups = new ConcurrentHashMap<>();
     private long _eventId;
     private final FireAction _fireTask = new FireAction();
 
@@ -63,7 +63,8 @@ final class GoSourcesImpl implements Sources, ChangeListener {
             @Override
             public SourceGroup[] run() {
                 SourceGroup[] groups;
-                if (type.equals(GoSourcesImpl.SOURCES_TYPE_GO)) {
+                switch (type) {
+                case GoSourcesImpl.SOURCES_TYPE_GO:
                     final FileObject sourcesDirectory = _project.getSourceRoot();
                     if (sourcesDirectory != null) {
                         SourceGroup group = new SourceGroup() {
@@ -140,12 +141,17 @@ final class GoSourcesImpl implements Sources, ChangeListener {
                     } else {
                         groups = new SourceGroup[0];
                     }
-                } else if (type.equals(Sources.TYPE_GENERIC)) {
+                    break;
+
+                case Sources.TYPE_GENERIC:
                     groups = new SourceGroup[] {
                         GenericSources.group(_project, _project.getProjectDirectory(), "go-generic", "Go", null, null)
                     };
-                } else {
+                    break;
+
+                default:
                     groups = new SourceGroup[0];
+                    break;
                 }
 
                 long myEventId;

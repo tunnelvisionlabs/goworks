@@ -75,9 +75,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                     CompiledModel compiledModel = refParseTreeData != null ? refParseTreeData.getData() : null;
                     CompiledFileModel compiledFileModel = compiledModel != null ? compiledModel.getResult() : null;
                     referenceParseTree = compiledFileModel != null ? compiledFileModel.getResult() : null;
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, "An exception occurred while getting the compiled model.", ex);
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     LOGGER.log(Level.WARNING, "An exception occurred while getting the compiled model.", ex);
                 }
 
@@ -86,7 +84,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                     annotatedParseTree = SemanticAnalyzer.analyze(snapshot.getVersionedDocument(), referenceParseTree);
                 }
 
-                parseTreeResult = new BaseParserData<GoAnnotatedParseTree>(context, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, annotatedParseTree);
+                parseTreeResult = new BaseParserData<>(context, GoParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, annotatedParseTree);
                 results.addResult(parseTreeResult);
             }
         }

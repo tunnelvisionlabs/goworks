@@ -36,7 +36,7 @@ public class GoProjectBinaryResolver implements ProjectBinaryResolver {
         }
 
         // looking for "main" package containing "func main()"
-        Set<String> binaries = new HashSet<String>();
+        Set<String> binaries = new HashSet<>();
         for (PackageModelImpl packageModel : cache.getPackages()) {
             Collection<FunctionModelImpl> functions = packageModel.getFunctions("main");
             if (functions.isEmpty()) {

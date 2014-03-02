@@ -60,7 +60,7 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
         synchronized (lock) {
             old = occurrences;
-            occurrences = new ArrayList<Mark>(marks);
+            occurrences = new ArrayList<>(marks);
             nue = occurrences;
         }
 
@@ -74,7 +74,7 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
             return Collections.emptyList();
         }
 
-        final List<Mark> result = new LinkedList<Mark>();
+        final List<Mark> result = new LinkedList<>();
         doc.render(new Runnable() {
             @Override
             public void run() {

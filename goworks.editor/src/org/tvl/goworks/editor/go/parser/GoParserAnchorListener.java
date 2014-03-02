@@ -8,10 +8,11 @@
  */
 package org.tvl.goworks.editor.go.parser;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.antlr.netbeans.editor.completion.AbstractAnchor;
@@ -31,8 +32,8 @@ import org.tvl.goworks.editor.go.parser.generated.GoParserBaseListener;
  * @author Sam Harwell
  */
 public class GoParserAnchorListener extends GoParserBaseListener {
-    private final Stack<Integer> anchorPositions = new Stack<Integer>();
-    private final List<Anchor> anchors = new ArrayList<Anchor>();
+    private final Deque<Integer> anchorPositions = new ArrayDeque<>();
+    private final List<Anchor> anchors = new ArrayList<>();
     private final DocumentSnapshot snapshot;
     private final AtomicBoolean cancel;
 

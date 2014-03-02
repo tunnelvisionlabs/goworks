@@ -67,13 +67,7 @@ public final class GoToSupport {
         CompletionQueryResult result;
         try {
             result = futureQuery.get(5, TimeUnit.SECONDS);
-        } catch (InterruptedException ex) {
-            LOGGER.log(Level.WARNING, "An exception occurred while attempting to navigate to an element.", ex);
-            return null;
-        } catch (ExecutionException ex) {
-            LOGGER.log(Level.WARNING, "An exception occurred while attempting to navigate to an element.", ex);
-            return null;
-        } catch (TimeoutException ex) {
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while attempting to navigate to an element.", ex);
             return null;
         }

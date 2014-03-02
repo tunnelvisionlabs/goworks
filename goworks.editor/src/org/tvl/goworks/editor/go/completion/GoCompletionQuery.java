@@ -316,13 +316,13 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         return new DeclarationCompletionItem(document, applicableTo);
     }
 
-    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_CONSTANTS = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("constants");
-    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_LOCALS = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("locals");
-    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_PARAMETER = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("parameter");
-    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_RECEIVER_PARAMETER = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("receiver-parameter");
-    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_RETURN_PARAMETER = new ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>>("return-parameter");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_CONSTANTS = new ObjectProperty<>("constants");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_LOCALS = new ObjectProperty<>("locals");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_PARAMETER = new ObjectProperty<>("parameter");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_RECEIVER_PARAMETER = new ObjectProperty<>("receiver-parameter");
+    private static final ObjectProperty<Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>> ATTR_RETURN_PARAMETER = new ObjectProperty<>("return-parameter");
 
-    private static final ObjectProperty<Collection<? extends CodeElementModel>> ATTR_TARGET = new ObjectProperty<Collection<? extends CodeElementModel>>("target");
+    private static final ObjectProperty<Collection<? extends CodeElementModel>> ATTR_TARGET = new ObjectProperty<>("target");
 
     @RuleDependencies({
         // these are dependencies from the BREAK_SCOPES and CONTINUE_SCOPES fields
@@ -388,7 +388,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_labeledStmt, version=0),
         })
         public void runImpl(BaseDocument document) {
-            results = new ArrayList<CompletionItem>();
+            results = new ArrayList<>();
             possibleDeclaration = true;
             possibleReference = true;
 
@@ -439,9 +439,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 Tagger<TokenTag<Token>> tagger = null;
                 try {
                     tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
                 }
 
@@ -460,7 +458,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     LOGGER.log(Level.FINE, "Code completion from {0}: {1}.", new Object[] { enclosing != null || previous != null ? "anchor region" : "top of File", region });
                 }
 
-                TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
+                TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<>(tagger, new SnapshotPositionRegion(snapshot, region));
                 TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                 CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
@@ -471,7 +469,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     @SuppressWarnings("LocalVariableHidesMemberVariable")
                     FileModel fileModel = getFileModel();
                     if (fileModel != null) {
-                        Set<String> packageNames = new HashSet<String>();
+                        Set<String> packageNames = new HashSet<>();
                         for (ImportDeclarationModel model : fileModel.getImportDeclarations()) {
                             String name = model.getName();
                             if (!name.isEmpty() && !name.equals(".")) {
@@ -495,7 +493,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     switch (anchorRule) {
                     case GoParser.RULE_topLevelDecl:
                         parseTrees = GoForestParser.INSTANCE.getParseTrees(parser);
-                        annotatedParseTrees = new HashMap<ParseTree<Token>, GoAnnotatedParseTree>();
+                        annotatedParseTrees = new HashMap<>();
                         break;
 
                     default:
@@ -587,7 +585,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         }
                     }
 
-                    Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
+                    Map<String, CompletionItem> intermediateResults = new HashMap<>();
                     if (parseTrees != null) {
                         /*
                         * KEYWORD ANALYSIS
@@ -769,11 +767,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                                 GoAnnotatedParseTree annotatedParseTree = getAnnotatedParseTree(snapshot.getVersionedDocument(), entry.getKey(), annotatedParseTrees);
                                 PackageModel currentPackage = getFileModel().getPackage();
-                                Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
+                                Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<>();
                                 for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
                                     Collection<PackageModel> packages = resolvedPackages.get(importDeclarationModel.getName());
                                     if (packages == null) {
-                                        packages = new ArrayList<PackageModel>();
+                                        packages = new ArrayList<>();
                                         resolvedPackages.put(importDeclarationModel.getName(), packages);
                                     }
 
@@ -942,7 +940,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                     }
 
                                     // add items from the current package and imported "mergeWithLocal" packages
-                                    List<PackageModel> visiblePackages = new ArrayList<PackageModel>();
+                                    List<PackageModel> visiblePackages = new ArrayList<>();
                                     visiblePackages.add(getFileModel().getPackage());
                                     for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
                                         if (importDeclarationModel.isMergeWithLocal()) {
@@ -1047,7 +1045,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         continue;
                                     }
 
-                                    final List<Token> labels = new ArrayList<Token>();
+                                    final List<Token> labels = new ArrayList<>();
                                     ParseTreeListener<Token> listener = new GoParserBaseListener() {
 
                                         @Override
@@ -1171,7 +1169,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
             if ((getQueryType() & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
                 String enteredText = applicableTo.getText(snapshot);
-                List<CompletionItem> updated = new ArrayList<CompletionItem>();
+                List<CompletionItem> updated = new ArrayList<>();
                 for (CompletionItem item : results) {
                     if (item.getInsertPrefix().equals(enteredText)) {
                         updated.add(item);
@@ -1207,7 +1205,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 Collection<? extends CodeElementModel> varTypes = targetAnalyzer.visit(varEntry.getItem2());
                 if (varTypes != null && index >= 0) {
-                    ArrayList<CodeElementModel> unbundledTypes = new ArrayList<CodeElementModel>();
+                    ArrayList<CodeElementModel> unbundledTypes = new ArrayList<>();
                     for (CodeElementModel varType : varTypes) {
                         if (varType instanceof BundledReturnTypeModel) {
                             List<? extends CodeElementModel> returnValues = ((BundledReturnTypeModel)varType).getReturnValues();
@@ -1271,10 +1269,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 try {
                     fileModel = futureFileModelData != null ? (FileModelImpl)futureFileModelData.get().getData() : null;
                     fileModelDataFailed = fileModel != null;
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
-                    fileModelDataFailed = true;
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     LOGGER.log(Level.WARNING, "An exception occurred while getting the file model.", ex);
                     fileModelDataFailed = true;
                 }
@@ -1283,7 +1278,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             return fileModel;
         }
 
-        private final ObjectDecorator<ParseTree<Token>> annotations = new ObjectDecorator<ParseTree<Token>>();
+        private final ObjectDecorator<ParseTree<Token>> annotations = new ObjectDecorator<>();
 
         private class LocalsAnalyzer {
 
@@ -1359,11 +1354,11 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             }
 
             private class Listener extends GoParserBaseListener {
-                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> locals = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
-                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> receiverParameters = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
-                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> parameters = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
-                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> returnParameters = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
-                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> constants = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> locals = new ArrayList<>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> receiverParameters = new ArrayList<>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> parameters = new ArrayList<>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> returnParameters = new ArrayList<>();
+                private final Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> constants = new ArrayList<>();
 
                 public Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> getLocals() {
                     return locals;
@@ -1572,7 +1567,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 } else {
                     // look up the package by import
                     CodeModelCache cache = CodeModelCacheImpl.getInstance();
-                    Collection<CodeElementModel> resolved = new ArrayList<CodeElementModel>();
+                    Collection<CodeElementModel> resolved = new ArrayList<>();
                     Collection<? extends ImportDeclarationModel> imports = fileModel.getImportDeclarations();
                     for (ImportDeclarationModel model : imports) {
                         if (model.getName().equals(ctx.start.getText())) {
@@ -1596,7 +1591,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 case GoParser.Star:
                     // dereference value
                     Collection<? extends CodeElementModel> pointerTypes = visit(ctx.expression());
-                    Collection<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                    Collection<CodeElementModel> result = new ArrayList<>();
                     for (CodeElementModel model : pointerTypes) {
                         for (TypeModelImpl typeModel : resolveType(model, true, false)) {
                             if (!(typeModel instanceof TypePointerModel)) {
@@ -1614,7 +1609,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 case GoParser.Amp:
                     // dereference value
                     Collection<? extends CodeElementModel> types = visit(ctx.expression());
-                    result = new ArrayList<CodeElementModel>();
+                    result = new ArrayList<>();
                     for (CodeElementModel model : types) {
                         TypeModel typeModel;
                         if (model instanceof TypeModel) {
@@ -1698,7 +1693,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 Collection<? extends CodeElementModel> target = visit(expressions.get(0));
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 for (CodeElementModel model : target) {
                     for (TypeModelImpl type : resolveType(model, true, true)) {
                         if (type instanceof TypeArrayModel || type instanceof TypeSliceModel) {
@@ -1726,7 +1721,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 Collection<? extends CodeElementModel> target = visit(expressions.get(0));
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 for (CodeElementModel model : target) {
                     for (TypeModelImpl type : resolveType(model, true, true)) {
                         if (type instanceof TypeArrayModel) {
@@ -1795,24 +1790,39 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 BuiltinArgsContext args = ctx.builtinArgs();
                 TypeContext type = args != null ? args.type() : null;
-                if ("append".equals(name) || "make".equals(name)) {
+                switch (name) {
+                case "append":
+                case "make":
                     if (type == null) {
                         return Collections.emptyList();
                     }
 
                     return visit(type);
-                } else if ("cap".equals(name) || "copy".equals(name) || "len".equals(name)) {
+
+                case "cap":
+                case "copy":
+                case "len":
                     return Collections.singletonList(IntrinsicTypeModels.INT);
-                } else if ("close".equals(name) || "delete".equals(name) || "panic".equals(name) || "print".equals(name) || "println".equals(name)) {
+
+                case "close":
+                case "delete":
+                case "panic":
+                case "print":
+                case "println":
                     // no return value
                     return Collections.emptyList();
-                } else if ("complex".equals(name)) {
+
+                case "complex":
                     LOGGER.log(Level.FINE, "TODO: separate complex64 and complex128 types.");
                     return Collections.singletonList(IntrinsicTypeModels.COMPLEX128);
-                } else if ("imag".equals(name) || "real".equals(name)) {
+
+                case "imag":
+                case "real":
                     LOGGER.log(Level.FINE, "TODO: separate float32 and float64 types.");
                     return Collections.singletonList(IntrinsicTypeModels.FLOAT64);
-                } else if ("new".equals(name)) {
+
+                case "new":
+                {
                     if (type == null) {
                         return Collections.emptyList();
                     }
@@ -1822,7 +1832,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         return result;
                     }
 
-                    List<CodeElementModel> pointers = new ArrayList<CodeElementModel>();
+                    List<CodeElementModel> pointers = new ArrayList<>();
                     for (CodeElementModel model : result) {
                         if (model instanceof TypeModelImpl) {
                             pointers.add(new TypePointerModelImpl((TypeModelImpl)model));
@@ -1831,15 +1841,20 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                     setTargetProperty(ctx, pointers);
                     return pointers;
-                } else if ("recover".equals(name)) {
+                }
+
+                case "recover":
+                {
                     TypeInterfaceModelImpl result = new TypeInterfaceModelImpl("_", fileModel, ctx);
                     result.freeze();
                     return Collections.singletonList(result);
-                } else {
+                }
+
+                default:
                     assert !SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(name);
 
                     Collection<? extends CodeElementModel> methodResults = analyzeUnqualifiedIdentifier(ctx.IDENTIFIER());
-                    List<CodeElementModel> results = new ArrayList<CodeElementModel>();
+                    List<CodeElementModel> results = new ArrayList<>();
                     for (CodeElementModel model : methodResults) {
                         if (model instanceof TypeModel) {
                             results.add(model);
@@ -1883,8 +1898,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 // HACK! copied from visitQualifiedIdentifier
                 Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars = Collections.emptyList();
-                List<CodeElementModel> contextModels = new ArrayList<CodeElementModel>();
-                List<ImportDeclarationModel> possibleImports = new ArrayList<ImportDeclarationModel>();
+                List<CodeElementModel> contextModels = new ArrayList<>();
+                List<ImportDeclarationModel> possibleImports = new ArrayList<>();
                 contextModels.add(getFileModel().getPackage());
                 for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
                     if (importDeclarationModel.isMergeWithLocal()) {
@@ -1894,7 +1909,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 ParseTree<Token> functionContext = getTopContext(parser, nameNode.getParent().getRuleContext(), new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                 if (functionContext != null) {
-                    vars = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                    vars = new ArrayList<>();
                     vars.addAll(localsAnalyzer.getReceiverParameters(functionContext));
                     vars.addAll(localsAnalyzer.getParameters(functionContext));
                     vars.addAll(localsAnalyzer.getReturnParameters(functionContext));
@@ -1914,7 +1929,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                Set<CodeElementModel> members = new HashSet<CodeElementModel>();
+                Set<CodeElementModel> members = new HashSet<>();
                 String name = nameNode.getSymbol().getText();
                 for (Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer> entry : vars) {
                     if (ParseTrees.isAncestorOf(entry.getItem2(), nameNode)) {
@@ -1927,7 +1942,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
 
                     Collection<? extends CodeElementModel> varTypes = visit(entry.getItem2());
-                    ArrayList<CodeElementModel> unbundledTypes = new ArrayList<CodeElementModel>();
+                    ArrayList<CodeElementModel> unbundledTypes = new ArrayList<>();
                     for (CodeElementModel varType : varTypes) {
                         if (varType instanceof BundledReturnTypeModel) {
                             List<? extends CodeElementModel> returnValues = ((BundledReturnTypeModel)varType).getReturnValues();
@@ -1978,7 +1993,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 Collection<? extends CodeElementModel> targets = visit(ctx.expression());
 
-                List<CodeElementModel> members = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> members = new ArrayList<>();
                 for (CodeElementModel target : targets) {
                     members.addAll(SemanticAnalyzer.getSelectableMembers(target, name));
                 }
@@ -2025,7 +2040,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public Collection<? extends CodeElementModel> visitArrayType(ArrayTypeContext ctx) {
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 if (ctx.elementType() != null) {
                     result.addAll(visit(ctx.elementType()));
                 }
@@ -2086,7 +2101,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseType, version=0),
             })
             public Collection<? extends CodeElementModel> visitPointerType(PointerTypeContext ctx) {
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 if (ctx.baseType() != null) {
                     result.addAll(visit(ctx.baseType()));
                 }
@@ -2177,7 +2192,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 // this will be a bundled return type
                 Collection<? extends CodeElementModel> expressionModel = visit(ctx.e);
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 for (CodeElementModel model : expressionModel) {
                     for (TypeModelImpl type : resolveType(model, true, true)) {
                         if (type instanceof TypeArrayModelImpl || type instanceof TypeSliceModelImpl) {
@@ -2296,7 +2311,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public Collection<? extends CodeElementModel> visitSliceType(SliceTypeContext ctx) {
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 if (ctx.elementType() != null) {
                     result.addAll(visit(ctx.elementType()));
                 }
@@ -2323,7 +2338,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
             public Collection<? extends CodeElementModel> visitMapType(MapTypeContext ctx) {
                 Collection<? extends CodeElementModel> keyTypes = null;
                 Collection<? extends CodeElementModel> valueTypes = null;
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
 
                 if (ctx.keyType() != null) {
                     keyTypes = visit(ctx.keyType());
@@ -2361,7 +2376,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_elementType, version=0),
             })
             public Collection<? extends CodeElementModel> visitChannelType(ChannelTypeContext ctx) {
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 if (ctx.elementType() != null) {
                     result.addAll(visit(ctx.elementType()));
                 }
@@ -2429,7 +2444,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 PackageModel currentPackage = getFileModel().getPackage();
                 Collection<? extends TypeModel> types = currentPackage.getTypes(ctx.IDENTIFIER().getSymbol().getText());
 
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 ReceiverContext receiverContext = (ReceiverContext)ctx.parent;
                 boolean isptr = receiverContext.ptr != null;
                 if (isptr) {
@@ -2501,7 +2516,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 Collection<? extends CodeElementModel> methodResults = visit(ctx.type());
-                List<CodeElementModel> results = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> results = new ArrayList<>();
                 for (CodeElementModel model : methodResults) {
                     if (model instanceof TypeModel) {
                         results.add(model);
@@ -2549,7 +2564,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 Collection<? extends CodeElementModel> methodResults = visit(ctx.expression());
-                List<CodeElementModel> results = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> results = new ArrayList<>();
                 for (CodeElementModel model : methodResults) {
                     Collection<? extends CodeElementModel> resolvedModels;
                     if (model instanceof VarModel) {
@@ -2599,9 +2614,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 // first check for the "semi-special" literals
                 if (ctx.packageName() == null && ctx.IDENTIFIER() != null) {
                     TerminalNode<Token> identifier = ctx.IDENTIFIER();
-                    if ("true".equals(identifier.getText()) || "false".equals(identifier.getText())) {
+                    switch (identifier.getText()) {
+                    case "true":
+                    case "false":
                         return Collections.singletonList(IntrinsicTypeModels.BOOL);
-                    } else if ("iota".equals(identifier.getText())) {
+
+                    case "iota":
                         return Collections.singletonList(IntrinsicTypeModels.INT);
                     }
 
@@ -2612,8 +2630,8 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 Collection<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>> vars = Collections.emptyList();
-                List<CodeElementModel> contextModels = new ArrayList<CodeElementModel>();
-                List<ImportDeclarationModel> possibleImports = new ArrayList<ImportDeclarationModel>();
+                List<CodeElementModel> contextModels = new ArrayList<>();
+                List<ImportDeclarationModel> possibleImports = new ArrayList<>();
                 if (ctx.packageName() == null) {
                     contextModels.add(getFileModel().getPackage());
                     for (ImportDeclarationModel importDeclarationModel : getFileModel().getImportDeclarations()) {
@@ -2624,7 +2642,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                     ParseTree<Token> functionContext = getTopContext(parser, ctx, new IntervalSet() {{ add(GoParser.RULE_functionDecl); add(GoParser.RULE_methodDecl); }});
                     if (functionContext != null) {
-                        vars = new ArrayList<Tuple3<TerminalNode<Token>, ParserRuleContext<Token>, Integer>>();
+                        vars = new ArrayList<>();
                         vars.addAll(localsAnalyzer.getReceiverParameters(functionContext));
                         vars.addAll(localsAnalyzer.getParameters(functionContext));
                         vars.addAll(localsAnalyzer.getReturnParameters(functionContext));
@@ -2652,7 +2670,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                Set<CodeElementModel> members = new HashSet<CodeElementModel>();
+                Set<CodeElementModel> members = new HashSet<>();
                 TerminalNode<Token> nameNode = ctx.IDENTIFIER();
                 if (nameNode != null) {
                     String name = nameNode.getSymbol().getText();
@@ -2667,7 +2685,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         }
 
                         Collection<? extends CodeElementModel> varTypes = visit(entry.getItem2());
-                        ArrayList<CodeElementModel> unbundledTypes = new ArrayList<CodeElementModel>();
+                        ArrayList<CodeElementModel> unbundledTypes = new ArrayList<>();
                         for (CodeElementModel varType : varTypes) {
                             if (varType instanceof BundledReturnTypeModel) {
                                 List<? extends CodeElementModel> returnValues = ((BundledReturnTypeModel)varType).getReturnValues();
@@ -2715,7 +2733,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return types;
                 }
 
-                List<CodeElementModel> assertionBundles = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> assertionBundles = new ArrayList<>();
                 for (CodeElementModel model : types) {
                     if (model instanceof AbstractCodeElementModel) {
                         assertionBundles.add(new BundledReturnTypeModel(Arrays.asList((AbstractCodeElementModel)model, (AbstractCodeElementModel)IntrinsicTypeModels.BOOL)));
@@ -2799,7 +2817,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     } else if (literalType.typeName() != null) {
                         result = visit(literalType.typeName());
                     } else if (literalType.elementType() != null) {
-                        List<CodeElementModel> arrayElementType = new ArrayList<CodeElementModel>();
+                        List<CodeElementModel> arrayElementType = new ArrayList<>();
                         arrayElementType.addAll(visit(literalType.elementType()));
                         for (int i = 0; i < arrayElementType.size(); i++) {
                             CodeElementModel elementType = arrayElementType.get(i);
@@ -2841,7 +2859,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
 
                 Collection<? extends TypeModelImpl> resolved = type.resolve();
                 if (lookThroughAliases) {
-                    List<TypeModelImpl> result = new ArrayList<TypeModelImpl>();
+                    List<TypeModelImpl> result = new ArrayList<>();
                     for (TypeModelImpl typeModelImpl : resolved) {
                         if (typeModelImpl instanceof TypeAliasModel) {
                             result.addAll(resolveType(((TypeAliasModel)typeModelImpl).getType(), lookThroughAliases, dereferenceArrayPointers));
@@ -2854,7 +2872,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (dereferenceArrayPointers) {
-                    List<TypeModelImpl> result = new ArrayList<TypeModelImpl>();
+                    List<TypeModelImpl> result = new ArrayList<>();
                     for (TypeModelImpl typeModelImpl : resolved) {
                         if (typeModelImpl instanceof TypePointerModel) {
                             Collection<? extends TypeModelImpl> dereferences = resolveType(((TypePointerModel)typeModelImpl).getElementType(), lookThroughAliases, false);

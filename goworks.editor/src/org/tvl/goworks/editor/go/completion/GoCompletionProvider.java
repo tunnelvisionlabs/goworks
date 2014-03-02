@@ -149,10 +149,7 @@ public class GoCompletionProvider extends AbstractCompletionProvider {
                     if (tagger == null) {
                         return null;
                     }
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
-                    return null;
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     LOGGER.log(Level.WARNING, "An exception occurred while getting tokens.", ex);
                     return null;
                 }

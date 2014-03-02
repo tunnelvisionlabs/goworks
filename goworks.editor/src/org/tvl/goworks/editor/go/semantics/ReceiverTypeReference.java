@@ -84,7 +84,7 @@ public class ReceiverTypeReference extends CodeElementReference {
             return types;
         }
 
-        List<CodeElementModel> pointerTypes = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> pointerTypes = new ArrayList<>();
         for (CodeElementModel model : types) {
             if (!(model instanceof TypeModelImpl)) {
                 continue;

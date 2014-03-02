@@ -161,7 +161,7 @@ public class GoIndentationAnalyzer {
         @NonNull
         private final TerminalNode<? extends Token> initialNode;
         @NonNull
-        private final List<ParseTree<? extends Token>> path = new ArrayList<ParseTree<? extends Token>>();
+        private final List<ParseTree<? extends Token>> path = new ArrayList<>();
 
         public GoIndentationVisitor(@NonNull GoCodeStyle codeStyle, @NonNull TerminalNode<? extends Token> initialNode) {
             this.codeStyle = codeStyle;

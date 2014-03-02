@@ -37,7 +37,7 @@ public class TypeMapModelImpl extends TypeModelImpl implements TypeMapModel {
 
         Collection<? extends TypeModelImpl> resolvedKey = getKeyType().resolve();
         Collection<? extends TypeModelImpl> resolvedValue = getValueType().resolve();
-        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>();
+        List<TypeModelImpl> resolved = new ArrayList<>();
         for (TypeModelImpl keyModel : resolvedKey) {
             for (TypeModelImpl valueModel : resolvedValue) {
                 resolved.add(new TypeMapModelImpl(keyModel, valueModel));

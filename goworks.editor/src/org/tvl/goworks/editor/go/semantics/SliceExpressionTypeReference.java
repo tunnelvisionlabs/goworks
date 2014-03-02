@@ -31,7 +31,7 @@ public class SliceExpressionTypeReference extends CodeElementReference {
 
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
-        List<CodeElementModel> resolved = new ArrayList<CodeElementModel>(expression.resolve(annotatedParseTree, currentPackage, resolvedPackages));
+        List<CodeElementModel> resolved = new ArrayList<>(expression.resolve(annotatedParseTree, currentPackage, resolvedPackages));
         for (int i = 0; i < resolved.size(); i++) {
             CodeElementModel model = resolved.get(i);
             if (!(model instanceof TypeModelImpl)) {

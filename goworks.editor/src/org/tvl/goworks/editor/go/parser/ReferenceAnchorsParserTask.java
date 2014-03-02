@@ -79,7 +79,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                     if (parseResult != null) {
                         ParseTreeWalker.DEFAULT.walk(listener, parseResult);
                     }
-                    anchorPointsResult = new BaseParserData<List<Anchor>>(context, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
+                    anchorPointsResult = new BaseParserData<>(context, GoParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
                 }
 
                 if (fileModelResult == null) {
@@ -92,7 +92,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                         if (fileModel != null) {
                             updateCodeModelCache(fileModel);
                         }
-                        fileModelResult = new BaseParserData<FileModel>(context, GoParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
+                        fileModelResult = new BaseParserData<>(context, GoParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
                     } catch (RuntimeException ex) {
                         LOGGER.log(Level.WARNING, "An exception occurred while analyzing reference anchors.", ex);
                     } catch (Error ex) {

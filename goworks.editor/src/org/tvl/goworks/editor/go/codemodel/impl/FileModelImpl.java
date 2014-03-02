@@ -24,14 +24,14 @@ import org.tvl.goworks.project.GoProject;
  */
 public class FileModelImpl extends AbstractCodeElementModel implements FileModel {
     private final FileObject fileObject;
-    private final FreezableArrayList<PackageDeclarationModelImpl> packageDeclarations = new FreezableArrayList<PackageDeclarationModelImpl>();
-    private final FreezableArrayList<ImportDeclarationModelImpl> importDeclarations = new FreezableArrayList<ImportDeclarationModelImpl>();
-    private final FreezableArrayList<TypeModelImpl> types = new FreezableArrayList<TypeModelImpl>();
-    private final FreezableArrayList<ConstModelImpl> constants = new FreezableArrayList<ConstModelImpl>();
-    private final FreezableArrayList<VarModelImpl> vars = new FreezableArrayList<VarModelImpl>();
-    private final FreezableArrayList<FunctionModelImpl> functions = new FreezableArrayList<FunctionModelImpl>();
+    private final FreezableArrayList<PackageDeclarationModelImpl> packageDeclarations = new FreezableArrayList<>();
+    private final FreezableArrayList<ImportDeclarationModelImpl> importDeclarations = new FreezableArrayList<>();
+    private final FreezableArrayList<TypeModelImpl> types = new FreezableArrayList<>();
+    private final FreezableArrayList<ConstModelImpl> constants = new FreezableArrayList<>();
+    private final FreezableArrayList<VarModelImpl> vars = new FreezableArrayList<>();
+    private final FreezableArrayList<FunctionModelImpl> functions = new FreezableArrayList<>();
     @SuppressWarnings("unchecked")
-    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<AbstractCodeElementModel>(packageDeclarations, importDeclarations, types, constants, vars, functions);
+    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(packageDeclarations, importDeclarations, types, constants, vars, functions);
 
     public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed GoProject project, @NonNull String packagePath) {
         super(fileObject.getNameExt(), project, packagePath);

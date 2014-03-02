@@ -66,7 +66,7 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
         }
 
         CodeModelCacheImpl cache = CodeModelCacheImpl.getInstance();
-        List<PackageModelImpl> packages = new ArrayList<PackageModelImpl>();
+        List<PackageModelImpl> packages = new ArrayList<>();
 
         FileModelImpl file = getFile();
         if (file != null) {
@@ -88,7 +88,7 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
             packages.add(getPackage());
         }
 
-        Collection<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>();
+        Collection<TypeModelImpl> resolved = new ArrayList<>();
         for (PackageModelImpl packageModel : packages) {
             resolved.addAll(packageModel.getTypes(referencedTypeName));
         }
@@ -112,7 +112,7 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
             TypeModelImpl model = resolved.iterator().next();
             return model.getFields();
         } else {
-            List<FieldModelImpl> elements = new ArrayList<FieldModelImpl>();
+            List<FieldModelImpl> elements = new ArrayList<>();
             for (TypeModelImpl model : resolved) {
                 elements.addAll(model.getFields());
             }
@@ -132,7 +132,7 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
             TypeModelImpl model = resolved.iterator().next();
             return model.getMethods();
         } else {
-            List<FunctionModelImpl> elements = new ArrayList<FunctionModelImpl>();
+            List<FunctionModelImpl> elements = new ArrayList<>();
             for (TypeModelImpl model : resolved) {
                 elements.addAll(model.getMethods());
             }
@@ -152,7 +152,7 @@ public class TypeReferenceModelImpl extends TypeModelImpl implements TypeReferen
             TypeModelImpl model = resolved.iterator().next();
             return model.getMembers();
         } else {
-            List<AbstractCodeElementModel> elements = new ArrayList<AbstractCodeElementModel>();
+            List<AbstractCodeElementModel> elements = new ArrayList<>();
             for (TypeModelImpl model : resolved) {
                 elements.addAll(model.getMembers());
             }

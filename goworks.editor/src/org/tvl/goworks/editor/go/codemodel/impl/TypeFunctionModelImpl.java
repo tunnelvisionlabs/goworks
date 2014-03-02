@@ -21,8 +21,8 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  */
 public class TypeFunctionModelImpl extends TypeModelImpl implements TypeFunctionModel {
 
-    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<>();
+    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<>();
 
     private String simpleName;
 

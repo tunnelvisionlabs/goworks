@@ -67,7 +67,7 @@ public class GoParserFactory {
             interpreter.setPredictionMode(PredictionMode.SLL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = true;
-            parser.setErrorHandler(new BailErrorStrategy<Token>());
+            parser.setErrorHandler(new BailErrorStrategy<>());
             break;
 
         case SLL:
@@ -82,7 +82,7 @@ public class GoParserFactory {
             interpreter.setPredictionMode(PredictionMode.LL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = true;
-            parser.setErrorHandler(new BailErrorStrategy<Token>());
+            parser.setErrorHandler(new BailErrorStrategy<>());
             break;
 
         case HYBRID_SLL:
@@ -97,7 +97,7 @@ public class GoParserFactory {
             interpreter.setPredictionMode(PredictionMode.LL);
             interpreter.tail_call_preserves_sll = false;
             interpreter.treat_sllk1_conflict_as_ambiguity = false;
-            parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+            parser.setErrorHandler(new DefaultErrorStrategy<>());
             parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
             break;
 

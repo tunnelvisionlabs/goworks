@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
@@ -103,7 +104,7 @@ public final class GoActionProvider implements ActionProvider {
 
     private final GoProject _project;
 
-    private final List<ExecutionListener> listeners = new CopyOnWriteArrayList<ExecutionListener>();
+    private final List<ExecutionListener> listeners = new CopyOnWriteArrayList<>();
 
     private WeakReference<Future<Integer>> _running;
 
@@ -299,26 +300,32 @@ public final class GoActionProvider implements ActionProvider {
             @Override
             public void run() {
                 try {
-                    if (COMMAND_REBUILD.equals(commandName)) {
-                        Future<Integer> result;
-                        result = executeImpl(COMMAND_CLEAN, packageName, io, firstListener);
-                        if (result.get() != 0) {
-                            return;
+                    switch (commandName) {
+                    case COMMAND_REBUILD:
+                        {
+                            Future<Integer> result;
+                            result = executeImpl(COMMAND_CLEAN, packageName, io, firstListener);
+                            if (result.get() != 0) {
+                                return;
+                            }   executeImpl(COMMAND_BUILD, packageName, io, listener);
+                            break;
                         }
 
-                        executeImpl(COMMAND_BUILD, packageName, io, listener);
-                    } else if (COMMAND_RUN.equals(commandName)) {
-                        Future<Integer> result;
-                        result = executeImpl(COMMAND_BUILD, packageName, io, firstListener);
-                        if (result.get() != 0) {
-                            return;
+                    case COMMAND_RUN:
+                        {
+                            Future<Integer> result;
+                            result = executeImpl(COMMAND_BUILD, packageName, io, firstListener);
+                            if (result.get() != 0) {
+                                return;
+                            }   executeImpl(COMMAND_RUN, packageName, io, listener);
+                            break;
                         }
 
-                        executeImpl(COMMAND_RUN, packageName, io, listener);
-                    } else {
+                    default:
                         executeImpl(commandName, packageName, io, listener);
+                        break;
                     }
-                } catch (Throwable throwable) {
+                } catch (InterruptedException | ExecutionException throwable) {
                     try {
                         io.getErr().println("Internal error occurred. Please report a bug.", null, true);
                     } catch (IOException ex) {
@@ -375,7 +382,7 @@ public final class GoActionProvider implements ActionProvider {
 
         };
 
-        List<Writer> outputHandlers = new ArrayList<Writer>();
+        List<Writer> outputHandlers = new ArrayList<>();
         if ("test".equals(commandName)) {
             outputHandlers.add(new GoTestOutputWriter(_project));
         }
@@ -388,7 +395,7 @@ public final class GoActionProvider implements ActionProvider {
         final ProcessChangeListener processChangeListener = new ProcessChangeListener(listener, outputListener, convertor, io);
 
         FileObject executable;
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         if (COMMAND_RUN.equals(commandName)) {
             FileObject projectDirectory = _project.getProjectDirectory();
             if (projectDirectory == null || !projectDirectory.isFolder()) {
@@ -462,19 +469,26 @@ public final class GoActionProvider implements ActionProvider {
                 throw new UnsupportedOperationException("Couldn't find the Go tool.");
             }
 
-            if (COMMAND_BUILD.equals(commandName) || COMMAND_COMPILE_SINGLE.equals(commandName)) {
+            switch (commandName) {
+            case COMMAND_BUILD:
+            case COMMAND_COMPILE_SINGLE:
                 args.add("install");
                 args.add("-v");
                 args.add(packageName);
-            } else if (COMMAND_CLEAN.equals(commandName)) {
+                break;
+
+            case COMMAND_CLEAN:
                 args.add("clean");
                 args.add("-i");
                 args.add("-x");
                 args.add(packageName);
-            } else if (COMMAND_TEST.equals(commandName)) {
+                break;
+
+            case COMMAND_TEST:
                 args.add("test");
                 args.add("-v");
                 args.add(packageName);
+                break;
             }
         }
 
@@ -513,7 +527,7 @@ public final class GoActionProvider implements ActionProvider {
 
         NativeExecutionService es = NativeExecutionService.newService(nativeProcessBuilder, descriptor, commandName);
         Future<Integer> future = es.run();
-        _running = new WeakReference<Future<Integer>>(future);
+        _running = new WeakReference<>(future);
         return future;
     }
 
@@ -577,7 +591,7 @@ public final class GoActionProvider implements ActionProvider {
     }
 
     private static class ProcessChangeListener implements ChangeListener, Runnable, ExecutionDescriptor.LineConvertorFactory {
-        private final AtomicReference<NativeProcess> processRef = new AtomicReference<NativeProcess>();
+        private final AtomicReference<NativeProcess> processRef = new AtomicReference<>();
         private final ExecutionListener listener;
         private Writer outputListener;
         private final LineConvertor lineConvertor;
@@ -833,9 +847,11 @@ public final class GoActionProvider implements ActionProvider {
             return false;
         }
 
-        if (command.equals(ActionProvider.COMMAND_BUILD)) {
+        switch (command) {
+        case ActionProvider.COMMAND_BUILD:
             return !_project.isStandardLibrary();
-        } else if (command.equals(ActionProvider.COMMAND_COMPILE_SINGLE)) {
+
+        case ActionProvider.COMMAND_COMPILE_SINGLE:
             if (_project.isStandardLibrary()) {
                 return false;
             }
@@ -857,23 +873,32 @@ public final class GoActionProvider implements ActionProvider {
             }
 
             return true;
-        } else if (command.equals(ActionProvider.COMMAND_REBUILD)) {
+
+        case ActionProvider.COMMAND_REBUILD:
             return !_project.isStandardLibrary();
-        } else if (command.equals(ActionProvider.COMMAND_CLEAN)) {
+
+        case ActionProvider.COMMAND_CLEAN:
             return !_project.isStandardLibrary();
-        } else if (command.equals(ActionProvider.COMMAND_RUN)) {
+
+        case ActionProvider.COMMAND_RUN:
             return !_project.isStandardLibrary();
-        } else if (command.equals(ActionProvider.COMMAND_DEBUG)) {
+
+        case ActionProvider.COMMAND_DEBUG:
             return false;
-        } else if (command.equals(ActionProvider.COMMAND_PROFILE)) {
+
+        case ActionProvider.COMMAND_PROFILE:
             return false;
-        } else if (command.equals(ActionProvider.COMMAND_TEST)) {
+
+        case ActionProvider.COMMAND_TEST:
             return !_project.isStandardLibrary();
-        } else if (command.equals(ActionProvider.COMMAND_DELETE)) {
+
+        case ActionProvider.COMMAND_DELETE:
             return !_project.isStandardLibrary();
-        } else if (command.equals(ActionProvider.COMMAND_COPY)) {
+
+        case ActionProvider.COMMAND_COPY:
             return !_project.isStandardLibrary();
-        } else {
+
+        default:
             throw new IllegalArgumentException(command);
         }
     }
@@ -956,7 +981,7 @@ public final class GoActionProvider implements ActionProvider {
         
         public WriterRedirector(@NonNull Collection<? extends Writer> writers) {
             Parameters.notNull("writers", writers);
-            _writers = new ArrayList<Writer>(writers);
+            _writers = new ArrayList<>(writers);
         }
 
         @Override

@@ -222,7 +222,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
     private void refreshKeys() {
         Set<String> keys;
         synchronized (names2nodes) {
-            keys = new TreeSet<String>(names2nodes.keySet());
+            keys = new TreeSet<>(names2nodes.keySet());
         }
         setKeys(keys);
     }
@@ -546,7 +546,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
             boolean doUpdate = false;
 
             // Find all entries which have to be updated
-            List<String> needsUpdate = new ArrayList<String>();
+            List<String> needsUpdate = new ArrayList<>();
             synchronized (names2nodes) {
                 for (Iterator<String> it = names2nodes.keySet().iterator(); it.hasNext(); ) {
                     String p = it.next();
@@ -689,7 +689,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
                 if ( actions == null ) {
                     // Copy actions and leave out the PropertiesAction and FileSystemAction.
                     Action superActions[] = super.getActions( context );
-                    List<Action> actionList = new ArrayList<Action>(superActions.length);
+                    List<Action> actionList = new ArrayList<>(superActions.length);
 
                     for( int i = 0; i < superActions.length; i++ ) {
 
@@ -776,10 +776,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
                         }
                     }
                     return hasPackageFlavor ? new PasteType[0] : super.getPasteTypes (t);
-                } catch (UnsupportedFlavorException e) {
-                    Exceptions.printStackTrace(e);
-                    return new PasteType[0];
-                } catch (IOException e) {
+                } catch (UnsupportedFlavorException | IOException e) {
                     Exceptions.printStackTrace(e);
                     return new PasteType[0];
                 }
@@ -808,10 +805,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
                         }
                     }
                     return hasPackageFlavor ? null : super.getDropType (t, action, index);
-                } catch (UnsupportedFlavorException e) {
-                    Exceptions.printStackTrace(e);
-                    return null;
-                } catch (IOException e) {
+                } catch (UnsupportedFlavorException | IOException e) {
                     Exceptions.printStackTrace(e);
                     return null;
                 }
@@ -1063,7 +1057,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
         @Override
         public Node.PropertySet[] getPropertySets () {
             final Node.PropertySet[] properties = super.getPropertySets ();
-            final List<Node.PropertySet> result = new ArrayList<Node.PropertySet>(properties.length);
+            final List<Node.PropertySet> result = new ArrayList<>(properties.length);
             for (Node.PropertySet set : properties) {
                 if (set == null) {
                     continue;
@@ -1156,7 +1150,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
         @Override
         public DataObject[] getChildren () {
             DataObject[] arr = folder.getChildren ();
-            List<DataObject> list = new ArrayList<DataObject>(arr.length);
+            List<DataObject> list = new ArrayList<>(arr.length);
             for (int i = 0; i < arr.length; i++) {
                 if (arr[i] instanceof DataFolder) continue;
 

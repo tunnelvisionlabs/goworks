@@ -37,7 +37,7 @@ public class TypeAssertionResultReference extends CodeElementReference {
             return result;
         }
 
-        List<CodeElementModel> bundled = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> bundled = new ArrayList<>();
         for (CodeElementModel model : result) {
             bundled.add(new BundledReturnTypeModel(Arrays.asList((AbstractCodeElementModel)model, new UnknownTypeModelImpl(((AbstractCodeElementModel)model).getFile()))));
         }

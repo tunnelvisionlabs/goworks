@@ -45,7 +45,7 @@ public final class ParseTreeUIVisibleParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE)) {
-            BaseParserData<Boolean> data = new BaseParserData<Boolean>(context, GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE, snapshot, GoParseTreeNavigatorPanel.getInstance() != null);
+            BaseParserData<Boolean> data = new BaseParserData<>(context, GoParserDataDefinitions.PARSE_TREE_UI_VISIBLE, snapshot, GoParseTreeNavigatorPanel.getInstance() != null);
             results.addResult(data);
         }
     }

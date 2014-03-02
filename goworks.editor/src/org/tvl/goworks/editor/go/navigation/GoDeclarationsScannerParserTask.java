@@ -89,7 +89,7 @@ public final class GoDeclarationsScannerParserTask implements ParserTask {
                     description = scanner.scan(model);
                 }
 
-                data = new BaseParserData<Description>(context, GoParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+                data = new BaseParserData<>(context, GoParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
                 results.addResult(data);
             }
         }

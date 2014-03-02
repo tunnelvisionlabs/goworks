@@ -53,7 +53,7 @@ public class CompiledModelParser {
         try {
             if (requestedData.contains(GoParserDataDefinitions.COMPILED_MODEL)) {
                 CompiledModel result = parseImpl(taskManager, context, snapshot);
-                BaseParserData<CompiledModel> data = new BaseParserData<CompiledModel>(context, GoParserDataDefinitions.COMPILED_MODEL, snapshot, result);
+                BaseParserData<CompiledModel> data = new BaseParserData<>(context, GoParserDataDefinitions.COMPILED_MODEL, snapshot, result);
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {
@@ -84,7 +84,7 @@ public class CompiledModelParser {
             try {
                 Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GoParserDataDefinitions.LEXER_TOKENS);
                 Tagger<TokenTag<Token>> tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
-                TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
+                TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<>(tagger, snapshot);
                 CommonTokenStream tokenStream = new CommonTokenStream(tokenSource);
                 GoParser parser = GoParserFactory.DEFAULT.getParser(tokenStream, ParserConfiguration.FASTEST);
                 try {
@@ -132,7 +132,7 @@ public class CompiledModelParser {
                     lastException = null;
                     return null;
                 }
-            } catch (Throwable ex) {
+            } catch (InterruptedException | ExecutionException | ParseCancellationException ex) {
                 lastSnapshot = snapshot;
                 lastResult = null;
                 lastException = ex;

@@ -30,7 +30,7 @@ import org.tvl.goworks.editor.go.parser.generated.GoParserBaseVisitor;
  * @author Sam Harwell
  */
 public class GoParser extends AbstractGoParser {
-	private final Set<String> packageNames = new HashSet<String>();
+	private final Set<String> packageNames = new HashSet<>();
     private DocumentSnapshot snapshot;
 
     public GoParser(TokenStream<? extends Token> input) {

@@ -26,12 +26,6 @@
                     <file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>
                 </folder>
 
-                <folder name="SideBar">
-                    <file name="org-antlr-netbeans-editor-fold-CodeFoldingSideBarFactory.instance">
-                        <attr name="position" intvalue="1500"/>
-                    </file>
-                </folder>
-
                 <folder name="Popup">
                     <folder name="goto">
                         <attr name="position" intvalue="500"/>

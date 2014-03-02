@@ -39,7 +39,7 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
     private final FileObject sourceRoot;
 
     // GuardedBy(cache)
-    private final Map<ClassPathCache, ClassPath> cache = new EnumMap<ClassPathCache, ClassPath>(ClassPathCache.class);
+    private final Map<ClassPathCache, ClassPath> cache = new EnumMap<>(ClassPathCache.class);
 
     public ClassPathProviderImpl(GoProject project) {
         assert project != null;
@@ -75,13 +75,15 @@ public final class ClassPathProviderImpl implements ClassPathProvider/*, GoSourc
 
     @Override
     public ClassPath findClassPath(FileObject file, String type) {
-        if (GoProject.SOURCE.equals(type)) {
+        switch (type) {
+        case GoProject.SOURCE:
             if (isStandardLibrary || FileUtil.getRelativePath(sourceRoot, file) == null) {
                 return null;
             }
 
             return getSourcePath(file);
-        } else if (GoProject.PLATFORM.equals(type)) {
+
+        case GoProject.PLATFORM:
             if (!isStandardLibrary || FileUtil.getRelativePath(sourceRoot, file) == null) {
                 return null;
             }

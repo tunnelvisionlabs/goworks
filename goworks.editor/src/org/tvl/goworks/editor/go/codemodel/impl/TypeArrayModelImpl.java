@@ -32,7 +32,7 @@ public class TypeArrayModelImpl extends TypeWrapperModelImpl implements TypeArra
             return Collections.singletonList(this);
         }
 
-        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getElementType().resolve());
+        List<TypeModelImpl> resolved = new ArrayList<>(getElementType().resolve());
         for (int i = 0; i < resolved.size(); i++) {
             resolved.set(i, new TypeArrayModelImpl(resolved.get(i)));
         }

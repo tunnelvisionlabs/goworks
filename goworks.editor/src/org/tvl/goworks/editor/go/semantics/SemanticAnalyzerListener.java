@@ -231,22 +231,22 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @NonNull
     private final ObjectDecorator<Tree> treeDecorator;
 
-    private final Deque<Map<String, TerminalNode<Token>>> visibleLocals = new ArrayDeque<Map<String, TerminalNode<Token>>>();
-    private final Deque<Map<String, TerminalNode<Token>>> visibleConstants = new ArrayDeque<Map<String, TerminalNode<Token>>>();
-    private final Deque<Map<String, TerminalNode<Token>>> visibleFunctions = new ArrayDeque<Map<String, TerminalNode<Token>>>();
-    private final Deque<Map<String, TerminalNode<Token>>> visibleTypes = new ArrayDeque<Map<String, TerminalNode<Token>>>();
+    private final Deque<Map<String, TerminalNode<Token>>> visibleLocals = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode<Token>>> visibleConstants = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode<Token>>> visibleFunctions = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode<Token>>> visibleTypes = new ArrayDeque<>();
 
-    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleLocals = new ArrayDeque<Map<String, TerminalNode<Token>>>();
-    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleConstants = new ArrayDeque<Map<String, TerminalNode<Token>>>();
+    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleLocals = new ArrayDeque<>();
+    private final Deque<Map<String, TerminalNode<Token>>> pendingVisibleConstants = new ArrayDeque<>();
 
-    private final List<TerminalNode<Token>> unresolvedIdentifiers = new ArrayList<TerminalNode<Token>>();
-    private final List<TerminalNode<Token>> unresolvedQualifiedIdentifiers = new ArrayList<TerminalNode<Token>>();
+    private final List<TerminalNode<Token>> unresolvedIdentifiers = new ArrayList<>();
+    private final List<TerminalNode<Token>> unresolvedQualifiedIdentifiers = new ArrayList<>();
 
     // label references are resolved at the end of a function
-    private final Deque<Map<String, TerminalNode<Token>>> visibleLabels = new ArrayDeque<Map<String, TerminalNode<Token>>>();
-    private final Deque<Collection<TerminalNode<Token>>> unresolvedLabels = new ArrayDeque<Collection<TerminalNode<Token>>>();
+    private final Deque<Map<String, TerminalNode<Token>>> visibleLabels = new ArrayDeque<>();
+    private final Deque<Collection<TerminalNode<Token>>> unresolvedLabels = new ArrayDeque<>();
 
-    private final Map<String, List<TerminalNode<Token>>> importedPackages = new HashMap<String, List<TerminalNode<Token>>>();
+    private final Map<String, List<TerminalNode<Token>>> importedPackages = new HashMap<>();
 
     private BigInteger _iota = BigInteger.ZERO;
 
@@ -269,11 +269,11 @@ public class SemanticAnalyzerListener implements GoParserListener {
         String currentPackagePath = getCurrentPackagePath((GoProject)project, document);
         PackageModel currentPackage = codeModelCache.getUniquePackage((GoProject)project, currentPackagePath);
 
-        Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<String, Collection<PackageModel>>();
+        Map<String, Collection<PackageModel>> resolvedPackages = new HashMap<>();
         for (Map.Entry<String, List<TerminalNode<Token>>> entry : importedPackages.entrySet()) {
             Collection<PackageModel> packages = resolvedPackages.get(entry.getKey());
             if (packages == null) {
-                packages = new ArrayList<PackageModel>();
+                packages = new ArrayList<>();
                 resolvedPackages.put(entry.getKey(), packages);
             }
 
@@ -299,9 +299,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             for (TerminalNode<Token> node : unresolvedQualifiedIdentifiers) {
                 try {
                     updatedResolution |= resolveQualifiedIdentifier(node, currentPackage, resolvedPackages);
-                } catch (RuntimeException ex) {
-                    LOGGER.log(Level.FINE, String.format("An exception occurred while resolving a qualified identifier '%s'", node.getSymbol()), ex);
-                } catch (Error ex) {
+                } catch (RuntimeException | Error ex) {
                     LOGGER.log(Level.FINE, String.format("An exception occurred while resolving a qualified identifier '%s'", node.getSymbol()), ex);
                 }
             }
@@ -554,7 +552,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
         }
 
         String nameText = token.getText();
-        List<CodeElementModel> qualifiedModels = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> qualifiedModels = new ArrayList<>();
         for (CodeElementModel model : resolvedQualifier) {
             qualifiedModels.addAll(SemanticAnalyzer.getSelectableMembers(model, nameText));
         }
@@ -632,7 +630,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     return;
                 }
 
-                List<TypeModelImpl> arrayTypes = new ArrayList<TypeModelImpl>();
+                List<TypeModelImpl> arrayTypes = new ArrayList<>();
                 for (CodeElementModel model : elementTypes) {
                     if (!(model instanceof TypeModelImpl)) {
                         continue;
@@ -660,7 +658,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     return;
                 }
 
-                List<TypeModelImpl> pointerTypes = new ArrayList<TypeModelImpl>();
+                List<TypeModelImpl> pointerTypes = new ArrayList<>();
                 for (CodeElementModel model : elementTypes) {
                     if (!(model instanceof TypeModelImpl)) {
                         continue;
@@ -688,7 +686,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     return;
                 }
 
-                List<TypeModelImpl> sliceTypes = new ArrayList<TypeModelImpl>();
+                List<TypeModelImpl> sliceTypes = new ArrayList<>();
                 for (CodeElementModel model : elementTypes) {
                     if (!(model instanceof TypeModelImpl)) {
                         continue;
@@ -718,7 +716,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     return;
                 }
 
-                List<TypeModelImpl> mapTypes = new ArrayList<TypeModelImpl>();
+                List<TypeModelImpl> mapTypes = new ArrayList<>();
                 for (CodeElementModel keyModel : keyTypes) {
                     if (!(keyModel instanceof TypeModelImpl)) {
                         continue;
@@ -760,7 +758,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
                     channelKind = ChannelKind.Receive;
                 }
 
-                List<TypeModelImpl> channelTypes = new ArrayList<TypeModelImpl>();
+                List<TypeModelImpl> channelTypes = new ArrayList<>();
                 for (CodeElementModel model : elementTypes) {
                     if (!(model instanceof TypeModelImpl)) {
                         continue;
@@ -1620,12 +1618,12 @@ public class SemanticAnalyzerListener implements GoParserListener {
             }
 
             Collection<? extends PackageModel> packages = CodeModelCacheImpl.getInstance().getPackages((GoProject)currentProject, path);
-            Set<PackageModel> libraryPackages = new HashSet<PackageModel>();
+            Set<PackageModel> libraryPackages = new HashSet<>();
             for (GoProject importedProject : ((GoProject)currentProject).getLibraryProjects()) {
                 libraryPackages.addAll(CodeModelCacheImpl.getInstance().getPackages(importedProject, path));
             }
 
-            List<PackageModel> visiblePackages = new ArrayList<PackageModel>(packages);
+            List<PackageModel> visiblePackages = new ArrayList<>(packages);
             visiblePackages.addAll(libraryPackages);
 
             treeDecorator.putProperty(target, GoAnnotations.MODELS, visiblePackages);
@@ -1635,7 +1633,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
             List<TerminalNode<Token>> packageList = importedPackages.get(name);
             if (packageList == null) {
-                packageList = new ArrayList<TerminalNode<Token>>();
+                packageList = new ArrayList<>();
                 importedPackages.put(name, packageList);
             }
 
@@ -1971,21 +1969,27 @@ public class SemanticAnalyzerListener implements GoParserListener {
         } else if (ctx.IDENTIFIER() != null) {
             assert ctx.packageName() == null;
             String text = ctx.IDENTIFIER().getText();
-            if ("true".equals(text)) {
+            switch (text) {
+            case "true":
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.UNEVALUATED_CONSTANT, "true");
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EVALUATED_CONSTANT, BigInteger.ONE);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
-            } else if ("false".equals(text)) {
+                break;
+
+            case "false":
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.UNEVALUATED_CONSTANT, "false");
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EVALUATED_CONSTANT, BigInteger.ZERO);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
-            } else if ("iota".equals(text)) {
+                break;
+
+            case "iota":
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.UNEVALUATED_CONSTANT, "iota");
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EVALUATED_CONSTANT, _iota);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.RESOLVED, true);
                 treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.CONST_REF);
+                break;
             }
 
             TerminalNode<Token> local = getVisibleLocal(ctx.IDENTIFIER());

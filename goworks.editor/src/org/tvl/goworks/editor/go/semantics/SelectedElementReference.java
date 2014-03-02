@@ -38,7 +38,7 @@ public class SelectedElementReference extends CodeElementReference {
         }
 
         String nameText = name.getText();
-        List<CodeElementModel> results = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> results = new ArrayList<>();
         for (CodeElementModel model : resolvedExpression) {
             results.addAll(SemanticAnalyzer.getSelectableMembers(model, nameText));
         }

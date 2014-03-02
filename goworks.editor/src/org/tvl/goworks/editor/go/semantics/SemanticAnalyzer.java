@@ -75,7 +75,7 @@ public final class SemanticAnalyzer {
             } else if (resolved.size() == 1) {
                 return getSelectableMembers(resolved.iterator().next(), name);
             } else {
-                List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+                List<CodeElementModel> result = new ArrayList<>();
                 for (CodeElementModel i : resolved) {
                     result.addAll(getSelectableMembers(i, name));
                 }
@@ -105,7 +105,7 @@ public final class SemanticAnalyzer {
             return members;
         }
 
-        List<CodeElementModel> allMembers = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> allMembers = new ArrayList<>();
         allMembers.addAll(members);
 
         if (source instanceof TypePointerModel) {
@@ -117,7 +117,7 @@ public final class SemanticAnalyzer {
             source = ((TypeAliasModel)source).getType();
         }
 
-        List<CodeElementModel> extendedSources = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> extendedSources = new ArrayList<>();
         if (source instanceof TypeReferenceModel) {
             // work with the underlying type for the extended portion
             extendedSources.addAll(((TypeReferenceModel)source).resolve());
@@ -141,8 +141,8 @@ public final class SemanticAnalyzer {
 
         for (CodeElementModel extendedSource : extendedSources) {
             if (extendedSource instanceof InterfaceModel) {
-                Set<TypeModel> visitedInterfaces = new HashSet<TypeModel>();
-                Deque<TypeModel> remainingInterfaces = new ArrayDeque<TypeModel>(((InterfaceModel)extendedSource).getImplementedInterfaces());
+                Set<TypeModel> visitedInterfaces = new HashSet<>();
+                Deque<TypeModel> remainingInterfaces = new ArrayDeque<>(((InterfaceModel)extendedSource).getImplementedInterfaces());
                 while (!remainingInterfaces.isEmpty()) {
                     TypeModel current = remainingInterfaces.pop();
                     if (current instanceof TypeReferenceModel) {
@@ -165,8 +165,8 @@ public final class SemanticAnalyzer {
                     allMembers.addAll(getSelectableMembers(current, name, false));
                 }
             } else if (extendedSource instanceof StructModel) {
-                Set<TypeModel> visitedStructures = new HashSet<TypeModel>();
-                Deque<TypeModel> remainingStructures = new ArrayDeque<TypeModel>(getAnonymousFieldTypes((StructModel)extendedSource));
+                Set<TypeModel> visitedStructures = new HashSet<>();
+                Deque<TypeModel> remainingStructures = new ArrayDeque<>(getAnonymousFieldTypes((StructModel)extendedSource));
                 while (!remainingStructures.isEmpty()) {
                     TypeModel current = remainingStructures.pop();
                     if (current instanceof TypeReferenceModel) {
@@ -196,7 +196,7 @@ public final class SemanticAnalyzer {
     }
 
     public static Collection<? extends TypeModel> getAnonymousFieldTypes(StructModel struct) {
-        Collection<TypeModel> types = new ArrayList<TypeModel>();
+        Collection<TypeModel> types = new ArrayList<>();
         for (FieldModel field : struct.getFields()) {
             if (field.isAnonymous()) {
                 types.add(field.getVarType());

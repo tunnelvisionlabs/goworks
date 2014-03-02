@@ -38,7 +38,7 @@ public class UnaryExpressionTypeReference extends CodeElementReference {
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         if (operator.getType() == GoParser.Amp) {
             // address of
-            List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+            List<CodeElementModel> result = new ArrayList<>();
             result.addAll(expression.resolve(annotatedParseTree, currentPackage, resolvedPackages));
             for (int i = 0; i < result.size(); i++) {
                 CodeElementModel codeElementModel = result.get(i);
@@ -53,7 +53,7 @@ public class UnaryExpressionTypeReference extends CodeElementReference {
             return result;
         } else if (operator.getType() == GoParser.Star) {
             // dereference
-            List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+            List<CodeElementModel> result = new ArrayList<>();
             result.addAll(expression.resolve(annotatedParseTree, currentPackage, resolvedPackages));
             for (int i = 0; i < result.size(); i++) {
                 CodeElementModel codeElementModel = result.get(i);

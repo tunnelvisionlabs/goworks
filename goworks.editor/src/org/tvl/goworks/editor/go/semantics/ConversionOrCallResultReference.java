@@ -36,7 +36,7 @@ public class ConversionOrCallResultReference extends CodeElementReference {
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         Collection<? extends CodeElementModel> methods = typeOrMethod.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-        List<CodeElementModel> result = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> result = new ArrayList<>();
         for (CodeElementModel model : methods) {
             if (model instanceof VarModelImpl) {
                 model = ((VarModelImpl)model).getVarType();
@@ -63,7 +63,7 @@ public class ConversionOrCallResultReference extends CodeElementReference {
                 }
             } else if (model instanceof TypeModelImpl) {
                 // this was actually a type cast
-                Collection<AbstractCodeElementModel> resultValues = new ArrayList<AbstractCodeElementModel>();
+                Collection<AbstractCodeElementModel> resultValues = new ArrayList<>();
                 resultValues.add((AbstractCodeElementModel)model);
                 resultValues.add((AbstractCodeElementModel)BuiltinTypeReference.BOOL.resolve());
                 result.add(new BundledReturnTypeModel(resultValues));

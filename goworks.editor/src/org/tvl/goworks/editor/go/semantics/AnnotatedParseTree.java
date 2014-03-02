@@ -29,7 +29,7 @@ import org.openide.util.Parameters;
  */
 public class AnnotatedParseTree {
 
-    private final ObjectDecorator<Tree> treeAnnotations = new ObjectDecorator<Tree>(new IdentityHashMap<Tree, Map<ObjectProperty<?>, Object>>());
+    private final ObjectDecorator<Tree> treeAnnotations = new ObjectDecorator<>(new IdentityHashMap<Tree, Map<ObjectProperty<?>, Object>>());
     private ParseTree<Token> parseTree;
 
     public AnnotatedParseTree(@NonNull ParseTree<Token> parseTree) {
@@ -66,7 +66,7 @@ public class AnnotatedParseTree {
     }
 
     public void compactAnnotations() {
-        final Map<Tree, Tree> map = new IdentityHashMap<Tree, Tree>();
+        final Map<Tree, Tree> map = new IdentityHashMap<>();
 
         ParseTreeListener<Token> listener = new ParseTreeListener<Token>() {
 
@@ -91,7 +91,7 @@ public class AnnotatedParseTree {
 
         };
 
-        final Map<Tree, Tree> extras = new IdentityHashMap<Tree, Tree>();
+        final Map<Tree, Tree> extras = new IdentityHashMap<>();
         ParseTreeWalker.DEFAULT.walk(listener, parseTree);
         for (Map.Entry<? extends Tree, ?> entry : treeAnnotations.getProperties().entrySet()) {
             if (!map.containsKey(entry.getKey())) {

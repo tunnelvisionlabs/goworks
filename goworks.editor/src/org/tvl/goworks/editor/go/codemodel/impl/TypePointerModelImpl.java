@@ -33,7 +33,7 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
             return Collections.singletonList(this);
         }
 
-        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getElementType().resolve());
+        List<TypeModelImpl> resolved = new ArrayList<>(getElementType().resolve());
         for (int i = 0; i < resolved.size(); i++) {
             resolved.set(i, new TypePointerModelImpl(resolved.get(i)));
         }
@@ -80,7 +80,7 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
             return Collections.emptyList();
         }
 
-        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        List<FunctionModelImpl> functions = new ArrayList<>();
         if (!isResolved()) {
             for (TypeModelImpl resolved : this.resolve()) {
                 functions.addAll(resolved.getMethods());
@@ -109,7 +109,7 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
             return Collections.emptyList();
         }
 
-        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        List<FunctionModelImpl> functions = new ArrayList<>();
         if (!isResolved()) {
             for (TypeModelImpl resolved : this.resolve()) {
                 functions.addAll(resolved.getMethods(name));

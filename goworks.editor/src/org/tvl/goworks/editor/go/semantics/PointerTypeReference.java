@@ -40,7 +40,7 @@ public class PointerTypeReference extends CodeElementReference {
             return elementTypes;
         }
 
-        List<CodeElementModel> pointerTypes = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> pointerTypes = new ArrayList<>();
         for (CodeElementModel model : elementTypes) {
             if (!(model instanceof TypeModelImpl)) {
                 continue;

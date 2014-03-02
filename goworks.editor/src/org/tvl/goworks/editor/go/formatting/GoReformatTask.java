@@ -96,7 +96,7 @@ public class GoReformatTask implements ReformatTask {
             throw new UnsupportedOperationException("Couldn't find the Go tool.");
         }
 
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         args.add("-tabs=" + useTabs);
         args.add("-tabwidth=" + tabWidth);
 
@@ -110,9 +110,9 @@ public class GoReformatTask implements ReformatTask {
 
             final InputStream inputStream = process.getInputStream();
             final InputStream errorStream = process.getErrorStream();
-            OutputStream outputStream = process.getOutputStream();
-            outputStream.write(text.getBytes());
-            outputStream.close();
+            try (OutputStream outputStream = process.getOutputStream()) {
+                outputStream.write(text.getBytes());
+            }
 
             ExecutorService ioService = Executors.newFixedThreadPool(2);
             Future<String> resultFuture = ioService.submit(new Callable<String>() {
@@ -150,9 +150,7 @@ public class GoReformatTask implements ReformatTask {
                 }
 
                 return result;
-            } catch (ExecutionException ex) {
-                return null;
-            } catch (InterruptedException ex) {
+            } catch (ExecutionException | InterruptedException ex) {
                 return null;
             }
         } catch (IOException ex) {

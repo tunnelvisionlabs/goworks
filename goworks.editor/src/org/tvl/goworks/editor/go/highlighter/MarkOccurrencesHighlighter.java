@@ -129,9 +129,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             Future<ParserData<GoAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GoParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<GoAnnotatedParseTree> annotatedParseTreeData = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get() : null;
             annotatedParseTree = annotatedParseTreeData != null ? annotatedParseTreeData.getData() : null;
-        } catch (InterruptedException ex) {
-            LOGGER.log(Level.WARNING, "An exception occurred while getting the annotated parse tree and file model.", ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting the annotated parse tree and file model.", ex);
         }
 
@@ -142,7 +140,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         return new MarkOccurrencesListener(fileModel, annotatedParseTree, parserData.getContext().getPosition());
     }
 
-    private final List<SnapshotPosition> markPositions = new ArrayList<SnapshotPosition>();
+    private final List<SnapshotPosition> markPositions = new ArrayList<>();
 
     @Override
     protected void addHighlights(List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
@@ -157,7 +155,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
     protected void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, MarkOccurrencesListener listener) {
         markPositions.clear();
 
-        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<Tuple2<OffsetRegion, AttributeSet>>(listener.getMarkedOccurrences().size());
+        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<>(listener.getMarkedOccurrences().size());
         addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getMarkedOccurrences(), markOccurrencesAttributes);
 
         OffsetsBag updateBag = new OffsetsBag(currentSnapshot.getVersionedDocument().getDocument());
@@ -225,10 +223,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             if (tokensData == null) {
                 return null;
             }
-        } catch (InterruptedException ex) {
-            LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
-            return null;
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting token data.", ex);
             return null;
         }
@@ -299,7 +294,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         private final FileModel fileModel;
         private final GoAnnotatedParseTree annotatedParseTree;
 
-        private final List<Token> markedOccurrences = new ArrayList<Token>();
+        private final List<Token> markedOccurrences = new ArrayList<>();
 
         private final Token currentToken;
         private final TerminalNode<? extends Token> currentNode;

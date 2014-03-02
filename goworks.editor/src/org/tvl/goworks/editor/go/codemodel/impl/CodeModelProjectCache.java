@@ -40,13 +40,13 @@ public class CodeModelProjectCache {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     private final Map<String, FileModelImpl> files =
-        new HashMap<String, FileModelImpl>();
+        new HashMap<>();
     private final Set<PackageModelImpl> packages =
-        new HashSet<PackageModelImpl>();
+        new HashSet<>();
     private final Map<String, PackageModelImpl> packagesByPath =
-        new HashMap<String, PackageModelImpl>();
+        new HashMap<>();
     private final Map<String, Collection<PackageModelImpl>> packagesByName =
-        new HashMap<String, Collection<PackageModelImpl>>();
+        new HashMap<>();
 
     public CodeModelProjectCache(@NullAllowed GoProject project) {
         this.project = project;
@@ -62,7 +62,7 @@ public class CodeModelProjectCache {
 
             @Override
             public Collection<PackageModelImpl> call() throws Exception {
-                return new ArrayList<PackageModelImpl>(packages);
+                return new ArrayList<>(packages);
             }
 
         });
@@ -79,7 +79,7 @@ public class CodeModelProjectCache {
                     return Collections.emptyList();
                 }
 
-                return new ArrayList<PackageModelImpl>(model);
+                return new ArrayList<>(model);
             }
 
         });
@@ -117,7 +117,7 @@ public class CodeModelProjectCache {
 
                     Collection<PackageModelImpl> set = packagesByName.get(packageName);
                     if (set == null) {
-                        set = new HashSet<PackageModelImpl>();
+                        set = new HashSet<>();
                         packagesByName.put(packageName, set);
                     }
 

@@ -25,8 +25,8 @@ import org.tvl.goworks.editor.go.codemodel.ParameterModel;
  */
 public class FunctionModelImpl extends AbstractCodeElementModel implements FunctionModel {
 
-    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<>();
+    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<>();
     private ParameterModelImpl receiverParameter;
 
     private final OffsetRegion seek;

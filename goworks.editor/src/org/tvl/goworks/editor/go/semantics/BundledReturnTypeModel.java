@@ -26,7 +26,7 @@ public class BundledReturnTypeModel extends AbstractCodeElementModel {
 
     public BundledReturnTypeModel(Collection<? extends AbstractCodeElementModel> returnValues) {
         super("tuple", returnValues.iterator().next().getFile());
-        this.returnValues = new ArrayList<AbstractCodeElementModel>(returnValues);
+        this.returnValues = new ArrayList<>(returnValues);
     }
 
     @NonNull

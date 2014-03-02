@@ -102,7 +102,7 @@ public final class CurrentMemberContextParserTask implements ParserTask {
                 data = new CurrentDeclarationContextData(snapshot, context);
             }
 
-            results.addResult(new BaseParserData<CurrentDeclarationContextData>(parseContext, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, snapshot, data));
+            results.addResult(new BaseParserData<>(parseContext, GoParserDataDefinitions.CURRENT_DECLARATION_CONTEXT, snapshot, data));
         }
     }
 

@@ -33,7 +33,7 @@ import org.antlr.v4.runtime.misc.IntervalSet;
  * @author Sam Harwell
  */
 public class TreeCorrectionParserATNSimulator extends ParserATNSimulator<Token> {
-    private final Map<Integer, IntervalSet> suppressedRules = new HashMap<Integer, IntervalSet>();
+    private final Map<Integer, IntervalSet> suppressedRules = new HashMap<>();
     private int startIndex;
 
     public TreeCorrectionParserATNSimulator(Parser<Token> parser, ATN atn) {

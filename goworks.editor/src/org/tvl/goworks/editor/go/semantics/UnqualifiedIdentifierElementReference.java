@@ -68,7 +68,7 @@ public class UnqualifiedIdentifierElementReference extends CodeElementReference 
                 result = currentPackage.getMembers(identifier.getSymbol().getText());
                 Collection<PackageModel> mergePackages = resolvedPackages.get("");
                 if (mergePackages != null && !mergePackages.isEmpty()) {
-                    List<CodeElementModel> combinedResults = new ArrayList<CodeElementModel>(result);
+                    List<CodeElementModel> combinedResults = new ArrayList<>(result);
                     for (PackageModel otherPackage : mergePackages) {
                         combinedResults.addAll(otherPackage.getMembers(identifier.getSymbol().getText()));
                     }
@@ -115,7 +115,7 @@ public class UnqualifiedIdentifierElementReference extends CodeElementReference 
 
                 int implicitIndex = annotatedParseTree.getTreeDecorator().getProperty(decl, GoAnnotations.IMPLICIT_INDEX);
                 if (implicitIndex >= 0) {
-                    Collection<CodeElementModel> unwrapped = new ArrayList<CodeElementModel>();
+                    Collection<CodeElementModel> unwrapped = new ArrayList<>();
                     for (CodeElementModel model : resolved) {
                         if (model instanceof BundledReturnTypeModel) {
                             BundledReturnTypeModel bundled = (BundledReturnTypeModel)model;
@@ -135,7 +135,7 @@ public class UnqualifiedIdentifierElementReference extends CodeElementReference 
 
             case FUNC_REF:
             {
-                ArrayList<CodeElementModel> resolved = new ArrayList<CodeElementModel>();
+                ArrayList<CodeElementModel> resolved = new ArrayList<>();
                 resolved.addAll(currentPackage.getFunctions(identifier.getSymbol().getText()));
                 Collection<? extends PackageModel> mergedImports = resolvedPackages.get("");
                 if (mergedImports != null) {

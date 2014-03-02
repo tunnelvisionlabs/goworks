@@ -59,7 +59,7 @@ public class GoCustomIndexer extends CustomIndexer {
     @Override
     protected void index(Iterable<? extends Indexable> files, Context context) {
         ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
-        Deque<Tuple2<Indexable, Future<ParserData<FileModel>>>> futures = new ArrayDeque<Tuple2<Indexable, Future<ParserData<FileModel>>>>();
+        Deque<Tuple2<Indexable, Future<ParserData<FileModel>>>> futures = new ArrayDeque<>();
         for (Indexable file : files) {
             try {
                 if (!GoEditorKit.GO_MIME_TYPE.equals(file.getMimeType())) {
@@ -99,9 +99,7 @@ public class GoCustomIndexer extends CustomIndexer {
             ParserData<FileModel> parserData = null;
             try {
                 parserData = future.get(0, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException ex) {
-                LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
             } catch (TimeoutException ex) {
                 futures.add(pair);
@@ -115,9 +113,7 @@ public class GoCustomIndexer extends CustomIndexer {
                 ParserData<CompiledModel> compiledModelData = null;
                 try {
                     compiledModelData = futureCompiledModelData != null ? futureCompiledModelData.get() : null;
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     LOGGER.log(Level.WARNING, "An exception occurred while indexing a document.", ex);
                 }
 

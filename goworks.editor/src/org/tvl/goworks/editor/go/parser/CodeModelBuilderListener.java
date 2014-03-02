@@ -152,38 +152,38 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
      * This is always balanced in {@link #enterStructType} and
      * {@link #exitStructType}.
      */
-    private final Deque<TypeStructModelImpl> _structModelStack = new ArrayDeque<TypeStructModelImpl>();
+    private final Deque<TypeStructModelImpl> _structModelStack = new ArrayDeque<>();
     /**
      * This is always balanced in {@link #enterInterfaceType} and
      * {@link #exitInterfaceType}.
      */
-    private final Deque<TypeInterfaceModelImpl> _interfaceModelStack = new ArrayDeque<TypeInterfaceModelImpl>();
+    private final Deque<TypeInterfaceModelImpl> _interfaceModelStack = new ArrayDeque<>();
     /**
      * This is always balanced in {@link #enterInterfaceType} and
      * {@link #exitInterfaceType}.
      */
-    private final Deque<Collection<TypeModelImpl>> _implementedTypesContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
+    private final Deque<Collection<TypeModelImpl>> _implementedTypesContainerStack = new ArrayDeque<>();
     /**
      * This is always balanced in {@link #enterSourceFileBody} and
      * {@link #exitSourceFileBody}.
      */
-    private final Deque<Collection<TypeModelImpl>> _typeContainerStack = new ArrayDeque<Collection<TypeModelImpl>>();
+    private final Deque<Collection<TypeModelImpl>> _typeContainerStack = new ArrayDeque<>();
     /**
      * This is always balanced in {@link #enterSourceFileBody} and
      * {@link #exitSourceFileBody}.
      */
-    private final Deque<Collection<ConstModelImpl>> _constContainerStack = new ArrayDeque<Collection<ConstModelImpl>>();
+    private final Deque<Collection<ConstModelImpl>> _constContainerStack = new ArrayDeque<>();
     /**
      * This is always balanced in {@link #enterSourceFileBody} and
      * {@link #exitSourceFileBody}.
      */
-    private final Deque<Collection<VarModelImpl>> _varContainerStack = new ArrayDeque<Collection<VarModelImpl>>();
+    private final Deque<Collection<VarModelImpl>> _varContainerStack = new ArrayDeque<>();
     /**
      * This is always balanced in {@link #enterSourceFileBody} and
      * {@link #exitSourceFileBody}, and in {@link #enterInterfaceType} and
      * {@link #exitInterfaceType}.
      */
-    private final Deque<Collection<FunctionModelImpl>> _functionContainerStack = new ArrayDeque<Collection<FunctionModelImpl>>();
+    private final Deque<Collection<FunctionModelImpl>> _functionContainerStack = new ArrayDeque<>();
     /**
      * This is always balanced in the following pairs of methods:
      * <ul>
@@ -194,7 +194,7 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
      * <li>{@link #enterResult} (balanced within this single method)</li>
      * </ul>
      */
-    private final Deque<Collection<ParameterModelImpl>> _parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
+    private final Deque<Collection<ParameterModelImpl>> _parameterContainerStack = new ArrayDeque<>();
     /**
      * This is always balanced in the following pairs of methods:
      * <ul>
@@ -204,13 +204,13 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
      * <li>{@link #enterFunctionDecl} and {@link #exitFunctionDecl}</li>
      * </ul>
      */
-    private final Deque<FunctionModel> _functionModelStack = new ArrayDeque<FunctionModel>();
+    private final Deque<FunctionModel> _functionModelStack = new ArrayDeque<>();
     /**
      * This stack is implicitly balanced.
      */
-    private final Deque<TypeModelImpl> _typeModelStack = new ArrayDeque<TypeModelImpl>();
+    private final Deque<TypeModelImpl> _typeModelStack = new ArrayDeque<>();
 
-    private final Map<ParserRuleContext<Token>, TypeModelImpl> _expressionTypes = new HashMap<ParserRuleContext<Token>, TypeModelImpl>();
+    private final Map<ParserRuleContext<Token>, TypeModelImpl> _expressionTypes = new HashMap<>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, Token[] tokens) {
         Project project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
@@ -831,10 +831,14 @@ public class CodeModelBuilderListener extends GoParserBaseListener {
             return;
         }
 
-        if ("make".equals(functionName)) {
+        switch (functionName) {
+        case "make":
             putExpressionType(ctx, getExpressionType(args.type()));
-        } else if ("new".equals(functionName)) {
+            break;
+
+        case "new":
             putExpressionType(ctx, new TypePointerModelImpl(getExpressionType(args.type())));
+            break;
         }
     }
 

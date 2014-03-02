@@ -37,7 +37,7 @@ public class GoTestOutputWriter extends Writer {
 
     private final GoProject _project;
     private final StringBuilder _buffer = new StringBuilder();
-    private final List<Testcase> _cases = new ArrayList<Testcase>();
+    private final List<Testcase> _cases = new ArrayList<>();
 
     private float _totalTime;
     private TestSession _session;

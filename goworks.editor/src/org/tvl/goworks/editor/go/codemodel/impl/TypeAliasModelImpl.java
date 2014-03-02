@@ -37,7 +37,7 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
             return Collections.singletonList(this);
         }
 
-        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getType().resolve());
+        List<TypeModelImpl> resolved = new ArrayList<>(getType().resolve());
         for (int i = 0; i < resolved.size(); i++) {
             resolved.set(i, new TypeAliasModelImpl(getName(), resolved.get(i), getFile(), null, null));
         }
@@ -80,7 +80,7 @@ public class TypeAliasModelImpl extends TypeModelImpl implements TypeAliasModel 
         PackageModelImpl packageModel = getPackage();
         assert packageModel != null;
 
-        List<FunctionModelImpl> methods = new ArrayList<FunctionModelImpl>();
+        List<FunctionModelImpl> methods = new ArrayList<>();
         for (FunctionModelImpl function : packageModel.getFunctions()) {
             ParameterModelImpl receiver = function.getReceiverParameter();
             if (receiver == null) {

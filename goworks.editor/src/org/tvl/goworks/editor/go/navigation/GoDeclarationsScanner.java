@@ -135,15 +135,15 @@ public class GoDeclarationsScanner {
 
     private static class DeclarationsScannerListener extends GoParserBaseListener {
         private final DocumentSnapshot snapshot;
-        private final Deque<DeclarationDescription> descriptionStack = new ArrayDeque<DeclarationDescription>();
-        private final Deque<String> typeNameStack = new ArrayDeque<String>();
+        private final Deque<DeclarationDescription> descriptionStack = new ArrayDeque<>();
+        private final Deque<String> typeNameStack = new ArrayDeque<>();
 
-        private final Map<String, Description> _typeDescriptions = new HashMap<String, Description>();
+        private final Map<String, Description> _typeDescriptions = new HashMap<>();
         /**
          * Name -> Parent Node -> Method Node
          */
         private final List<Tuple3<String, ? extends Description, ? extends Description>> _methodDescriptions =
-            new ArrayList<Tuple3<String, ? extends Description, ? extends Description>>();
+            new ArrayList<>();
 
         private int resultLevel;
         private int blockLevel;

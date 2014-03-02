@@ -50,7 +50,7 @@ public class QualifiedIdentifierElementReference extends CodeElementReference {
                 return Collections.emptyList();
             }
 
-            List<CodeElementModel> results = new ArrayList<CodeElementModel>();
+            List<CodeElementModel> results = new ArrayList<>();
             for (PackageModel model : packages) {
                 results.addAll(model.getMembers(memberName));
             }

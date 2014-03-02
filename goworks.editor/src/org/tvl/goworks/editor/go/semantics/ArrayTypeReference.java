@@ -40,7 +40,7 @@ public class ArrayTypeReference extends CodeElementReference {
             return elementTypes;
         }
 
-        List<CodeElementModel> arrayTypes = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> arrayTypes = new ArrayList<>();
         for (CodeElementModel model : elementTypes) {
             if (!(model instanceof TypeModelImpl)) {
                 continue;

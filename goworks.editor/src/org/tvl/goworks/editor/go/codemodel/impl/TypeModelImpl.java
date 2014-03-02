@@ -84,7 +84,7 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
 
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        List<AbstractCodeElementModel> members = new ArrayList<>();
         members.addAll(getFields());
         members.addAll(getMethods());
         return members;
@@ -92,7 +92,7 @@ public abstract class TypeModelImpl extends AbstractCodeElementModel implements 
 
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        List<AbstractCodeElementModel> members = new ArrayList<>();
         members.addAll(getFields(name));
         members.addAll(getMethods(name));
         return members;

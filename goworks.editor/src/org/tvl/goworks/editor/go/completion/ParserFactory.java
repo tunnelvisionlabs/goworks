@@ -41,7 +41,7 @@ public class ParserFactory {
 
         parser.removeErrorListeners();
         parser.setBuildParseTree(false);
-        parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+        parser.setErrorHandler(new DefaultErrorStrategy<>());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL);
         parser.getInterpreter().force_global_context = false;
         parser.getInterpreter().always_try_local_context = true;

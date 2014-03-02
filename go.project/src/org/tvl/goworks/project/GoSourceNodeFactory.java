@@ -66,7 +66,7 @@ public final class GoSourceNodeFactory implements NodeFactory {
             if (this.project.getProjectDirectory() == null || !this.project.getProjectDirectory().isValid()) {
                 return Collections.<SourceGroupKey>emptyList();
             }
-            List<SourceGroupKey> result =  new ArrayList<SourceGroupKey>();
+            List<SourceGroupKey> result =  new ArrayList<>();
             final SourceGroup[] groups = getSources().getSourceGroups(GoSourcesImpl.SOURCES_TYPE_GO);
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -184,7 +184,7 @@ public final class GoSourceNodeFactory implements NodeFactory {
         }
 
         public @Override Action[] getActions(boolean context) {
-            List<Action> actions = new ArrayList<Action>(Arrays.asList(super.getActions(context)));
+            List<Action> actions = new ArrayList<>(Arrays.asList(super.getActions(context)));
             if (!trueSource) {
                 // Just take out "New File..." as this would be misleading.
                 Iterator<Action> scan = actions.iterator();

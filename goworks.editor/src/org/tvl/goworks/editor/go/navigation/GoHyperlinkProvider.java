@@ -145,10 +145,7 @@ public class GoHyperlinkProvider implements HyperlinkProviderExt {
                         panesArray[0] = editorCookie.getOpenedPanes();
                     }
                 });
-            } catch (InterruptedException ex) {
-                LOGGER.log(Level.WARNING, "An exception occurred while locating a document.", ex);
-                return null;
-            } catch (InvocationTargetException ex) {
+            } catch (InterruptedException | InvocationTargetException ex) {
                 LOGGER.log(Level.WARNING, "An exception occurred while locating a document.", ex);
                 return null;
             }

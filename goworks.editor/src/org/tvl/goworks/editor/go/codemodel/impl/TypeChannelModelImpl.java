@@ -35,7 +35,7 @@ public class TypeChannelModelImpl extends TypeWrapperModelImpl implements TypeCh
             return Collections.singletonList(this);
         }
 
-        List<TypeModelImpl> resolved = new ArrayList<TypeModelImpl>(getElementType().resolve());
+        List<TypeModelImpl> resolved = new ArrayList<>(getElementType().resolve());
         for (int i = 0; i < resolved.size(); i++) {
             resolved.set(i, new TypeChannelModelImpl(resolved.get(i), getChannelKind()));
         }

@@ -51,7 +51,7 @@ public class RangeClauseResultReference extends CodeElementReference {
             return indexableType;
         }
 
-        List<CodeElementModel> resolvedTypes = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> resolvedTypes = new ArrayList<>();
         for (CodeElementModel model : indexableType) {
             if (model instanceof VarModel) {
                 model = ((VarModel)model).getVarType();
@@ -64,7 +64,7 @@ public class RangeClauseResultReference extends CodeElementReference {
             }
         }
 
-        Collection<CodeElementModel> elements = new ArrayList<CodeElementModel>();
+        Collection<CodeElementModel> elements = new ArrayList<>();
         for (CodeElementModel model : resolvedTypes) {
             if (!(model instanceof TypeModel)) {
                 elements.add(model);

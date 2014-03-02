@@ -59,7 +59,7 @@ final class SourcePathImplementation implements ClassPathImplementation {
     }
 
     private List<PathResourceImplementation> getPath() {
-        List<PathResourceImplementation> result = new ArrayList<PathResourceImplementation>();
+        List<PathResourceImplementation> result = new ArrayList<>();
         result.add(ClassPathSupport.createResource(this.sourceRoot.toURL()));
         return Collections.unmodifiableList(result);
     }

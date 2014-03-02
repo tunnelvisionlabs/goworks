@@ -21,8 +21,8 @@ import org.tvl.goworks.editor.go.codemodel.TypeKind;
  * @author Sam Harwell
  */
 public class TypeInterfaceModelImpl extends TypeModelImpl implements InterfaceModel {
-    private final FreezableArrayList<FunctionModelImpl> interfaceMethods = new FreezableArrayList<FunctionModelImpl>();
-    private final FreezableArrayList<TypeModelImpl> implementedInterfaces = new FreezableArrayList<TypeModelImpl>();
+    private final FreezableArrayList<FunctionModelImpl> interfaceMethods = new FreezableArrayList<>();
+    private final FreezableArrayList<TypeModelImpl> implementedInterfaces = new FreezableArrayList<>();
 
     public TypeInterfaceModelImpl(@NonNull String name, @NonNull FileModelImpl fileModel, @NullAllowed ParserRuleContext<?> span) {
         super(name, fileModel, null, span);

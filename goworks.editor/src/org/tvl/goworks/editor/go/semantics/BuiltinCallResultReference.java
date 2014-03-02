@@ -37,18 +37,24 @@ public class BuiltinCallResultReference extends CodeElementReference {
     @Override
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         String function = name.getText();
-        if (function.equals("len") || function.equals("cap") || function.equals("copy")) {
+        switch (function) {
+        case "len":
+        case "cap":
+        case "copy":
             return BuiltinTypeReference.INT.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-        } else if (function.equals("real") || function.equals("imag")) {
+
+        case "real":
+        case "imag":
             // TODO: handle 32 vs 64 bit issues
             return BuiltinTypeReference.FLOAT32.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-        } else if (function.equals("complex")) {
+
+        case "complex":
             // TODO: handle 32 vs 64 bit issues
             return BuiltinTypeReference.COMPLEX64.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-        } else if (function.equals("new")) {
 
+        case "new":
             Collection<? extends CodeElementModel> types = typeArgument.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-            List<CodeElementModel> pointerTypes = new ArrayList<CodeElementModel>();
+            List<CodeElementModel> pointerTypes = new ArrayList<>();
             for (CodeElementModel model : types) {
                 if (!(model instanceof TypeModelImpl)) {
                     continue;
@@ -60,18 +66,19 @@ public class BuiltinCallResultReference extends CodeElementReference {
 
             return pointerTypes;
 
-        } else if (function.equals("make")) {
-
+        case "make":
             return typeArgument.resolve(annotatedParseTree, currentPackage, resolvedPackages);
 
-        } else if (function.equals("append")) {
-
+        case "append":
             Collection<? extends CodeElementModel> argumentType = typeArgument.resolve(annotatedParseTree, currentPackage, resolvedPackages);
             throw new UnsupportedOperationException("Not supported yet.");
 
-        } else if (function.equals("panic") || function.equals("recover")) {
+        case "panic":
+        case "recover":
             return Collections.emptyList();
-        } else if (function.equals("print") || function.equals("println")) {
+
+        case "print":
+        case "println":
             return Collections.emptyList();
         }
 

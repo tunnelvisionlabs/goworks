@@ -40,7 +40,7 @@ public class SliceTypeReference extends CodeElementReference {
             return elementTypes;
         }
 
-        List<CodeElementModel> sliceTypes = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> sliceTypes = new ArrayList<>();
         for (CodeElementModel model : elementTypes) {
             if (!(model instanceof TypeModelImpl)) {
                 continue;

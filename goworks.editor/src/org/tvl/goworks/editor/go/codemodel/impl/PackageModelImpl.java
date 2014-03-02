@@ -22,7 +22,7 @@ import org.tvl.goworks.project.GoProject;
  * @author Sam Harwell
  */
 public class PackageModelImpl extends AbstractCodeElementModel implements PackageModel {
-    private final ConcurrentHashMap<String, FileModelImpl> files = new ConcurrentHashMap<String, FileModelImpl>();
+    private final ConcurrentHashMap<String, FileModelImpl> files = new ConcurrentHashMap<>();
 
     public PackageModelImpl(String name, GoProject project, String path) {
         super(name, project, path);
@@ -44,7 +44,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<AbstractCodeElementModel> getMembers() {
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        List<AbstractCodeElementModel> members = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             members.addAll(file.getMembers());
         }
@@ -56,7 +56,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
     public Collection<AbstractCodeElementModel> getMembers(@NonNull String name) {
         Parameters.notNull("name", name);
 
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        List<AbstractCodeElementModel> members = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             members.addAll(file.getMembers(name));
         }
@@ -66,7 +66,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<TypeModelImpl> getTypes() {
-        List<TypeModelImpl> types = new ArrayList<TypeModelImpl>();
+        List<TypeModelImpl> types = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             types.addAll(file.getTypes());
         }
@@ -76,7 +76,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<TypeModelImpl> getTypes(String name) {
-        List<TypeModelImpl> types = new ArrayList<TypeModelImpl>();
+        List<TypeModelImpl> types = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             types.addAll(file.getTypes(name));
         }
@@ -86,7 +86,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<FunctionModelImpl> getFunctions() {
-        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        List<FunctionModelImpl> functions = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             functions.addAll(file.getFunctions());
         }
@@ -96,7 +96,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<FunctionModelImpl> getFunctions(String name) {
-        List<FunctionModelImpl> functions = new ArrayList<FunctionModelImpl>();
+        List<FunctionModelImpl> functions = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             functions.addAll(file.getFunctions(name));
         }
@@ -106,7 +106,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<ConstModelImpl> getConstants() {
-        List<ConstModelImpl> constants = new ArrayList<ConstModelImpl>();
+        List<ConstModelImpl> constants = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             constants.addAll(file.getConstants());
         }
@@ -116,7 +116,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<ConstModelImpl> getConstants(String name) {
-        List<ConstModelImpl> constants = new ArrayList<ConstModelImpl>();
+        List<ConstModelImpl> constants = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             constants.addAll(file.getConstants(name));
         }
@@ -126,7 +126,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<VarModelImpl> getVars() {
-        List<VarModelImpl> vars = new ArrayList<VarModelImpl>();
+        List<VarModelImpl> vars = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             vars.addAll(file.getVars());
         }
@@ -136,7 +136,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<VarModelImpl> getVars(String name) {
-        List<VarModelImpl> vars = new ArrayList<VarModelImpl>();
+        List<VarModelImpl> vars = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             vars.addAll(file.getVars(name));
         }

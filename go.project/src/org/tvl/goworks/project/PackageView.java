@@ -117,7 +117,7 @@ public class PackageView {
 
         boolean hasSubfolders = false;
         boolean hasFiles = false;
-        List<FileObject> folders = new ArrayList<FileObject>();
+        List<FileObject> folders = new ArrayList<>();
         for (FileObject kid : fo.getChildren()) {
             // XXX could use PackageDisplayUtils.isSignificant here
             if (kid.isValid() && VisibilityQuery.getDefault().isVisible(kid) && group.contains(kid)) {
@@ -202,7 +202,7 @@ public class PackageView {
      */
     static final class PackageItem implements Comparable<PackageItem> {
 
-        private static Map<Image,Icon> image2icon = new IdentityHashMap<Image,Icon>();
+        private static Map<Image,Icon> image2icon = new IdentityHashMap<>();
 
         private final boolean empty;
         private final FileObject pkg;

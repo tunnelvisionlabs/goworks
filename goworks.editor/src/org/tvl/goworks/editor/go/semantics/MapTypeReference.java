@@ -43,7 +43,7 @@ public class MapTypeReference extends CodeElementReference {
     public Collection<? extends CodeElementModel> resolve(GoAnnotatedParseTree annotatedParseTree, PackageModel currentPackage, Map<String, Collection<PackageModel>> resolvedPackages) {
         Collection<? extends CodeElementModel> resolvedKeys = keyType.resolve(annotatedParseTree, currentPackage, resolvedPackages);
         Collection<? extends CodeElementModel> resolvedValues = valueType.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-        List<CodeElementModel> resolved = new ArrayList<CodeElementModel>();
+        List<CodeElementModel> resolved = new ArrayList<>();
         for (CodeElementModel keyModel : resolvedKeys) {
             if (!(keyModel instanceof TypeModelImpl)) {
                 continue;

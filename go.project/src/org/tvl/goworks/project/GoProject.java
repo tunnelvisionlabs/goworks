@@ -88,7 +88,7 @@ public class GoProject implements Project {
             return Collections.emptyList();
         }
 
-        Set<GoProject> projects = new HashSet<GoProject>();
+        Set<GoProject> projects = new HashSet<>();
         Set<? extends ClassPath> platformPaths = GlobalPathRegistry.getDefault().getPaths(PLATFORM);
         for (ClassPath path : platformPaths) {
             for (FileObject root : path.getRoots()) {
@@ -100,7 +100,7 @@ public class GoProject implements Project {
         }
 
         projects.remove(this);
-        return new ArrayList<GoProject>(projects);
+        return new ArrayList<>(projects);
     }
 
     //The project type's capabilities are registered in the project's lookup:
@@ -135,13 +135,13 @@ public class GoProject implements Project {
 
         @Override
         public List<FileObject> getMetadataFiles() {
-            List<FileObject> dataFiles = new ArrayList<FileObject>();
+            List<FileObject> dataFiles = new ArrayList<>();
             return dataFiles;
         }
 
         @Override
         public List<FileObject> getDataFiles() {
-            List<FileObject> dataFiles = new ArrayList<FileObject>();
+            List<FileObject> dataFiles = new ArrayList<>();
             return dataFiles;
         }
     }
