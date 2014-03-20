@@ -1,6 +1,6 @@
 ## Contributors
 
-By signing this agreement, the undersigned agree that contributions made to the ANTLRWorks 2
+By signing this agreement, the undersigned agree that contributions made to the GoWorks
 project are provided under the terms of the MIT license, included below. For additional
 information, please see the [`CONTRIBUTING.md`](CONTRIBUTING.md) file.
 

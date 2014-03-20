@@ -1,6 +1,6 @@
 ## Contributor Agreement (required for pull requests)
 
-While the ANTLRWorks 2 project is open source under the LGPL license, contributions
+While the GoWorks project is open source under the LGPL license, contributions
 back to this project which contain code must be made available to Tunnel Vision
 Laboratories, LLC under the terms of the MIT license.
 
@@ -9,7 +9,7 @@ Laboratories, LLC under the terms of the MIT license.
 This means Tunnel Vision Laboratories, LLC can do the following with code contributed
 back to the project from the open source community.
 
-1. Include the code in future ANTLRWorks 2 releases.
+1. Include the code in future GoWorks releases.
 2. Include the code, in original or modified form, in other products created by Tunnel
    Vision Labs, **including closed-source products**.
 

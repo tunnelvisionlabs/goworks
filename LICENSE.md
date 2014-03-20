@@ -1,4 +1,4 @@
-# ANTLRWORKS 2 DEVELOPMENT VERSION ("Product") LICENSE AGREEMENT
+# GOWORKS DEVELOPMENT VERSION ("Product") LICENSE AGREEMENT
 
 **PLEASE READ THE FOLLOWING LICENSE AGREEMENT TERMS AND
 CONDITIONS CAREFULLY, INCLUDING WITHOUT LIMITATION THOSE
@@ -16,11 +16,11 @@ OR USE THIS SOFTWARE.**
 Copyright &copy; 2013, Tunnel Vision Laboratories, LLC
 and/or its affiliates. All rights reserved.
 
-The Product contains the ANTLRWorks 2 IDE and other
+The Product contains the GoWorks IDE and other
 components. Review the Product carefully to determine
 which license governs the code you are using.
 
-Tunnel Vision Laboratories licenses ANTLRWorks 2 under the
+Tunnel Vision Laboratories licenses GoWorks under the
 GNU General Public License version 2 with Classpath Exception
 ("GPLv2 with Classpath Exception"), which is identified below.
 
@@ -31,7 +31,7 @@ the third party technology license agreement specified and
 not under the GPLv2 with Classpath Exception. Please review
 the list of libraries and licenses provided for use.
 
-If you redistribute ANTLRWorks 2 IDE, add the following below
+If you redistribute GoWorks IDE, add the following below
 the License Header, with the fields enclosed by brackets []
 replaced by your own identifying information:
 
@@ -39,7 +39,7 @@ replaced by your own identifying information:
 
 Contributor(s):
 
-The original software is ANTLRWorks 2. The initial developer
+The original software is GoWorks. The initial developer
 of the original software is Tunnel Vision Laboratories;
 portions Copyright &copy; 2013 Tunnel Vision Laboratories
 and/or its affiliates. All rights reserved.
