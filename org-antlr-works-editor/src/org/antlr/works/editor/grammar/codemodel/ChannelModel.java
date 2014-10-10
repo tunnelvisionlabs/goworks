@@ -6,22 +6,11 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-
-package org.antlr.works.editor.grammar.debugger;
-
-import java.util.List;
-import org.antlr.v4.runtime.Vocabulary;
+package org.antlr.works.editor.grammar.codemodel;
 
 /**
  *
  * @author Sam Harwell
  */
-public class AbstractInterpreterData {
-
-    public String grammarFileName;
-    public String serializedAtn;
-    public Vocabulary vocabulary;
-    public List<String> ruleNames;
-    public int startRuleIndex;
-
+public interface ChannelModel extends CodeElementModel {
 }

@@ -95,6 +95,7 @@ grammarType
 // the set of rules that compose the grammar, and is invoked 0..n
 // times by the grammarPrequel rule.
 prequelConstruct
+@version{6}
 	:	// A list of options that affect analysis and/or code generation
 		optionsSpec
 
@@ -108,6 +109,9 @@ prequelConstruct
 		// tree parser adds further imaginary tokens to ones defined in a prior
 		// {tree} parser.
 		tokensSpec
+
+	|	// A list of custom channels used by the grammar
+		channelsSpec
 
 	|	// A declaration of language target implemented constructs. All such
 		// action sections start with '@' and are given to the language target's
@@ -169,6 +173,11 @@ delegateGrammar
 tokensSpec
 @version{1}
 	:	TOKENS (id (COMMA id)* COMMA?)? RBRACE
+	;
+
+channelsSpec
+@version{6}
+	:	CHANNELS (id (COMMA id)* COMMA?)? RBRACE
 	;
 
 actionBlock
@@ -235,7 +244,8 @@ argActionParameters
 	;
 
 argActionParameter
-	:	type=argActionParameterType? ignored* name=ARG_ACTION_WORD
+@version{7}
+	:	type=argActionParameterType? ignored* name=ARG_ACTION_WORD (ignored* ARG_ACTION_EQUALS ignored* argActionParameterType?)?
 	;
 
 argActionParameterType
@@ -243,9 +253,10 @@ argActionParameterType
 	;
 
 argActionParameterTypePart
+@version{7}
 	:	ARG_ACTION_WORD
-	|	ARG_ACTION_LT argActionParameterType? ARG_ACTION_GT
-	|	ARG_ACTION_LPAREN argActionParameterType? ARG_ACTION_RPAREN
+	|	ARG_ACTION_LT ignored* (argActionParameterType (ignored* ARG_ACTION_COMMA (ignored* argActionParameterType)?)* ignored*)? ARG_ACTION_GT
+	|	ARG_ACTION_LPAREN ignored* (argActionParameterType (ignored* ARG_ACTION_COMMA (ignored* argActionParameterType)?)* ignored*)? ARG_ACTION_RPAREN
 	;
 
 ignored
@@ -485,7 +496,6 @@ lexerAltList
 lexerAlt
 @version{3}
 	:	lexerElements? lexerCommands?
-	|	// empty alt
 	;
 
 lexerElements
@@ -541,8 +551,11 @@ altList
 // An individual alt with an optional rewrite clause for the
 // elements of the alt.
 alternative
-	:	elements
-	|			// empty alt
+@version{5}
+	:	elementOptions?
+		(	elements
+		|			// empty alt
+		)
 	;
 
 elements
@@ -550,6 +563,7 @@ elements
 	;
 
 element
+@version{5}
 	:	labeledElement
 		(	ebnfSuffix
 		|
@@ -559,7 +573,7 @@ element
 		|
 		)
 	|	ebnf
-	|	actionBlock QUESTION? // SEMPRED is actionBlock followed by QUESTION
+	|	actionBlock QUESTION? elementOptions? // SEMPRED is actionBlock followed by QUESTION
 	;
 
 labeledElement
@@ -640,11 +654,12 @@ blockSet
 	;
 
 setElement
-@version{2}
+@version{4}
 	:	(	TOKEN_REF
 		|	STRING_LITERAL
 		|	LEXER_CHAR_SET
 		)
+		elementOptions?
 	|	range
 	;
 
@@ -669,7 +684,8 @@ block
 // directive to become the root node or ignore the tree produced
 //
 ruleref
-	:	RULE_REF argActionBlock?
+@version{5}
+	:	RULE_REF argActionBlock? elementOptions?
 	;
 
 // ---------------

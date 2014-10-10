@@ -59,6 +59,7 @@ import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarPars
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.AltListContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.BlockContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.BlockSetContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ChannelsSpecContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.DelegateGrammarContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.DelegateGrammarsContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ElementsContext;
@@ -257,12 +258,13 @@ public class GrammarIndentTask extends AbstractIndentTask {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=3),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=6),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=6),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_channelsSpec, version=6),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=3),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=6),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=5),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=5),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=3),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=3),
@@ -357,6 +359,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         case GrammarParser.RULE_block:
         case GrammarParser.RULE_optionsSpec:
         case GrammarParser.RULE_tokensSpec:
+        case GrammarParser.RULE_channelsSpec:
         case GrammarParser.RULE_modeSpec:
         case GrammarParser.RULE_delegateGrammars:
         case GrammarParser.RULE_actionBlock:
@@ -442,7 +445,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=5, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=3, dependents=Dependents.PARENTS),
         })
         private Tuple2<? extends ParseTree, Integer> visitElements() {
@@ -536,7 +539,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=5, dependents=Dependents.PARENTS)
         public Tuple2<? extends ParseTree, Integer> visitElements(ElementsContext ctx) {
             return visitElements();
         }
@@ -651,7 +654,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1, dependents=Dependents.PARENTS),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=0, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=5, dependents=Dependents.SELF),
         })
         public Tuple2<? extends ParseTree, Integer> visitLabeledAlt(LabeledAltContext ctx) {
             assert ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.POUND;
@@ -677,7 +680,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=3, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=6, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=3, dependents=Dependents.PARENTS),
         })
         public Tuple2<? extends ParseTree, Integer> visitOptionsSpec(OptionsSpecContext ctx) {
@@ -719,7 +722,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=6, dependents=Dependents.PARENTS)
         public Tuple2<? extends ParseTree, Integer> visitTokensSpec(TokensSpecContext ctx) {
             if (ctx.getChildCount() == 0 || targetElement == ctx.getChild(0)) {
                 return null;
@@ -742,7 +745,30 @@ public class GrammarIndentTask extends AbstractIndentTask {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_channelsSpec, version=6, dependents=Dependents.PARENTS)
+        public Tuple2<? extends ParseTree, Integer> visitChannelsSpec(ChannelsSpecContext ctx) {
+            if (ctx.getChildCount() == 0 || targetElement == ctx.getChild(0)) {
+                return null;
+            }
+
+            if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.RBRACE) {
+                return Tuple.create(ctx, 0);
+            }
+
+            // align to the previous element
+            for (int i = priorSiblings.size() - 2; i >= 0; i--) {
+                ParseTree sibling = priorSiblings.get(i);
+                // stop at the first id rule, index 0 is the CHANNELS terminal itself
+                if (i == 1 || ParseTrees.elementStartsLine(sibling)) {
+                    return Tuple.create(sibling, 0);
+                }
+            }
+
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=5, dependents=Dependents.PARENTS)
         public Tuple2<? extends ParseTree, Integer> visitActionBlock(ActionBlockContext ctx) {
             if (ctx.getChildCount() == 0 || targetElement == ctx.getChild(0)) {
                 return null;

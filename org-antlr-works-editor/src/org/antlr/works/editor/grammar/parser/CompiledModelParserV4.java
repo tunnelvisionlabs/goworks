@@ -199,7 +199,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
         public void importTokensFromTokensFile() {
             String vocab = getOptionString("tokenVocab");
             if ( vocab!=null ) {
-                TokenVocabParser vparser = new CustomTokenVocabParser((CustomTool)tool, vocab);
+                TokenVocabParser vparser = new CustomTokenVocabParser(this);
                 Map<String,Integer> tokens = vparser.load();
                 tool.log("grammar", "tokens=" + tokens);
                 for (String t : tokens.keySet()) {
@@ -221,7 +221,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
         public void importTokensFromTokensFile() {
             String vocab = getOptionString("tokenVocab");
             if ( vocab!=null ) {
-                TokenVocabParser vparser = new CustomTokenVocabParser((CustomTool)tool, vocab);
+                TokenVocabParser vparser = new CustomTokenVocabParser(this);
                 Map<String,Integer> tokens = vparser.load();
                 tool.log("grammar", "tokens=" + tokens);
                 for (String t : tokens.keySet()) {
@@ -235,8 +235,8 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
     private static class CustomTokenVocabParser extends TokenVocabParser {
 
-        public CustomTokenVocabParser(CustomTool tool, String vocabName) {
-            super(tool, vocabName);
+        public CustomTokenVocabParser(Grammar g) {
+            super(g);
         }
 
         @Override
@@ -246,8 +246,9 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 return super.load();
             }
 
+            String vocabName = g.getOptionString("tokenVocab");
             if (vocabName != null && !vocabName.isEmpty()) {
-                FileObject fileObject = ((CustomTool)tool).snapshot.getVersionedDocument().getFileObject();
+                FileObject fileObject = ((CustomTool)g.tool).snapshot.getVersionedDocument().getFileObject();
                 if (fileObject == null) {
                     LOGGER.log(Level.WARNING, "Could not find source for token vocabulary.");
                     return Collections.emptyMap();
@@ -345,7 +346,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
             ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
             String outputMessage = messageTemplate.render();
-            syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, offendingToken, e, outputMessage, Severity.ERROR));
+            syntaxErrors.add(new AntlrSyntaxErrorV3(getSnapshot(offendingToken), offendingToken, e, outputMessage, Severity.ERROR));
         }
 
         @Override
@@ -365,7 +366,43 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
             ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
             String outputMessage = messageTemplate.render();
-            syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, offendingToken, e, outputMessage, Severity.WARNING));
+            syntaxErrors.add(new AntlrSyntaxErrorV3(getSnapshot(offendingToken), offendingToken, e, outputMessage, Severity.WARNING));
+        }
+
+        private DocumentSnapshot getSnapshot(Token offendingToken) {
+            if (offendingToken == null) {
+                return snapshot;
+            }
+
+            FileObject fileObject = getImportedGrammarFileObject(offendingToken.getInputStream().getSourceName());
+            if (fileObject == null) {
+                return snapshot;
+            }
+
+            VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
+            return versionedDocument.getCurrentSnapshot();
+        }
+
+        private FileObject getImportedGrammarFileObject(String sourceName) {
+            VersionedDocument versionedDocument = snapshot.getVersionedDocument();
+            FileObject rootFileObject = versionedDocument.getFileObject();
+            if (rootFileObject == null) {
+                return null;
+            }
+
+            File sourceFile = new File(sourceName);
+            File rootFile = new File(rootFileObject.getPath());
+            if (sourceFile.equals(rootFile)) {
+                return rootFileObject;
+            }
+
+            String fileName = sourceFile.getName();
+            FileObject importedFile = rootFileObject.getParent().getFileObject(fileName);
+            if (!importedFile.isData()) {
+                return null;
+            }
+
+            return importedFile;
         }
     }
 }

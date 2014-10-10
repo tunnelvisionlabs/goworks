@@ -52,6 +52,7 @@ import org.antlr.v4.runtime.atn.PredictionContext;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.v4.runtime.misc.Tuple2;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.tool.Grammar;
@@ -71,6 +72,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.GrammarReferenceAnchors;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionScopeExpressionContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionParameterTypeContext;
 import org.netbeans.editor.BaseDocument;
 import org.openide.util.Exceptions;
 
@@ -130,11 +132,11 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents=Dependents.PARENTS),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=3, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=5, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=6, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1, dependents=Dependents.PARENTS),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=5, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0, dependents=Dependents.PARENTS),
@@ -430,7 +432,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0, dependents=Dependents.SELF),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=3, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=6, dependents=Dependents.PARENTS),
         })
         private void analyzeKeywords(Map<RuleContext, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {
             boolean maybeLexerCommand = false;
@@ -569,11 +571,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (!inExpression && possibleInAction) {
-                    if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
-                        CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName().getText());
-                        intermediateResults.put(item.getInsertPrefix().toString(), item);
-                    }
-
                     for (Token label : labelAnalyzer.getLabels()) {
                         CompletionItem item = new RewriteReferenceCompletionItem(label.getText(), true);
                         intermediateResults.put(item.getInsertPrefix().toString(), item);
@@ -581,25 +578,26 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                     if (possibleInAction && !inExpression) {
                         for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                            // only add implicit tokens here. all implicit rule references will be added separately
-                            if (Grammar.isTokenName(implicit.getText())) {
-                                CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
-                                intermediateResults.put(item.getInsertPrefix().toString(), item);
-                            }
+                            CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
                         }
 
-                        if (grammarType != GrammarParser.LEXER) {
-                            // Add rules from the grammar
-                            if (rules.isEmpty()) {
-                                rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot, true));
-                            }
+                        for (Tuple2<Token, ArgActionParameterTypeContext> argument : labelAnalyzer.getArguments()) {
+                            String type = argument.getItem2() != null ? argument.getItem2().getText().trim() : "";
+                            CompletionItem item = new ActionReferenceCompletionItem(argument.getItem1().getText(), false, type);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                        }
 
-                            for (Description rule : rules) {
-                                if (!Grammar.isTokenName(rule.getName())) {
-                                    CompletionItem item = new ActionReferenceCompletionItem(rule.getName(), false);
-                                    intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                }
-                            }
+                        for (Tuple2<Token, ArgActionParameterTypeContext> returnValue : labelAnalyzer.getReturnValues()) {
+                            String type = returnValue.getItem2() != null ? returnValue.getItem2().getText().trim() : "";
+                            CompletionItem item = new ActionReferenceCompletionItem(returnValue.getItem1().getText(), false, type);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                        }
+
+                        for (Tuple2<Token, ArgActionParameterTypeContext> local : labelAnalyzer.getLocals()) {
+                            String type = local.getItem2() != null ? local.getItem2().getText().trim() : "";
+                            CompletionItem item = new ActionReferenceCompletionItem(local.getItem1().getText(), false, type);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
                         }
 
                         addRootActionExpressions(intermediateResults, grammarType);

@@ -29,6 +29,7 @@ import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.ChannelModel;
 import org.antlr.works.editor.grammar.codemodel.CodeElementModel;
 import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
@@ -37,6 +38,7 @@ import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
+import org.antlr.works.editor.grammar.navigation.DeclarationKind;
 import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescription;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.openide.util.NbBundle;
@@ -159,19 +161,40 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                     continue;
                 }
 
-                GrammarNodeDescription description = new GrammarNodeDescription(ruleModel.getName());
+                DeclarationKind declarationKind;
+                if (ruleModel instanceof LexerRuleModel) {
+                    if (((LexerRuleModel)ruleModel).isFragment()) {
+                        declarationKind = DeclarationKind.FRAGMENT_RULE;
+                    } else {
+                        declarationKind = DeclarationKind.LEXER_RULE;
+                    }
+                } else {
+                    declarationKind = DeclarationKind.PARSER_RULE;
+                }
+
+                GrammarNodeDescription description = new GrammarNodeDescription(declarationKind, ruleModel.getName());
                 addSeekPositionToDescription(description, ruleModel);
                 rules.put(ruleModel.getName(), description);
             }
 
             if (!ignoreLexerOnlyRules) {
+                for (ChannelModel channelModel : fileModel.getChannels()) {
+                    GrammarNodeDescription description = new GrammarNodeDescription(DeclarationKind.CHANNEL, channelModel.getName());
+                    addSeekPositionToDescription(description, channelModel);
+                    rules.put(channelModel.getName(), description);
+                }
+
                 for (ModeModel modeModel : fileModel.getModes()) {
+                    GrammarNodeDescription modeDescription = new GrammarNodeDescription(DeclarationKind.MODE, modeModel.getName());
+                    addSeekPositionToDescription(modeDescription, modeModel);
+                    rules.put(modeModel.getName(), modeDescription);
+
                     for (RuleModel ruleModel : modeModel.getRules()) {
                         if (rules.containsKey(ruleModel.getName())) {
                             continue;
                         }
 
-                        GrammarNodeDescription description = new GrammarNodeDescription(ruleModel.getName());
+                        GrammarNodeDescription description = new GrammarNodeDescription(DeclarationKind.LEXER_RULE, ruleModel.getName());
                         addSeekPositionToDescription(description, ruleModel);
                         rules.put(ruleModel.getName(), description);
                     }
@@ -183,7 +206,7 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                     continue;
                 }
 
-                GrammarNodeDescription description = new GrammarNodeDescription(tokenData.getName());
+                GrammarNodeDescription description = new GrammarNodeDescription(DeclarationKind.TOKEN, tokenData.getName());
                 Collection<? extends RuleModel> resolved = tokenData.resolve();
                 for (RuleModel ruleModel : resolved) {
                     if (addSeekPositionToDescription(description, ruleModel)) {

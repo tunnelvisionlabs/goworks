@@ -119,19 +119,19 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    protected DFAState createDFAState(ATNConfigSet configs) {
+    protected DFAState createDFAState(DFA dfa, ATNConfigSet configs) {
         int t = _input.LA(1);
         if (t == CaretToken.CARET_TOKEN_TYPE && !_computingStartState) {
             caretToken = (CaretToken)_input.LT(1);
             throw noViableAlt(_input, _outerContext, configs, _startIndex);
         }
 
-        return super.createDFAState(configs);
+        return super.createDFAState(dfa, configs);
     }
 
     @Override
-    protected void closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean hasMoreContext, PredictionContextCache contextCache) {
-        super.closure(sourceConfigs, configs, collectPredicates, hasMoreContext, contextCache);
+    protected void closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean hasMoreContext, PredictionContextCache contextCache, boolean treatEofAsEpsilon) {
+        super.closure(sourceConfigs, configs, collectPredicates, hasMoreContext, contextCache, treatEofAsEpsilon);
     }
 
     protected abstract IntervalSet getWordlikeTokenTypes();

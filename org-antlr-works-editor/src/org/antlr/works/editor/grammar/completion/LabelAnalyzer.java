@@ -17,9 +17,14 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple2;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionBlockContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionParameterContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionParameterTypeContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LabeledAltContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LabeledElementContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerRuleContext;
@@ -36,6 +41,9 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
 
     private final Map<String, Token> labels = new HashMap<>();
     private final Map<String, Token> unlabeledElements = new HashMap<>();
+    private final Map<String, Tuple2<Token, ArgActionParameterTypeContext>> arguments = new HashMap<>();
+    private final Map<String, Tuple2<Token, ArgActionParameterTypeContext>> returnValues = new HashMap<>();
+    private final Map<String, Tuple2<Token, ArgActionParameterTypeContext>> locals = new HashMap<>();
     private final RuleContext finalContext;
 
     private Token enclosingRuleName;
@@ -56,6 +64,18 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
 
     public final Collection<Token> getUnlabeledElements() {
         return unlabeledElements.values();
+    }
+
+    public final Collection<Tuple2<Token, ArgActionParameterTypeContext>> getArguments() {
+        return arguments.values();
+    }
+
+    public final Collection<Tuple2<Token, ArgActionParameterTypeContext>> getReturnValues() {
+        return returnValues.values();
+    }
+
+    public final Collection<Tuple2<Token, ArgActionParameterTypeContext>> getLocals() {
+        return locals.values();
     }
 
     public final Token getEnclosingRuleName() {
@@ -103,7 +123,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=3, dependents={Dependents.PARENTS, Dependents.DESCENDANTS})
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=5, dependents={Dependents.PARENTS, Dependents.DESCENDANTS})
     public void enterLabeledElement(LabeledElementContext ctx) {
         if (isCaretReached()) {
             return;
@@ -133,7 +153,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=1, dependents={Dependents.PARENTS, Dependents.DESCENDANTS})
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=5, dependents={Dependents.PARENTS, Dependents.DESCENDANTS})
     public void enterRuleref(RulerefContext ctx) {
         if (isCaretReached()) {
             return;
@@ -151,7 +171,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents=Dependents.PARENTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=5, dependents=Dependents.PARENTS)
     public void enterActionBlock(ActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
@@ -161,7 +181,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents=Dependents.PARENTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=5, dependents=Dependents.PARENTS)
     public void exitActionBlock(ActionBlockContext ctx) {
         checkCaretReached(ctx);
 
@@ -173,7 +193,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1, dependents=Dependents.PARENTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=5, dependents=Dependents.PARENTS)
     public void enterArgActionBlock(ArgActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
@@ -183,7 +203,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1, dependents=Dependents.PARENTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=5, dependents=Dependents.PARENTS)
     public void exitArgActionBlock(ArgActionBlockContext ctx) {
         checkCaretReached(ctx);
 
@@ -194,6 +214,54 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
         inAction = false;
     }
 
+    @Override
+    @RuleDependencies({
+        // general dependencies for the target of an arg action parameter
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=7, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0, dependents=Dependents.PARENTS),
+        // dependencies for specific constructs which allow arg action parameters
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0, dependents=Dependents.SELF),
+    })
+    public void enterArgActionParameter(ArgActionParameterContext ctx) {
+        checkCaretReached(ctx);
+        if (isCaretReached()) {
+            return;
+        }
+
+        TerminalNode name = ctx.ARG_ACTION_WORD();
+        ParserRuleContext parent = ctx.getParent();
+        if (parent == null) {
+            return;
+        }
+
+        ParserRuleContext grandParent = parent.getParent();
+        if (grandParent == null) {
+            return;
+        }
+
+        if (name != null) {
+            Tuple2<Token, ArgActionParameterTypeContext> parameter = Tuple.create(name.getSymbol(), ctx.argActionParameterType(0));
+            switch (grandParent.getRuleIndex()) {
+            case GrammarParser.RULE_parserRuleSpec:
+                arguments.put(name.getText(), parameter);
+                break;
+
+            case GrammarParser.RULE_ruleReturns:
+                returnValues.put(name.getText(), parameter);
+                break;
+
+            case GrammarParser.RULE_localsSpec:
+                locals.put(name.getText(), parameter);
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+
     private void checkCaretReached(RuleContext ctx) {
         if (ctx == getFinalContext()) {
             caretReached = true;
@@ -201,8 +269,8 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=3, dependents=Dependents.DESCENDANTS),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=2, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=5, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=4, dependents=Dependents.DESCENDANTS),
     })
     private static boolean isLabeledContext(ParserRuleContext ctx) {
         for (RuleContext current = ctx; current != null; current = current.parent) {
