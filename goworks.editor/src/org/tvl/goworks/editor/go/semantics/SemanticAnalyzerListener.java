@@ -1714,7 +1714,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             ParseTree firstChild = ctx.getChild(0);
             assert firstChild instanceof TerminalNode
                 && ((TerminalNode)firstChild).getSymbol() instanceof Token
-                && ((Token)((TerminalNode)firstChild).getSymbol()).getType() == GoParser.LeftBrack;
+                && ((TerminalNode)firstChild).getSymbol().getType() == GoParser.LeftBrack;
 
             ParseTree lastChild = ctx.getChild(ctx.getChildCount() - 1);
             assert lastChild instanceof ElementTypeContext;
