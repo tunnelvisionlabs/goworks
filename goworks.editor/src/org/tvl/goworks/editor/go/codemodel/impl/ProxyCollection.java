@@ -18,6 +18,8 @@ import java.util.List;
 public class ProxyCollection<E> extends AbstractList<E> {
     private final List<? extends E>[] collections;
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     public ProxyCollection(List<? extends E> ...collections) {
         this.collections = collections;
     }
