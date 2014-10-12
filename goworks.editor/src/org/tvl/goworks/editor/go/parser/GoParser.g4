@@ -198,7 +198,7 @@ channelType
     ;
 
 block
-    :   '{' (statement (';' statement)* ';'?)? '}'
+    :   '{' statement (';' statement)* ';'? '}'
     ;
 
 declaration
@@ -508,7 +508,7 @@ exprSwitchStmt
     ;
 
 exprCaseClause
-    :   exprSwitchCase ':' (statement (';' statement)* ';'?)?
+    :   exprSwitchCase ':' statement (';' statement)* ';'?
     ;
 
 exprSwitchCase
@@ -526,7 +526,7 @@ typeSwitchGuard
     ;
 
 typeCaseClause
-    :   typeSwitchCase ':' (statement (';' statement)* ';'?)?
+    :   typeSwitchCase ':' statement (';' statement)* ';'?
     ;
 
 typeSwitchCase
@@ -547,7 +547,7 @@ condition
     ;
 
 forClause
-    :   initStmt? ';' condition? ';' postStmt?
+    :   initStmt ';' condition? ';' postStmt
     ;
 
 initStmt
@@ -571,7 +571,7 @@ selectStmt
     ;
 
 commClause
-    :   commCase ':' (statement (';' statement)* ';'?)?
+    :   commCase ':' statement (';' statement)* ';'?
     ;
 
 commCase
