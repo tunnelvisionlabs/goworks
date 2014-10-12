@@ -662,7 +662,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                         }
 
                         for (int keyword : allowedKeywords.toArray()) {
-                            KeywordCompletionItem item = new KeywordCompletionItem(GoLexer.tokenNames[keyword].substring(1, GoLexer.tokenNames[keyword].length() - 1));
+                            String literalName = GoLexer.VOCABULARY.getLiteralName(keyword);
+                            if (literalName == null) {
+                                continue;
+                            }
+
+                            KeywordCompletionItem item = new KeywordCompletionItem(literalName.substring(1, literalName.length() - 1));
                             intermediateResults.put(item.getInsertPrefix().toString(), item);
                         }
 

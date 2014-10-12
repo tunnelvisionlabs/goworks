@@ -23,50 +23,61 @@ import org.tvl.goworks.editor.go.parser.GoLexer;
  * @author Sam Harwell
  */
 public class KeywordCompletionItem extends GoCompletionItem {
-    public static final IntervalSet KEYWORD_TYPES =
-        new IntervalSet() {{
-            add(GoLexer.Break);
-            add(GoLexer.Case);
-            add(GoLexer.Chan);
-            add(GoLexer.Const);
-            add(GoLexer.Continue);
-            add(GoLexer.Default);
-            add(GoLexer.Defer);
-            add(GoLexer.Else);
-            add(GoLexer.Fallthrough);
-            add(GoLexer.For);
-            add(GoLexer.Func);
-            add(GoLexer.Go);
-            add(GoLexer.Goto);
-            add(GoLexer.If);
-            add(GoLexer.Import);
-            add(GoLexer.Interface);
-            add(GoLexer.Map);
-            add(GoLexer.Package);
-            add(GoLexer.Range);
-            add(GoLexer.Return);
-            add(GoLexer.Select);
-            add(GoLexer.Struct);
-            add(GoLexer.Switch);
-            add(GoLexer.Type);
-            add(GoLexer.Var);
-        }};
+    public static final IntervalSet KEYWORD_TYPES = new IntervalSet();
+    static {
+        KEYWORD_TYPES.add(GoLexer.Break);
+        KEYWORD_TYPES.add(GoLexer.Case);
+        KEYWORD_TYPES.add(GoLexer.Chan);
+        KEYWORD_TYPES.add(GoLexer.Const);
+        KEYWORD_TYPES.add(GoLexer.Continue);
+        KEYWORD_TYPES.add(GoLexer.Default);
+        KEYWORD_TYPES.add(GoLexer.Defer);
+        KEYWORD_TYPES.add(GoLexer.Else);
+        KEYWORD_TYPES.add(GoLexer.Fallthrough);
+        KEYWORD_TYPES.add(GoLexer.For);
+        KEYWORD_TYPES.add(GoLexer.Func);
+        KEYWORD_TYPES.add(GoLexer.Go);
+        KEYWORD_TYPES.add(GoLexer.Goto);
+        KEYWORD_TYPES.add(GoLexer.If);
+        KEYWORD_TYPES.add(GoLexer.Import);
+        KEYWORD_TYPES.add(GoLexer.Interface);
+        KEYWORD_TYPES.add(GoLexer.Map);
+        KEYWORD_TYPES.add(GoLexer.Package);
+        KEYWORD_TYPES.add(GoLexer.Range);
+        KEYWORD_TYPES.add(GoLexer.Return);
+        KEYWORD_TYPES.add(GoLexer.Select);
+        KEYWORD_TYPES.add(GoLexer.Struct);
+        KEYWORD_TYPES.add(GoLexer.Switch);
+        KEYWORD_TYPES.add(GoLexer.Type);
+        KEYWORD_TYPES.add(GoLexer.Var);
+    }
 
-    public static final Collection<String> KEYWORDS =
-        new ArrayList<String>() {{
-            for (int i : KEYWORD_TYPES.toArray()) {
-                add(GoLexer.tokenNames[i].substring(1, GoLexer.tokenNames[i].length() - 1));
+    public static final Collection<String> KEYWORDS;
+    static {
+        ArrayList<String> keywords = new ArrayList<>();
+        for (int i : KEYWORD_TYPES.toArray()) {
+            String literal = GoLexer.VOCABULARY.getLiteralName(i);
+            if (literal == null) {
+                continue;
             }
 
-            Collections.sort(this);
-        }};
+            String keyword = literal.substring(1, literal.length() - 1);
+            keywords.add(keyword);
+        }
 
-    public static final Collection<KeywordCompletionItem> KEYWORD_ITEMS =
-        new ArrayList<KeywordCompletionItem>() {{
-            for (String keyword : KEYWORDS) {
-                add(new KeywordCompletionItem(keyword));
-            }
-        }};
+        Collections.sort(keywords);
+        KEYWORDS = keywords;
+    }
+
+    public static final Collection<KeywordCompletionItem> KEYWORD_ITEMS;
+    static {
+        ArrayList<KeywordCompletionItem> keywordItems = new ArrayList<>();
+        for (String keyword : KEYWORDS) {
+            keywordItems.add(new KeywordCompletionItem(keyword));
+        }
+
+        KEYWORD_ITEMS = keywordItems;
+    }
 
     private static ImageIcon ICON;
     private final String keyword;

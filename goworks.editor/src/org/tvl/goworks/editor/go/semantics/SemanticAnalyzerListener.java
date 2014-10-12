@@ -1161,6 +1161,16 @@ public class SemanticAnalyzerListener implements GoParserListener {
 
     @Override
     //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
+    public void enterExpression(ExpressionContext ctx) {
+    }
+
+    @Override
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
+    public void exitExpression(ExpressionContext ctx) {
+    }
+
+    @Override
+    //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_expression, version=1)
     public void enterOrExpr(OrExprContext ctx) {
     }
 

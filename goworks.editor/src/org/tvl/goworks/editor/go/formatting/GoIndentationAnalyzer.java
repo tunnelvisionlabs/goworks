@@ -61,6 +61,7 @@ import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.EmptyStmtCont
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExprCaseClauseContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExprSwitchCaseContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExprSwitchStmtContext;
+import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExpressionContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExpressionListContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.ExpressionStmtContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.FallthroughStmtContext;
@@ -441,6 +442,14 @@ public class GoIndentationAnalyzer {
         })
         public IndentationData visitFunctionLiteral(FunctionLiteralContext ctx) {
             return visitParent(ctx);
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_expression, version = 1, dependents = Dependents.PARENTS)
+        })
+        public IndentationData visitExpression(ExpressionContext ctx) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override

@@ -23,6 +23,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.tvl.goworks.editor.GoEditorKit;
 import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.parser.CompiledModel;
+import org.tvl.goworks.editor.go.parser.GoParser;
 
 /**
  *
@@ -47,7 +48,7 @@ public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorU
     @Override
     protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, GoParseTreeNavigatorPanel panel, CompiledModel data) {
         panel.setCurrentFile(data.getResult().getFileObject());
-        panel.setParseTree(new ParseTreeNode(data.getResult().getResult()));
+        panel.setParseTree(new ParseTreeNode(data.getResult().getResult(), Arrays.asList(GoParser.ruleNames)));
     }
 
     private static final class Definition extends AbstractDefinition {

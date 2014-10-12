@@ -472,7 +472,7 @@ channel
 
 incDecStmt
 @version{1}
-    :   expression op=('++' | '--')
+    :   expression (Inc | Dec)
     ;
 
 assignment

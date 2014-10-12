@@ -121,7 +121,7 @@ public class GoParser extends AbstractGoParser {
         public Boolean visitChildren(RuleNode node) {
             RuleContext ruleContext = node.getRuleContext();
             if (ruleContext instanceof ExpressionContext) {
-                return visitExpression((ExpressionContext)ruleContext);
+                return visitAnyExpression((ExpressionContext)ruleContext);
             }
 
             return super.visitChildren(node);
@@ -160,7 +160,7 @@ public class GoParser extends AbstractGoParser {
             @RuleDependency(recognizer=GoParser.class, rule=RULE_typeSwitchGuard, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=RULE_goStmt, version=0),
         })
-        private Boolean visitExpression(ExpressionContext ctx) {
+        private Boolean visitAnyExpression(ExpressionContext ctx) {
             ParserRuleContext parent = ctx.getParent();
             if (parent == null) {
                 return null;
