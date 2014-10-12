@@ -57,7 +57,6 @@ public class GoParserFactory {
         // common configuration
         interpreter.force_global_context = false;
         interpreter.always_try_local_context = true;
-        interpreter.optimize_hidden_conflicted_configs = true;
         interpreter.optimize_tail_calls = true;
         parser.setBuildParseTree(true);
         parser.removeErrorListeners();
