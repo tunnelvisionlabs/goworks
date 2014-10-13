@@ -87,13 +87,23 @@
                 <path location="${src.dir}/@{srcpath}"/>
                 <map from="${src.dir}/" to=""/>
             </pathconvert>
+            <path id="g4files.path">
+                <fileset dir="${src.dir}/@{srcpath}">
+                    <include name="*.g4" />
+                </fileset>
+            </path>
+
+            <pathconvert pathsep=" " property="g4files.list" refid="g4files.path">
+                <map from=" " to=" " />
+            </pathconvert>
             <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/@{srcpath}">
                 <arg value="-o"/>
                 <arg value="generated"/>
                 <arg value="-package"/>
                 <arg value="${package}.generated"/>
                 <args/>
-                <arg value="*.g4"/>
+                <!--    <arg value="*.g4"/> -->
+                <arg line="${g4files.list}" />
                 <classpath>
                     <path refid="cp.antlr4"/>
                     <pathelement location="${java.class.path}"/>
@@ -101,7 +111,7 @@
             </java>
         </sequential>
     </macrodef>
-
+    
     <target name="antlr4" depends="antlr-init,harness.build-init,antlr4-up-to-date" unless="is.antlr4.uptodate">
         <path id="sources.antlr4">
             <fileset dir="${src.dir}" includes="**/*.g4"/>
