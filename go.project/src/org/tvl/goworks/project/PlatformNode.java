@@ -119,7 +119,8 @@ class PlatformNode extends AbstractNode implements ChangeListener {
             }
 
             List<SourceGroup> result = new ArrayList<>();
-            final FileObject sourceRoot = root.getFileObject("src/pkg");
+            FileObject newBuiltIn = root.getFileObject("src/builtin/builtin.go");
+            final FileObject sourceRoot = root.getFileObject(newBuiltIn.isData() ? "src" : "src/pkg");
             if (sourceRoot != null && sourceRoot.isFolder()) {
                 result.add(new SourceGroup() {
                     final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
