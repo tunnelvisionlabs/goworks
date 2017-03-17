@@ -12,7 +12,6 @@ import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.AddAssignOpContext;
@@ -1230,7 +1229,7 @@ abstract class GoFullListenerTemplate implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 3, dependents = Dependents.PARENTS)
     })
     public void enterType(TypeContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -1238,7 +1237,7 @@ abstract class GoFullListenerTemplate implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 3, dependents = Dependents.PARENTS)
     })
     public void exitType(TypeContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -1422,7 +1421,8 @@ abstract class GoFullListenerTemplate implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 3, dependents = Dependents.PARENTS),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinTypeArgs, version = 3, dependents = Dependents.SELF)
     })
     public void enterBuiltinArgs(BuiltinArgsContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -1430,7 +1430,8 @@ abstract class GoFullListenerTemplate implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 3, dependents = Dependents.PARENTS),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinTypeArgs, version = 3, dependents = Dependents.SELF)
     })
     public void exitBuiltinArgs(BuiltinArgsContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -2046,7 +2047,7 @@ abstract class GoFullListenerTemplate implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 3, dependents = Dependents.PARENTS)
     })
     public void enterArgumentList(ArgumentListContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -2054,7 +2055,7 @@ abstract class GoFullListenerTemplate implements GoParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 3, dependents = Dependents.PARENTS)
     })
     public void exitArgumentList(ArgumentListContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");

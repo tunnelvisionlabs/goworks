@@ -814,7 +814,7 @@ public class GoIndentationAnalyzer {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 2, dependents = Dependents.PARENTS),
+            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 3, dependents = Dependents.PARENTS),
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_typeName, version = 0, dependents = Dependents.SELF),
             @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_typeLiteral, version = 0, dependents = Dependents.SELF)
         })
@@ -944,7 +944,8 @@ public class GoIndentationAnalyzer {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 2, dependents = Dependents.PARENTS)
+            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 3, dependents = Dependents.PARENTS),
+            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinTypeArgs, version = 3, dependents = Dependents.PARENTS),
         })
         public IndentationData visitBuiltinArgs(BuiltinArgsContext ctx) {
             return indent(visitParent(ctx));
@@ -1297,7 +1298,7 @@ public class GoIndentationAnalyzer {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 2, dependents = Dependents.PARENTS)
+            @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 3, dependents = Dependents.PARENTS)
         })
         public IndentationData visitArgumentList(ArgumentListContext ctx) {
             return indent(visitParent(ctx));

@@ -77,6 +77,8 @@ public void setCheckPackageNames(boolean checkPackageNames) {
 protected abstract boolean isLiteralAllowed(Token nextToken, OperandContext context);
 
 protected abstract boolean isBuiltInMethodName(Token token);
+
+protected abstract boolean isBuiltInMethodWithType(Token token);
 }
 
 type
@@ -363,8 +365,11 @@ functionLiteral
 
 expression
     :   // force a context-sensitive predicate so it only affects decisions in this rule
-		{!isBuiltInMethodName(_input.LT(1)/*$ctx*/)}? conversion
+        {!isBuiltInMethodName(_input.LT(1)/*$ctx*/)}? conversion
         # conversionOrCallExpr
+    |   // force a context-sensitive predicate so it only affects decisions in this rule
+        {isBuiltInMethodWithType(_input.LT(1)/*$ctx*/)}? builtinTypeCall
+        # builtinCallExpr
     |   builtinCall
         # builtinCallExpr
     |   expression dot='.' IDENTIFIER
@@ -616,9 +621,20 @@ builtinCall
     ;
 
 builtinArgs
-@version{2}
+@version{3}
+    :   argumentList
+    ;
+
+builtinTypeCall
+options { baseContext=builtinCall; }
+@version{3}
+    :   IDENTIFIER '(' (builtinTypeArgs ','?)? ')'
+    ;
+
+builtinTypeArgs
+options { baseContext=builtinArgs; }
+@version{3}
     :   type (',' argumentList)?
-    |   argumentList
     ;
 
 sourceFileBody

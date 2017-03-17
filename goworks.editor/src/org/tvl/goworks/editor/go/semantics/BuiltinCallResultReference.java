@@ -70,8 +70,8 @@ public class BuiltinCallResultReference extends CodeElementReference {
             return typeArgument.resolve(annotatedParseTree, currentPackage, resolvedPackages);
 
         case "append":
-            Collection<? extends CodeElementModel> argumentType = typeArgument.resolve(annotatedParseTree, currentPackage, resolvedPackages);
-            throw new UnsupportedOperationException("Not supported yet.");
+            // append returns the same type as the first argument
+            return typeArgument.resolve(annotatedParseTree, currentPackage, resolvedPackages);
 
         case "panic":
         case "recover":
