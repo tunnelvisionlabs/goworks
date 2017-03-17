@@ -8,8 +8,14 @@
  */
 package org.tvl.goworks.editor.go.codemodel;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.tvl.goworks.editor.go.codemodel.impl.FunctionIntrinsicModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.FunctionModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.IntrinsicFileModelImpl;
+import org.tvl.goworks.editor.go.codemodel.impl.ParameterModelImpl;
 import org.tvl.goworks.editor.go.codemodel.impl.TypeIntrinsicModelImpl;
 
 /**
@@ -22,7 +28,6 @@ public class IntrinsicTypeModels {
     public static final TypeIntrinsicModel BYTE = new TypeIntrinsicModelImpl(IntrinsicKind.BYTE);
     public static final TypeIntrinsicModel COMPLEX64 = new TypeIntrinsicModelImpl(IntrinsicKind.COMPLEX64);
     public static final TypeIntrinsicModel COMPLEX128 = new TypeIntrinsicModelImpl(IntrinsicKind.COMPLEX128);
-    public static final TypeIntrinsicModel ERROR = new TypeIntrinsicModelImpl(IntrinsicKind.ERROR);
     public static final TypeIntrinsicModel FLOAT32 = new TypeIntrinsicModelImpl(IntrinsicKind.FLOAT32);
     public static final TypeIntrinsicModel FLOAT64 = new TypeIntrinsicModelImpl(IntrinsicKind.FLOAT64);
     public static final TypeIntrinsicModel INT = new TypeIntrinsicModelImpl(IntrinsicKind.INT);
@@ -38,6 +43,19 @@ public class IntrinsicTypeModels {
     public static final TypeIntrinsicModel UINT32 = new TypeIntrinsicModelImpl(IntrinsicKind.UINT32);
     public static final TypeIntrinsicModel UINT64 = new TypeIntrinsicModelImpl(IntrinsicKind.UINT64);
     public static final TypeIntrinsicModel UINTPTR = new TypeIntrinsicModelImpl(IntrinsicKind.UINTPTR);
+    public static final TypeIntrinsicModel ERROR = new TypeIntrinsicModelImpl(IntrinsicKind.ERROR) {
+        FunctionModelImpl errorFunction = new FunctionIntrinsicModelImpl("Error") {
+            {
+                getReturnValues().add(new ParameterModelImpl("_", VarKind.RETURN, (TypeIntrinsicModelImpl)STRING, IntrinsicFileModelImpl.INSTANCE, null, null));
+                freeze();
+            }
+        };
+
+        @Override
+        public Collection<FunctionModelImpl> getMethods() {
+            return Collections.singletonList(errorFunction);
+        }
+    };
 
     private static final Map<String, TypeIntrinsicModel> MODELS = new HashMap<String, TypeIntrinsicModel>()
         {{

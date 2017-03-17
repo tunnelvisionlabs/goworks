@@ -58,26 +58,18 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
 
     @Override
     public Collection<FieldModelImpl> getFields() {
-        if (getElementType().getKind() == TypeKind.INTRINSIC) {
-            return Collections.emptyList();
-        }
-
         return getElementType().getFields();
     }
 
     @Override
     public Collection<FieldModelImpl> getFields(String name) {
-        if (getElementType().getKind() == TypeKind.INTRINSIC) {
-            return Collections.emptyList();
-        }
-
         return getElementType().getFields(name);
     }
 
     @Override
     public Collection<FunctionModelImpl> getMethods() {
         if (getElementType().getKind() == TypeKind.INTRINSIC) {
-            return Collections.emptyList();
+            return getElementType().getMethods();
         }
 
         List<FunctionModelImpl> functions = new ArrayList<>();
@@ -106,7 +98,7 @@ public class TypePointerModelImpl extends TypeWrapperModelImpl implements TypePo
     @Override
     public Collection<FunctionModelImpl> getMethods(String name) {
         if (getElementType().getKind() == TypeKind.INTRINSIC) {
-            return Collections.emptyList();
+            return getElementType().getMethods(name);
         }
 
         List<FunctionModelImpl> functions = new ArrayList<>();
