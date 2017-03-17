@@ -82,14 +82,56 @@ public class CodeModelCacheImpl implements CodeModelCache {
 
     @NonNull
     public Collection<? extends PackageModelImpl> resolvePackages(ImportDeclarationModel importModel) {
-        GoProject project = importModel.getPackage().getProject();
+        return resolvePackages(importModel.getPackage().getProject(), importModel.getPackage().getPackagePath(), importModel.getPath());
+    }
+
+    @NonNull
+    public Collection<? extends PackageModelImpl> resolvePackages(GoProject project, String packagePath, String path) {
+        Collection<? extends PackageModelImpl> userPackages = resolveUserPackages(project, packagePath, path);
+        if (!userPackages.isEmpty()) {
+            return userPackages;
+        }
+
+        return resolveLibraryPackages(project, path);
+    }
+
+    @NonNull
+    private Collection<? extends PackageModelImpl> resolveUserPackages(GoProject project, String packagePath, String path) {
         CodeModelProjectCache projectCache = getProjectCache(project, false);
-        PackageModelImpl unique = projectCache != null ? projectCache.getUniquePackage(importModel.getPath()) : null;
+        if (projectCache == null) {
+            return Collections.emptyList();
+        }
+
+        // Check vendor folders headed to the root
+        for (String vendorBase = packagePath; !vendorBase.isEmpty(); vendorBase = vendorBase.substring(0, vendorBase.lastIndexOf('/', vendorBase.length() - 2) + 1)) {
+            String vendorPackage =
+                vendorBase + (vendorBase.endsWith("/") ? "" : "/") + "vendor/" + path;
+            PackageModelImpl vendor = projectCache.getUniquePackage(vendorPackage);
+            if (vendor != null) {
+                return Collections.singletonList(vendor);
+            }
+        }
+
+        PackageModelImpl unique = projectCache.getUniquePackage(path);
         if (unique == null) {
             return Collections.emptyList();
         }
 
         return Collections.singletonList(unique);
+    }
+
+    @NonNull
+    private Collection<? extends PackageModelImpl> resolveLibraryPackages(GoProject project, String path) {
+        if (project.isStandardLibrary()) {
+            return Collections.emptyList();
+        }
+
+        List<PackageModelImpl> result = new ArrayList<>();
+        for (GoProject libraryProject : project.getLibraryProjects()) {
+            result.addAll(getPackages(libraryProject, path));
+        }
+
+        return result;
     }
 
     @CheckForNull
