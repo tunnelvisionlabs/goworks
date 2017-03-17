@@ -198,6 +198,7 @@ public class GoLexer extends AbstractGoLexer {
         Token result = super.emitEOF();
         if (semicolonToken != null) {
             deferredEol = result;
+            _token = semicolonToken;
             return semicolonToken;
         }
 
