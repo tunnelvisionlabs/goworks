@@ -870,7 +870,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.NODE_TYPE, NodeType.VAR_DECL);
             treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.VAR_TYPE, VarKind.RECEIVER);
             treeDecorator.putProperty(ctx.IDENTIFIER(), GoAnnotations.EXPLICIT_TYPE, ctx.baseTypeName());
-            visibleLocals.peek().put(ctx.IDENTIFIER().getSymbol().getText(), ctx.IDENTIFIER());
+            pendingVisibleLocals.peek().put(ctx.IDENTIFIER().getSymbol().getText(), ctx.IDENTIFIER());
         }
 
         if (ctx.ptr != null && ctx.baseTypeName() != null) {
@@ -881,6 +881,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
     @Override
     //@RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_receiver, version=0)
     public void exitReceiver(ReceiverContext ctx) {
+        applyPendingVars();
     }
 
     @Override
@@ -1524,7 +1525,7 @@ public class SemanticAnalyzerListener implements GoParserListener {
             }
 
             for (TerminalNode id : ctx.identifierList().IDENTIFIER()) {
-                visibleLocals.peek().put(id.getSymbol().getText(), id);
+                pendingVisibleLocals.peek().put(id.getSymbol().getText(), id);
             }
         }
     }
