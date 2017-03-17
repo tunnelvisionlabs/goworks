@@ -1792,6 +1792,17 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                 TypeContext type = args != null ? args.type() : null;
                 switch (name) {
                 case "append":
+                    if (args == null || args.argumentList() == null || args.argumentList().expressionList() == null) {
+                        return Collections.emptyList();
+                    }
+
+                    ExpressionContext expression = args.argumentList().expressionList().expression(0);
+                    if (expression == null) {
+                        return Collections.emptyList();
+                    }
+
+                    return visit(expression);
+
                 case "make":
                     if (type == null) {
                         return Collections.emptyList();
