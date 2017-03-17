@@ -364,7 +364,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
         @RuleDependencies({
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_topLevelDecl, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_methodName, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=0),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_packageName, version=3, dependents=Dependents.ANCESTORS),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_label, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_baseTypeName, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_builtinCall, version=0),
@@ -549,7 +549,9 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         break;
 
                                     case GoParser.RULE_packageName:
-                                        if (isInContext(parser, entry.getValue().getFinalContext(), IntervalSet.of(GoParser.RULE_packageClause))) {
+                                        IntervalSet packageOrImport = IntervalSet.of(GoParser.RULE_packageClause)
+                                            .addAll(IntervalSet.of(GoParser.RULE_importSpec));
+                                        if (isInContext(parser, entry.getValue().getFinalContext(), packageOrImport)) {
                                             possibleDeclaration = true;
                                         } else {
                                             possibleReference = true;
