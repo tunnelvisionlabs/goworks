@@ -97,8 +97,6 @@ public class GoReformatTask implements ReformatTask {
         }
 
         List<String> args = new ArrayList<>();
-        args.add("-tabs=" + useTabs);
-        args.add("-tabwidth=" + tabWidth);
 
         ExternalProcessBuilder nativeProcessBuilder = new ExternalProcessBuilder(executable.getPath());
         for (String arg : args) {
