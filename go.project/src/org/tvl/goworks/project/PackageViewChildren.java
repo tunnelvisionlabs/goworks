@@ -681,7 +681,10 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
             return relativePath == null ?  null : relativePath.replace('/', '.'); // NOI18N
         }
 
-        @NbBundle.Messages("LBL_CompilePackage_Action=Compile Package")
+        @NbBundle.Messages({
+            "LBL_CompilePackage_Action=Compile Package",
+            "LBL_TestPackage_Action=Test Package"
+        })
         @Override
         public Action[] getActions( boolean context ) {
 
@@ -703,6 +706,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
                         else*/ if ( superActions[i] instanceof FileSystemAction ) {
                             actionList.add (null); // insert separator and new action
                             actionList.add (FileSensitiveActions.fileCommandAction(ActionProvider.COMMAND_COMPILE_SINGLE, Bundle.LBL_CompilePackage_Action(), null));
+                            actionList.add (FileSensitiveActions.fileCommandAction(ActionProvider.COMMAND_TEST_SINGLE, Bundle.LBL_TestPackage_Action(), null));
                         }
 
                         actionList.add( superActions[i] );
