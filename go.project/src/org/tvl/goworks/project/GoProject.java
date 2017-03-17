@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.netbeans.api.java.classpath.ClassPath;
@@ -30,6 +32,7 @@ import org.netbeans.spi.project.ProjectState;
 import org.netbeans.spi.project.ui.ProjectOpenedHook;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
@@ -49,6 +52,8 @@ public class GoProject implements Project {
 
     private final FileObject projectDir;
     private final boolean isStandardLibrary;
+    private final int standardLibraryMajorVersion;
+    private final int standardLibraryMinorVersion;
     private final ProjectState state;
     private Lookup lkp;
 
@@ -61,8 +66,43 @@ public class GoProject implements Project {
             File gorootFile = new File(goroot);
             FileObject gorootFileObject = FileUtil.toFileObject(gorootFile);
             isStandardLibrary = projectDir.equals(gorootFileObject);
+            String version = readVersionFile(gorootFileObject);
+            int firstDot = version.indexOf('.');
+            if (firstDot < 0) {
+                standardLibraryMajorVersion = Integer.parseInt(version);
+                standardLibraryMinorVersion = 0;
+            } else {
+                standardLibraryMajorVersion = Integer.parseInt(version.substring(0, firstDot));
+                int secondDot = firstDot >= 0 ? version.indexOf('.', firstDot + 1) : -1;
+                if (secondDot < 0) {
+                    standardLibraryMinorVersion = Integer.parseInt(version.substring(firstDot + 1));
+                } else {
+                    standardLibraryMinorVersion = Integer.parseInt(version.substring(firstDot + 1), secondDot);
+                }
+            }
         } else {
             isStandardLibrary = false;
+            standardLibraryMajorVersion = 0;
+            standardLibraryMinorVersion = 0;
+        }
+    }
+
+    private static String readVersionFile(FileObject goroot) {
+        FileObject versionFile = goroot.getFileObject("VERSION");
+        if (!versionFile.isData()) {
+            return "1.0";
+        }
+
+        try {
+            String versionText = versionFile.asText("UTF-8");
+            Matcher matcher = Pattern.compile("^go([0-9]+(\\.[0-9])*)").matcher(versionText);
+            if (!matcher.find()) {
+                return "1.0";
+            }
+
+            return matcher.group(1);
+        } catch (IOException ex) {
+            return "1.0";
         }
     }
 
@@ -72,7 +112,7 @@ public class GoProject implements Project {
     }
 
     public FileObject getSourceRoot() {
-        if (isStandardLibrary()) {
+        if (isStandardLibrary() && getStandardLibraryMajorVersion() == 1 && getStandardLibraryMinorVersion() < 4) {
             return getProjectDirectory().getFileObject("src/pkg");
         } else {
             return getProjectDirectory().getFileObject("src");
@@ -81,6 +121,14 @@ public class GoProject implements Project {
 
     public boolean isStandardLibrary() {
         return isStandardLibrary;
+    }
+
+    public int getStandardLibraryMajorVersion() {
+        return standardLibraryMajorVersion;
+    }
+
+    public int getStandardLibraryMinorVersion() {
+        return standardLibraryMinorVersion;
     }
 
     public List<? extends GoProject> getLibraryProjects() {
@@ -227,7 +275,8 @@ public class GoProject implements Project {
                 File gorootFile = new File(goroot);
                 if (gorootFile.isDirectory()) {
                     FileObject stdlibRootFile = FileUtil.toFileObject(gorootFile);
-                    final FileObject stdlibSourceRoot = stdlibRootFile.getFileObject("src/pkg");
+                    FileObject newBuiltIn = stdlibRootFile.getFileObject("src/builtin/builtin.go");
+                    final FileObject stdlibSourceRoot = stdlibRootFile.getFileObject(newBuiltIn.isData() ? "src" : "src/pkg");
                     if (stdlibSourceRoot != null && stdlibSourceRoot.isFolder()) {
                         ClassPath stdLibRoot = ClassPath.getClassPath(stdlibSourceRoot, PLATFORM);
                         if (stdLibRoot != null) {
@@ -253,7 +302,8 @@ public class GoProject implements Project {
                 File gorootFile = new File(goroot);
                 if (gorootFile.isDirectory()) {
                     FileObject stdlibRootFile = FileUtil.toFileObject(gorootFile);
-                    final FileObject stdlibSourceRoot = stdlibRootFile.getFileObject("src/pkg");
+                    FileObject newBuiltIn = stdlibRootFile.getFileObject("src/builtin/builtin.go");
+                    final FileObject stdlibSourceRoot = stdlibRootFile.getFileObject(newBuiltIn.isData() ? "src" : "src/pkg");
                     if (stdlibSourceRoot != null && stdlibSourceRoot.isFolder()) {
                         ClassPath stdLibRoot = ClassPath.getClassPath(stdlibSourceRoot, PLATFORM);
                         if (stdLibRoot != null) {
