@@ -80,7 +80,6 @@ import org.tvl.goworks.editor.go.GoParserDataDefinitions;
 import org.tvl.goworks.editor.go.codemodel.ChannelKind;
 import org.tvl.goworks.editor.go.codemodel.CodeElementModel;
 import org.tvl.goworks.editor.go.codemodel.CodeElementPositionRegion;
-import org.tvl.goworks.editor.go.codemodel.CodeModelCache;
 import org.tvl.goworks.editor.go.codemodel.ConstModel;
 import org.tvl.goworks.editor.go.codemodel.FileModel;
 import org.tvl.goworks.editor.go.codemodel.FunctionModel;
@@ -780,11 +779,7 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                                         resolvedPackages.put(importDeclarationModel.getName(), packages);
                                     }
 
-                                    packages.addAll(CodeModelCacheImpl.getInstance().getPackages(getFileModel().getPackage().getProject(), importDeclarationModel.getPath()));
-                                    GoProject mainProject = getFileModel().getPackage().getProject();
-                                    for (GoProject library : mainProject.getLibraryProjects()) {
-                                        packages.addAll(CodeModelCacheImpl.getInstance().getPackages(library, importDeclarationModel.getPath()));
-                                    }
+                                    packages.addAll(CodeModelCacheImpl.getInstance().resolvePackages(importDeclarationModel));
                                 }
 
                                 Collection<? extends CodeElementModel> models = resolveSelectorTarget(selectorTarget, annotatedParseTree, currentPackage, resolvedPackages);
@@ -1571,12 +1566,12 @@ public final class GoCompletionQuery extends AbstractCompletionQuery {
                     return resolved;
                 } else {
                     // look up the package by import
-                    CodeModelCache cache = CodeModelCacheImpl.getInstance();
+                    CodeModelCacheImpl cache = CodeModelCacheImpl.getInstance();
                     Collection<CodeElementModel> resolved = new ArrayList<>();
                     Collection<? extends ImportDeclarationModel> imports = fileModel.getImportDeclarations();
                     for (ImportDeclarationModel model : imports) {
                         if (model.getName().equals(ctx.start.getText())) {
-                            resolved.addAll(cache.getPackages(fileModel.getPackage().getProject(), model.getPath()));
+                            resolved.addAll(cache.resolvePackages(model));
                         }
                     }
 

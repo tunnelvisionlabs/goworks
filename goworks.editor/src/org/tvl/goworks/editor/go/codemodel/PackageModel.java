@@ -21,6 +21,9 @@ public interface PackageModel extends CodeElementModel {
     GoProject getProject();
 
     @NonNull
+    String getPackagePath();
+
+    @NonNull
     Collection<? extends FileModel> getFiles();
 
     @NonNull
