@@ -52,14 +52,4 @@ public class TypeIntrinsicModelImpl extends TypeModelImpl implements TypeIntrins
         return kind;
     }
 
-    private static class IntrinsicFileModelImpl extends FileModelImpl {
-
-        private static final IntrinsicFileModelImpl INSTANCE = new IntrinsicFileModelImpl();
-
-        public IntrinsicFileModelImpl() {
-            super("intrinsic", null, "");
-        }
-
-    }
-
 }
