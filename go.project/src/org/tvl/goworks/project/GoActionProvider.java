@@ -89,6 +89,10 @@ public final class GoActionProvider implements ActionProvider {
 
     private static final RequestProcessor RP = new RequestProcessor(GoActionProvider.class);
 
+    public static final String COMMAND_DOWNLOAD_DEPENDENCIES = "download.dependencies";
+
+    public static final String COMMAND_DOWNLOAD_DEPENDENCIES_SINGLE = "download.dependencies.single";
+
     private static final String[] supported = new String[] {
         ActionProvider.COMMAND_BUILD,
         ActionProvider.COMMAND_COMPILE_SINGLE,
@@ -100,7 +104,9 @@ public final class GoActionProvider implements ActionProvider {
         ActionProvider.COMMAND_TEST,
         ActionProvider.COMMAND_TEST_SINGLE,
         ActionProvider.COMMAND_DELETE,
-        ActionProvider.COMMAND_COPY
+        ActionProvider.COMMAND_COPY,
+        COMMAND_DOWNLOAD_DEPENDENCIES,
+        COMMAND_DOWNLOAD_DEPENDENCIES_SINGLE,
     };
 
     private final GoProject _project;
@@ -146,6 +152,12 @@ public final class GoActionProvider implements ActionProvider {
         }
         else if (string.equals(COMMAND_TEST_SINGLE)) {
             handleTestPackageAction(lookup);
+        }
+        else if (string.equals(COMMAND_DOWNLOAD_DEPENDENCIES)) {
+            handleDownloadDependenciesAction(lookup);
+        }
+        else if (string.equals(COMMAND_DOWNLOAD_DEPENDENCIES_SINGLE)) {
+            handleDownloadDependenciesPackageAction(lookup);
         }
         else if (string.equalsIgnoreCase(ActionProvider.COMMAND_DELETE)) {
             DefaultProjectOperations.performDefaultDeleteOperation(_project);
@@ -491,6 +503,15 @@ public final class GoActionProvider implements ActionProvider {
             case COMMAND_TEST:
             case COMMAND_TEST_SINGLE:
                 args.add("test");
+                args.add("-v");
+                args.add(packageName);
+                break;
+
+            case COMMAND_DOWNLOAD_DEPENDENCIES:
+            case COMMAND_DOWNLOAD_DEPENDENCIES_SINGLE:
+                args.add("get");
+                args.add("-d");
+                args.add("-t");
                 args.add("-v");
                 args.add(packageName);
                 break;
@@ -901,6 +922,106 @@ public final class GoActionProvider implements ActionProvider {
         execute(COMMAND_TEST, ioTab, relativePath.replace(File.separatorChar, '/'), progressHandle);
     }
 
+    private void handleDownloadDependenciesAction(Lookup lookup) throws IllegalArgumentException {
+        String buildCommand = "go";
+        String args = "get";
+
+        String projectName = ProjectUtils.getInformation(_project).getDisplayName();
+        InputOutput tab;
+        tab = IOProvider.getDefault().getIO(projectName + " (download dependencies)", false);
+        tab.closeInputOutput();
+
+        Action[] actions = new Action[] {
+        };
+
+        tab = IOProvider.getDefault().getIO(projectName + " (download depedencies)", actions);
+        try {
+            tab.getOut().reset();
+        } catch (IOException ex) {
+        }
+
+        final InputOutput ioTab = tab;
+
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (download dependencies)", new Cancellable() {
+
+            @Override
+            public boolean cancel() {
+                return false;
+            }
+
+        }, new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ioTab.select();
+            }
+
+        });
+
+        progressHandle.setInitialDelay(0);
+        progressHandle.start();
+
+        execute(COMMAND_DOWNLOAD_DEPENDENCIES, ioTab, progressHandle);
+   }
+
+    private void handleDownloadDependenciesPackageAction(Lookup lookup) throws IllegalArgumentException {
+        String buildCommand = "go";
+        String args = "get";
+
+        String projectName = ProjectUtils.getInformation(_project).getDisplayName();
+        InputOutput tab;
+        tab = IOProvider.getDefault().getIO(projectName + " (get-single)", false);
+        tab.closeInputOutput();
+
+        Action[] actions = new Action[] {
+        };
+
+        tab = IOProvider.getDefault().getIO(projectName + " (get-single)", actions);
+        try {
+            tab.getOut().reset();
+        } catch (IOException ex) {
+        }
+
+        final InputOutput ioTab = tab;
+
+        ProgressHandle progressHandle = ProgressHandleFactory.createHandle(projectName + " (get-single)", new Cancellable() {
+
+            @Override
+            public boolean cancel() {
+                return false;
+            }
+
+        }, new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ioTab.select();
+            }
+
+        });
+
+        progressHandle.setInitialDelay(0);
+        progressHandle.start();
+
+        DataObject dataFolder = lookup.lookup(DataObject.class);
+        if (dataFolder == null) {
+            return;
+        }
+
+        FileObject fileObject = dataFolder.getPrimaryFile();
+        if (fileObject == null || !fileObject.isFolder()) {
+            return;
+        }
+
+        FileObject sourceRoot = _project.getSourceRoot();
+        String relativePath = FileUtil.getRelativePath(sourceRoot, fileObject);
+        if (relativePath == null) {
+            return;
+        }
+
+        execute(COMMAND_DOWNLOAD_DEPENDENCIES_SINGLE, ioTab, relativePath.replace(File.separatorChar, '/'), progressHandle);
+   }
+
     @Override
     public boolean isActionEnabled(String command, Lookup lookup) throws IllegalArgumentException {
         if (_project == null) {
@@ -910,10 +1031,12 @@ public final class GoActionProvider implements ActionProvider {
         switch (command) {
         case ActionProvider.COMMAND_BUILD:
         case ActionProvider.COMMAND_TEST:
+        case COMMAND_DOWNLOAD_DEPENDENCIES:
             return !_project.isStandardLibrary();
 
         case ActionProvider.COMMAND_COMPILE_SINGLE:
         case ActionProvider.COMMAND_TEST_SINGLE:
+        case COMMAND_DOWNLOAD_DEPENDENCIES_SINGLE:
             if (_project.isStandardLibrary()) {
                 return false;
             }
