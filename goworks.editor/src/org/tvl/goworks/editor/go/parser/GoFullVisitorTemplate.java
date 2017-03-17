@@ -11,7 +11,6 @@ package org.tvl.goworks.editor.go.parser;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.AddAssignOpContext;
 import org.tvl.goworks.editor.go.parser.generated.AbstractGoParser.AddExprContext;
@@ -692,7 +691,7 @@ abstract class GoFullVisitorTemplate extends AbstractParseTreeVisitor<Void> impl
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_type, version = 3, dependents = Dependents.PARENTS)
     })
     public Void visitType(TypeContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -788,7 +787,8 @@ abstract class GoFullVisitorTemplate extends AbstractParseTreeVisitor<Void> impl
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinArgs, version = 3, dependents = Dependents.PARENTS),
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_builtinTypeArgs, version = 3, dependents = Dependents.PARENTS)
     })
     public Void visitBuiltinArgs(BuiltinArgsContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -1100,7 +1100,7 @@ abstract class GoFullVisitorTemplate extends AbstractParseTreeVisitor<Void> impl
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 2, dependents = Dependents.PARENTS)
+        @RuleDependency(recognizer = GoParser.class, rule = GoParser.RULE_argumentList, version = 3, dependents = Dependents.PARENTS)
     })
     public Void visitArgumentList(ArgumentListContext ctx) {
         throw new UnsupportedOperationException("Not supported yet.");

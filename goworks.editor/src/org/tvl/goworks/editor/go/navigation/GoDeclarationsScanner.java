@@ -601,7 +601,7 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_interfaceType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_structType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=3, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
         })
         private boolean isAnonymousType(ParserRuleContext context) {
@@ -664,7 +664,7 @@ public class GoDeclarationsScanner {
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_mapType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_channelType, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeLiteral, version=0),
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=3, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_typeSpec, version=0),
             @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_body, version=0),
         })
@@ -975,7 +975,7 @@ public class GoDeclarationsScanner {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=2, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GoParser.class, rule=GoParser.RULE_type, version=3, dependents=Dependents.PARENTS),
         })
         public String visitType(TypeContext ctx) {
             // default impl does the right thing

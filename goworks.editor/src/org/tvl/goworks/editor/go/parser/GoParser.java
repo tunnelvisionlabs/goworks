@@ -33,6 +33,12 @@ public class GoParser extends AbstractGoParser {
 	private final Set<String> packageNames = new HashSet<>();
     private DocumentSnapshot snapshot;
 
+    public static final Set<String> PREDEFINED_FUNCTIONS_WITH_TYPE = new HashSet<String>()
+        {{
+            add("make");
+            add("new");
+        }};
+
     public GoParser(TokenStream input) {
         super(input);
         CharStream charStream = input != null ? input.getTokenSource().getInputStream() : null;
@@ -111,6 +117,11 @@ public class GoParser extends AbstractGoParser {
     @Override
     protected boolean isBuiltInMethodName(Token token) {
         return token != null && SemanticHighlighter.PREDEFINED_FUNCTIONS.contains(token.getText());
+    }
+
+    @Override
+    protected boolean isBuiltInMethodWithType(Token token) {
+        return token != null && PREDEFINED_FUNCTIONS_WITH_TYPE.contains(token.getText());
     }
 
     protected static final class CompositeLiteralAllowedVisitor extends GoParserBaseVisitor<Boolean> {
