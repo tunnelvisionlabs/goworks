@@ -24,12 +24,15 @@ import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.project.Sources;
+import org.netbeans.spi.project.ui.support.FileSensitiveActions;
 import org.netbeans.spi.project.ui.support.NodeFactory;
 import org.netbeans.spi.project.ui.support.NodeList;
+import org.openide.awt.Actions;
 import org.openide.filesystems.FileObject;
 import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 import org.openide.util.ChangeSupport;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.Lookups;
 import org.openide.xml.XMLUtil;
 
@@ -183,6 +186,9 @@ public final class GoSourceNodeFactory implements NodeFactory {
             trueSource = sourceGroupKey.trueSource;
         }
 
+        @NbBundle.Messages({
+            "LBL_DownloadDependencies_Action=Download Dependencies",
+        })
         public @Override Action[] getActions(boolean context) {
             List<Action> actions = new ArrayList<>(Arrays.asList(super.getActions(context)));
             if (!trueSource) {
@@ -195,6 +201,8 @@ public final class GoSourceNodeFactory implements NodeFactory {
                     }
                 }
             }
+
+            actions.add(FileSensitiveActions.fileCommandAction(GoActionProvider.COMMAND_DOWNLOAD_DEPENDENCIES, Bundle.LBL_DownloadDependencies_Action(), null));
 
             return actions.toArray(new Action[actions.size()]);
         }

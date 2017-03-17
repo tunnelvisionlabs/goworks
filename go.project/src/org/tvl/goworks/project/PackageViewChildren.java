@@ -683,7 +683,8 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
 
         @NbBundle.Messages({
             "LBL_CompilePackage_Action=Compile Package",
-            "LBL_TestPackage_Action=Test Package"
+            "LBL_TestPackage_Action=Test Package",
+            "LBL_DownloadDependenciesPackage_Action=Download Package Dependencies",
         })
         @Override
         public Action[] getActions( boolean context ) {
@@ -707,6 +708,7 @@ final class PackageViewChildren extends Children.Keys<String> implements FileCha
                             actionList.add (null); // insert separator and new action
                             actionList.add (FileSensitiveActions.fileCommandAction(ActionProvider.COMMAND_COMPILE_SINGLE, Bundle.LBL_CompilePackage_Action(), null));
                             actionList.add (FileSensitiveActions.fileCommandAction(ActionProvider.COMMAND_TEST_SINGLE, Bundle.LBL_TestPackage_Action(), null));
+                            actionList.add (FileSensitiveActions.fileCommandAction(GoActionProvider.COMMAND_DOWNLOAD_DEPENDENCIES_SINGLE, Bundle.LBL_DownloadDependenciesPackage_Action(), null));
                         }
 
                         actionList.add( superActions[i] );
